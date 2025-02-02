@@ -3,7 +3,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
     const postsSection = document.getElementById("posts");
 
-    // Example of adding a new blog post dynamically
+    // Function to dynamically add a blog post
     function addPost(title, content, date) {
         const article = document.createElement("article");
         article.innerHTML = `
@@ -14,6 +14,16 @@ document.addEventListener("DOMContentLoaded", function() {
         postsSection.appendChild(article);
     }
 
-    // Adding a sample post dynamically
-    addPost("New Blog Update!", "I'm excited to share my new thoughts soon.", "February 10, 2025");
+    // Adding a new post dynamically
+    addPost("How I Stay Motivated in Research", "Keeping motivation alive while working on long-term projects can be difficult, but I've found some strategies that help.", "February 20, 2025");
+
+    // Contact Form Submission
+    const contactForm = document.getElementById("contact-form");
+    if (contactForm) {
+        contactForm.addEventListener("submit", function(event) {
+            event.preventDefault();
+            alert("Thank you for your message! I'll get back to you soon.");
+            contactForm.reset();
+        });
+    }
 });
