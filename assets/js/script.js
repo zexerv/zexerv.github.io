@@ -3,7 +3,6 @@ document.addEventListener("DOMContentLoaded", function() {
 
     const postsSection = document.getElementById("posts");
 
-    // Function to dynamically add a blog post
     function addPost(title, content, date) {
         const article = document.createElement("article");
         article.innerHTML = `
@@ -14,10 +13,14 @@ document.addEventListener("DOMContentLoaded", function() {
         postsSection.appendChild(article);
     }
 
-    // Adding a new post dynamically
-    addPost("How I Stay Motivated in Research", "Keeping motivation alive while working on long-term projects can be difficult, but I've found some strategies that help.", "February 20, 2025");
+    // Adding a blog post dynamically
+    addPost(
+        "Understanding the Bellman Q-Value Function",
+        "In reinforcement learning, the Q-function helps determine the best possible action at a given state using the Bellman optimality equation.",
+        "February 25, 2025"
+    );
 
-    // Contact Form Submission
+    // Contact Form Handling
     const contactForm = document.getElementById("contact-form");
     if (contactForm) {
         contactForm.addEventListener("submit", function(event) {
