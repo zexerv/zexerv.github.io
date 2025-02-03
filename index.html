@@ -1,41 +1,17 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <!-- Basic Meta Tags -->
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>My Personal Website</title>
-  <meta name="description" content="Welcome to my personal space where I share thoughts, knowledge, and experiences." />
-  <meta name="author" content="Your Name" />
-  
-  <!-- Favicon -->
-  <link rel="icon" href="assets/images/favicon.ico" type="image/x-icon" />
-  
-  <!-- Google Fonts -->
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&family=Lato:wght@300;400;700&display=swap" rel="stylesheet" />
-
-  <!-- Font Awesome for Icons -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" integrity="sha512-Fo3rlrZj/k7ujTnH/PR5njL16VsdhE5W8aXjz/r+5M6l5NjF/YSO0UOeAcH6rOr1v6Z1bOiHx6sF8Jb4iMJ5gw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-
-  <!-- AOS Library for Scroll Animations -->
-  <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
-
-  <!-- Custom CSS -->
   <link rel="stylesheet" href="assets/css/styles.css" />
 </head>
 <body>
   <div class="page-wrapper">
-    <!-- Header Section -->
     <header>
       <nav class="navbar">
         <div class="container">
           <a href="index.html" class="logo">MySite</a>
-          <!-- Responsive Nav Toggle -->
-          <button class="navbar-toggler" aria-label="Toggle navigation">
-            <i class="fas fa-bars"></i>
-          </button>
           <ul class="nav-links">
             <li><a href="index.html">Home</a></li>
             <li><a href="about.html">About Me</a></li>
@@ -47,52 +23,33 @@
       </nav>
     </header>
     
-    <!-- Main Content -->
     <main>
       <!-- Hero Section -->
-      <section id="hero" class="hero-section" data-aos="fade-up">
-        <div class="hero-overlay"></div>
-        <div class="container hero-content">
-          <h1>Welcome to My Personal Space</h1>
-          <p>Sharing thoughts, knowledge, and experiences.</p>
-          <a href="blog.html" class="btn btn-primary">Read My Blog</a>
-        </div>
-      </section>
-      
-      <!-- Latest Blog Posts Section -->
-      <section id="latest-posts" class="latest-posts-section" data-aos="fade-up">
-        <div class="container">
-          <h2>Latest Blog Posts</h2>
-          <div class="posts-grid" id="posts">
-            <!-- Posts will be dynamically loaded here via JavaScript -->
-          </div>
-        </div>
-      </section>
-    </main>
-    
-    <!-- Footer Section -->
-    <footer>
+    <section id="hero">
       <div class="container">
-        <p>&copy; 2025 My Personal Website. All rights reserved.</p>
-        <ul class="social-links">
-          <li><a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a></li>
-          <li><a href="#" aria-label="LinkedIn"><i class="fab fa-linkedin"></i></a></li>
-          <li><a href="#" aria-label="GitHub"><i class="fab fa-github"></i></a></li>
-        </ul>
+        <h1>Welcome to My Personal Space</h1>
+        <p>Sharing thoughts, knowledge, and experiences.</p>
       </div>
-    </footer>
-  </div>
-
-  <!-- AOS JS for Scroll Animations -->
-  <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
-  <script>
-    AOS.init({
-      duration: 800, // Animation duration in ms
-      once: true     // Whether animation should happen only once
-    });
-  </script>
+    </section>
+    
+    <!-- Latest Blog Posts Section (dynamically loaded) -->
+    <section id="latest-posts">
+      <div class="container">
+        <h2>Latest Blog Posts</h2>
+        <div class="posts-grid" id="posts">
+          <!-- Posts will be loaded here via JavaScript -->
+        </div>
+      </div>
+    </section>
+  </main>
   
-  <!-- Custom JS -->
+  <footer>
+    <div class="container">
+      <p>&copy; 2025 My Personal Website. All rights reserved.</p>
+    </div>
+  </footer>
+</div>
+  
   <script src="assets/js/script.js"></script>
 </body>
 </html>
