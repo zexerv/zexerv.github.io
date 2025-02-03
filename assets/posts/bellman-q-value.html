@@ -5,23 +5,23 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>The Bellman Optimal Q-Value Function - My Personal Website</title>
   
+  <!-- Google Fonts for improved typography -->
+  <link href="https://fonts.googleapis.com/css?family=Roboto:400,700&display=swap" rel="stylesheet">
+  
   <!-- Custom CSS -->
   <link rel="stylesheet" href="../css/styles.css" />
-
+  
   <!-- Prism.js CSS for Syntax Highlighting -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" 
         integrity="sha512-FsNE34r3+SIE7+F5fTLYE8OD9lykgodvx6txj6I3VOVkMt6NA+7kOfmDdHhELZXN3j4MNR7IqIDx3XWw1A7K6w==" 
         crossorigin="anonymous" referrerpolicy="no-referrer" />
-
+  
   <!-- MathJax for Mathematical Equations -->
   <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
-  <script id="MathJax-script" async
-          src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
-  </script>
+  <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 </head>
 <body>
   <div class="page-wrapper">
-    
     <header>
       <nav class="navbar">
         <div class="container">
@@ -51,21 +51,26 @@
               This post is dedicated to exploring the fundamentals of the Q-value function and how it helps an agent learn
               the best course of action over time. This content is currently a placeholder while I work on more detailed examples and explanations.
             </p>
-
-            <!-- Code Block / Mathematical Equation -->
+            
+            <!-- Code Block with Mathematical Equation -->
             <pre><code class="language-markup">
 \( Q^*(s, a) = \mathbb{E} \Bigl[r + \gamma \max_{a'} Q^*(s', a') \,\Bigl|\, s, a\Bigr] \)
             </code></pre>
-
+            
             <p>
               Here, <code>s</code> and <code>a</code> represent the current state and action, <code>r</code> is the immediate reward,
               <code>s'</code> and <code>a'</code> denote the next state and possible actions, and <code>\(\gamma\)</code> is the discount factor.
               More in-depth analysis and case studies will follow in future updates.
             </p>
-
+            
             <!-- Image with Caption -->
+            <!--
+                 Ensure that the image file exists at the specified path.
+                 For example, if this HTML file is at posts/2025/ and your images folder is at the root,
+                 you might need to use /images/q-function-diagram.png instead.
+            -->
             <figure>
-              <img src="../images/q-function-diagram.png" alt="Diagram of the Q-value function" />
+              <img src="../images/q-function-diagram.png" alt="Diagram of the Q-value function">
               <figcaption>
                 <strong>Figure 1:</strong> Diagram illustrating the Q-value function in reinforcement learning.
               </figcaption>
