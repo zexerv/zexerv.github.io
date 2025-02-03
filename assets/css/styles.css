@@ -182,7 +182,32 @@ body {
   margin: 2rem 0;
   box-shadow: 0 4px 6px rgba(0,0,0,0.1);
 }
+/* Form Status Messages */
+.form-status {
+  margin-top: 1rem;
+}
 
+.success-message {
+  color: #155724;
+  background-color: #d4edda;
+  border: 1px solid #c3e6cb;
+  padding: 1rem;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.error-message {
+  color: #721c24;
+  background-color: #f8d7da;
+  border: 1px solid #f5c6cb;
+  padding: 1rem;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
 /* Responsive Design */
 @media (max-width: 768px) {
   .nav-links { display: none; }
