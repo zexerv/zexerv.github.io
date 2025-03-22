@@ -2025,3 +2025,17 @@ footer {
     width: 100%;
   }
 }
+
+/* Update resume header to remove photo placeholder */
+.resume-header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 30px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+/* Adjust the layout to take full width since there's no photo */
+.resume-name {
+  flex: 1;
+}
