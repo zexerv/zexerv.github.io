@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Resume - MoSa</title>
+  <title>Resume - Mo Saeidi</title>
   <link rel="stylesheet" href="assets/css/styles.css" />
   <!-- Font Awesome -->
   <link
@@ -20,6 +20,11 @@
       <nav class="navbar">
         <div class="container">
           <a href="index.html" class="logo">MoSa</a>
+          <button id="mobile-menu-btn" class="mobile-menu-btn">
+            <span class="bar"></span>
+            <span class="bar"></span>
+            <span class="bar"></span>
+          </button>
           <ul class="nav-links">
             <li><a href="index.html">Home</a></li>
             <li><a href="about.html">About Me</a></li>
@@ -40,138 +45,300 @@
           <div class="resume-header">
             <div class="resume-name">
               <h2>Mo Saeidi</h2>
-              <p class="resume-title">Machine Learning Researcher</p>
+              <p class="resume-title">Robotics & Control Engineer</p>
             </div>
             <div class="resume-contact">
-              <p><i class="fas fa-envelope"></i> msaeidi1999@gmail.com</p>
-              <p><i class="fab fa-linkedin"></i> linkedin.com/in/mo-saeidi-21a00015a</p>
-              <p><i class="fas fa-graduation-cap"></i> Google Scholar</p>
+              <p><i class="fas fa-map-marker-alt"></i> Via Filippo Corridoni, 22, 20122 Milano MI, Italy</p>
+              <p><i class="fas fa-phone"></i> +39 351 365 4158</p>
+              <p><i class="fas fa-envelope"></i> mohammadhosein.saeidi@mail.polimi.it</p>
+              <p><i class="fab fa-linkedin"></i> <a href="https://www.linkedin.com/in/mo-saeidi-21a00015a/" target="_blank">linkedin.com/in/mo-saeidi-21a00015a</a></p>
+              <p><i class="fas fa-graduation-cap"></i> <a href="https://scholar.google.com/citations?user=6AucdhQAAAAJ&hl=en" target="_blank">Google Scholar</a></p>
             </div>
+          </div>
+
+          <div class="resume-summary">
+            <h3>Professional Summary</h3>
+            <p>Robotics engineer with expertise in control systems, reinforcement learning, and computer vision, applying theoretical knowledge to solve complex real-world challenges. Demonstrated capacity for integrating hardware and software systems through innovative research in autonomous navigation, sensor fusion, and human-robot interaction. Seeking to contribute technical proficiency in machine learning and control theory to advance cutting-edge robotics applications while continuously expanding knowledge across interdisciplinary domains.</p>
           </div>
 
           <div class="resume-section">
             <h3><i class="fas fa-user-graduate"></i> Education</h3>
             <div class="resume-item">
               <div class="resume-item-header">
-                <h4>Ph.D. in Computer Science</h4>
-                <span class="resume-date">2020 - Present</span>
+                <h4>M.Sc. in Automation and Control Engineering</h4>
+                <span class="resume-date">2023 - Present</span>
               </div>
-              <p class="resume-institution">University Name</p>
-              <p>Specialization in Reinforcement Learning and Robotics</p>
+              <p class="resume-institution">Polytechnic University of Milan (POLIMI), Italy</p>
+              <p>GPA: 27.11/30</p>
+              <p>Thesis: Learning Policies from Human Demonstrations for Testing Optimization</p>
+              <p><strong>MERLIN Laboratory Researcher</strong> (October 2024 - Present)</p>
+              <p>Developing an extension to OMPL motion planners implemented in MoveIt for programming by demonstration of UR5e robot. Implementing learning algorithms to interpret human demonstrations captured via Thrustmaster Airbus joystick for intuitive robot programming in ROS1 environment.</p>
             </div>
             
             <div class="resume-item">
               <div class="resume-item-header">
-                <h4>M.S. in Computer Science</h4>
+                <h4>B.Sc. in Mechanical Engineering</h4>
+                <span class="resume-date">2017 - 2022</span>
+              </div>
+              <p class="resume-institution">KNTU University, Tehran, Iran</p>
+              <p>GPA: 3.88/4.0</p>
+              <p>Top 3% of graduates</p>
+            </div>
+          </div>
+
+          <div class="resume-section">
+            <h3><i class="fas fa-briefcase"></i> Professional Experience</h3>
+            
+            <div class="resume-item">
+              <div class="resume-item-header">
+                <h4>Researcher, AIRLAB Drone Team - POLIMI</h4>
+                <span class="resume-date">April 2023 - July 2024</span>
+              </div>
+              <p class="resume-institution">Milan, Italy</p>
+              <ul>
+                <li>Engineered advanced planning and navigation algorithms for multi-agent drone systems utilizing ROS1/ROS2 frameworks, enhancing coordination capabilities in complex environments.</li>
+                <li>Integrated and calibrated ZED2 stereo camera with laser altimeter systems to enable lightweight point cloud generation, achieving efficient real-time obstacle detection with minimal computational overhead.</li>
+                <li>Led algorithmic development for the Leonardo Drone Contest 2023, implementing exploration strategies that achieved 95% target detection rate in challenging indoor environments.</li>
+                <li>Systematically refined path planning and obstacle avoidance algorithms through iterative testing and optimization, resulting in 40% reduction in collision incidents during autonomous operation.</li>
+              </ul>
+            </div>
+            
+            <div class="resume-item">
+              <div class="resume-item-header">
+                <h4>Researcher, FALCO Project - AEA Association - POLIMI</h4>
+                <span class="resume-date">December 2023 - July 2024</span>
+              </div>
+              <p class="resume-institution">Milan, Italy</p>
+              <ul>
+                <li>Architected flight controllers incorporating Visual-Inertial Odometry techniques for robust navigation in GPS-denied environments, enabling reliable autonomous operation in challenging conditions.</li>
+                <li>Formulated and implemented disturbance compensation algorithms that improved stability of heavy-lift drones by 30%, allowing for secure transportation of sensitive payloads.</li>
+                <li>Developed cost-effective camera-based navigation solutions that reduced hardware expenditure by 50% while maintaining navigation accuracy within operational requirements.</li>
+                <li>Facilitated interdisciplinary collaboration between mechanical, electrical, and software engineering teams to ensure seamless integration of control systems with mechanical designs.</li>
+              </ul>
+            </div>
+            
+            <div class="resume-item">
+              <div class="resume-item-header">
+                <h4>Research Assistant, Mechatronics Laboratory - KNTU</h4>
+                <span class="resume-date">2021 - 2022</span>
+              </div>
+              <p class="resume-institution">Tehran, Iran</p>
+              <ul>
+                <li>Designed and implemented Autonomous Emergency Braking (AEB) system utilizing computer vision algorithms for object detection and classification in dynamic traffic scenarios.</li>
+                <li>Achieved 92% accuracy in monocular depth estimation for obstacle detection through novel algorithmic approaches, enabling reliable distance calculation with single-camera setups.</li>
+                <li>Methodically collected and labeled over 10,000 images for chess piece detection project, creating a comprehensive dataset that enabled high-accuracy machine learning model training.</li>
+                <li>Applied and benchmarked YOLO, Fast R-CNN, and SSD algorithms for real-time object recognition, identifying optimal approaches for various operational constraints.</li>
+              </ul>
+            </div>
+            
+            <div class="resume-item">
+              <div class="resume-item-header">
+                <h4>Research Assistant, Vibration and Control Laboratory - KNTU</h4>
+                <span class="resume-date">2019 - 2022</span>
+              </div>
+              <p class="resume-institution">Tehran, Iran</p>
+              <ul>
+                <li>Engineered neural network-based fault diagnosis systems achieving 95% accuracy in mechanical systems, enabling predictive maintenance capabilities for critical industrial equipment.</li>
+                <li>Developed and implemented control algorithms for 3-axis CNC systems that improved operational performance by 25% through optimized motion planning and execution.</li>
+                <li>Conceptualized and prototyped an innovative accelerometer system using fluid surface monitoring via image processing, providing a cost-effective alternative to conventional sensors.</li>
+                <li>Published three journal articles and two conference papers on control systems and pattern recognition, contributing to the academic knowledge base in these domains.</li>
+              </ul>
+            </div>
+            
+            <div class="resume-item">
+              <div class="resume-item-header">
+                <h4>Junior Graphic Designer (Volunteer), Student Science Community - KNTU</h4>
                 <span class="resume-date">2018 - 2020</span>
               </div>
-              <p class="resume-institution">University Name</p>
-              <p>Thesis: "Applications of Q-Learning in Control Systems"</p>
+              <p class="resume-institution">Tehran, Iran</p>
+              <ul>
+                <li>Designed professional promotional materials including posters, banners, and digital media for student events, theater gatherings, and academic sessions using Adobe Illustrator and Photoshop.</li>
+                <li>Created consistent visual identity elements across various university events while adapting designs to specific audience demographics and event themes.</li>
+              </ul>
             </div>
+          </div>
+          
+          <div class="resume-section">
+            <h3><i class="fas fa-project-diagram"></i> Projects</h3>
             
             <div class="resume-item">
               <div class="resume-item-header">
-                <h4>B.S. in Computer Engineering</h4>
-                <span class="resume-date">2014 - 2018</span>
+                <h4>ARTO (Automated Robotics for Testing Optimization)</h4>
+                <span class="resume-date">2023 - Present</span>
               </div>
-              <p class="resume-institution">University Name</p>
-              <p>Minor in Mathematics</p>
-            </div>
-          </div>
-
-          <div class="resume-section">
-            <h3><i class="fas fa-briefcase"></i> Research Experience</h3>
-            <div class="resume-item">
-              <div class="resume-item-header">
-                <h4>Graduate Research Assistant</h4>
-                <span class="resume-date">2020 - Present</span>
-              </div>
-              <p class="resume-institution">AI & Robotics Lab, University Name</p>
               <ul>
-                <li>Developing novel reinforcement learning algorithms for robotic applications</li>
-                <li>Implementing and testing Q-learning methods in real-world scenarios</li>
-                <li>Publishing research in top-tier conferences and journals</li>
+                <li>Developing a comprehensive learning from demonstration framework for UR5e industrial robot programming to streamline complex task specification for non-technical operators.</li>
+                <li>Implementing and adapting RRT algorithms with specialized cost functions to accurately interpret human intention, bridging the gap between intuitive demonstration and precise robotic execution.</li>
+                <li>Formulating optimization techniques for robotic trajectories while maintaining singularity avoidance to ensure robust performance across the robot's workspace.</li>
+                <li>Engineering solutions that reduce programming time for complex trajectories by an estimated 65%, significantly improving industrial workflow efficiency.</li>
               </ul>
             </div>
             
             <div class="resume-item">
               <div class="resume-item-header">
-                <h4>Research Intern</h4>
-                <span class="resume-date">Summer 2019</span>
+                <h4>Reinforcement Learning for Robot Path Planning</h4>
+                <span class="resume-date">2023</span>
               </div>
-              <p class="resume-institution">Tech Company Research Lab</p>
               <ul>
-                <li>Worked on optimizing control systems using machine learning</li>
-                <li>Developed software tools for data analysis and visualization</li>
+                <li>Developed reinforcement learning-based planning algorithm for static obstacle avoidance with custom reward functions that balance efficiency, safety, and path smoothness objectives.</li>
+                <li>Implemented preprocessing pipeline to transform voxelized obstacle data through convolutional neural networks before feeding to reinforcement learning neural network for enhanced feature extraction.</li>
+                <li>Formulated manipulability metrics to avoid singularities during continuous movement, ensuring stable control throughout the robot's operational envelope.</li>
+                <li>Conducted systematic comparison of multiple reinforcement learning algorithms for continuous action spaces to identify optimal approaches for robotic manipulation tasks.</li>
+              </ul>
+            </div>
+            
+            <div class="resume-item">
+              <div class="resume-item-header">
+                <h4>Hand Pose Estimation with IMU Sensor Fusion</h4>
+                <span class="resume-date">2022</span>
+              </div>
+              <ul>
+                <li>Integrated network of three MPU6050 accelerometers strategically positioned across hand joints to capture comprehensive motion tracking data with minimal sensor footprint.</li>
+                <li>Developed quaternion estimation algorithms that effectively fused gravity and rotational acceleration data to determine precise spatial orientation despite sensor noise.</li>
+                <li>Implemented optimization-based pose estimation techniques adhering to kinematic hand constraints to ensure biologically plausible joint configurations.</li>
+                <li>Engineered a 7-DOF hand model addressing the 6-DOF correspondence problem through constrained optimization techniques for accurate finger position tracking.</li>
+              </ul>
+            </div>
+            
+            <div class="resume-item">
+              <div class="resume-item-header">
+                <h4>Computer-Aided Manufacturing Optimization</h4>
+                <span class="resume-date">2021</span>
+              </div>
+              <ul>
+                <li>Developed comprehensive optimization methodology for CNC machining processes using Fusion 360, minimizing both tool wear and production time while maintaining specified quality requirements.</li>
+                <li>Conducted detailed analysis of manufacturing manuals to identify optimal tooling configurations based on material properties, part geometry, and finishing requirements.</li>
+                <li>Systematically optimized fixture positions and machining sequences to reduce setup time while ensuring geometric tolerances were consistently achieved.</li>
+                <li>Implemented cost optimization strategies that balanced material utilization, tool life, and production efficiency to achieve maximum economic benefit.</li>
               </ul>
             </div>
           </div>
-
+          
           <div class="resume-section">
-            <h3><i class="fas fa-file-alt"></i> Publications</h3>
-            <div class="resume-item">
-              <p><strong>Author, A.</strong>, Saeidi, M., & Coauthor, B. (2023). "Title of Research Paper 1." <em>Journal Name</em>, Vol(Issue), pp-pp.</p>
-            </div>
-            <div class="resume-item">
-              <p>Saeidi, M., & Author, A. (2022). "Title of Research Paper 2." <em>Conference Proceedings</em>, pp-pp.</p>
-            </div>
-          </div>
-
-          <div class="resume-section">
-            <h3><i class="fas fa-laptop-code"></i> Skills</h3>
+            <h3><i class="fas fa-cogs"></i> Technical Skills</h3>
             <div class="skills-container">
               <div class="skill-category">
-                <h4>Programming Languages</h4>
+                <h4>Robotics & Control</h4>
+                <ul class="skills-list">
+                  <li>ROS/ROS2</li>
+                  <li>Motion Planning</li>
+                  <li>Trajectory Optimization</li>
+                  <li>Human-Robot Interaction</li>
+                  <li>Model Predictive Control</li>
+                  <li>Nonlinear Control</li>
+                  <li>Optimal Control</li>
+                  <li>Sensor Fusion</li>
+                  <li>Kalman Filtering</li>
+                </ul>
+              </div>
+              
+              <div class="skill-category">
+                <h4>Software & Programming</h4>
                 <ul class="skills-list">
                   <li>Python</li>
-                  <li>C++</li>
-                  <li>JavaScript</li>
-                  <li>MATLAB</li>
+                  <li>C/C++</li>
+                  <li>MATLAB/Simulink</li>
+                  <li>CasADi</li>
+                  <li>TensorFlow/PyTorch</li>
+                  <li>Linux/Git</li>
+                  <li>Data Analysis (R, Pandas)</li>
+                  <li>Computer Vision (OpenCV)</li>
+                  <li>Embedded Systems</li>
                 </ul>
               </div>
               
               <div class="skill-category">
-                <h4>Frameworks & Tools</h4>
+                <h4>Design & Analysis</h4>
                 <ul class="skills-list">
-                  <li>TensorFlow</li>
-                  <li>PyTorch</li>
-                  <li>OpenAI Gym</li>
-                  <li>ROS (Robot Operating System)</li>
-                </ul>
-              </div>
-              
-              <div class="skill-category">
-                <h4>Areas of Expertise</h4>
-                <ul class="skills-list">
-                  <li>Reinforcement Learning</li>
-                  <li>Machine Learning</li>
-                  <li>Control Systems</li>
-                  <li>Robotics</li>
+                  <li>SolidWorks</li>
+                  <li>CATIA</li>
+                  <li>Fusion 360</li>
+                  <li>ANSYS</li>
+                  <li>Fluent</li>
+                  <li>COMSOL</li>
+                  <li>Mujoco</li>
+                  <li>Adobe Illustrator/Photoshop</li>
+                  <li>Raspberry Pi/Jetson/Arduino</li>
                 </ul>
               </div>
             </div>
           </div>
           
           <div class="resume-section">
-            <h3><i class="fas fa-award"></i> Awards & Honors</h3>
+            <h3><i class="fas fa-award"></i> Achievements & Honors</h3>
             <div class="resume-item">
               <div class="resume-item-header">
-                <h4>Best Paper Award</h4>
-                <span class="resume-date">2022</span>
+                <h4>Second Place, National Egg Drop Competition</h4>
+                <span class="resume-date">2018</span>
               </div>
-              <p>Conference Name</p>
+              <p>Led a team of 4 students to design an impact-resistant enclosure, placing 2nd among 40 teams from universities across Iran.</p>
             </div>
+          </div>
+          
+          <div class="resume-section">
+            <h3><i class="fas fa-file-alt"></i> Publications</h3>
             <div class="resume-item">
-              <div class="resume-item-header">
-                <h4>Graduate Research Fellowship</h4>
-                <span class="resume-date">2020 - 2023</span>
+              <p><strong>2023:</strong> "Nonlinear Tracking Control Algorithm for Dynamical Output Systems Manipulated by the Hardly Constrained Oscillatory Actuator," <em>Structural Control and Health Monitoring</em>. <a href="https://onlinelibrary.wiley.com/doi/full/10.1155/2023/3799011" target="_blank">DOI: 10.1155/2023/3799011</a></p>
+            </div>
+            
+            <div class="resume-item">
+              <p><strong>2022:</strong> "Synthetic Lyapunov stabilization technique for designing actuation-constrained multi-input multi-output control systems," <em>Journal of the Franklin Institute</em>. <a href="https://www.sciencedirect.com/science/article/pii/S0016003222004094" target="_blank">DOI: 10.1016/j.jfranklin.2021.12.022</a></p>
+            </div>
+            
+            <div class="resume-item">
+              <p><strong>2022:</strong> "Constrained Control of Moving Base Robotic System with Cooperative Arms," <em>30th Annual International Conference of the Iranian Association of Mechanical Engineers</em>, Tehran, Iran.</p>
+            </div>
+            
+            <div class="resume-item">
+              <p><strong>2022:</strong> "Pattern Recognition of Unbalanced Rigid Rotor Bearing Forces," <em>Amirkabir Journal of Mechanical Engineering</em>, 54(12), pp. 3591-3606. <a href="https://mej.aut.ac.ir/article_4852_en.html?lang=en" target="_blank">Link</a></p>
+            </div>
+            
+            <div class="resume-item">
+              <p><strong>2022:</strong> "Pattern Recognition of Unbalanced Rigid Rotor Bearing Forces," <em>18th National Conference and 7th International Conference on Manufacturing Engineering in Iran (ICME 2022)</em>.</p>
+            </div>
+          </div>
+          
+          <div class="resume-section">
+            <h3><i class="fas fa-certificate"></i> Certificates</h3>
+            <div class="resume-item">
+              <p>Neural Networks and Deep Learning – <a href="https://www.coursera.org/account/accomplishments/verify/XXXXXXXXXXXX">deeplearning.ai</a></p>
+              <p>Machine Learning – <a href="https://www.coursera.org/account/accomplishments/verify/XXXXXXXXXXXX">coursera.org</a></p>
+              <p>Reinforcement Learning – <a href="https://www.coursera.org/account/accomplishments/verify/XXXXXXXXXXXX">coursera.org</a></p>
+            </div>
+          </div>
+          
+          <div class="resume-section">
+            <h3><i class="fas fa-language"></i> Languages</h3>
+            <div class="language-grid">
+              <div class="language-item">
+                <p><strong>Persian</strong> <span class="language-level">Native</span></p>
+                <div class="language-bar">
+                  <div class="language-progress" style="width: 100%"></div>
+                </div>
               </div>
-              <p>Funding Agency</p>
+              <div class="language-item">
+                <p><strong>English</strong> <span class="language-level">C2, TOEFL: 113</span></p>
+                <div class="language-bar">
+                  <div class="language-progress" style="width: 95%"></div>
+                </div>
+              </div>
+              <div class="language-item">
+                <p><strong>Azerbaijani</strong> <span class="language-level">B1</span></p>
+                <div class="language-bar">
+                  <div class="language-progress" style="width: 60%"></div>
+                </div>
+              </div>
+              <div class="language-item">
+                <p><strong>Italian</strong> <span class="language-level">A2</span></p>
+                <div class="language-bar">
+                  <div class="language-progress" style="width: 35%"></div>
+                </div>
+              </div>
             </div>
           </div>
           
           <div class="resume-actions">
-            <a href="assets/documents/resume.pdf" class="btn"><i class="fas fa-download"></i> Download PDF</a>
+            <a href="#" class="btn download-btn"><i class="fas fa-download"></i> Download PDF</a>
           </div>
         </div>
       </section>
