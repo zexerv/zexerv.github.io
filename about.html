@@ -3,57 +3,200 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>About Me - My Personal Website</title>
+  <title>About Me - Mo Saeidi</title>
   <link rel="stylesheet" href="assets/css/styles.css" />
+  <!-- Font Awesome -->
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+    integrity="sha512-Fo3rlrZj/k7ujTnH/PR5njL16VsdhE5W8aXjz/r+5M6l5NjF/YSO0UOeAcH6rOr1v6Z1bOiHx6sF8Jb4iMJ5gw=="
+    crossorigin="anonymous"
+    referrerpolicy="no-referrer"
+  />
 </head>
 <body>
-    <div class="page-wrapper">
-        
-        
-        <header>
-            <nav class="navbar">
-              <div class="container">
-                <a href="index.html" class="logo">MoSa</a>
+  <div class="page-wrapper">
+    <header>
+      <nav class="navbar">
+        <div class="container">
+          <a href="index.html" class="logo">MoSa</a>
+          <button id="mobile-menu-btn" class="mobile-menu-btn">
+            <span class="bar"></span>
+            <span class="bar"></span>
+            <span class="bar"></span>
+          </button>
+          <ul class="nav-links">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="about.html">About Me</a></li>
+            <li><a href="blog.html">Blog</a></li>
+            <li><a href="academia.html">Academia</a></li>
+            <li><a href="resume.html">Resume</a></li>
+            <li><a href="contact.html">Contact</a></li>
+          </ul>
+        </div>
+      </nav>
+    </header>
+
+    <main>
+      <section id="about-hero" class="page-hero">
+        <div class="container">
+          <h1>About Me</h1>
+          <p class="hero-subtitle">A journey of exploration and discovery in robotics and beyond</p>
+        </div>
+      </section>
+
+      <section id="about-content">
+        <div class="container">
+          <div class="about-grid">
+            <!-- Main Content -->
+            <div class="about-main">
+              <div class="about-section">
+                <h2>My Journey</h2>
                 
-                <button id="mobile-menu-btn" class="mobile-menu-btn">
-                  <span class="bar"></span>
-                  <span class="bar"></span>
-                  <span class="bar"></span>
-                </button>
+                <p>My story began in childhood, when family gatherings sparked a fascination with inventors—individuals who don't just accept the world as it is, but who strive to reshape it. This early drive crystallized during high school, where I stood firm in choosing mathematics over biology, despite external pressures. Math felt like more than just numbers; it was a language with which I could talk to the universe—a language that explained the world's intricacies.</p>
                 
-                <ul class="nav-links">
-                  <li><a href="index.html">Home</a></li>
-                  <li><a href="about.html">About Me</a></li>
-                  <li><a href="blog.html">Blog</a></li>
-                  <li><a href="academia.html">Academia</a></li>
-                  <li><a href="resume.html">Resume</a></li>
-                  <li><a href="contact.html">Contact</a></li>
+                <p>In my undergraduate studies at KNTU, I embraced Mechanical Engineering, where my curiosity grew into a disciplined pursuit of knowledge. Early in my journey, I worked on an autonomous emergency braking system, applying object detection and depth estimation algorithms. This experience allowed me to witness firsthand how machines could learn to solve real-world problems, sparking my passion for intelligent systems and the power of automation.</p>
+                
+                <div class="about-quote">
+                  <blockquote>
+                    "We can be the driver of the new things around us as opposed to being a passive consumer... going forward it's not only trying to understand the stuff that has grown naturally, it's gonna be understanding the stuff that we create."
+                  </blockquote>
+                  <cite>— Brian Greene</cite>
+                </div>
+                
+                <p>The rise of reinforcement learning in robotics felt like a revolution to me. After completing my bachelor's thesis, I spent a portion of my semester diving into RL, drawn by its potential to redefine how machines learn and make decisions. This exploration inspired the question that continues to guide me: What is the best control policy for robots? Is there a universal framework that can govern all robotic systems, akin to physicists' search for the elusive M-theory?</p>
+                
+                <p>To align my education with my vision, I pursued a Master's in Automation and Control Engineering at Politecnico di Milano. During my studies, I engaged in several research projects that sharpened both my technical and collaborative skills. At AIRLAB, I contributed to multi-agent drone autonomy, focusing on trajectory planning and control. Building on this foundation, I am currently working on the ARTO project, which focuses on teaching robots to learn tasks from human demonstrations.</p>
+              </div>
+              
+              <div class="about-section">
+                <h2>Philosophy & Perspective</h2>
+                
+                <p>Over time, I've come to see science as humanity's most profound gift. Unlike other animals, we inherit not only our genes but also our knowledge—the accumulated science of generations before us. I borrow this inheritance from those who came before, expand on it with my own efforts, and hope to pass it on to those who come after me. This continuity of thought inspires me daily.</p>
+                
+                <div class="about-image-container">
+                  <img src="assets/images/exploration.jpg" alt="Exploration in robotics" class="about-image">
+                  <p class="image-caption">The pursuit of knowledge through exploration and experimentation</p>
+                </div>
+                
+                <p>The COVID-19 pandemic was a turning point in my life. Amid the solitude and uncertainty, I found time to think deeply about the structure of scientific reasoning. I realized that true understanding requires stepping beyond the comfortable bounds of conformity, questioning the norms we live by, and embracing the unknown. During this period, I embraced science—not as a perfect entity, but as a guiding principle that acknowledges its own limitations.</p>
+                
+                <p>Exploration has since become my guiding philosophy. In my academic journey, I've seen how this principle mirrors itself in the challenges of reinforcement learning—where "exploration" remains a crucial and unsolved problem. Beyond its technical meaning, exploration is a way of life: stepping into uncharted territories, testing boundaries, and learning from failures.</p>
+                
+                <p>This mindset led me to cross continents, meet diverse people, and immerse myself in unfamiliar fields. Each step has strengthened my belief in the transformative power of curiosity and discovery. I believe that great innovation arises from the convergence of diverse ideas and perspectives—a concept reflected in one of the core challenges of reinforcement learning itself.</p>
+              </div>
+              
+              <div class="about-section">
+                <h2>Research Interests</h2>
+                
+                <p>My research passion lies at the intersection of reinforcement learning and control systems. I want to explore how we can design intelligent robots that adapt and perform reliably in complex environments. This pursuit is not just about solving technical problems—it is about pushing the boundaries of human knowledge.</p>
+                
+                <div class="research-interests">
+                  <div class="interest-item">
+                    <h3><i class="fas fa-robot"></i> Human-Robot Interaction</h3>
+                    <p>Developing intuitive interfaces for non-technical users to program complex robot behaviors through demonstration and natural interaction.</p>
+                  </div>
+                  
+                  <div class="interest-item">
+                    <h3><i class="fas fa-brain"></i> Reinforcement Learning</h3>
+                    <p>Exploring the fundamental challenge of balancing exploration and exploitation in RL algorithms, with applications in robotic control and decision-making.</p>
+                  </div>
+                  
+                  <div class="interest-item">
+                    <h3><i class="fas fa-cogs"></i> Control Theory</h3>
+                    <p>Bridging classical control approaches with modern learning-based methods to develop robust, adaptive controllers for complex mechanical systems.</p>
+                  </div>
+                  
+                  <div class="interest-item">
+                    <h3><i class="fas fa-project-diagram"></i> System Integration</h3>
+                    <p>Creating unified frameworks that integrate perception, planning, and control for autonomous systems operating in dynamic environments.</p>
+                  </div>
+                </div>
+              </div>
+              
+              <div class="about-section">
+                <h2>Beyond Research</h2>
+                
+                <p>When I'm not working on robotics problems, I enjoy exploring the philosophical underpinnings of scientific thought. I'm particularly interested in how our understanding of intelligence can inform the development of artificial systems, and vice versa.</p>
+                
+                <p>I also believe strongly in the importance of science communication and education. Through this website, my publications, and interactions with colleagues, I hope to contribute to broader conversations about the future of technology and its role in society.</p>
+                
+                <p>Today, as I look at the road ahead, I feel a deep sense of purpose. My passion for science and exploration is not just a pursuit of knowledge; it is a commitment to contributing to humanity's collective understanding. I see myself as part of a continuum—an unbroken chain of inquiry that defines us as human.</p>
+              </div>
+            </div>
+            
+            <!-- Sidebar -->
+            <div class="about-sidebar">
+              <div class="sidebar-block profile-block">
+                <img src="assets/images/profile-photo.jpg" alt="Mo Saeidi" class="profile-image">
+                <h3>Mo Saeidi</h3>
+                <p>Robotics & Control Engineer</p>
+                <div class="profile-social">
+                  <a href="mailto:mohammadhosein.saeidi@mail.polimi.it"><i class="fas fa-envelope"></i></a>
+                  <a href="https://www.linkedin.com/in/mo-saeidi-21a00015a/" target="_blank"><i class="fab fa-linkedin"></i></a>
+                  <a href="https://scholar.google.com/citations?user=6AucdhQAAAAJ&hl=en" target="_blank"><i class="fas fa-graduation-cap"></i></a>
+                </div>
+              </div>
+              
+              <div class="sidebar-block">
+                <h3>Education</h3>
+                <div class="timeline">
+                  <div class="timeline-item">
+                    <div class="timeline-marker"></div>
+                    <div class="timeline-content">
+                      <h4>M.Sc. in Automation and Control Engineering</h4>
+                      <p>Polytechnic University of Milan</p>
+                      <p class="timeline-date">2023 - Present</p>
+                    </div>
+                  </div>
+                  <div class="timeline-item">
+                    <div class="timeline-marker"></div>
+                    <div class="timeline-content">
+                      <h4>B.Sc. in Mechanical Engineering</h4>
+                      <p>KNTU University, Tehran</p>
+                      <p class="timeline-date">2017 - 2022</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              
+              <div class="sidebar-block">
+                <h3>Current Projects</h3>
+                <div class="project-card">
+                  <h4>ARTO Project</h4>
+                  <p>Teaching robots to learn tasks from human demonstrations by combining reinforcement learning with trajectory optimization.</p>
+                  <a href="academia.html" class="project-link">Learn more <i class="fas fa-arrow-right"></i></a>
+                </div>
+              </div>
+              
+              <div class="sidebar-block">
+                <h3>Languages</h3>
+                <ul class="language-list">
+                  <li><span class="language-name">Persian</span> <span class="language-level">Native</span></li>
+                  <li><span class="language-name">English</span> <span class="language-level">C2</span></li>
+                  <li><span class="language-name">Azerbaijani</span> <span class="language-level">B1</span></li>
+                  <li><span class="language-name">Italian</span> <span class="language-level">A2</span></li>
                 </ul>
               </div>
-            </nav>
-          </header>
-        
-        <main>
-            <section id="about">
-                <div class="container">
-                    <h1>About Me</h1>
-                    <p>
-                        Hello! I'm passionate about sharing my thoughts, research, and experiences with the world.
-                        This website documents my journey, ideas, and projects.
-                    </p>
-                    <p>
-                        I have a keen interest in academia, technology, and personal growth. My goal is to contribute
-                        to meaningful discussions and provide valuable insights.
-                    </p>
-                </div>
-            </section>
-        </main>
-
-        <footer>
-            <div class="container">
-                <p>&copy; 2025 My Personal Website. All rights reserved.</p>
+              
+              <div class="sidebar-block cta-block">
+                <h3>Let's Connect</h3>
+                <p>Interested in collaboration, research opportunities, or just want to discuss robotics and control?</p>
+                <a href="contact.html" class="btn btn-full">Get in Touch</a>
+              </div>
             </div>
-        </footer>
-    </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <div class="container">
+        <p>&copy; 2025 MoSa. All rights reserved.</p>
+      </div>
+    </footer>
+  </div>
+  
+  <script src="assets/js/script.js"></script>
 </body>
 </html>
