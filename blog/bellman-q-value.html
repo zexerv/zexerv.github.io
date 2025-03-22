@@ -9,12 +9,16 @@
   <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@300;500&family=Roboto:wght@300;500;700&display=swap" rel="stylesheet">
   
   <!-- Custom CSS -->
-  <link rel="stylesheet" href="../css/styles.css" />
+  <link rel="stylesheet" href="../assets/css/styles.css" />
   
-  <!-- Prism.js CSS -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-twilight.min.css" 
-        integrity="sha512-ak6UBEeS6cqR+k0Dqgx9qTUJQlU6gy6Z8Z6Z8mK4ZdjB7iUKL4d7gwfzuM6+332J0OXVlk03WU2CY1q4sA5dOg==" 
-        crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <!-- Font Awesome -->
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+    integrity="sha512-Fo3rlrZj/k7ujTnH/PR5njL16VsdhE5W8aXjz/r+5M6l5NjF/YSO0UOeAcH6rOr1v6Z1bOiHx6sF8Jb4iMJ5gw=="
+    crossorigin="anonymous"
+    referrerpolicy="no-referrer"
+  />
   
   <!-- MathJax -->
   <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
@@ -26,13 +30,19 @@
     <header class="header">
       <nav class="navbar">
         <div class="container">
-          <a href="../../index.html" class="logo">MoSa<span class="logo-accent">;</span></a>
+          <a href="../index.html" class="logo">MoSa</a>
+          <button id="mobile-menu-btn" class="mobile-menu-btn">
+            <span class="bar"></span>
+            <span class="bar"></span>
+            <span class="bar"></span>
+          </button>
           <ul class="nav-links">
-            <li><a href="../../index.html" class="nav-link hover-underline">Home</a></li>
-            <li><a href="../../about.html" class="nav-link hover-underline">About</a></li>
-            <li><a href="../../blog.html" class="nav-link hover-underline active">Blog</a></li>
-            <li><a href="../../academia.html" class="nav-link hover-underline">Academia</a></li>
-            <li><a href="../../contact.html" class="nav-link cta-button">Contact</a></li>
+            <li><a href="../index.html">Home</a></li>
+            <li><a href="../about.html">About Me</a></li>
+            <li><a href="../blog.html">Blog</a></li>
+            <li><a href="../academia.html">Academia</a></li>
+            <li><a href="../resume.html">Resume</a></li>
+            <li><a href="../contact.html">Contact</a></li>
           </ul>
         </div>
       </nav>
@@ -62,42 +72,177 @@
 
           <section class="post-content">
             <p class="post-intro">
-              In reinforcement learning, the Bellman optimality equation forms the backbone of many learning algorithms. 
-              This post explores the Q-value function and its role in determining optimal policies.
+              Reinforcement learning (RL) has revolutionized our approach to building intelligent systems that can learn from experience. At the core of many RL algorithms lies a powerful concept: the Bellman equation. Today, I want to explore the Bellman optimal Q-value function, which forms the mathematical foundation for algorithms like Q-learning and serves as a bridge between traditional control theory and modern machine learning.
             </p>
+
+            <h2>The Essence of Reinforcement Learning</h2>
+            
+            <p>Before diving into the mathematics, let's understand the core problem RL solves. We have an agent interacting with an environment through a sequence of actions, observations, and rewards. The agent's goal is to learn a policy (a strategy for choosing actions) that maximizes the expected cumulative reward over time.</p>
+            
+            <p>This framework applies beautifully to robotics problems. For instance, in my current research on robot path planning, we can think of:</p>
+            
+            <ul>
+              <li><strong>States (s)</strong>: The robot's current position, orientation, and sensor readings</li>
+              <li><strong>Actions (a)</strong>: Commands to actuators controlling the robot's movement</li>
+              <li><strong>Rewards (r)</strong>: Positive values for reaching goals and negative values for collisions or excessive energy use</li>
+              <li><strong>Policy (π)</strong>: The function mapping the robot's state to the best action</li>
+            </ul>
+            
+            <p>The challenge lies in discovering the optimal policy when the environment's dynamics are complex or unknown.</p>
+
+            <h2>The Q-Value Function: Decision-Making Quantified</h2>
+            
+            <p>The Q-value function represents the expected cumulative reward of taking action <strong>a</strong> in state <strong>s</strong>, and then following the optimal policy thereafter. More formally:</p>
 
             <!-- Math Equation (fixed rendering) -->
             <div class="math-equation">
               \[ Q^*(s, a) = \mathbb{E} \left[ r + \gamma \max_{a'} Q^*(s', a') \mid s, a \right] \]
             </div>
 
+            <p>Let's break this equation down:</p>
+            
             <div class="equation-explain">
               <h3>Equation Components</h3>
               <ul class="math-symbols">
-                <li><span class="symbol">\( s \)</span> Current state</li>
-                <li><span class="symbol">\( a \)</span> Chosen action</li>
-                <li><span class="symbol">\( r \)</span> Immediate reward</li>
-                <li><span class="symbol">\( \gamma \)</span> Discount factor</li>
-                <li><span class="symbol">\( s' \)</span> Subsequent state</li>
+                <li><span class="symbol">\( Q^*(s, a) \)</span> is the optimal Q-value for state-action pair (s, a)</li>
+                <li><span class="symbol">\( r \)</span> is the immediate reward received</li>
+                <li><span class="symbol">\( \gamma \)</span> is the discount factor (0 ≤ γ ≤ 1) that balances immediate versus future rewards</li>
+                <li><span class="symbol">\( s' \)</span> is the next state after taking action a</li>
+                <li><span class="symbol">\( \max_{a'} Q^*(s', a') \)</span> represents choosing the best action in the next state</li>
+                <li><span class="symbol">\( \mathbb{E} \)</span> denotes expectation, accounting for stochastic transitions</li>
               </ul>
             </div>
+            
+            <p>This recursive equation elegantly captures a fundamental insight: the value of a state-action pair equals the immediate reward plus the discounted value of the best action in the resulting state.</p>
+
+            <h2>The Bellman Optimality Principle</h2>
+            
+            <p>Richard Bellman's contribution to optimal control theory extends beyond this specific equation. The Bellman optimality principle states that an optimal policy has the property that, regardless of the initial state and decision, the remaining decisions must constitute an optimal policy with respect to the state resulting from the first decision.</p>
+            
+            <p>This principle leads directly to the Bellman equation and enables dynamic programming solutions to complex sequential decision problems.</p>
+
+            <h2>From Theory to Practice: Q-Learning</h2>
+            
+            <p>The theoretical beauty of the Bellman equation becomes practically useful in algorithms like Q-learning. The basic Q-learning update rule is:</p>
+            
+            <div class="math-equation">
+              \[ Q(s, a) \leftarrow Q(s, a) + \alpha \left[ r + \gamma \max_{a'} Q(s', a') - Q(s, a) \right] \]
+            </div>
+            
+            <p>Where:</p>
+            <ul>
+              <li>\( \alpha \) is the learning rate</li>
+              <li>The term in brackets is the "temporal difference error"</li>
+            </ul>
+            
+            <p>This update rule moves the current Q-value estimate closer to the right-hand side of the Bellman equation. Through repeated updates as the agent explores the environment, Q-values converge to their optimal values, \( Q^* \).</p>
 
             <!-- Image Section -->
             <figure class="post-figure">
-              <img src="../images/q-function-diagram.png" alt="Q-function diagram" class="post-image">
+              <img src="../assets/images/q-function-diagram.png" alt="Q-function diagram" class="post-image">
               <figcaption class="post-caption">
-                <strong>Figure 1:</strong> Visual representation of Q-value function updates
+                <strong>Figure 1:</strong> Visualization of Q-values for different actions across the state space. Brighter regions indicate higher expected returns.
               </figcaption>
             </figure>
+
+            <h2>Connecting to Control Theory</h2>
+            
+            <p>As a control engineer, I find the connections between reinforcement learning and classical control theory particularly fascinating. The Bellman equation bears striking similarities to:</p>
+            
+            <ol>
+              <li><strong>Hamilton-Jacobi-Bellman (HJB) Equation</strong>: The continuous-time analog used in optimal control</li>
+              <li><strong>Riccati Equation</strong>: Used in linear quadratic regulators (LQR)</li>
+              <li><strong>Dynamic Programming</strong>: Bellman's original formulation for multistage decision processes</li>
+            </ol>
+            
+            <p>These connections enable powerful hybrid approaches. In my work on trajectory optimization for robotic arms, I've found that combining model predictive control with reinforcement learning can yield controllers that have both the stability guarantees of traditional control theory and the adaptability of RL.</p>
+
+            <h2>Challenges in Real-World Applications</h2>
+            
+            <p>While the theory is elegant, applying these concepts to real-world robotics problems reveals several challenges:</p>
+            
+            <h3>The Curse of Dimensionality</h3>
+            
+            <p>For complex systems like multi-joint robots, the state space becomes prohibitively large. A 7-DOF robot arm with just 10 discretizations per joint would have 10^7 states. Including velocities would square this number.</p>
+            
+            <h3>Sample Efficiency</h3>
+            
+            <p>Physical robots can't perform millions of trials like simulated agents. This places a premium on sample-efficient algorithms that learn from limited experience.</p>
+            
+            <h3>Safety Constraints</h3>
+            
+            <p>Unlike in games, failed exploration in robotics can damage hardware or pose safety risks. This necessitates safe exploration strategies.</p>
+            
+            <h3>Partial Observability</h3>
+            
+            <p>Real-world sensors provide incomplete information about the environment, violating the Markov assumption underlying the standard Bellman equation.</p>
+
+            <h2>Deep Q-Networks: Scaling to Complex Problems</h2>
+            
+            <p>To address the dimensionality challenge, Deep Q-Networks (DQNs) approximate the Q-function using neural networks:</p>
+            
+            <div class="math-equation">
+              \[ Q(s, a; \theta) \approx Q^*(s, a) \]
+            </div>
+            
+            <p>Where \( \theta \) represents the network parameters. This allows handling continuous state spaces and complex sensory inputs. The training objective becomes minimizing the squared temporal difference error:</p>
+            
+            <div class="math-equation">
+              \[ L(\theta) = \mathbb{E}_{(s,a,r,s')} \left[ \left(r + \gamma \max_{a'} Q(s', a'; \theta^-) - Q(s, a; \theta) \right)^2 \right] \]
+            </div>
+            
+            <p>With \( \theta^- \) being parameters of a target network that stabilizes training.</p>
+
+            <h2>Current Research Directions</h2>
+            
+            <p>The Bellman equation continues to inspire new research directions:</p>
+            
+            <ol>
+              <li><strong>Distributional RL</strong>: Modeling the entire distribution of returns rather than just the expectation</li>
+              <li><strong>Multi-agent RL</strong>: Extending to scenarios with multiple interacting agents</li>
+              <li><strong>Hierarchical RL</strong>: Learning at multiple temporal scales</li>
+              <li><strong>Model-based RL</strong>: Incorporating environment models to improve sample efficiency</li>
+              <li><strong>Offline RL</strong>: Learning from fixed datasets without active exploration</li>
+            </ol>
+            
+            <p>In my own research, I'm particularly interested in combining imitation learning with RL, using human demonstrations to bootstrap the Q-function before fine-tuning through exploration.</p>
+
+            <h2>Practical Implementation Tips</h2>
+            
+            <p>For those implementing Q-learning algorithms, I've found these practices helpful:</p>
+            
+            <ol>
+              <li><strong>Start simple</strong>: Implement tabular Q-learning on toy problems before tackling complex domains</li>
+              <li><strong>Careful exploration</strong>: Balance exploration and exploitation using techniques like epsilon-greedy with annealing</li>
+              <li><strong>Proper normalization</strong>: Scale rewards to prevent numerical instability</li>
+              <li><strong>Hyperparameter tuning</strong>: Systematically search for optimal learning rates and discount factors</li>
+              <li><strong>Experience replay</strong>: Store and reuse transitions to improve sample efficiency</li>
+            </ol>
 
             <div class="post-summary">
               <h2>Key Takeaways</h2>
               <ul class="summary-list">
-                <li>Q-values represent expected future rewards</li>
-                <li>The Bellman equation enables dynamic programming solutions</li>
-                <li>Optimal policies emerge from value iteration</li>
+                <li>The Bellman equation forms the mathematical backbone of many reinforcement learning algorithms</li>
+                <li>Q-values represent expected future rewards for state-action pairs</li>
+                <li>Deep Q-Networks allow scaling to complex, high-dimensional problems</li>
+                <li>Reinforcement learning connects to classical control theory in powerful ways</li>
+                <li>Real-world robotics applications face challenges like sample efficiency and safety constraints</li>
               </ul>
             </div>
+            
+            <h2>Conclusion</h2>
+            
+            <p>The Bellman optimal Q-value function represents one of the most elegant mathematical formulations in artificial intelligence. It connects dynamic programming, optimal control, and modern deep learning approaches.</p>
+            
+            <p>For roboticists, mastering this concept provides a powerful tool for developing systems that can learn complex behaviors through interaction with their environment. As we continue to advance reinforcement learning algorithms, we move closer to robots that can adapt to new tasks and environments with minimal human intervention.</p>
+            
+            <p>In future posts, I'll explore practical implementations of these concepts in robotic systems, including my current work on using reinforcement learning for trajectory optimization in industrial manipulators.</p>
+            
+            <p>Until then, I encourage you to explore these ideas further. Understanding the mathematical foundations of RL provides insights that go far beyond simply applying off-the-shelf algorithms.</p>
+            
+            <hr>
+            
+            <p><em>Have questions about reinforcement learning or its applications in robotics? Feel free to reach out through the <a href="../contact.html">contact page</a> or connect with me on <a href="https://www.linkedin.com/in/mo-saeidi-21a00015a/" target="_blank">LinkedIn</a>.</em></p>
           </section>
         </article>
       </div>
@@ -106,27 +251,12 @@
     <!-- Footer -->
     <footer class="footer">
       <div class="container">
-        <div class="footer-content">
-          <div class="footer-brand">
-            <a href="/" class="footer-logo">MoSa</a>
-            <p class="footer-tagline">Exploring the intersection of math and machine learning</p>
-          </div>
-          <nav class="footer-nav">
-            <h4 class="nav-title">Categories</h4>
-            <ul>
-              <li><a href="/rl">Reinforcement Learning</a></li>
-              <li><a href="/math">Mathematics</a></li>
-              <li><a href="/projects">Projects</a></li>
-            </ul>
-          </nav>
-        </div>
-        <p class="footer-copyright">&copy; 2025 MoSa. All rights reserved.</p>
+        <p>&copy; 2025 MoSa. All rights reserved.</p>
       </div>
     </footer>
   </div>
 
   <!-- Scripts -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
-  <script src="../js/script.js"></script>
+  <script src="../assets/js/script.js"></script>
 </body>
 </html>
