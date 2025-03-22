@@ -3,8 +3,16 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>My Personal Website</title>
+  <title>Mo Saeidi - Robotics & Control Engineer</title>
   <link rel="stylesheet" href="assets/css/styles.css" />
+  <!-- Font Awesome -->
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+    integrity="sha512-Fo3rlrZj/k7ujTnH/PR5njL16VsdhE5W8aXjz/r+5M6l5NjF/YSO0UOeAcH6rOr1v6Z1bOiHx6sF8Jb4iMJ5gw=="
+    crossorigin="anonymous"
+    referrerpolicy="no-referrer"
+  />
 </head>
 <body>
   <div class="page-wrapper">
@@ -12,15 +20,13 @@
       <nav class="navbar">
         <div class="container">
           <a href="index.html" class="logo">MoSa</a>
-          
           <button id="mobile-menu-btn" class="mobile-menu-btn">
             <span class="bar"></span>
             <span class="bar"></span>
             <span class="bar"></span>
           </button>
-          
           <ul class="nav-links">
-            <li><a href="index.html">Home</a></li>
+            <li><a href="index.html" class="active">Home</a></li>
             <li><a href="about.html">About Me</a></li>
             <li><a href="blog.html">Blog</a></li>
             <li><a href="academia.html">Academia</a></li>
@@ -30,33 +36,249 @@
         </div>
       </nav>
     </header>
-    
-    <main>
-      <!-- Hero Section -->
-    <section id="hero">
-      <div class="container">
-        <h1>Welcome to My Personal Space</h1>
-        <p>Sharing thoughts, knowledge, and experiences.</p>
-      </div>
-    </section>
-    
-    <!-- Latest Blog Posts Section (dynamically loaded) -->
-    <section id="latest-posts">
-      <div class="container">
-        <h2>Latest Blog Posts</h2>
-        <div class="posts-grid" id="posts">
-          <!-- Posts will be loaded here via JavaScript -->
+
+    <!-- Hero Section with Parallax -->
+    <section id="hero" class="parallax-hero">
+      <div class="hero-content">
+        <h1 class="animated-text">Exploring the Intersection of <span class="highlight">Robotics</span>, <span class="highlight">Control</span>, and <span class="highlight">Learning</span></h1>
+        <p>Robotics engineer passionate about creating intelligent systems that adapt to complex environments</p>
+        <div class="hero-buttons">
+          <a href="resume.html" class="btn btn-primary">View Resume</a>
+          <a href="assets/documents/resume.pdf" class="btn btn-secondary" download="MoSaeidi_Resume.pdf">Download CV</a>
         </div>
       </div>
+      <div class="scroll-indicator">
+        <span>Scroll Down</span>
+        <i class="fas fa-chevron-down"></i>
+      </div>
     </section>
-  </main>
-  
-  <footer>
-    <div class="container">
-      <p>&copy; 2025 My Personal Website. All rights reserved.</p>
-    </div>
-  </footer>
-</div>
+
+    <main>
+      <!-- Current Focus Section -->
+      <section id="current-focus">
+        <div class="container">
+          <h2 class="section-title">Current Focus</h2>
+          <div class="focus-wrapper">
+            <div class="focus-card research">
+              <div class="focus-icon">
+                <i class="fas fa-robot"></i>
+              </div>
+              <h3>ARTO Project</h3>
+              <p>Teaching robots to learn from human demonstrations using reinforcement learning and trajectory optimization</p>
+              <div class="progress-container">
+                <div class="progress-bar">
+                  <div class="progress" style="width: 75%"></div>
+                </div>
+                <span class="progress-text">75% Complete</span>
+              </div>
+            </div>
+            
+            <div class="focus-card publication">
+              <div class="focus-icon">
+                <i class="fas fa-file-alt"></i>
+              </div>
+              <h3>Upcoming Publication</h3>
+              <p>Research paper on human-guided reinforcement learning for robotic manipulation tasks</p>
+              <div class="milestone-tracker">
+                <div class="milestone completed">
+                  <span class="milestone-dot"></span>
+                  <span class="milestone-label">Research</span>
+                </div>
+                <div class="milestone completed">
+                  <span class="milestone-dot"></span>
+                  <span class="milestone-label">Draft</span>
+                </div>
+                <div class="milestone in-progress">
+                  <span class="milestone-dot"></span>
+                  <span class="milestone-label">Review</span>
+                </div>
+                <div class="milestone">
+                  <span class="milestone-dot"></span>
+                  <span class="milestone-label">Submit</span>
+                </div>
+              </div>
+            </div>
+            
+            <div class="focus-card learning">
+              <div class="focus-icon">
+                <i class="fas fa-book"></i>
+              </div>
+              <h3>Learning Journey</h3>
+              <p>Advancing knowledge in statistical ML, reinforcement learning, and optimal control</p>
+              <div class="books-progress">
+                <div class="book-item">
+                  <span class="book-title">Statistical ML</span>
+                  <div class="book-progress-bar">
+                    <div class="book-progress" style="width: 65%"></div>
+                  </div>
+                  <span class="book-percentage">65%</span>
+                </div>
+                <div class="book-item">
+                  <span class="book-title">Reinforcement Learning</span>
+                  <div class="book-progress-bar">
+                    <div class="book-progress" style="width: 80%"></div>
+                  </div>
+                  <span class="book-percentage">80%</span>
+                </div>
+                <div class="book-item">
+                  <span class="book-title">Optimal Control</span>
+                  <div class="book-progress-bar">
+                    <div class="book-progress" style="width: 40%"></div>
+                  </div>
+                  <span class="book-percentage">40%</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Personal Goals Section -->
+      <section id="personal-goals">
+        <div class="container">
+          <h2 class="section-title">Life Beyond Code</h2>
+          <p class="section-subtitle">Because balance matters in the pursuit of excellence</p>
+          
+          <div class="goals-container">
+            <div class="goal-item">
+              <div class="goal-icon-container">
+                <i class="fas fa-bicycle"></i>
+              </div>
+              <div class="goal-details">
+                <h3>Weekly Cycling</h3>
+                <p>Target: 50km per week</p>
+                <div class="circular-progress">
+                  <svg width="120" height="120" viewBox="0 0 120 120">
+                    <circle cx="60" cy="60" r="54" fill="none" stroke="#e6e6e6" stroke-width="12" />
+                    <circle cx="60" cy="60" r="54" fill="none" stroke="#3498db" stroke-width="12" stroke-dasharray="339.3" stroke-dashoffset="118.8" />
+                    <text x="60" y="60" text-anchor="middle" dy="7" font-size="20">65%</text>
+                  </svg>
+                </div>
+                <p class="goal-stats">32.5 km this week</p>
+              </div>
+            </div>
+            
+            <div class="goal-item">
+              <div class="goal-icon-container">
+                <i class="fas fa-dumbbell"></i>
+              </div>
+              <div class="goal-details">
+                <h3>Gym Sessions</h3>
+                <p>Target: 4 sessions per week</p>
+                <div class="sessions-tracker">
+                  <div class="session-day completed">
+                    <span>M</span>
+                  </div>
+                  <div class="session-day completed">
+                    <span>T</span>
+                  </div>
+                  <div class="session-day">
+                    <span>W</span>
+                  </div>
+                  <div class="session-day completed">
+                    <span>T</span>
+                  </div>
+                  <div class="session-day">
+                    <span>F</span>
+                  </div>
+                  <div class="session-day rest">
+                    <span>S</span>
+                  </div>
+                  <div class="session-day rest">
+                    <span>S</span>
+                  </div>
+                </div>
+                <p class="goal-stats">3 of 4 completed</p>
+              </div>
+            </div>
+            
+            <div class="goal-item">
+              <div class="goal-icon-container">
+                <i class="fas fa-brain"></i>
+              </div>
+              <div class="goal-details">
+                <h3>Daily Meditation</h3>
+                <p>Target: 15 minutes daily</p>
+                <div class="habit-calendar">
+                  <div class="habit-week">
+                    <div class="habit-day completed" data-day="Mon"></div>
+                    <div class="habit-day completed" data-day="Tue"></div>
+                    <div class="habit-day completed" data-day="Wed"></div>
+                    <div class="habit-day" data-day="Thu"></div>
+                    <div class="habit-day" data-day="Fri"></div>
+                    <div class="habit-day" data-day="Sat"></div>
+                    <div class="habit-day" data-day="Sun"></div>
+                  </div>
+                </div>
+                <p class="goal-stats">Current streak: 3 days</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Latest Blog Posts Section -->
+      <section id="latest-posts">
+        <div class="container">
+          <h2 class="section-title">Latest Insights</h2>
+          <div class="posts-grid" id="posts">
+            <!-- Posts will be loaded here via JavaScript -->
+          </div>
+          <div class="see-more-container">
+            <a href="blog.html" class="btn btn-outline">View All Posts</a>
+          </div>
+        </div>
+      </section>
+      
+      <!-- Quote Section -->
+      <section id="quote-section">
+        <div class="container">
+          <blockquote>
+            <p>"Exploration is not just a core challenge in reinforcement learning algorithms; it's a guiding philosophy for life."</p>
+            <cite>— My Research Philosophy</cite>
+          </blockquote>
+        </div>
+      </section>
+      
+      <!-- Connect Section -->
+      <section id="connect">
+        <div class="container">
+          <h2 class="section-title">Let's Connect</h2>
+          <p class="connect-description">Interested in robotics, control systems, or potential collaborations? Reach out to discuss possibilities or just exchange ideas.</p>
+          <div class="connect-buttons">
+            <a href="contact.html" class="btn btn-primary">Contact Me</a>
+            <a href="https://www.linkedin.com/in/mo-saeidi-21a00015a/" target="_blank" class="btn btn-linkedin"><i class="fab fa-linkedin"></i> LinkedIn</a>
+            <a href="https://scholar.google.com/citations?user=6AucdhQAAAAJ&hl=en" target="_blank" class="btn btn-scholar"><i class="fas fa-graduation-cap"></i> Google Scholar</a>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <div class="container">
+        <div class="footer-content">
+          <div class="footer-logo">
+            <span>MoSa</span>
+            <p>Exploring the future of intelligent systems</p>
+          </div>
+          <div class="footer-links">
+            <h3>Quick Links</h3>
+            <ul>
+              <li><a href="index.html">Home</a></li>
+              <li><a href="about.html">About Me</a></li>
+              <li><a href="blog.html">Blog</a></li>
+              <li><a href="academia.html">Academia</a></li>
+              <li><a href="resume.html">Resume</a></li>
+              <li><a href="contact.html">Contact</a></li>
+            </ul>
+          </div>
+        </div>
+        <div class="footer-bottom">
+          <p>&copy; 2025 Mo Saeidi. All rights reserved.</p>
+        </div>
+      </div>
+    </footer>
+  </div>
   
   <script src="assets/js/script.js"></script>
 </body>

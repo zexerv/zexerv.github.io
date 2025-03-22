@@ -134,3 +134,28 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   });
 });
+
+// Add this to your script.js file to enable resume downloads
+
+document.addEventListener('DOMContentLoaded', function() {
+  // Fix for resume download in the resume page
+  const downloadButtons = document.querySelectorAll('.resume-actions .btn');
+  if (downloadButtons.length > 0) {
+    downloadButtons.forEach(button => {
+      // Check if it's a download button
+      if (button.textContent.includes('Download') || button.querySelector('i.fa-download')) {
+        button.setAttribute('href', 'assets/documents/resume.pdf');
+        button.setAttribute('download', 'MoSaeidi_Resume.pdf');
+        
+        // Add event listener to ensure the download works
+        button.addEventListener('click', function(e) {
+          // Prevent default only if the download attribute isn't supported
+          if (!('download' in button)) {
+            e.preventDefault();
+            alert('Your browser does not support automatic downloads. Please right-click the link and select "Save link as..." to download the file.');
+          }
+        });
+      }
+    });
+  }
+});
