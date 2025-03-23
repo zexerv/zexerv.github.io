@@ -23,6 +23,7 @@
   <script src="https://unpkg.com/tippy.js@6"></script>
   <link rel="stylesheet" href="https://unpkg.com/tippy.js@6/animations/scale.css"/>
   <!-- Custom Resume Styles -->
+
   <style>
 /* Logo styling */
 .logo-container {
@@ -66,18 +67,22 @@
     0% { opacity: 0; transform: scale(0.8); }
     100% { opacity: 1; transform: scale(1); }
   }
-  
+
   @keyframes slideInFromRight {
     0% { opacity: 0; transform: translateX(30px); }
     100% { opacity: 1; transform: translateX(0); }
   }
-  
   @keyframes highlight {
     0% { background-color: transparent; }
     50% { background-color: rgba(13, 71, 161, 0.1); }
     100% { background-color: transparent; }
   }
-  
+  .publication-item[data-aos="fade-up"] {
+    animation-name: slideInFromRight;
+    animation-duration: 0.5s;
+    animation-timing-function: ease;
+    animation-fill-mode: backwards;
+  }
   .skill-category:hover {
     animation: highlight 1s ease;
   }
@@ -206,22 +211,30 @@
       }
       
       .contact-icon {
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        width: 26px;
-        height: 26px;
-        min-width: 26px;
-        border-radius: 50%;
-        background: rgba(255, 255, 255, 0.2);
-        margin-right: var(--spacing-sm);
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        width: 28px !important;
+        height: 28px !important;
+        min-width: 28px !important;
+        border-radius: 50% !important;
+        background: rgba(255, 255, 255, 0.2) !important;
+        margin-right: 10px !important;
       }
       
       .contact-icon i {
-        color: white;
-        font-size: var(--font-size-sm);
+        color: white !important;
+        font-size: 14px !important;
+        opacity: 1 !important;
       }
-      
+
+
+      /* Fix for all contact section elements */
+    .resume-header .contact-item *,
+    .resume-header .contact-icon *,
+    .resume-header .contact-text * {
+    opacity: 1 !important;
+    }
       /* Fix for section title line */
       .section-title {
         color: var(--primary);
@@ -788,17 +801,12 @@
     
     /* Publications */
     .publication-item {
-      margin-bottom: var(--spacing-md);
-      padding-bottom: var(--spacing-sm);
-      border-bottom: 1px dashed var(--border);
-      transition: all var(--transition-normal);
-      position: relative;
+        transition: transform 0.3s ease, background-color 0.3s ease;
     }
     
     .publication-item:hover {
       transform: translateX(5px);
       background-color: rgba(2, 119, 189, 0.03);
-      padding-left: var(--spacing-sm);
     }
     
     .publication-item:last-child {
@@ -1412,6 +1420,36 @@
       text-align: center;
       border-top: 1px solid var(--border);
     }
+    /* Add this to your CSS (at the end of your style tag) */
+    .experience-logo, .education-logo {
+        width: 40px;
+        height: 40px;
+        opacity: 0.6;  /* Increased from 0.1 for better visibility */
+        filter: grayscale(70%);
+        transition: all 0.3s ease;
+        border-radius: 4px;
+        object-fit: contain;
+        z-index: 10;  /* Ensure it's on top */
+        position: relative;
+    }
+    
+    .experience-item:hover .experience-logo,
+    .education-item:hover .education-logo {
+        opacity: 1;
+        filter: grayscale(0%);
+        transform: scale(1.1);  /* Add slight scale effect */
+    }
+    
+    /* Improved logo container to ensure proper positioning */
+    .logo-container {
+        position: relative;
+        display: inline-block;
+        margin-right: 10px;
+        width: 40px;
+        height: 40px;
+        overflow: visible;
+    }
+
   </style>
 </head>
 <body>

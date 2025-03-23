@@ -2663,3 +2663,32 @@ footer {
   box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
 }
 
+/* Add this to your CSS (at the end of your style tag) */
+.experience-logo, .education-logo {
+  width: 40px;
+  height: 40px;
+  opacity: 0.6;  /* Increased from 0.1 for better visibility */
+  filter: grayscale(70%);
+  transition: all 0.3s ease;
+  border-radius: 4px;
+  object-fit: contain;
+  z-index: 10;  /* Ensure it's on top */
+  position: relative;
+}
+
+.experience-item:hover .experience-logo,
+.education-item:hover .education-logo {
+  opacity: 1;
+  filter: grayscale(0%);
+  transform: scale(1.1);  /* Add slight scale effect */
+}
+
+/* Improved logo container to ensure proper positioning */
+.logo-container {
+  position: relative;
+  display: inline-block;
+  margin-right: 10px;
+  width: 40px;
+  height: 40px;
+  overflow: visible;
+}
