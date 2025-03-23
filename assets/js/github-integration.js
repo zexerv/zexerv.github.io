@@ -1,271 +1,108 @@
-// GitHub Integration Script
+// Fixed GitHub Integration Script
 document.addEventListener("DOMContentLoaded", function() {
-    console.log("GitHub Integration Script Loaded");
+    console.log("Fixed GitHub Integration Script Loaded");
     
     // Initialize GitHub Contributions Heatmap
-    initContributionHeatmap();
+    createContributionHeatmap();
     
     // Initialize Projects Filtering
     initProjectsFilter();
   });
   
-  // Function to initialize the contribution heatmap
-  function initContributionHeatmap() {
-    const contributionGrid = document.getElementById("contribution-grid");
+  // Function to create the contribution heatmap from scratch
+  function createContributionHeatmap() {
+    const contributionSection = document.getElementById("github-contributions");
+    if (!contributionSection) return;
     
-    if (!contributionGrid) return;
+    // Find the container for the heatmap
+    const container = contributionSection.querySelector(".contribution-heatmap");
+    if (!container) return;
     
-    // This would normally be fetched from GitHub API or pre-generated data
-    // For demo purposes, we'll generate random contribution data
-    const days = 7 * 52; // 1 year of data (7 days * 52 weeks)
-    
-    // Create cells for each day
-    for (let i = 0; i < days; i++) {
-      const cell = document.createElement("div");
-      cell.classList.add("grid-cell");
-      
-      // Randomly assign heat level (0-4)
-      const heatLevel = Math.floor(Math.random() * 5);
-      if (heatLevel > 0) {
-        cell.classList.add(`heat-${heatLevel}`);
-      }
-      
-      // Add data attributes for tooltip (would be actual dates and contribution counts)
-      const today = new Date();
-      const date = new Date(today);
-      date.setDate(today.getDate() - (days - i));
-      
-      cell.setAttribute("data-date", formatDate(date));
-      cell.setAttribute("data-count", Math.floor(Math.random() * 10));
-      
-      // Add tooltip functionality
-      cell.addEventListener("mouseover", showTooltip);
-      cell.addEventListener("mouseout", hideTooltip);
-      
-      contributionGrid.appendChild(cell);
-    }
-  }
-  
-  // Helper function to format date
-  function formatDate(date) {
-    const options = { year: 'numeric', month: 'short', day: 'numeric' };
-    return date.toLocaleDateString('en-US', options);
-  }
-  
-  // Functions for tooltip
-  function showTooltip(event) {
-    const cell = event.target;
-    const date = cell.getAttribute("data-date");
-    const count = cell.getAttribute("data-count");
-    
-    // Create tooltip
-    const tooltip = document.createElement("div");
-    tooltip.classList.add("heatmap-tooltip");
-    tooltip.textContent = `${count} contributions on ${date}`;
-    
-    // Position the tooltip
-    const rect = cell.getBoundingClientRect();
-    tooltip.style.position = "absolute";
-    tooltip.style.left = `${rect.left}px`;
-    tooltip.style.top = `${rect.top - 30}px`;
-    tooltip.style.backgroundColor = "#333";
-    tooltip.style.color = "white";
-    tooltip.style.padding = "5px 10px";
-    tooltip.style.borderRadius = "4px";
-    tooltip.style.fontSize = "12px";
-    tooltip.style.zIndex = "100";
-    
-    document.body.appendChild(tooltip);
-    cell.setAttribute("data-tooltip-id", Date.now());
-    tooltip.id = cell.getAttribute("data-tooltip-id");
-  }
-  
-  function hideTooltip(event) {
-    const cell = event.target;
-    const tooltipId = cell.getAttribute("data-tooltip-id");
-    if (tooltipId) {
-      const tooltip = document.getElementById(tooltipId);
-      if (tooltip) {
-        tooltip.remove();
-      }
-    }
-  }
-  
-  // Function to initialize projects filtering
-  function initProjectsFilter() {
-    const filterButtons = document.querySelectorAll(".filter-btn");
-    const projectCards = document.querySelectorAll(".project-card");
-    
-    if (!filterButtons.length || !projectCards.length) return;
-    
-    filterButtons.forEach(button => {
-      button.addEventListener("click", function() {
-        // Remove active class from all buttons
-        filterButtons.forEach(btn => btn.classList.remove("active"));
-        
-        // Add active class to clicked button
-        this.classList.add("active");
-        
-        // Get filter value
-        const filterValue = this.getAttribute("data-filter");
-        
-        // Filter projects
-        projectCards.forEach(card => {
-          if (filterValue === "all" || card.getAttribute("data-category") === filterValue) {
-            card.style.display = "block";
-          } else {
-            card.style.display = "none";
-          }
-        });
-      });
-    });
-  }
-  
-
-  // Enhanced GitHub Integration Script
-document.addEventListener("DOMContentLoaded", function() {
-    console.log("Enhanced GitHub Integration Script Loaded");
-    
-    // Initialize GitHub Contributions Heatmap
-    initEnhancedContributionHeatmap();
-    
-    // Initialize Projects Filtering
-    initProjectsFilter();
-  });
-  
-  // Function to initialize the enhanced contribution heatmap
-  function initEnhancedContributionHeatmap() {
-    const contributionHeatmap = document.querySelector(".contribution-heatmap");
-    
-    if (!contributionHeatmap) return;
-    
-    // Clear any existing content in the heatmap
-    const existingGrid = document.getElementById("contribution-grid");
-    if (existingGrid) {
-      existingGrid.innerHTML = '';
-    }
-    
-    // Add labels for days of the week
-    const daysOfWeek = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
-    const heatmapDays = document.createElement("div");
-    heatmapDays.className = "heatmap-days";
-    
-    daysOfWeek.forEach(day => {
-      const dayElement = document.createElement("div");
-      dayElement.className = "heatmap-day";
-      dayElement.textContent = day;
-      heatmapDays.appendChild(dayElement);
-    });
-    
-    // Create container for the heatmap
-    const heatmapContainer = document.createElement("div");
-    heatmapContainer.className = "heatmap-container";
-    
-    // Add week labels
-    const weekLabels = document.createElement("div");
-    weekLabels.className = "week-labels";
-    
-    ['', 'Mon', '', 'Wed', '', 'Fri', ''].forEach(label => {
-      const labelElement = document.createElement("div");
-      labelElement.className = "week-label";
-      labelElement.textContent = label;
-      weekLabels.appendChild(labelElement);
-    });
-    
-    heatmapContainer.appendChild(weekLabels);
-    
-    // Create grid for contributions
-    const grid = document.createElement("div");
-    grid.id = "contribution-grid";
-    grid.className = "heatmap-grid";
-    heatmapContainer.appendChild(grid);
-    
-    // Add months labels
-    const heatmapMonths = document.createElement("div");
-    heatmapMonths.className = "heatmap-months";
-    
-    const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-    months.forEach(month => {
-      const monthElement = document.createElement("span");
-      monthElement.textContent = month;
-      heatmapMonths.appendChild(monthElement);
-    });
-    
-    // Replace the existing content
-    contributionHeatmap.innerHTML = '';
-    
-    // Add the header back
-    const heatmapHeader = document.createElement("div");
-    heatmapHeader.className = "heatmap-header";
-    heatmapHeader.innerHTML = `
-      <span>Contributions in the last year: <strong>854</strong></span>
-      <div class="heatmap-legend">
-        <span class="legend-label">Less</span>
-        <ul class="legend-squares">
-          <li class="heat-0"></li>
-          <li class="heat-1"></li>
-          <li class="heat-2"></li>
-          <li class="heat-3"></li>
-          <li class="heat-4"></li>
-        </ul>
-        <span class="legend-label">More</span>
+    // Clear existing content and rebuild it
+    container.innerHTML = `
+      <div class="heatmap-header">
+        <span>Contributions in the last year: <strong>854</strong></span>
+        <div class="heatmap-legend">
+          <span class="legend-label">Less</span>
+          <ul class="legend-squares">
+            <li class="heat-0"></li>
+            <li class="heat-1"></li>
+            <li class="heat-2"></li>
+            <li class="heat-3"></li>
+            <li class="heat-4"></li>
+          </ul>
+          <span class="legend-label">More</span>
+        </div>
+      </div>
+      <div class="heatmap-days">
+        <div class="heatmap-day">Sun</div>
+        <div class="heatmap-day">Mon</div>
+        <div class="heatmap-day">Tue</div>
+        <div class="heatmap-day">Wed</div>
+        <div class="heatmap-day">Thu</div>
+        <div class="heatmap-day">Fri</div>
+        <div class="heatmap-day">Sat</div>
+      </div>
+      <div class="heatmap-container">
+        <div class="week-labels">
+          <div class="week-label"></div>
+          <div class="week-label">Mon</div>
+          <div class="week-label"></div>
+          <div class="week-label">Wed</div>
+          <div class="week-label"></div>
+          <div class="week-label">Fri</div>
+          <div class="week-label"></div>
+        </div>
+        <div id="contribution-grid" class="heatmap-grid"></div>
+      </div>
+      <div class="heatmap-months">
+        <span>Jan</span>
+        <span>Feb</span>
+        <span>Mar</span>
+        <span>Apr</span>
+        <span>May</span>
+        <span>Jun</span>
+        <span>Jul</span>
+        <span>Aug</span>
+        <span>Sep</span>
+        <span>Oct</span>
+        <span>Nov</span>
+        <span>Dec</span>
       </div>
     `;
     
-    contributionHeatmap.appendChild(heatmapHeader);
-    contributionHeatmap.appendChild(heatmapDays);
-    contributionHeatmap.appendChild(heatmapContainer);
-    contributionHeatmap.appendChild(heatmapMonths);
-    
-    // Populate the grid with cells
-    generateContributionData();
+    // Now populate the grid with cells
+    populateContributionGrid();
   }
   
-  // Function to generate contribution data and populate the grid
-  function generateContributionData() {
+  // Function to populate the contribution grid with data
+  function populateContributionGrid() {
     const grid = document.getElementById("contribution-grid");
     if (!grid) return;
+    
+    // Clear any existing content
+    grid.innerHTML = "";
     
     // Generate data for 52 weeks (1 year)
     const numWeeks = 52;
     const numDays = 7;
-    const totalDays = numWeeks * numDays;
     
     // Get current date
     const today = new Date();
     
-    // Generate activity pattern (more activity in recent months, less in older months)
-    for (let week = 0; week < numWeeks; week++) {
-      for (let day = 0; day < numDays; day++) {
+    // Create a pattern of activity (you can customize this)
+    const activityPattern = generateActivityPattern(numWeeks, numDays);
+    
+    // Create cells for each day
+    for (let day = 0; day < numDays; day++) {
+      for (let week = 0; week < numWeeks; week++) {
         // Calculate date for this cell
+        const daysAgo = (numWeeks - week - 1) * 7 + (numDays - day - 1);
         const cellDate = new Date(today);
-        cellDate.setDate(today.getDate() - (totalDays - (week * numDays + day)));
+        cellDate.setDate(today.getDate() - daysAgo);
         
-        // Generate activity level (0-4)
-        // More recent dates have higher probability of more activity
-        let heatLevel;
-        const recency = week / numWeeks; // 0 = oldest, 1 = newest
-        const randomFactor = Math.random();
-        
-        if (recency > 0.75) {
-          // Last quarter: higher activity
-          heatLevel = Math.floor(randomFactor * 5);
-          if (randomFactor > 0.3) heatLevel = Math.max(1, heatLevel); // 70% chance of at least level 1
-        } else if (recency > 0.5) {
-          // 3rd quarter: medium activity
-          heatLevel = Math.floor(randomFactor * 4);
-        } else if (recency > 0.25) {
-          // 2nd quarter: lower activity
-          heatLevel = Math.floor(randomFactor * 3);
-        } else {
-          // 1st quarter: sparse activity
-          heatLevel = Math.floor(randomFactor * 2);
-        }
-        
-        // Weekend days (0=Sunday, 6=Saturday) have less activity
-        if ((day === 0 || day === 6) && Math.random() > 0.3) {
-          heatLevel = Math.max(0, heatLevel - 1);
-        }
+        // Get activity level from pattern
+        const heatLevel = activityPattern[day][week];
         
         // Create the cell
         const cell = document.createElement("div");
@@ -277,7 +114,7 @@ document.addEventListener("DOMContentLoaded", function() {
         
         // Add data attributes for tooltip
         cell.setAttribute("data-date", formatDate(cellDate));
-        cell.setAttribute("data-count", heatLevel === 0 ? "0" : Math.floor(Math.random() * 10 + heatLevel * 2));
+        cell.setAttribute("data-count", heatLevel === 0 ? "0" : (heatLevel * 3 + Math.floor(Math.random() * 5)));
         
         // Add tooltip functionality
         cell.addEventListener("mouseover", showEnhancedTooltip);
@@ -286,6 +123,54 @@ document.addEventListener("DOMContentLoaded", function() {
         grid.appendChild(cell);
       }
     }
+  }
+  
+  // Function to generate a realistic activity pattern
+  function generateActivityPattern(weeks, days) {
+    const pattern = Array(days).fill().map(() => Array(weeks).fill(0));
+    
+    // Create a realistic pattern with more activity in recent months
+    for (let day = 0; day < days; day++) {
+      for (let week = 0; week < weeks; week++) {
+        // Calculate probability based on recency (higher for recent weeks)
+        const recency = week / weeks; // 0 = oldest, 1 = newest
+        let probability;
+        
+        if (recency > 0.8) {         // Last 20% of time (very recent)
+          probability = 0.8;
+        } else if (recency > 0.6) {  // 60-80% of time
+          probability = 0.7;
+        } else if (recency > 0.4) {  // 40-60% of time
+          probability = 0.5;
+        } else if (recency > 0.2) {  // 20-40% of time
+          probability = 0.3;
+        } else {                     // First 20% of time (oldest)
+          probability = 0.15;
+        }
+        
+        // Weekend adjustment (less activity on weekends)
+        if (day === 0 || day === 6) {
+          probability *= 0.6;
+        }
+        
+        // Randomly determine activity level based on probability
+        const random = Math.random();
+        
+        if (random < probability * 0.2) {
+          pattern[day][week] = 4; // Very high activity (darkest green)
+        } else if (random < probability * 0.4) {
+          pattern[day][week] = 3; // High activity
+        } else if (random < probability * 0.6) {
+          pattern[day][week] = 2; // Medium activity
+        } else if (random < probability) {
+          pattern[day][week] = 1; // Low activity
+        } else {
+          pattern[day][week] = 0; // No activity
+        }
+      }
+    }
+    
+    return pattern;
   }
   
   // Helper function to format date
@@ -403,19 +288,3 @@ document.addEventListener("DOMContentLoaded", function() {
       card.style.transition = "all 0.3s ease";
     });
   }
-  // You could add functions here to fetch actual GitHub data
-  // using the GitHub API if you implement a backend service
-  // Example:
-  /*
-  async function fetchGitHubData(username) {
-    try {
-      // This would require a backend proxy to avoid CORS issues and to hide your GitHub token
-      const response = await fetch(`/api/github/${username}`);
-      const data = await response.json();
-      return data;
-    } catch (error) {
-      console.error("Error fetching GitHub data:", error);
-      return null;
-    }
-  }
-  */
