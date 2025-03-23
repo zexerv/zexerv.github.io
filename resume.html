@@ -14,68 +14,80 @@
     referrerpolicy="no-referrer"
   />
   <!-- Google Fonts -->
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&family=Lora:ital,wght@0,400;0,500;0,600;1,400&family=Open+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&family=Lora:ital,wght@0,400;0,500;0,600;1,400&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
   <!-- AOS Animations -->
   <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
   <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+  <!-- Tippy.js for Tooltips -->
+  <script src="https://unpkg.com/@popperjs/core@2"></script>
+  <script src="https://unpkg.com/tippy.js@6"></script>
+  <link rel="stylesheet" href="https://unpkg.com/tippy.js@6/animations/scale.css"/>
   <!-- Custom Resume Styles -->
   <style>
     :root {
-      /* Primary color palette */
-      --primary: #1e3a8a;
-      --primary-light: #2563eb;
-      --primary-dark: #1e40af;
-      --primary-gradient: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);
+      /* Primary color palette - refined professional blue */
+      --primary: #0d47a1;
+      --primary-light: #5472d3;
+      --primary-dark: #002171;
       
-      /* Secondary color palette */
-      --secondary: #0ea5e9;
-      --secondary-light: #38bdf8;
-      --secondary-dark: #0284c7;
+      /* Secondary color */
+      --secondary: #0277bd;
+      --secondary-light: #58a5f0;
+      --secondary-dark: #004c8c;
       
       /* Accent color */
-      --accent: #f59e0b;
-      --accent-light: #fbbf24;
+      --accent: #ffc107;
+      --accent-light: #fff350;
+      --accent-dark: #c79100;
       
       /* Neutral colors */
-      --text-dark: #0f172a;
-      --text-medium: #334155;
-      --text-light: #64748b;
-      --background: #f8fafc;
+      --text-dark: #263238;
+      --text-medium: #455a64;
+      --text-light: #78909c;
+      --background: #f5f7fa;
       --card-bg: #ffffff;
-      --border: #e2e8f0;
+      --border: #e0e0e0;
       
       /* Success/achievement colors */
-      --success: #10b981;
-      --success-light: #a7f3d0;
+      --success: #00897b;
+      --success-light: #4ebaaa;
+      --success-dark: #005b4f;
       
-      /* Spacing */
-      --spacing-xs: 0.25rem;
-      --spacing-sm: 0.5rem;
-      --spacing-md: 1rem;
-      --spacing-lg: 1.5rem;
-      --spacing-xl: 2rem;
-      --spacing-2xl: 3rem;
+      /* Spacing - reduced for tighter layout */
+      --spacing-xs: 0.2rem;
+      --spacing-sm: 0.4rem;
+      --spacing-md: 0.8rem;
+      --spacing-lg: 1.2rem;
+      --spacing-xl: 1.6rem;
+      --spacing-2xl: 2.4rem;
       
-      /* Container widths */
-      --container-width: 1100px;
+      /* Container widths - narrower than before */
+      --container-width: 900px;
       
       /* Border radius */
-      --radius-sm: 0.25rem;
-      --radius-md: 0.5rem;
-      --radius-lg: 1rem;
-      --radius-xl: 1.5rem;
+      --radius-sm: 0.2rem;
+      --radius-md: 0.4rem;
+      --radius-lg: 0.6rem;
+      --radius-xl: 1rem;
       --radius-full: 9999px;
       
       /* Box shadows */
-      --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.1);
-      --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-      --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-      --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+      --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+      --shadow-md: 0 2px 4px rgba(0, 0, 0, 0.1);
+      --shadow-lg: 0 4px 6px rgba(0, 0, 0, 0.1);
+      --shadow-xl: 0 10px 15px rgba(0, 0, 0, 0.1);
       
-      /* Typography */
+      /* Typography - smaller font sizes */
       --font-heading: 'Montserrat', sans-serif;
-      --font-body: 'Open Sans', sans-serif;
+      --font-body: 'Roboto', sans-serif;
       --font-serif: 'Lora', serif;
+      --font-size-xs: 0.75rem;
+      --font-size-sm: 0.85rem;
+      --font-size-md: 0.95rem;
+      --font-size-lg: 1.1rem;
+      --font-size-xl: 1.3rem;
+      --font-size-2xl: 1.8rem;
+      --font-size-3xl: 2.2rem;
       
       /* Transitions */
       --transition-fast: 150ms ease;
@@ -95,7 +107,7 @@
       color: var(--text-medium);
       background-color: var(--background);
       line-height: 1.6;
-      font-size: 16px;
+      font-size: var(--font-size-md);
     }
     
     h1, h2, h3, h4, h5, h6 {
@@ -108,6 +120,7 @@
     
     p {
       margin-bottom: var(--spacing-md);
+      font-size: var(--font-size-md);
     }
     
     a {
@@ -154,12 +167,12 @@
       position: absolute;
       top: 0;
       right: 0;
-      width: 300px;
-      height: 300px;
-      background: var(--primary-gradient);
+      width: 200px;
+      height: 200px;
+      background: linear-gradient(135deg, var(--primary-light) 0%, var(--primary) 100%);
       opacity: 0.05;
       border-radius: 50%;
-      transform: translate(100px, -150px);
+      transform: translate(100px, -120px);
       z-index: 0;
     }
     
@@ -168,26 +181,26 @@
       position: absolute;
       bottom: 0;
       left: 0;
-      width: 200px;
-      height: 200px;
+      width: 150px;
+      height: 150px;
       background: var(--secondary-light);
       opacity: 0.05;
       border-radius: 50%;
-      transform: translate(-100px, 100px);
+      transform: translate(-70px, 70px);
       z-index: 0;
     }
     
     /* Header Section */
     .resume-header {
-      background: var(--primary-gradient);
+      background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
       color: white;
-      padding: var(--spacing-2xl);
+      padding: var(--spacing-xl) var(--spacing-2xl);
       position: relative;
       display: flex;
       align-items: center;
       justify-content: space-between;
       z-index: 1;
-      border-bottom: 5px solid var(--accent);
+      border-bottom: 3px solid var(--accent);
     }
     
     .resume-header-content {
@@ -200,10 +213,10 @@
     }
     
     .profile-image {
-      width: 180px;
-      height: 180px;
+      width: 150px;
+      height: 150px;
       border-radius: var(--radius-full);
-      border: 4px solid rgba(255, 255, 255, 0.8);
+      border: 3px solid rgba(255, 255, 255, 0.8);
       box-shadow: var(--shadow-lg);
       object-fit: cover;
       transition: transform var(--transition-normal);
@@ -213,14 +226,14 @@
       transform: scale(1.05);
     }
     
-    /* Decorative circle behind profile image */
+    /* Decorative circular outline behind profile image */
     .profile-image-container::before {
       content: '';
       position: absolute;
-      top: -10px;
-      left: -10px;
-      right: -10px;
-      bottom: -10px;
+      top: -8px;
+      left: -8px;
+      right: -8px;
+      bottom: -8px;
       border-radius: var(--radius-full);
       border: 2px dashed rgba(255, 255, 255, 0.3);
       animation: rotate 20s linear infinite;
@@ -232,7 +245,7 @@
     }
     
     .resume-name {
-      font-size: 3rem;
+      font-size: var(--font-size-3xl);
       font-weight: 700;
       margin-bottom: var(--spacing-xs);
       letter-spacing: 1px;
@@ -245,17 +258,17 @@
       position: absolute;
       bottom: -5px;
       left: 0;
-      width: 80px;
-      height: 4px;
+      width: 60px;
+      height: 3px;
       background: var(--accent);
       border-radius: var(--radius-full);
     }
     
     .resume-title {
-      font-size: 1.2rem;
+      font-size: var(--font-size-lg);
       font-weight: 500;
       margin-bottom: var(--spacing-lg);
-      opacity: 0.9;
+      color: white;
       font-family: var(--font-serif);
       font-style: italic;
     }
@@ -264,7 +277,7 @@
       display: flex;
       flex-wrap: wrap;
       margin-top: var(--spacing-lg);
-      max-width: 600px;
+      max-width: 500px;
     }
     
     .contact-item {
@@ -279,17 +292,24 @@
       transform: translateY(-3px);
     }
     
-    .contact-item i {
-      margin-right: var(--spacing-sm);
-      font-size: 1rem;
-      width: 20px;
-      height: 20px;
+    .contact-icon {
       display: flex;
       align-items: center;
       justify-content: center;
-      background: rgba(255, 255, 255, 0.2);
+      width: 28px;
+      height: 28px;
       border-radius: var(--radius-full);
-      padding: var(--spacing-lg);
+      background: rgba(255, 255, 255, 0.15);
+      color: white;
+      margin-right: var(--spacing-sm);
+    }
+    
+    .contact-icon i {
+      font-size: var(--font-size-sm);
+    }
+    
+    .contact-text {
+      font-size: var(--font-size-sm);
     }
     
     .contact-item a {
@@ -306,7 +326,7 @@
     /* Summary Section */
     .summary-section {
       background-color: var(--card-bg);
-      padding: var(--spacing-2xl);
+      padding: var(--spacing-xl) var(--spacing-2xl);
       position: relative;
       border-bottom: 1px solid var(--border);
       margin-bottom: var(--spacing-md);
@@ -315,9 +335,9 @@
     .summary-section::before {
       content: '"';
       position: absolute;
-      top: 20px;
-      left: 20px;
-      font-size: 60px;
+      top: 10px;
+      left: 15px;
+      font-size: 40px;
       font-family: var(--font-serif);
       color: var(--primary);
       opacity: 0.1;
@@ -327,8 +347,8 @@
       content: '"';
       position: absolute;
       bottom: 0;
-      right: 25px;
-      font-size: 60px;
+      right: 15px;
+      font-size: 40px;
       font-family: var(--font-serif);
       color: var(--primary);
       opacity: 0.1;
@@ -336,10 +356,10 @@
     
     .summary-section p {
       margin: 0;
-      line-height: 1.8;
+      line-height: 1.7;
       color: var(--text-medium);
-      font-size: 1.05rem;
-      padding: 0 var(--spacing-2xl);
+      font-size: var(--font-size-md);
+      padding: 0 var(--spacing-xl);
       font-family: var(--font-serif);
       position: relative;
       z-index: 1;
@@ -347,10 +367,10 @@
     
     /* Main Content */
     .resume-body {
-      padding: var(--spacing-lg) var(--spacing-2xl) var(--spacing-2xl);
+      padding: var(--spacing-lg) var(--spacing-xl) var(--spacing-xl);
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: var(--spacing-2xl);
+      gap: var(--spacing-xl);
       position: relative;
       z-index: 1;
     }
@@ -362,16 +382,16 @@
     
     /* Section Styling */
     .resume-section {
-      margin-bottom: var(--spacing-2xl);
+      margin-bottom: var(--spacing-xl);
       position: relative;
     }
     
     .section-title {
       color: var(--primary);
-      font-size: 1.5rem;
+      font-size: var(--font-size-xl);
       font-weight: 600;
       margin-bottom: var(--spacing-lg);
-      padding-bottom: var(--spacing-sm);
+      padding-bottom: var(--spacing-xs);
       position: relative;
       display: flex;
       align-items: center;
@@ -384,17 +404,16 @@
       left: 0;
       width: 100%;
       height: 1px;
-      background: linear-gradient(to right, var(--primary) 0%, var(--primary) 50px, var(--border) 50px, var(--border) 100%);
+      background: linear-gradient(to right, var(--primary) 0%, var(--primary) 40px, var(--border) 40px, var(--border) 100%);
     }
     
     .section-title i {
       margin-right: var(--spacing-sm);
-      color: var(--primary);
-      font-size: 1.2rem;
-      background: var(--primary-light);
       color: white;
-      width: 32px;
-      height: 32px;
+      font-size: var(--font-size-sm);
+      background: var(--primary);
+      width: 26px;
+      height: 26px;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -403,10 +422,10 @@
     
     /* Experience Items */
     .experience-item, .education-item, .project-item {
-      margin-bottom: var(--spacing-xl);
+      margin-bottom: var(--spacing-lg);
       position: relative;
-      padding-left: var(--spacing-2xl);
-      padding-bottom: var(--spacing-lg);
+      padding-left: var(--spacing-xl);
+      padding-bottom: var(--spacing-md);
     }
     
     .experience-item:last-child, .education-item:last-child, .project-item:last-child {
@@ -417,23 +436,23 @@
       content: '';
       position: absolute;
       left: 0;
-      top: 8px;
-      width: 14px;
-      height: 14px;
+      top: 6px;
+      width: 10px;
+      height: 10px;
       border-radius: var(--radius-full);
       background-color: var(--primary-light);
-      box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.2);
+      box-shadow: 0 0 0 3px rgba(84, 114, 211, 0.2);
       z-index: 2;
     }
     
     .experience-item::after, .education-item::after, .project-item::after {
       content: '';
       position: absolute;
-      left: 7px;
-      top: 28px;
-      width: 2px;
-      height: calc(100% - 20px);
-      background-color: rgba(37, 99, 235, 0.2);
+      left: 5px;
+      top: 20px;
+      width: 1px;
+      height: calc(100% - 14px);
+      background-color: rgba(84, 114, 211, 0.2);
       z-index: 1;
     }
     
@@ -445,13 +464,13 @@
       display: flex;
       justify-content: space-between;
       align-items: flex-start;
-      margin-bottom: var(--spacing-sm);
+      margin-bottom: var(--spacing-xs);
     }
     
     .experience-title, .education-degree, .project-title {
       font-weight: 600;
       color: var(--text-dark);
-      font-size: 1.1rem;
+      font-size: var(--font-size-md);
       line-height: 1.4;
       margin-bottom: var(--spacing-xs);
     }
@@ -460,23 +479,24 @@
       color: var(--secondary);
       font-weight: 500;
       white-space: nowrap;
-      font-size: 0.9rem;
-      background: rgba(14, 165, 233, 0.1);
-      padding: 2px 10px;
+      font-size: var(--font-size-xs);
+      background: rgba(2, 119, 189, 0.08);
+      padding: 2px 8px;
       border-radius: var(--radius-full);
     }
     
     .experience-company, .education-institution {
       font-style: italic;
       color: var(--text-light);
-      margin-bottom: var(--spacing-sm);
+      margin-bottom: var(--spacing-xs);
       font-family: var(--font-serif);
+      font-size: var(--font-size-sm);
     }
     
     .experience-location {
       color: var(--text-light);
-      font-size: 0.9rem;
-      margin-bottom: var(--spacing-sm);
+      font-size: var(--font-size-xs);
+      margin-bottom: var(--spacing-xs);
       display: flex;
       align-items: center;
     }
@@ -488,21 +508,23 @@
     
     .experience-description, .project-description {
       color: var(--text-medium);
-      line-height: 1.7;
-      font-size: 0.95rem;
-      padding-right: var(--spacing-sm);
+      line-height: 1.6;
+      font-size: var(--font-size-sm);
     }
     
     /* Publications */
     .publication-item {
-      margin-bottom: var(--spacing-lg);
-      padding-bottom: var(--spacing-md);
+      margin-bottom: var(--spacing-md);
+      padding-bottom: var(--spacing-sm);
       border-bottom: 1px dashed var(--border);
-      transition: transform var(--transition-normal);
+      transition: all var(--transition-normal);
+      position: relative;
     }
     
     .publication-item:hover {
       transform: translateX(5px);
+      background-color: rgba(2, 119, 189, 0.03);
+      padding-left: var(--spacing-sm);
     }
     
     .publication-item:last-child {
@@ -512,7 +534,7 @@
     .publication-title {
       font-weight: 600;
       margin-bottom: var(--spacing-xs);
-      font-size: 1rem;
+      font-size: var(--font-size-sm);
       line-height: 1.4;
       color: var(--text-dark);
     }
@@ -522,32 +544,32 @@
       margin-bottom: var(--spacing-xs);
       color: var(--text-light);
       font-family: var(--font-serif);
-      font-size: 0.9rem;
+      font-size: var(--font-size-xs);
     }
     
     .publication-journal {
       margin-bottom: var(--spacing-xs);
       color: var(--text-medium);
-      font-size: 0.9rem;
+      font-size: var(--font-size-xs);
     }
     
     .publication-year {
       color: var(--primary);
       font-weight: 600;
-      font-size: 0.9rem;
+      font-size: var(--font-size-xs);
       display: inline-block;
-      background: rgba(37, 99, 235, 0.1);
-      padding: 1px 8px;
+      background: rgba(13, 71, 161, 0.08);
+      padding: 1px 6px;
       border-radius: var(--radius-full);
       margin-top: var(--spacing-xs);
     }
     
     .publication-link {
       display: inline-block;
-      margin-top: var(--spacing-sm);
+      margin-top: var(--spacing-xs);
       color: var(--primary-light);
       text-decoration: none;
-      font-size: 0.9rem;
+      font-size: var(--font-size-xs);
       transition: all var(--transition-fast);
     }
     
@@ -556,11 +578,34 @@
       text-decoration: underline;
     }
     
+    /* Paper preview tooltip */
+    .paper-preview {
+      display: none;
+      position: absolute;
+      top: 0;
+      left: 100%;
+      width: 180px;
+      box-shadow: var(--shadow-xl);
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      z-index: 10;
+    }
+    
+    .paper-preview img {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+    
+    .publication-item:hover .paper-preview {
+      display: block;
+    }
+    
     /* Skills */
     .skills-container {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
-      gap: var(--spacing-xl);
+      gap: var(--spacing-lg);
     }
     
     .skill-category {
@@ -569,10 +614,10 @@
     
     .skill-category h4 {
       color: var(--secondary-dark);
-      font-size: 1.1rem;
+      font-size: var(--font-size-md);
       margin-bottom: var(--spacing-md);
       padding-bottom: var(--spacing-xs);
-      border-bottom: 2px dashed rgba(2, 132, 199, 0.2);
+      border-bottom: 1px dashed rgba(0, 76, 140, 0.2);
       display: inline-block;
     }
     
@@ -583,30 +628,34 @@
     }
     
     .skills-list li {
-      margin-bottom: var(--spacing-sm);
+      margin-bottom: var(--spacing-xs);
       position: relative;
-      padding-left: var(--spacing-lg);
+      padding-left: var(--spacing-md);
       color: var(--text-medium);
       transition: transform var(--transition-fast);
+      font-size: var(--font-size-sm);
     }
     
     .skills-list li:hover {
-      transform: translateX(5px);
+      transform: translateX(3px);
       color: var(--primary-dark);
     }
     
+    /* Fixed the bullet point styling */
     .skills-list li::before {
-      content: "●";
-      color: var(--primary-light);
+      content: "";
       position: absolute;
       left: 0;
-      font-size: 0.8rem;
-      top: 0.15rem;
+      top: 9px;
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+      background-color: var(--primary-light);
     }
     
     /* Interactive skill level indicators */
     .skill-level {
-      height: 4px;
+      height: 3px;
       background-color: var(--border);
       border-radius: var(--radius-full);
       margin-top: var(--spacing-xs);
@@ -632,16 +681,16 @@
     
     /* Achievements */
     .achievement-item {
-      margin-bottom: var(--spacing-lg);
+      margin-bottom: var(--spacing-md);
       position: relative;
       transition: transform var(--transition-normal);
-      padding: var(--spacing-md);
-      border-radius: var(--radius-md);
+      padding: var(--spacing-sm);
+      border-radius: var(--radius-sm);
     }
     
     .achievement-item:hover {
-      transform: translateY(-5px);
-      background-color: rgba(16, 185, 129, 0.05);
+      transform: translateY(-3px);
+      background-color: rgba(0, 137, 123, 0.05);
     }
     
     .achievement-title {
@@ -650,62 +699,62 @@
       margin-bottom: var(--spacing-xs);
       display: flex;
       align-items: center;
-      font-size: 1rem;
+      font-size: var(--font-size-sm);
     }
     
     .achievement-title i {
       color: white;
       margin-right: var(--spacing-sm);
       background-color: var(--success);
-      width: 24px;
-      height: 24px;
+      width: 20px;
+      height: 20px;
       display: flex;
       align-items: center;
       justify-content: center;
       border-radius: var(--radius-full);
-      font-size: 0.8rem;
+      font-size: var(--font-size-xs);
     }
     
     .achievement-date {
       color: var(--text-light);
-      font-size: 0.9rem;
-      margin-left: 2rem;
+      font-size: var(--font-size-xs);
+      margin-left: 28px;
       margin-bottom: var(--spacing-xs);
     }
     
     .achievement-description {
       color: var(--text-medium);
-      margin-left: 2rem;
+      margin-left: 28px;
       font-style: italic;
-      font-size: 0.95rem;
+      font-size: var(--font-size-xs);
       line-height: 1.5;
     }
     
     /* Languages */
     .languages-section {
-      margin-top: var(--spacing-lg);
+      margin-top: var(--spacing-md);
     }
     
     .language-items {
       display: flex;
       flex-wrap: wrap;
-      gap: var(--spacing-lg);
+      gap: var(--spacing-md);
     }
     
     .language-item {
       display: flex;
       flex-direction: column;
-      margin-bottom: var(--spacing-md);
-      padding: var(--spacing-md) var(--spacing-lg);
-      background-color: rgba(37, 99, 235, 0.05);
-      border-radius: var(--radius-md);
+      margin-bottom: var(--spacing-sm);
+      padding: var(--spacing-sm) var(--spacing-md);
+      background-color: rgba(13, 71, 161, 0.05);
+      border-radius: var(--radius-sm);
       transition: all var(--transition-normal);
       border: 1px solid transparent;
     }
     
     .language-item:hover {
       transform: translateY(-3px);
-      border-color: rgba(37, 99, 235, 0.2);
+      border-color: rgba(13, 71, 161, 0.1);
       box-shadow: var(--shadow-md);
     }
     
@@ -713,46 +762,47 @@
       font-weight: 600;
       margin-bottom: var(--spacing-xs);
       color: var(--text-dark);
+      font-size: var(--font-size-sm);
     }
     
     .language-level {
       color: var(--text-light);
-      font-size: 0.9rem;
+      font-size: var(--font-size-xs);
     }
     
     /* Certificates */
     .certificate-item {
-      margin-bottom: var(--spacing-md);
-      padding: var(--spacing-md);
-      border-radius: var(--radius-md);
+      margin-bottom: var(--spacing-sm);
+      padding: var(--spacing-sm);
+      border-radius: var(--radius-sm);
       transition: all var(--transition-normal);
-      border-left: 3px solid var(--primary-light);
+      border-left: 2px solid var(--primary-light);
     }
     
     .certificate-item:hover {
-      background-color: rgba(37, 99, 235, 0.05);
-      transform: translateX(5px);
+      background-color: rgba(13, 71, 161, 0.05);
+      transform: translateX(3px);
     }
     
     .certificate-title {
       font-weight: 600;
       margin-bottom: var(--spacing-xs);
       color: var(--text-dark);
-      font-size: 1rem;
+      font-size: var(--font-size-sm);
     }
     
     .certificate-issuer {
       color: var(--text-light);
       margin-bottom: var(--spacing-xs);
-      font-size: 0.9rem;
+      font-size: var(--font-size-xs);
     }
     
     .certificate-date {
       color: var(--primary);
-      font-size: 0.85rem;
+      font-size: var(--font-size-xs);
       display: inline-block;
-      background: rgba(37, 99, 235, 0.1);
-      padding: 1px 8px;
+      background: rgba(13, 71, 161, 0.08);
+      padding: 1px 6px;
       border-radius: var(--radius-full);
     }
     
@@ -760,8 +810,8 @@
       display: inline-block;
       color: var(--primary-light);
       text-decoration: none;
-      margin-top: var(--spacing-sm);
-      font-size: 0.9rem;
+      margin-top: var(--spacing-xs);
+      font-size: var(--font-size-xs);
       transition: all var(--transition-fast);
     }
     
@@ -772,11 +822,11 @@
     
     /* Footer */
     .resume-footer {
-      padding: var(--spacing-lg) var(--spacing-2xl);
+      padding: var(--spacing-md) var(--spacing-xl);
       background-color: var(--primary-dark);
       text-align: center;
       color: rgba(255, 255, 255, 0.7);
-      font-size: 0.9rem;
+      font-size: var(--font-size-xs);
       position: relative;
       z-index: 1;
     }
@@ -784,7 +834,7 @@
     /* Download Button */
     .resume-actions {
       text-align: center;
-      margin: var(--spacing-2xl) 0 var(--spacing-lg);
+      margin: var(--spacing-xl) 0 var(--spacing-lg);
     }
     
     .download-btn {
@@ -802,6 +852,7 @@
       position: relative;
       overflow: hidden;
       z-index: 1;
+      font-size: var(--font-size-sm);
     }
     
     .download-btn::before {
@@ -829,6 +880,90 @@
       background-color: var(--primary-dark);
       transform: translateY(-3px);
       box-shadow: var(--shadow-lg);
+    }
+    
+    /* Additional cool animations */
+    .glow-effect {
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .glow-effect::after {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle, rgba(255,255,255,0.3) 0%, rgba(255,255,255,0) 70%);
+      opacity: 0;
+      transform: scale(0.5);
+      transition: opacity 0.5s, transform 0.5s;
+    }
+    
+    .glow-effect:hover::after {
+      opacity: 1;
+      transform: scale(1);
+    }
+    
+    /* Shimmer effect */
+    @keyframes shimmer {
+      0% {
+        background-position: -100% 0;
+      }
+      100% {
+        background-position: 100% 0;
+      }
+    }
+    
+    .shimmer-effect {
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .shimmer-effect::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(
+        90deg,
+        rgba(255,255,255,0) 0%,
+        rgba(255,255,255,0.2) 50%,
+        rgba(255,255,255,0) 100%
+      );
+      background-size: 200% 100%;
+      animation: shimmer 2s infinite;
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+    
+    .shimmer-effect:hover::after {
+      opacity: 1;
+    }
+    
+    /* Floating animation */
+    @keyframes float {
+      0% { transform: translateY(0); }
+      50% { transform: translateY(-5px); }
+      100% { transform: translateY(0); }
+    }
+    
+    .float-effect {
+      animation: float 3s ease-in-out infinite;
+    }
+    
+    /* Subtle pulse animation */
+    @keyframes subtle-pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.02); }
+      100% { transform: scale(1); }
+    }
+    
+    .pulse-effect {
+      animation: subtle-pulse 3s ease-in-out infinite;
     }
     
     /* Print Styles */
@@ -862,13 +997,17 @@
         -webkit-print-color-adjust: exact;
         print-color-adjust: exact;
       }
+      
+      .paper-preview {
+        display: none !important;
+      }
     }
     
     /* Responsive Styles */
     @media (max-width: 992px) {
       .resume-body {
         grid-template-columns: 1fr;
-        padding: var(--spacing-lg);
+        padding: var(--spacing-md);
       }
       
       .skills-container {
@@ -880,8 +1019,8 @@
       }
       
       .profile-image {
-        width: 150px;
-        height: 150px;
+        width: 120px;
+        height: 120px;
       }
     }
     
@@ -921,29 +1060,33 @@
       }
       
       .resume-name {
-        font-size: 2.2rem;
+        font-size: var(--font-size-2xl);
       }
       
       .resume-title {
-        font-size: 1rem;
+        font-size: var(--font-size-md);
       }
       
       .summary-section p {
         padding: 0;
       }
+      
+      .paper-preview {
+        display: none !important;
+      }
     }
     
     @media (max-width: 576px) {
       .resume-container {
-        margin: var(--spacing-lg) var(--spacing-sm);
+        margin: var(--spacing-md) var(--spacing-sm);
       }
       
       .resume-body {
-        padding: var(--spacing-md);
+        padding: var(--spacing-sm);
       }
       
       .section-title {
-        font-size: 1.3rem;
+        font-size: var(--font-size-lg);
       }
       
       .contact-item {
@@ -956,7 +1099,7 @@
       }
       
       .certificate-item, .achievement-item {
-        padding: var(--spacing-sm);
+        padding: var(--spacing-xs);
       }
       
       .profile-image-container::before {
@@ -964,41 +1107,37 @@
       }
     }
     
-    /* Animations and visual enhancements */
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(20px); }
-      to { opacity: 1; transform: translateY(0); }
+    /* Tippy tooltip styling */
+    .tippy-box {
+      background-color: white;
+      color: var(--text-dark);
+      box-shadow: var(--shadow-xl);
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      border: 1px solid var(--border);
     }
     
-    @keyframes slideIn {
-      from { transform: translateX(-20px); opacity: 0; }
-      to { transform: translateX(0); opacity: 1; }
+    .tippy-box img {
+      width: 100%;
+      height: auto;
+      display: block;
     }
     
-    @keyframes pulse {
-      0% { transform: scale(1); }
-      50% { transform: scale(1.05); }
-      100% { transform: scale(1); }
+    .tippy-arrow {
+      color: white;
     }
     
-    .animate-fade-in {
-      animation: fadeIn 0.6s ease forwards;
+    .paper-tooltip {
+      padding: 0;
+      max-width: 200px !important;
+      font-size: var(--font-size-xs);
     }
     
-    .animate-slide-in {
-      animation: slideIn 0.6s ease forwards;
+    .paper-tooltip-content {
+      padding: var(--spacing-xs);
+      text-align: center;
+      border-top: 1px solid var(--border);
     }
-    
-    .animate-pulse {
-      animation: pulse 2s infinite;
-    }
-    
-    /* Staggered animation delays */
-    .delay-1 { animation-delay: 0.1s; }
-    .delay-2 { animation-delay: 0.2s; }
-    .delay-3 { animation-delay: 0.3s; }
-    .delay-4 { animation-delay: 0.4s; }
-    .delay-5 { animation-delay: 0.5s; }
   </style>
 </head>
 <body>
@@ -1028,53 +1167,53 @@
       <div class="resume-container" data-aos="fade-up" data-aos-duration="800">
         <!-- Header Section -->
         <div class="resume-header">
-          <div class="resume-header-content" data-aos="fade-right" data-aos-delay="300">
+          <div class="resume-header-content" data-aos="fade-right" data-aos-delay="200">
             <h1 class="resume-name">Mo Saeidi</h1>
             <p class="resume-title">Robotics & Control Engineer</p>
             <div class="contact-info">
               <div class="contact-item">
-                <i class="fas fa-map-marker-alt"></i>
-                <span>Milano MI, Italy</span>
+                <div class="contact-icon"><i class="fas fa-map-marker-alt"></i></div>
+                <span class="contact-text">Milano MI, Italy</span>
               </div>
               <div class="contact-item">
-                <i class="fas fa-phone"></i>
-                <span>+39 351 365 4158</span>
+                <div class="contact-icon"><i class="fas fa-phone"></i></div>
+                <span class="contact-text">+39 351 365 4158</span>
               </div>
               <div class="contact-item">
-                <i class="fas fa-envelope"></i>
-                <a href="mailto:mohammadhosein.saeidi@mail.polimi.it">mohammadhosein.saeidi@mail.polimi.it</a>
+                <div class="contact-icon"><i class="fas fa-envelope"></i></div>
+                <a href="mailto:mohammadhosein.saeidi@mail.polimi.it" class="contact-text">mohammadhosein.saeidi@mail.polimi.it</a>
               </div>
               <div class="contact-item">
-                <i class="fab fa-linkedin"></i>
-                <a href="https://www.linkedin.com/in/mo-saeidi-21a00015a/" target="_blank">mo-saeidi-21a00015a</a>
+                <div class="contact-icon"><i class="fab fa-linkedin"></i></div>
+                <a href="https://www.linkedin.com/in/mo-saeidi-21a00015a/" target="_blank" class="contact-text">mo-saeidi-21a00015a</a>
               </div>
               <div class="contact-item">
-                <i class="fas fa-graduation-cap"></i>
-                <a href="https://scholar.google.com/citations?user=6AucdhQAAAAJ&hl=en" target="_blank">Google Scholar</a>
+                <div class="contact-icon"><i class="fas fa-graduation-cap"></i></div>
+                <a href="https://scholar.google.com/citations?user=6AucdhQAAAAJ&hl=en" target="_blank" class="contact-text">Google Scholar</a>
               </div>
               <div class="contact-item">
-                <i class="fas fa-globe"></i>
-                <a href="https://zexerv.github.io/" target="_blank">zexerv.github.io</a>
+                <div class="contact-icon"><i class="fas fa-globe"></i></div>
+                <a href="https://zexerv.github.io/" target="_blank" class="contact-text">zexerv.github.io</a>
               </div>
             </div>
           </div>
-          <div class="profile-image-container" data-aos="fade-left" data-aos-delay="400">
+          <div class="profile-image-container" data-aos="fade-left" data-aos-delay="300">
             <img src="assets/images/profile-photo.jpg" alt="Mo Saeidi" class="profile-image">
           </div>
         </div>
         
         <!-- Summary Section -->
-        <div class="summary-section" data-aos="fade-up" data-aos-delay="500">
+        <div class="summary-section" data-aos="fade-up" data-aos-delay="400">
           <p>I'm a robotics engineer with a passion for integrating control theory with reinforcement learning. My interests lie in engineering innovations that simplify and enhance everyday life, with a strong focus on robotics, automation, control, and machine learning. Through my experience as a research assistant in various university laboratories during my BSc and MSc, I've developed a solid foundation in these fields. Now, as I prepare to enter the workforce, I'm eager to apply my knowledge and take a meaningful step toward making society a better place.</p>
         </div>
         
         <!-- Main Content -->
         <div class="resume-body">
           <!-- Education Section -->
-          <div class="resume-section" data-aos="fade-up" data-aos-delay="100">
+          <div class="resume-section" data-aos="fade-up">
             <h2 class="section-title"><i class="fas fa-user-graduate"></i> Education</h2>
             
-            <div class="education-item" data-aos="fade-up" data-aos-delay="200">
+            <div class="education-item" data-aos="fade-up" data-aos-delay="100">
               <div class="education-header">
                 <h3 class="education-degree">M.Sc. in Automation and Control Engineering</h3>
                 <span class="education-date">2023 - Present</span>
@@ -1084,7 +1223,7 @@
               <p><strong>Thesis:</strong> Learning Policies from Human Demonstrations for Testing Optimization</p>
             </div>
             
-            <div class="education-item" data-aos="fade-up" data-aos-delay="300">
+            <div class="education-item" data-aos="fade-up" data-aos-delay="150">
               <div class="education-header">
                 <h3 class="education-degree">B.Sc. in Mechanical Engineering</h3>
                 <span class="education-date">2017 - 2022</span>
@@ -1096,47 +1235,47 @@
           </div>
           
           <!-- Publications Section -->
-          <div class="resume-section" data-aos="fade-up" data-aos-delay="100">
+          <div class="resume-section" data-aos="fade-up">
             <h2 class="section-title"><i class="fas fa-file-alt"></i> Publications</h2>
             
-            <div class="publication-item" data-aos="fade-up" data-aos-delay="200">
+            <div class="publication-item" data-aos="fade-up" data-aos-delay="100">
               <div class="publication-authors">Homaeinezhad, M. R. & Saeidi Mostaghim, M. H.</div>
               <div class="publication-title">"Nonlinear Tracking Control Algorithm for Dynamical Output Systems Manipulated by the Hardly Constrained Oscillatory Actuator"</div>
               <div class="publication-journal">Structural Control and Health Monitoring</div>
               <span class="publication-year">2023</span>
               <div>
-                <a href="https://onlinelibrary.wiley.com/doi/full/10.1155/2023/3799011" target="_blank" class="publication-link">View Paper <i class="fas fa-external-link-alt"></i></a>
+                <a href="https://onlinelibrary.wiley.com/doi/full/10.1155/2023/3799011" target="_blank" class="publication-link" data-tippy-content="<img src='assets/images/papers/paper1.jpg'><div class='paper-tooltip-content'>First page preview</div>">View Paper <i class="fas fa-external-link-alt"></i></a>
               </div>
             </div>
             
-            <div class="publication-item" data-aos="fade-up" data-aos-delay="250">
+            <div class="publication-item" data-aos="fade-up" data-aos-delay="150">
               <div class="publication-authors">Homaeinezhad, M. R. & Saeidi Mostaghim, M. H.</div>
               <div class="publication-title">"Synthetic Lyapunov Stabilization Technique for Designing Actuation-Constrained Multi-Input Multi-Output Control Systems"</div>
               <div class="publication-journal">Journal of the Franklin Institute</div>
               <span class="publication-year">2022</span>
               <div>
-                <a href="https://www.sciencedirect.com/science/article/pii/S0016003222004094" target="_blank" class="publication-link">View Paper <i class="fas fa-external-link-alt"></i></a>
+                <a href="https://www.sciencedirect.com/science/article/pii/S0016003222004094" target="_blank" class="publication-link" data-tippy-content="<img src='assets/images/papers/paper2.jpg'><div class='paper-tooltip-content'>First page preview</div>">View Paper <i class="fas fa-external-link-alt"></i></a>
               </div>
             </div>
             
-            <div class="publication-item" data-aos="fade-up" data-aos-delay="300">
+            <div class="publication-item" data-aos="fade-up" data-aos-delay="200">
               <div class="publication-authors">Homaeinezhad, M. R. & Saeidi Mostaghim, M. H.</div>
               <div class="publication-title">"Constrained Control of Moving Base Robotic System with Cooperative Arms"</div>
               <div class="publication-journal">30th Annual International Conference of the Iranian Association of Mechanical Engineers, Tehran, Iran</div>
               <span class="publication-year">2022</span>
             </div>
             
-            <div class="publication-item" data-aos="fade-up" data-aos-delay="350">
+            <div class="publication-item" data-aos="fade-up" data-aos-delay="250">
               <div class="publication-authors">Homaeinezhad, M. R. & Saeidi Mostaghim, M. H.</div>
               <div class="publication-title">"Pattern Recognition of Unbalanced Rigid Rotor Bearing Forces"</div>
               <div class="publication-journal">Amirkabir Journal of Mechanical Engineering, 54(12), pp. 3591-3606</div>
               <span class="publication-year">2022</span>
               <div>
-                <a href="https://mej.aut.ac.ir/article_4852_en.html?lang=en" target="_blank" class="publication-link">View Paper <i class="fas fa-external-link-alt"></i></a>
+                <a href="https://mej.aut.ac.ir/article_4852_en.html?lang=en" target="_blank" class="publication-link" data-tippy-content="<img src='assets/images/papers/paper3.jpg'><div class='paper-tooltip-content'>First page preview</div>">View Paper <i class="fas fa-external-link-alt"></i></a>
               </div>
             </div>
             
-            <div class="publication-item" data-aos="fade-up" data-aos-delay="400">
+            <div class="publication-item" data-aos="fade-up" data-aos-delay="300">
               <div class="publication-authors">Homaeinezhad, M. R. & Saeidi Mostaghim, M. H.</div>
               <div class="publication-title">"Pattern Recognition of Unbalanced Rigid Rotor Bearing Forces"</div>
               <div class="publication-journal">18th National Conference and 7th International Conference on Manufacturing Engineering in Iran (ICME 2022)</div>
@@ -1145,10 +1284,10 @@
           </div>
           
           <!-- Experience Section -->
-          <div class="resume-section full-width" data-aos="fade-up" data-aos-delay="100">
+          <div class="resume-section full-width" data-aos="fade-up">
             <h2 class="section-title"><i class="fas fa-briefcase"></i> Experience</h2>
             
-            <div class="experience-item" data-aos="fade-up" data-aos-delay="200">
+            <div class="experience-item" data-aos="fade-up" data-aos-delay="100">
               <div class="experience-header">
                 <h3 class="experience-title">Researcher, MERLIN Laboratory - POLIMI</h3>
                 <span class="experience-date">October 2024 - Present</span>
@@ -1159,7 +1298,7 @@
               </p>
             </div>
             
-            <div class="experience-item" data-aos="fade-up" data-aos-delay="250">
+            <div class="experience-item" data-aos="fade-up" data-aos-delay="150">
               <div class="experience-header">
                 <h3 class="experience-title">Researcher, AIRLAB Drone Team - POLIMI</h3>
                 <span class="experience-date">April 2023 - July 2024</span>
@@ -1170,7 +1309,7 @@
               </p>
             </div>
             
-            <div class="experience-item" data-aos="fade-up" data-aos-delay="300">
+            <div class="experience-item" data-aos="fade-up" data-aos-delay="200">
               <div class="experience-header">
                 <h3 class="experience-title">Researcher, FALCO Project - AEA Association - POLIMI</h3>
                 <span class="experience-date">December 2023 - July 2024</span>
@@ -1181,7 +1320,7 @@
               </p>
             </div>
             
-            <div class="experience-item" data-aos="fade-up" data-aos-delay="350">
+            <div class="experience-item" data-aos="fade-up" data-aos-delay="250">
               <div class="experience-header">
                 <h3 class="experience-title">Research Assistant, Mechatronics Laboratory - KNTU</h3>
                 <span class="experience-date">2021 - 2022</span>
@@ -1192,7 +1331,7 @@
               </p>
             </div>
             
-            <div class="experience-item" data-aos="fade-up" data-aos-delay="400">
+            <div class="experience-item" data-aos="fade-up" data-aos-delay="300">
               <div class="experience-header">
                 <h3 class="experience-title">Research Assistant, Vibration and Control Laboratory - KNTU</h3>
                 <span class="experience-date">2019 - 2022</span>
@@ -1203,7 +1342,7 @@
               </p>
             </div>
             
-            <div class="experience-item" data-aos="fade-up" data-aos-delay="450">
+            <div class="experience-item" data-aos="fade-up" data-aos-delay="350">
               <div class="experience-header">
                 <h3 class="experience-title">Junior Graphic Designer (Volunteer), Student Science Community - KNTU</h3>
                 <span class="experience-date">2018 - 2020</span>
@@ -1216,10 +1355,10 @@
           </div>
           
           <!-- Projects Section -->
-          <div class="resume-section" data-aos="fade-up" data-aos-delay="100">
+          <div class="resume-section" data-aos="fade-up">
             <h2 class="section-title"><i class="fas fa-project-diagram"></i> Selected Projects</h2>
             
-            <div class="project-item" data-aos="fade-up" data-aos-delay="200">
+            <div class="project-item pulse-effect" data-aos="fade-up" data-aos-delay="100">
               <div class="project-header">
                 <h3 class="project-title">Reinforcement Learning for Robot Path Planning</h3>
                 <span class="project-date">2025</span>
@@ -1229,7 +1368,7 @@
               </p>
             </div>
             
-            <div class="project-item" data-aos="fade-up" data-aos-delay="250">
+            <div class="project-item shimmer-effect" data-aos="fade-up" data-aos-delay="150">
               <div class="project-header">
                 <h3 class="project-title">Hand Pose Estimation with IMU Sensor Fusion</h3>
                 <span class="project-date">2025</span>
@@ -1239,7 +1378,7 @@
               </p>
             </div>
             
-            <div class="project-item" data-aos="fade-up" data-aos-delay="300">
+            <div class="project-item glow-effect" data-aos="fade-up" data-aos-delay="200">
               <div class="project-header">
                 <h3 class="project-title">Computer-Aided Manufacturing Optimization</h3>
                 <span class="project-date">2024</span>
@@ -1249,7 +1388,7 @@
               </p>
             </div>
             
-            <div class="project-item" data-aos="fade-up" data-aos-delay="350">
+            <div class="project-item shimmer-effect" data-aos="fade-up" data-aos-delay="250">
               <div class="project-header">
                 <h3 class="project-title">HVAC System Modeling and Control</h3>
                 <span class="project-date">2024</span>
@@ -1261,24 +1400,24 @@
           </div>
           
           <!-- Certificates Section -->
-          <div class="resume-section" data-aos="fade-up" data-aos-delay="100">
+          <div class="resume-section" data-aos="fade-up">
             <h2 class="section-title"><i class="fas fa-certificate"></i> Certificates</h2>
             
-            <div class="certificate-item" data-aos="fade-up" data-aos-delay="200">
+            <div class="certificate-item float-effect" data-aos="fade-up" data-aos-delay="100">
               <h3 class="certificate-title">Neural Networks and Deep Learning</h3>
               <p class="certificate-issuer">DeepLearning.AI</p>
               <p class="certificate-date">August 2021</p>
               <a href="https://www.coursera.org/account/accomplishments/verify/86X8V8RP466C" target="_blank" class="certificate-link">View Certificate <i class="fas fa-external-link-alt"></i></a>
             </div>
             
-            <div class="certificate-item" data-aos="fade-up" data-aos-delay="250">
+            <div class="certificate-item float-effect" data-aos="fade-up" data-aos-delay="150">
               <h3 class="certificate-title">Machine Learning</h3>
               <p class="certificate-issuer">Stanford University</p>
               <p class="certificate-date">August 2021</p>
               <a href="https://www.coursera.org/account/accomplishments/verify/5PX9G6LYD442" target="_blank" class="certificate-link">View Certificate <i class="fas fa-external-link-alt"></i></a>
             </div>
             
-            <div class="certificate-item" data-aos="fade-up" data-aos-delay="300">
+            <div class="certificate-item float-effect" data-aos="fade-up" data-aos-delay="200">
               <h3 class="certificate-title">Fundamentals of Reinforcement Learning</h3>
               <p class="certificate-issuer">University of Alberta</p>
               <p class="certificate-date">November 2021</p>
@@ -1287,22 +1426,22 @@
           </div>
           
           <!-- Achievements Section -->
-          <div class="resume-section" data-aos="fade-up" data-aos-delay="100">
+          <div class="resume-section" data-aos="fade-up">
             <h2 class="section-title"><i class="fas fa-award"></i> Achievements</h2>
             
-            <div class="achievement-item" data-aos="fade-up" data-aos-delay="200">
+            <div class="achievement-item" data-aos="fade-up" data-aos-delay="100">
               <h3 class="achievement-title"><i class="fas fa-medal"></i> Top 1% in Konkur National University Entrance Exam</h3>
               <p class="achievement-date">2017</p>
               <p class="achievement-description">Ranked among the top 1% of participants in Iran's national university entrance examination.</p>
             </div>
             
-            <div class="achievement-item" data-aos="fade-up" data-aos-delay="250">
+            <div class="achievement-item" data-aos="fade-up" data-aos-delay="150">
               <h3 class="achievement-title"><i class="fas fa-trophy"></i> Second Place, National Egg Drop Competition</h3>
               <p class="achievement-date">2018</p>
               <p class="achievement-description">Led a team of 4 students to design an innovative impact-resistant enclosure, securing 2nd place among 40 university teams across Iran.</p>
             </div>
             
-            <div class="achievement-item" data-aos="fade-up" data-aos-delay="300">
+            <div class="achievement-item" data-aos="fade-up" data-aos-delay="200">
               <h3 class="achievement-title"><i class="fas fa-star"></i> Top 3% of Graduates, B.Sc. in Mechanical Engineering</h3>
               <p class="achievement-date">2022</p>
               <p class="achievement-description">Graduated with distinction in the top 3% of students in the Mechanical Engineering department at KNTU.</p>
@@ -1310,11 +1449,11 @@
           </div>
           
           <!-- Skills Section -->
-          <div class="resume-section full-width" data-aos="fade-up" data-aos-delay="100">
+          <div class="resume-section full-width" data-aos="fade-up">
             <h2 class="section-title"><i class="fas fa-cogs"></i> Technical Skills</h2>
             
             <div class="skills-container">
-              <div class="skill-category" data-aos="fade-up" data-aos-delay="200">
+              <div class="skill-category" data-aos="fade-up" data-aos-delay="100">
                 <h4>Robotics & Control</h4>
                 <ul class="skills-list">
                   <li>
@@ -1374,7 +1513,7 @@
                 </ul>
               </div>
               
-              <div class="skill-category" data-aos="fade-up" data-aos-delay="300">
+              <div class="skill-category" data-aos="fade-up" data-aos-delay="150">
                 <h4>Software & Programming</h4>
                 <ul class="skills-list">
                   <li>
@@ -1434,7 +1573,7 @@
                 </ul>
               </div>
               
-              <div class="skill-category" data-aos="fade-up" data-aos-delay="400">
+              <div class="skill-category" data-aos="fade-up" data-aos-delay="200">
                 <h4>Design & Analysis</h4>
                 <ul class="skills-list">
                   <li>
@@ -1497,26 +1636,26 @@
           </div>
           
           <!-- Languages Section -->
-          <div class="resume-section full-width" data-aos="fade-up" data-aos-delay="100">
+          <div class="resume-section full-width" data-aos="fade-up">
             <h2 class="section-title"><i class="fas fa-language"></i> Languages</h2>
             
             <div class="language-items">
-              <div class="language-item" data-aos="fade-up" data-aos-delay="200">
+              <div class="language-item" data-aos="fade-up" data-aos-delay="100">
                 <span class="language-name">Persian</span>
                 <span class="language-level">Native</span>
               </div>
               
-              <div class="language-item" data-aos="fade-up" data-aos-delay="250">
+              <div class="language-item" data-aos="fade-up" data-aos-delay="150">
                 <span class="language-name">English</span>
                 <span class="language-level">C2, TOEFL: 113</span>
               </div>
               
-              <div class="language-item" data-aos="fade-up" data-aos-delay="300">
+              <div class="language-item" data-aos="fade-up" data-aos-delay="200">
                 <span class="language-name">Azerbaijani</span>
                 <span class="language-level">B1</span>
               </div>
               
-              <div class="language-item" data-aos="fade-up" data-aos-delay="350">
+              <div class="language-item" data-aos="fade-up" data-aos-delay="250">
                 <span class="language-name">Italian</span>
                 <span class="language-level">A2</span>
               </div>
@@ -1552,17 +1691,42 @@
       AOS.init({
         once: true,
         duration: 800,
-        easing: 'ease-out'
+        easing: 'ease-out',
+        disable: window.innerWidth < 768 // Disable animations on mobile
+      });
+      
+      // Initialize Tippy.js for paper previews
+      tippy('[data-tippy-content]', {
+        allowHTML: true,
+        placement: 'right',
+        animation: 'scale',
+        theme: 'light',
+        maxWidth: 250,
+        interactive: true,
+        arrow: true,
+        class: 'paper-tooltip'
       });
       
       // Add interactive skill levels
       const skillItems = document.querySelectorAll('.skills-list li');
       skillItems.forEach(item => {
-        const skillLevel = Math.floor(Math.random() * 30) + 70; // Random value between 70-100
-        const levelBar = item.querySelector('.skill-level div');
+        // Get the actual skill level value from CSS if already set,
+        // or use a default between 70-100
+        let levelBar = item.querySelector('.skill-level div');
         if (levelBar) {
-          levelBar.style.setProperty('--level', `${skillLevel}%`);
+          const computedStyle = window.getComputedStyle(levelBar);
+          let currentLevel = computedStyle.getPropertyValue('--level');
+          
+          if (!currentLevel || currentLevel === '') {
+            const skillLevel = Math.floor(Math.random() * 30) + 70; // Random between 70-100
+            levelBar.style.setProperty('--level', `${skillLevel}%`);
+          }
         }
+      });
+      
+      // Fix the contact icons
+      document.querySelectorAll('.contact-icon').forEach(icon => {
+        icon.style.opacity = '1';
       });
     });
   </script>
