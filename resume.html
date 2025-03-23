@@ -1508,6 +1508,41 @@
     0% { transform: rotate(0deg); }
     100% { transform: rotate(360deg); }
   }
+
+/* Complete icon fix - paste this at the end of your style tag */
+.contact-item {
+    display: flex !important;
+    align-items: center !important;
+    margin-bottom: var(--spacing-sm) !important;
+  }
+  
+  .contact-icon {
+    width: 30px !important;
+    height: 30px !important;
+    min-width: 30px !important;
+    background-color: rgba(255, 255, 255, 0.4) !important;
+    border-radius: 50% !important;
+    margin-right: 10px !important;
+    position: relative !important;
+  }
+  
+  /* Force the icons to appear by using content property */
+  .contact-icon:has(i.fa-map-marker-alt)::before { content: "📍"; position: absolute; top: 7px; left: 9px; }
+  .contact-icon:has(i.fa-phone)::before { content: "📞"; position: absolute; top: 7px; left: 8px; }
+  .contact-icon:has(i.fa-envelope)::before { content: "✉️"; position: absolute; top: 7px; left: 8px; }
+  .contact-icon:has(i.fa-linkedin)::before { content: "🔗"; position: absolute; top: 7px; left: 8px; }
+  .contact-icon:has(i.fa-graduation-cap)::before { content: "🎓"; position: absolute; top: 7px; left: 8px; }
+  .contact-icon:has(i.fa-globe)::before { content: "🌐"; position: absolute; top: 7px; left: 8px; }
+  
+  /* Hide the original Font Awesome icons that aren't working */
+  .contact-icon i {
+    display: none !important;
+  }
+  
+  .contact-text {
+    color: white !important;
+    font-size: var(--font-size-sm) !important;
+  }
   </style>
 </head>
 <body>
