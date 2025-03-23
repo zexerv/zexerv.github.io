@@ -278,10 +278,10 @@
         100% { transform: rotate(360deg); }
       }
       
-      .profile-image-container::before {
-        animation: rotate 10s linear infinite;
-      }
-      
+    /* Remove profile picture animation */
+    .profile-image-container::before {
+        display: none;
+    }
       @keyframes float {
         0% { transform: translateY(0); }
         50% { transform: translateY(-3px); }
@@ -1449,7 +1449,65 @@
         height: 40px;
         overflow: visible;
     }
-
+    .resume-header .contact-icon {
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        width: 30px !important;
+        height: 30px !important;
+        min-width: 30px !important;
+        background-color: rgba(255, 255, 255, 0.25) !important;
+        border-radius: 50% !important;
+        margin-right: 10px !important;
+        opacity: 1 !important;
+      }
+      
+      .resume-header .contact-icon i {
+        color: white !important;
+        font-size: 14px !important;
+        opacity: 1 !important;
+        visibility: visible !important;
+      }
+      
+      .resume-header .contact-text {
+        color: white !important;
+        opacity: 1 !important;
+      }
+      /* Improved profile picture animation */
+.profile-image-container::before {
+    content: '';
+    position: absolute;
+    top: -10px;
+    left: -10px;
+    right: -10px;
+    bottom: -10px;
+    border-radius: var(--radius-full);
+    border: 3px dashed rgba(255, 255, 255, 0.4);
+    animation: rotate 15s linear infinite;
+    z-index: 0;
+  }
+  
+  .profile-image-container::after {
+    content: '';
+    position: absolute;
+    top: -5px;
+    left: -5px;
+    right: -5px;
+    bottom: -5px;
+    border-radius: var(--radius-full);
+    border: 1px solid rgba(255, 255, 255, 0.6);
+    z-index: 0;
+  }
+  
+  .profile-image {
+    position: relative;
+    z-index: 1;
+  }
+  
+  @keyframes rotate {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
   </style>
 </head>
 <body>
