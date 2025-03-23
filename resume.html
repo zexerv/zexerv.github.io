@@ -24,6 +24,67 @@
   <link rel="stylesheet" href="https://unpkg.com/tippy.js@6/animations/scale.css"/>
   <!-- Custom Resume Styles -->
   <style>
+
+    /* 1. COMPLETELY NEW CONTACT ICONS IMPLEMENTATION */
+    .contact-icon-fix {
+        display: inline-flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        width: 30px !important;
+        height: 30px !important;
+        min-width: 30px !important;
+        background-color: rgba(255, 255, 255, 0.3) !important;
+        border-radius: 50% !important;
+        margin-right: 10px !important;
+    }
+    
+    .contact-icon-fix i {
+        color: white !important;
+        font-size: 14px !important;
+    }
+    
+    /* 2. COMPLETELY REMOVE LINES FROM SECTION TITLES */
+    .section-title {
+        position: relative !important;
+        padding-bottom: 10px !important;
+        margin-bottom: 20px !important;
+        border-bottom: none !important;
+    }
+    
+    /* Remove any ::after pseudo-elements that might be creating lines */
+    .section-title::after {
+        display: none !important;
+    }
+    
+    /* Add a new underline that's guaranteed to be below the text */
+    .section-title-underline {
+        position: absolute !important;
+        bottom: 0 !important;
+        left: 0 !important;
+        width: 100% !important;
+        height: 1px !important;
+        background-color: #e0e0e0 !important;
+    }
+    
+    /* 3. FIX PAPER PREVIEW Z-INDEX */
+    /* Make tooltips appear on top of everything */
+    .tippy-box {
+        z-index: 9999 !important;
+    }
+    
+    /* Add these styles to ensure tooltips are positioned correctly */
+    body .tippy-box[data-placement^=right]>.tippy-arrow {
+        left: -8px;
+    }
+    
+    body .tippy-box[data-placement^=right] {
+        margin-left: 10px !important;
+    }
+    
+    /* Additional fix for contact icons opacity */
+    .resume-header .contact-item * {
+        opacity: 1 !important;
+    }
       /* Fix for contact icons */
       .contact-item {
         display: flex;
@@ -1277,35 +1338,36 @@
             <h1 class="resume-name">Mo Saeidi</h1>
             <p class="resume-title">Robotics & Control Engineer</p>
 
-    
+
+
+            <!-- Replace your contact-info section with this HTML -->
             <div class="contact-info">
                 <div class="contact-item">
-                  <div class="contact-icon"><i class="fas fa-map-marker-alt"></i></div>
-                  <span class="contact-text">Milano MI, Italy</span>
+                <div class="contact-icon-fix"><i class="fas fa-map-marker-alt"></i></div>
+                <span class="contact-text">Milano MI, Italy</span>
                 </div>
                 <div class="contact-item">
-                  <div class="contact-icon"><i class="fas fa-phone"></i></div>
-                  <span class="contact-text">+39 351 365 4158</span>
+                <div class="contact-icon-fix"><i class="fas fa-phone"></i></div>
+                <span class="contact-text">+39 351 365 4158</span>
                 </div>
                 <div class="contact-item">
-                  <div class="contact-icon"><i class="fas fa-envelope"></i></div>
-                  <a href="mailto:mohammadhosein.saeidi@mail.polimi.it" class="contact-text">mohammadhosein.saeidi@mail.polimi.it</a>
+                <div class="contact-icon-fix"><i class="fas fa-envelope"></i></div>
+                <a href="mailto:mohammadhosein.saeidi@mail.polimi.it" class="contact-text">mohammadhosein.saeidi@mail.polimi.it</a>
                 </div>
                 <div class="contact-item">
-                  <div class="contact-icon"><i class="fab fa-linkedin"></i></div>
-                  <a href="https://www.linkedin.com/in/mo-saeidi-21a00015a/" target="_blank" class="contact-text">mo-saeidi-21a00015a</a>
+                <div class="contact-icon-fix"><i class="fab fa-linkedin"></i></div>
+                <a href="https://www.linkedin.com/in/mo-saeidi-21a00015a/" target="_blank" class="contact-text">mo-saeidi-21a00015a</a>
                 </div>
                 <div class="contact-item">
-                  <div class="contact-icon"><i class="fas fa-graduation-cap"></i></div>
-                  <a href="https://scholar.google.com/citations?user=6AucdhQAAAAJ&hl=en" target="_blank" class="contact-text">Google Scholar</a>
+                <div class="contact-icon-fix"><i class="fas fa-graduation-cap"></i></div>
+                <a href="https://scholar.google.com/citations?user=6AucdhQAAAAJ&hl=en" target="_blank" class="contact-text">Google Scholar</a>
                 </div>
                 <div class="contact-item">
-                  <div class="contact-icon"><i class="fas fa-globe"></i></div>
-                  <a href="https://zexerv.github.io/" target="_blank" class="contact-text">zexerv.github.io</a>
+                <div class="contact-icon-fix"><i class="fas fa-globe"></i></div>
+                <a href="https://zexerv.github.io/" target="_blank" class="contact-text">zexerv.github.io</a>
                 </div>
-              </div>
+            </div>
             
-          </div>
           <div class="profile-image-container" data-aos="fade-left" data-aos-delay="300">
             <img src="assets/images/profile-photo.jpg" alt="Mo Saeidi" class="profile-image">
           </div>
@@ -1796,44 +1858,29 @@
   <script src="assets/js/script.js"></script>
   <script>
 
-      // Initialize AOS animations with faster speed
+
+  // Fix section titles by adding the underline element
   document.addEventListener('DOMContentLoaded', function() {
-    AOS.init({
-      once: true,
-      duration: 400, // Faster animation duration (was 800)
-      easing: 'ease-out',
-      disable: window.innerWidth < 768 // Disable animations on mobile
+    const sectionTitles = document.querySelectorAll('.section-title');
+    sectionTitles.forEach(title => {
+      // Clear any existing ::after styling
+      title.style.setProperty('border-bottom', 'none', 'important');
+      
+      // Add a new underline element that's guaranteed to be below the text
+      const underline = document.createElement('div');
+      underline.className = 'section-title-underline';
+      title.appendChild(underline);
     });
     
-    // Initialize Tippy.js for paper previews
-    tippy('[data-tippy-content]', {
-      allowHTML: true,
-      placement: 'right',
-      animation: 'scale',
-      theme: 'light',
-      maxWidth: 250,
-      interactive: true,
-      arrow: true,
-      class: 'paper-tooltip'
-    });
-    
-    // Add interactive skill levels
-    const skillItems = document.querySelectorAll('.skills-list li');
-    skillItems.forEach(item => {
-      // Get the actual skill level value from CSS if already set,
-      // or use a default between 70-100
-      let levelBar = item.querySelector('.skill-level div');
-      if (levelBar) {
-        const computedStyle = window.getComputedStyle(levelBar);
-        let currentLevel = computedStyle.getPropertyValue('--level');
-        
-        if (!currentLevel || currentLevel === '') {
-          const skillLevel = Math.floor(Math.random() * 30) + 70; // Random between 70-100
-          levelBar.style.setProperty('--level', `${skillLevel}%`);
-        }
-      }
-    });
+    // Configure Tippy.js tooltips with higher z-index
+    if (typeof tippy !== 'undefined') {
+      tippy.setDefaultProps({
+        zIndex: 9999,
+        appendTo: document.body
+      });
+    }
   });
+
 
   </script>
 </body>
