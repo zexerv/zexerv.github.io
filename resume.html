@@ -14,48 +14,180 @@
     referrerpolicy="no-referrer"
   />
   <!-- Google Fonts -->
-  <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@300;400;500;600;700&family=Open+Sans:wght@300;400;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&family=Lora:ital,wght@0,400;0,500;0,600;1,400&family=Open+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <!-- AOS Animations -->
+  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
   <!-- Custom Resume Styles -->
   <style>
     :root {
-      --primary-color: #0066cc;
-      --primary-light: #e6f0ff;
-      --primary-dark: #004d99;
-      --text-dark: #333333;
-      --text-light: #666666;
-      --background-light: #f9f9f9;
-      --border-color: #eaeaea;
-      --success-color: #27ae60;
+      /* Primary color palette */
+      --primary: #1e3a8a;
+      --primary-light: #2563eb;
+      --primary-dark: #1e40af;
+      --primary-gradient: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);
+      
+      /* Secondary color palette */
+      --secondary: #0ea5e9;
+      --secondary-light: #38bdf8;
+      --secondary-dark: #0284c7;
+      
+      /* Accent color */
+      --accent: #f59e0b;
+      --accent-light: #fbbf24;
+      
+      /* Neutral colors */
+      --text-dark: #0f172a;
+      --text-medium: #334155;
+      --text-light: #64748b;
+      --background: #f8fafc;
+      --card-bg: #ffffff;
+      --border: #e2e8f0;
+      
+      /* Success/achievement colors */
+      --success: #10b981;
+      --success-light: #a7f3d0;
+      
+      /* Spacing */
+      --spacing-xs: 0.25rem;
+      --spacing-sm: 0.5rem;
+      --spacing-md: 1rem;
+      --spacing-lg: 1.5rem;
+      --spacing-xl: 2rem;
+      --spacing-2xl: 3rem;
+      
+      /* Container widths */
+      --container-width: 1100px;
+      
+      /* Border radius */
+      --radius-sm: 0.25rem;
+      --radius-md: 0.5rem;
+      --radius-lg: 1rem;
+      --radius-xl: 1.5rem;
+      --radius-full: 9999px;
+      
+      /* Box shadows */
+      --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.1);
+      --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+      --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+      --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+      
+      /* Typography */
+      --font-heading: 'Montserrat', sans-serif;
+      --font-body: 'Open Sans', sans-serif;
+      --font-serif: 'Lora', serif;
+      
+      /* Transitions */
+      --transition-fast: 150ms ease;
+      --transition-normal: 300ms ease;
+      --transition-slow: 500ms ease;
+    }
+    
+    /* Base styles */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
     }
     
     body {
-      font-family: 'Open Sans', sans-serif;
-      color: var(--text-dark);
-      background-color: var(--background-light);
+      font-family: var(--font-body);
+      color: var(--text-medium);
+      background-color: var(--background);
+      line-height: 1.6;
+      font-size: 16px;
     }
     
     h1, h2, h3, h4, h5, h6 {
-      font-family: 'Raleway', sans-serif;
+      font-family: var(--font-heading);
+      color: var(--text-dark);
+      line-height: 1.3;
+      font-weight: 600;
+      margin-bottom: var(--spacing-md);
+    }
+    
+    p {
+      margin-bottom: var(--spacing-md);
+    }
+    
+    a {
+      color: var(--primary-light);
+      text-decoration: none;
+      transition: all var(--transition-fast);
+    }
+    
+    a:hover {
+      color: var(--secondary);
+    }
+    
+    img {
+      max-width: 100%;
+      height: auto;
+    }
+    
+    ul, ol {
+      margin-bottom: var(--spacing-md);
+      padding-left: var(--spacing-xl);
+    }
+    
+    /* Layout */
+    .container {
+      max-width: var(--container-width);
+      margin: 0 auto;
+      padding: 0 var(--spacing-md);
     }
     
     /* Resume Container */
     .resume-container {
-      background-color: white;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-      border-radius: 12px;
+      background-color: var(--card-bg);
+      box-shadow: var(--shadow-xl);
+      border-radius: var(--radius-lg);
       overflow: hidden;
-      margin: 40px auto;
-      max-width: 1000px;
+      margin: var(--spacing-2xl) auto;
+      max-width: var(--container-width);
+      position: relative;
+    }
+    
+    /* Background accent element */
+    .resume-container::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: 300px;
+      height: 300px;
+      background: var(--primary-gradient);
+      opacity: 0.05;
+      border-radius: 50%;
+      transform: translate(100px, -150px);
+      z-index: 0;
+    }
+    
+    .resume-container::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 200px;
+      height: 200px;
+      background: var(--secondary-light);
+      opacity: 0.05;
+      border-radius: 50%;
+      transform: translate(-100px, 100px);
+      z-index: 0;
     }
     
     /* Header Section */
     .resume-header {
-      background-color: var(--primary-color);
+      background: var(--primary-gradient);
       color: white;
-      padding: 40px;
+      padding: var(--spacing-2xl);
       position: relative;
       display: flex;
       align-items: center;
+      justify-content: space-between;
+      z-index: 1;
+      border-bottom: 5px solid var(--accent);
     }
     
     .resume-header-content {
@@ -63,81 +195,164 @@
     }
     
     .profile-image-container {
-      margin-left: 30px;
+      margin-left: var(--spacing-xl);
+      position: relative;
     }
     
     .profile-image {
       width: 180px;
       height: 180px;
-      border-radius: 50%;
-      border: 5px solid white;
-      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+      border-radius: var(--radius-full);
+      border: 4px solid rgba(255, 255, 255, 0.8);
+      box-shadow: var(--shadow-lg);
       object-fit: cover;
+      transition: transform var(--transition-normal);
+    }
+    
+    .profile-image:hover {
+      transform: scale(1.05);
+    }
+    
+    /* Decorative circle behind profile image */
+    .profile-image-container::before {
+      content: '';
+      position: absolute;
+      top: -10px;
+      left: -10px;
+      right: -10px;
+      bottom: -10px;
+      border-radius: var(--radius-full);
+      border: 2px dashed rgba(255, 255, 255, 0.3);
+      animation: rotate 20s linear infinite;
+    }
+    
+    @keyframes rotate {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
     }
     
     .resume-name {
-      font-size: 36px;
+      font-size: 3rem;
       font-weight: 700;
-      margin-bottom: 5px;
+      margin-bottom: var(--spacing-xs);
       letter-spacing: 1px;
+      position: relative;
+      display: inline-block;
+    }
+    
+    .resume-name::after {
+      content: '';
+      position: absolute;
+      bottom: -5px;
+      left: 0;
+      width: 80px;
+      height: 4px;
+      background: var(--accent);
+      border-radius: var(--radius-full);
     }
     
     .resume-title {
-      font-size: 18px;
-      font-weight: 400;
-      margin-bottom: 25px;
+      font-size: 1.2rem;
+      font-weight: 500;
+      margin-bottom: var(--spacing-lg);
       opacity: 0.9;
+      font-family: var(--font-serif);
+      font-style: italic;
     }
     
     .contact-info {
       display: flex;
       flex-wrap: wrap;
-      margin-top: 20px;
+      margin-top: var(--spacing-lg);
+      max-width: 600px;
     }
     
     .contact-item {
       display: flex;
       align-items: center;
-      margin-right: 20px;
-      margin-bottom: 10px;
+      margin-right: var(--spacing-lg);
+      margin-bottom: var(--spacing-md);
+      transition: transform var(--transition-fast);
+    }
+    
+    .contact-item:hover {
+      transform: translateY(-3px);
     }
     
     .contact-item i {
-      margin-right: 8px;
-      font-size: 16px;
+      margin-right: var(--spacing-sm);
+      font-size: 1rem;
       width: 20px;
-      text-align: center;
+      height: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(255, 255, 255, 0.2);
+      border-radius: var(--radius-full);
+      padding: var(--spacing-lg);
     }
     
     .contact-item a {
       color: white;
       text-decoration: none;
-      transition: opacity 0.3s;
+      transition: all var(--transition-fast);
     }
     
     .contact-item a:hover {
-      opacity: 0.8;
+      color: var(--accent-light);
+      text-decoration: underline;
     }
     
     /* Summary Section */
     .summary-section {
-      background-color: var(--primary-light);
-      padding: 30px 40px;
+      background-color: var(--card-bg);
+      padding: var(--spacing-2xl);
       position: relative;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: var(--spacing-md);
+    }
+    
+    .summary-section::before {
+      content: '"';
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      font-size: 60px;
+      font-family: var(--font-serif);
+      color: var(--primary);
+      opacity: 0.1;
+    }
+    
+    .summary-section::after {
+      content: '"';
+      position: absolute;
+      bottom: 0;
+      right: 25px;
+      font-size: 60px;
+      font-family: var(--font-serif);
+      color: var(--primary);
+      opacity: 0.1;
     }
     
     .summary-section p {
       margin: 0;
-      line-height: 1.6;
-      color: var(--text-dark);
+      line-height: 1.8;
+      color: var(--text-medium);
+      font-size: 1.05rem;
+      padding: 0 var(--spacing-2xl);
+      font-family: var(--font-serif);
+      position: relative;
+      z-index: 1;
     }
     
     /* Main Content */
     .resume-body {
-      padding: 40px;
+      padding: var(--spacing-lg) var(--spacing-2xl) var(--spacing-2xl);
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 30px;
+      gap: var(--spacing-2xl);
+      position: relative;
+      z-index: 1;
     }
     
     /* For full-width sections */
@@ -147,93 +362,147 @@
     
     /* Section Styling */
     .resume-section {
-      margin-bottom: 30px;
+      margin-bottom: var(--spacing-2xl);
+      position: relative;
     }
     
     .section-title {
-      color: var(--primary-color);
-      font-size: 24px;
+      color: var(--primary);
+      font-size: 1.5rem;
       font-weight: 600;
-      margin-bottom: 20px;
-      padding-bottom: 10px;
-      border-bottom: 2px solid var(--primary-color);
+      margin-bottom: var(--spacing-lg);
+      padding-bottom: var(--spacing-sm);
+      position: relative;
       display: flex;
       align-items: center;
     }
     
+    .section-title::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 1px;
+      background: linear-gradient(to right, var(--primary) 0%, var(--primary) 50px, var(--border) 50px, var(--border) 100%);
+    }
+    
     .section-title i {
-      margin-right: 10px;
+      margin-right: var(--spacing-sm);
+      color: var(--primary);
+      font-size: 1.2rem;
+      background: var(--primary-light);
+      color: white;
+      width: 32px;
+      height: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: var(--radius-full);
     }
     
     /* Experience Items */
     .experience-item, .education-item, .project-item {
-      margin-bottom: 25px;
+      margin-bottom: var(--spacing-xl);
       position: relative;
-      padding-left: 20px;
+      padding-left: var(--spacing-2xl);
+      padding-bottom: var(--spacing-lg);
     }
     
-    .experience-item:before, .education-item:before, .project-item:before {
+    .experience-item:last-child, .education-item:last-child, .project-item:last-child {
+      padding-bottom: 0;
+    }
+    
+    .experience-item::before, .education-item::before, .project-item::before {
       content: '';
       position: absolute;
       left: 0;
       top: 8px;
-      width: 10px;
-      height: 10px;
-      border-radius: 50%;
-      background-color: var(--primary-color);
+      width: 14px;
+      height: 14px;
+      border-radius: var(--radius-full);
+      background-color: var(--primary-light);
+      box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.2);
+      z-index: 2;
     }
     
-    .experience-item:after, .education-item:after, .project-item:after {
+    .experience-item::after, .education-item::after, .project-item::after {
       content: '';
       position: absolute;
-      left: 4px;
-      top: 22px;
+      left: 7px;
+      top: 28px;
       width: 2px;
-      height: calc(100% - 14px);
-      background-color: var(--border-color);
+      height: calc(100% - 20px);
+      background-color: rgba(37, 99, 235, 0.2);
+      z-index: 1;
+    }
+    
+    .experience-item:last-child::after, .education-item:last-child::after, .project-item:last-child::after {
+      display: none;
     }
     
     .experience-header, .education-header, .project-header {
       display: flex;
       justify-content: space-between;
-      margin-bottom: 5px;
+      align-items: flex-start;
+      margin-bottom: var(--spacing-sm);
     }
     
     .experience-title, .education-degree, .project-title {
       font-weight: 600;
       color: var(--text-dark);
-      font-size: 18px;
+      font-size: 1.1rem;
+      line-height: 1.4;
+      margin-bottom: var(--spacing-xs);
     }
     
     .experience-date, .education-date, .project-date {
-      color: var(--primary-color);
+      color: var(--secondary);
       font-weight: 500;
       white-space: nowrap;
-      font-size: 14px;
+      font-size: 0.9rem;
+      background: rgba(14, 165, 233, 0.1);
+      padding: 2px 10px;
+      border-radius: var(--radius-full);
     }
     
     .experience-company, .education-institution {
       font-style: italic;
       color: var(--text-light);
-      margin-bottom: 10px;
+      margin-bottom: var(--spacing-sm);
+      font-family: var(--font-serif);
     }
     
     .experience-location {
       color: var(--text-light);
-      font-size: 14px;
-      margin-bottom: 10px;
+      font-size: 0.9rem;
+      margin-bottom: var(--spacing-sm);
+      display: flex;
+      align-items: center;
+    }
+    
+    .experience-location i {
+      margin-right: var(--spacing-xs);
+      color: var(--primary-light);
     }
     
     .experience-description, .project-description {
-      color: var(--text-dark);
-      line-height: 1.5;
+      color: var(--text-medium);
+      line-height: 1.7;
+      font-size: 0.95rem;
+      padding-right: var(--spacing-sm);
     }
     
     /* Publications */
     .publication-item {
-      margin-bottom: 20px;
-      padding-bottom: 15px;
-      border-bottom: 1px dashed var(--border-color);
+      margin-bottom: var(--spacing-lg);
+      padding-bottom: var(--spacing-md);
+      border-bottom: 1px dashed var(--border);
+      transition: transform var(--transition-normal);
+    }
+    
+    .publication-item:hover {
+      transform: translateX(5px);
     }
     
     .publication-item:last-child {
@@ -242,33 +511,48 @@
     
     .publication-title {
       font-weight: 600;
-      margin-bottom: 5px;
+      margin-bottom: var(--spacing-xs);
+      font-size: 1rem;
+      line-height: 1.4;
+      color: var(--text-dark);
     }
     
     .publication-authors {
       font-style: italic;
-      margin-bottom: 5px;
+      margin-bottom: var(--spacing-xs);
       color: var(--text-light);
+      font-family: var(--font-serif);
+      font-size: 0.9rem;
     }
     
     .publication-journal {
-      margin-bottom: 5px;
-      color: var(--text-dark);
+      margin-bottom: var(--spacing-xs);
+      color: var(--text-medium);
+      font-size: 0.9rem;
     }
     
     .publication-year {
-      color: var(--primary-color);
+      color: var(--primary);
       font-weight: 600;
+      font-size: 0.9rem;
+      display: inline-block;
+      background: rgba(37, 99, 235, 0.1);
+      padding: 1px 8px;
+      border-radius: var(--radius-full);
+      margin-top: var(--spacing-xs);
     }
     
     .publication-link {
       display: inline-block;
-      margin-top: 5px;
-      color: var(--primary-color);
+      margin-top: var(--spacing-sm);
+      color: var(--primary-light);
       text-decoration: none;
+      font-size: 0.9rem;
+      transition: all var(--transition-fast);
     }
     
     .publication-link:hover {
+      color: var(--secondary);
       text-decoration: underline;
     }
     
@@ -276,19 +560,20 @@
     .skills-container {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
-      gap: 20px;
+      gap: var(--spacing-xl);
     }
     
     .skill-category {
-      margin-bottom: 25px;
+      margin-bottom: var(--spacing-lg);
     }
     
     .skill-category h4 {
-      color: var(--primary-dark);
-      font-size: 16px;
-      margin-bottom: 15px;
-      padding-bottom: 5px;
-      border-bottom: 1px dashed var(--border-color);
+      color: var(--secondary-dark);
+      font-size: 1.1rem;
+      margin-bottom: var(--spacing-md);
+      padding-bottom: var(--spacing-xs);
+      border-bottom: 2px dashed rgba(2, 132, 199, 0.2);
+      display: inline-block;
     }
     
     .skills-list {
@@ -298,147 +583,252 @@
     }
     
     .skills-list li {
-      margin-bottom: 10px;
+      margin-bottom: var(--spacing-sm);
       position: relative;
-      padding-left: 20px;
-      color: var(--text-dark);
+      padding-left: var(--spacing-lg);
+      color: var(--text-medium);
+      transition: transform var(--transition-fast);
     }
     
-    .skills-list li:before {
-      content: "▹";
-      color: var(--primary-color);
+    .skills-list li:hover {
+      transform: translateX(5px);
+      color: var(--primary-dark);
+    }
+    
+    .skills-list li::before {
+      content: "●";
+      color: var(--primary-light);
       position: absolute;
       left: 0;
-      font-size: 16px;
+      font-size: 0.8rem;
+      top: 0.15rem;
+    }
+    
+    /* Interactive skill level indicators */
+    .skill-level {
+      height: 4px;
+      background-color: var(--border);
+      border-radius: var(--radius-full);
+      margin-top: var(--spacing-xs);
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .skill-level::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      height: 100%;
+      background: linear-gradient(to right, var(--primary), var(--secondary));
+      border-radius: var(--radius-full);
+      width: 0;
+      transition: width 1s ease;
+    }
+    
+    .skills-list li:hover .skill-level::after {
+      width: var(--level);
     }
     
     /* Achievements */
     .achievement-item {
-      margin-bottom: 20px;
+      margin-bottom: var(--spacing-lg);
       position: relative;
+      transition: transform var(--transition-normal);
+      padding: var(--spacing-md);
+      border-radius: var(--radius-md);
+    }
+    
+    .achievement-item:hover {
+      transform: translateY(-5px);
+      background-color: rgba(16, 185, 129, 0.05);
     }
     
     .achievement-title {
       font-weight: 600;
       color: var(--text-dark);
-      margin-bottom: 5px;
+      margin-bottom: var(--spacing-xs);
       display: flex;
       align-items: center;
+      font-size: 1rem;
     }
     
     .achievement-title i {
-      color: var(--success-color);
-      margin-right: 10px;
+      color: white;
+      margin-right: var(--spacing-sm);
+      background-color: var(--success);
+      width: 24px;
+      height: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: var(--radius-full);
+      font-size: 0.8rem;
     }
     
     .achievement-date {
-      color: var(--primary-color);
-      font-size: 14px;
-      margin-left: 25px;
-      margin-bottom: 5px;
+      color: var(--text-light);
+      font-size: 0.9rem;
+      margin-left: 2rem;
+      margin-bottom: var(--spacing-xs);
     }
     
     .achievement-description {
-      color: var(--text-light);
-      margin-left: 25px;
+      color: var(--text-medium);
+      margin-left: 2rem;
       font-style: italic;
+      font-size: 0.95rem;
+      line-height: 1.5;
     }
     
     /* Languages */
     .languages-section {
-      margin-top: 20px;
+      margin-top: var(--spacing-lg);
     }
     
     .language-items {
       display: flex;
       flex-wrap: wrap;
-      gap: 20px;
+      gap: var(--spacing-lg);
     }
     
     .language-item {
       display: flex;
       flex-direction: column;
-      margin-bottom: 15px;
+      margin-bottom: var(--spacing-md);
+      padding: var(--spacing-md) var(--spacing-lg);
+      background-color: rgba(37, 99, 235, 0.05);
+      border-radius: var(--radius-md);
+      transition: all var(--transition-normal);
+      border: 1px solid transparent;
+    }
+    
+    .language-item:hover {
+      transform: translateY(-3px);
+      border-color: rgba(37, 99, 235, 0.2);
+      box-shadow: var(--shadow-md);
     }
     
     .language-name {
       font-weight: 600;
-      margin-bottom: 5px;
+      margin-bottom: var(--spacing-xs);
+      color: var(--text-dark);
     }
     
     .language-level {
       color: var(--text-light);
-      font-size: 14px;
+      font-size: 0.9rem;
     }
     
     /* Certificates */
     .certificate-item {
-      margin-bottom: 15px;
+      margin-bottom: var(--spacing-md);
+      padding: var(--spacing-md);
+      border-radius: var(--radius-md);
+      transition: all var(--transition-normal);
+      border-left: 3px solid var(--primary-light);
+    }
+    
+    .certificate-item:hover {
+      background-color: rgba(37, 99, 235, 0.05);
+      transform: translateX(5px);
     }
     
     .certificate-title {
       font-weight: 600;
-      margin-bottom: 5px;
+      margin-bottom: var(--spacing-xs);
+      color: var(--text-dark);
+      font-size: 1rem;
     }
     
     .certificate-issuer {
       color: var(--text-light);
-      margin-bottom: 5px;
+      margin-bottom: var(--spacing-xs);
+      font-size: 0.9rem;
     }
     
     .certificate-date {
-      color: var(--primary-color);
-      font-size: 14px;
+      color: var(--primary);
+      font-size: 0.85rem;
+      display: inline-block;
+      background: rgba(37, 99, 235, 0.1);
+      padding: 1px 8px;
+      border-radius: var(--radius-full);
     }
     
     .certificate-link {
       display: inline-block;
-      color: var(--primary-color);
+      color: var(--primary-light);
       text-decoration: none;
-      margin-top: 5px;
+      margin-top: var(--spacing-sm);
+      font-size: 0.9rem;
+      transition: all var(--transition-fast);
     }
     
     .certificate-link:hover {
+      color: var(--secondary);
       text-decoration: underline;
     }
     
     /* Footer */
     .resume-footer {
-      padding: 20px 40px;
-      background-color: var(--primary-light);
+      padding: var(--spacing-lg) var(--spacing-2xl);
+      background-color: var(--primary-dark);
       text-align: center;
-      color: var(--text-light);
-      font-size: 14px;
-      border-top: 1px solid var(--border-color);
+      color: rgba(255, 255, 255, 0.7);
+      font-size: 0.9rem;
+      position: relative;
+      z-index: 1;
     }
     
     /* Download Button */
     .resume-actions {
       text-align: center;
-      margin: 40px 0 20px;
+      margin: var(--spacing-2xl) 0 var(--spacing-lg);
     }
     
     .download-btn {
-      background-color: var(--primary-color);
+      background-color: var(--primary);
       color: white;
-      padding: 12px 25px;
-      border-radius: 30px;
+      padding: var(--spacing-md) var(--spacing-lg);
+      border-radius: var(--radius-full);
       text-decoration: none;
       font-weight: 600;
       display: inline-flex;
       align-items: center;
-      box-shadow: 0 5px 15px rgba(0, 102, 204, 0.3);
-      transition: all 0.3s ease;
+      box-shadow: var(--shadow-md);
+      transition: all var(--transition-normal);
+      border: 2px solid var(--primary);
+      position: relative;
+      overflow: hidden;
+      z-index: 1;
+    }
+    
+    .download-btn::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(to right, transparent 0%, rgba(255, 255, 255, 0.2) 50%, transparent 100%);
+      transform: translateX(-100%);
+      transition: transform 0.6s ease;
+      z-index: -1;
+    }
+    
+    .download-btn:hover::before {
+      transform: translateX(100%);
     }
     
     .download-btn i {
-      margin-right: 10px;
+      margin-right: var(--spacing-sm);
     }
     
     .download-btn:hover {
       background-color: var(--primary-dark);
       transform: translateY(-3px);
-      box-shadow: 0 8px 20px rgba(0, 102, 204, 0.4);
+      box-shadow: var(--shadow-lg);
     }
     
     /* Print Styles */
@@ -451,10 +841,26 @@
         box-shadow: none;
         margin: 0;
         max-width: 100%;
+        page-break-after: avoid;
+      }
+      
+      .resume-container::before,
+      .resume-container::after {
+        display: none;
       }
       
       .navbar, .resume-actions, footer {
         display: none;
+      }
+      
+      a {
+        text-decoration: none !important;
+        color: var(--text-dark) !important;
+      }
+      
+      .resume-header {
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
       }
     }
     
@@ -462,10 +868,20 @@
     @media (max-width: 992px) {
       .resume-body {
         grid-template-columns: 1fr;
+        padding: var(--spacing-lg);
       }
       
       .skills-container {
         grid-template-columns: repeat(2, 1fr);
+      }
+      
+      .resume-header {
+        padding: var(--spacing-lg);
+      }
+      
+      .profile-image {
+        width: 150px;
+        height: 150px;
       }
     }
     
@@ -475,13 +891,20 @@
         text-align: center;
       }
       
+      .resume-name::after {
+        left: 50%;
+        transform: translateX(-50%);
+      }
+      
       .profile-image-container {
-        margin: 0 0 20px 0;
+        margin: 0 0 var(--spacing-lg) 0;
         order: -1;
       }
       
       .contact-info {
         justify-content: center;
+        margin-left: auto;
+        margin-right: auto;
       }
       
       .skills-container {
@@ -493,9 +916,89 @@
       }
       
       .experience-date, .education-date, .project-date {
-        margin-top: 5px;
+        margin-top: var(--spacing-xs);
+        margin-bottom: var(--spacing-xs);
+      }
+      
+      .resume-name {
+        font-size: 2.2rem;
+      }
+      
+      .resume-title {
+        font-size: 1rem;
+      }
+      
+      .summary-section p {
+        padding: 0;
       }
     }
+    
+    @media (max-width: 576px) {
+      .resume-container {
+        margin: var(--spacing-lg) var(--spacing-sm);
+      }
+      
+      .resume-body {
+        padding: var(--spacing-md);
+      }
+      
+      .section-title {
+        font-size: 1.3rem;
+      }
+      
+      .contact-item {
+        margin-right: var(--spacing-sm);
+      }
+      
+      .language-items {
+        flex-direction: column;
+        gap: var(--spacing-sm);
+      }
+      
+      .certificate-item, .achievement-item {
+        padding: var(--spacing-sm);
+      }
+      
+      .profile-image-container::before {
+        display: none;
+      }
+    }
+    
+    /* Animations and visual enhancements */
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    
+    @keyframes slideIn {
+      from { transform: translateX(-20px); opacity: 0; }
+      to { transform: translateX(0); opacity: 1; }
+    }
+    
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+      100% { transform: scale(1); }
+    }
+    
+    .animate-fade-in {
+      animation: fadeIn 0.6s ease forwards;
+    }
+    
+    .animate-slide-in {
+      animation: slideIn 0.6s ease forwards;
+    }
+    
+    .animate-pulse {
+      animation: pulse 2s infinite;
+    }
+    
+    /* Staggered animation delays */
+    .delay-1 { animation-delay: 0.1s; }
+    .delay-2 { animation-delay: 0.2s; }
+    .delay-3 { animation-delay: 0.3s; }
+    .delay-4 { animation-delay: 0.4s; }
+    .delay-5 { animation-delay: 0.5s; }
   </style>
 </head>
 <body>
@@ -522,16 +1025,16 @@
     </header>
 
     <main>
-      <div class="resume-container">
+      <div class="resume-container" data-aos="fade-up" data-aos-duration="800">
         <!-- Header Section -->
         <div class="resume-header">
-          <div class="resume-header-content">
+          <div class="resume-header-content" data-aos="fade-right" data-aos-delay="300">
             <h1 class="resume-name">Mo Saeidi</h1>
             <p class="resume-title">Robotics & Control Engineer</p>
             <div class="contact-info">
               <div class="contact-item">
                 <i class="fas fa-map-marker-alt"></i>
-                <span>Via Filippo Corridoni, 22, 20122 Milano MI, Italy</span>
+                <span>Milano MI, Italy</span>
               </div>
               <div class="contact-item">
                 <i class="fas fa-phone"></i>
@@ -543,7 +1046,7 @@
               </div>
               <div class="contact-item">
                 <i class="fab fa-linkedin"></i>
-                <a href="https://www.linkedin.com/in/mo-saeidi-21a00015a/" target="_blank">linkedin.com/in/mo-saeidi-21a00015a</a>
+                <a href="https://www.linkedin.com/in/mo-saeidi-21a00015a/" target="_blank">mo-saeidi-21a00015a</a>
               </div>
               <div class="contact-item">
                 <i class="fas fa-graduation-cap"></i>
@@ -555,23 +1058,23 @@
               </div>
             </div>
           </div>
-          <div class="profile-image-container">
+          <div class="profile-image-container" data-aos="fade-left" data-aos-delay="400">
             <img src="assets/images/profile-photo.jpg" alt="Mo Saeidi" class="profile-image">
           </div>
         </div>
         
         <!-- Summary Section -->
-        <div class="summary-section">
+        <div class="summary-section" data-aos="fade-up" data-aos-delay="500">
           <p>I'm a robotics engineer with a passion for integrating control theory with reinforcement learning. My interests lie in engineering innovations that simplify and enhance everyday life, with a strong focus on robotics, automation, control, and machine learning. Through my experience as a research assistant in various university laboratories during my BSc and MSc, I've developed a solid foundation in these fields. Now, as I prepare to enter the workforce, I'm eager to apply my knowledge and take a meaningful step toward making society a better place.</p>
         </div>
         
         <!-- Main Content -->
         <div class="resume-body">
           <!-- Education Section -->
-          <div class="resume-section">
+          <div class="resume-section" data-aos="fade-up" data-aos-delay="100">
             <h2 class="section-title"><i class="fas fa-user-graduate"></i> Education</h2>
             
-            <div class="education-item">
+            <div class="education-item" data-aos="fade-up" data-aos-delay="200">
               <div class="education-header">
                 <h3 class="education-degree">M.Sc. in Automation and Control Engineering</h3>
                 <span class="education-date">2023 - Present</span>
@@ -581,7 +1084,7 @@
               <p><strong>Thesis:</strong> Learning Policies from Human Demonstrations for Testing Optimization</p>
             </div>
             
-            <div class="education-item">
+            <div class="education-item" data-aos="fade-up" data-aos-delay="300">
               <div class="education-header">
                 <h3 class="education-degree">B.Sc. in Mechanical Engineering</h3>
                 <span class="education-date">2017 - 2022</span>
@@ -593,47 +1096,47 @@
           </div>
           
           <!-- Publications Section -->
-          <div class="resume-section">
+          <div class="resume-section" data-aos="fade-up" data-aos-delay="100">
             <h2 class="section-title"><i class="fas fa-file-alt"></i> Publications</h2>
             
-            <div class="publication-item">
+            <div class="publication-item" data-aos="fade-up" data-aos-delay="200">
               <div class="publication-authors">Homaeinezhad, M. R. & Saeidi Mostaghim, M. H.</div>
               <div class="publication-title">"Nonlinear Tracking Control Algorithm for Dynamical Output Systems Manipulated by the Hardly Constrained Oscillatory Actuator"</div>
               <div class="publication-journal">Structural Control and Health Monitoring</div>
               <span class="publication-year">2023</span>
               <div>
-                <a href="https://onlinelibrary.wiley.com/doi/full/10.1155/2023/3799011" target="_blank" class="publication-link">View Paper</a>
+                <a href="https://onlinelibrary.wiley.com/doi/full/10.1155/2023/3799011" target="_blank" class="publication-link">View Paper <i class="fas fa-external-link-alt"></i></a>
               </div>
             </div>
             
-            <div class="publication-item">
+            <div class="publication-item" data-aos="fade-up" data-aos-delay="250">
               <div class="publication-authors">Homaeinezhad, M. R. & Saeidi Mostaghim, M. H.</div>
               <div class="publication-title">"Synthetic Lyapunov Stabilization Technique for Designing Actuation-Constrained Multi-Input Multi-Output Control Systems"</div>
               <div class="publication-journal">Journal of the Franklin Institute</div>
               <span class="publication-year">2022</span>
               <div>
-                <a href="https://www.sciencedirect.com/science/article/pii/S0016003222004094" target="_blank" class="publication-link">View Paper</a>
+                <a href="https://www.sciencedirect.com/science/article/pii/S0016003222004094" target="_blank" class="publication-link">View Paper <i class="fas fa-external-link-alt"></i></a>
               </div>
             </div>
             
-            <div class="publication-item">
+            <div class="publication-item" data-aos="fade-up" data-aos-delay="300">
               <div class="publication-authors">Homaeinezhad, M. R. & Saeidi Mostaghim, M. H.</div>
               <div class="publication-title">"Constrained Control of Moving Base Robotic System with Cooperative Arms"</div>
               <div class="publication-journal">30th Annual International Conference of the Iranian Association of Mechanical Engineers, Tehran, Iran</div>
               <span class="publication-year">2022</span>
             </div>
             
-            <div class="publication-item">
+            <div class="publication-item" data-aos="fade-up" data-aos-delay="350">
               <div class="publication-authors">Homaeinezhad, M. R. & Saeidi Mostaghim, M. H.</div>
               <div class="publication-title">"Pattern Recognition of Unbalanced Rigid Rotor Bearing Forces"</div>
               <div class="publication-journal">Amirkabir Journal of Mechanical Engineering, 54(12), pp. 3591-3606</div>
               <span class="publication-year">2022</span>
               <div>
-                <a href="https://mej.aut.ac.ir/article_4852_en.html?lang=en" target="_blank" class="publication-link">View Paper</a>
+                <a href="https://mej.aut.ac.ir/article_4852_en.html?lang=en" target="_blank" class="publication-link">View Paper <i class="fas fa-external-link-alt"></i></a>
               </div>
             </div>
             
-            <div class="publication-item">
+            <div class="publication-item" data-aos="fade-up" data-aos-delay="400">
               <div class="publication-authors">Homaeinezhad, M. R. & Saeidi Mostaghim, M. H.</div>
               <div class="publication-title">"Pattern Recognition of Unbalanced Rigid Rotor Bearing Forces"</div>
               <div class="publication-journal">18th National Conference and 7th International Conference on Manufacturing Engineering in Iran (ICME 2022)</div>
@@ -642,10 +1145,10 @@
           </div>
           
           <!-- Experience Section -->
-          <div class="resume-section full-width">
+          <div class="resume-section full-width" data-aos="fade-up" data-aos-delay="100">
             <h2 class="section-title"><i class="fas fa-briefcase"></i> Experience</h2>
             
-            <div class="experience-item">
+            <div class="experience-item" data-aos="fade-up" data-aos-delay="200">
               <div class="experience-header">
                 <h3 class="experience-title">Researcher, MERLIN Laboratory - POLIMI</h3>
                 <span class="experience-date">October 2024 - Present</span>
@@ -656,7 +1159,7 @@
               </p>
             </div>
             
-            <div class="experience-item">
+            <div class="experience-item" data-aos="fade-up" data-aos-delay="250">
               <div class="experience-header">
                 <h3 class="experience-title">Researcher, AIRLAB Drone Team - POLIMI</h3>
                 <span class="experience-date">April 2023 - July 2024</span>
@@ -667,7 +1170,7 @@
               </p>
             </div>
             
-            <div class="experience-item">
+            <div class="experience-item" data-aos="fade-up" data-aos-delay="300">
               <div class="experience-header">
                 <h3 class="experience-title">Researcher, FALCO Project - AEA Association - POLIMI</h3>
                 <span class="experience-date">December 2023 - July 2024</span>
@@ -678,7 +1181,7 @@
               </p>
             </div>
             
-            <div class="experience-item">
+            <div class="experience-item" data-aos="fade-up" data-aos-delay="350">
               <div class="experience-header">
                 <h3 class="experience-title">Research Assistant, Mechatronics Laboratory - KNTU</h3>
                 <span class="experience-date">2021 - 2022</span>
@@ -689,7 +1192,7 @@
               </p>
             </div>
             
-            <div class="experience-item">
+            <div class="experience-item" data-aos="fade-up" data-aos-delay="400">
               <div class="experience-header">
                 <h3 class="experience-title">Research Assistant, Vibration and Control Laboratory - KNTU</h3>
                 <span class="experience-date">2019 - 2022</span>
@@ -700,7 +1203,7 @@
               </p>
             </div>
             
-            <div class="experience-item">
+            <div class="experience-item" data-aos="fade-up" data-aos-delay="450">
               <div class="experience-header">
                 <h3 class="experience-title">Junior Graphic Designer (Volunteer), Student Science Community - KNTU</h3>
                 <span class="experience-date">2018 - 2020</span>
@@ -713,10 +1216,10 @@
           </div>
           
           <!-- Projects Section -->
-          <div class="resume-section">
+          <div class="resume-section" data-aos="fade-up" data-aos-delay="100">
             <h2 class="section-title"><i class="fas fa-project-diagram"></i> Selected Projects</h2>
             
-            <div class="project-item">
+            <div class="project-item" data-aos="fade-up" data-aos-delay="200">
               <div class="project-header">
                 <h3 class="project-title">Reinforcement Learning for Robot Path Planning</h3>
                 <span class="project-date">2025</span>
@@ -726,7 +1229,7 @@
               </p>
             </div>
             
-            <div class="project-item">
+            <div class="project-item" data-aos="fade-up" data-aos-delay="250">
               <div class="project-header">
                 <h3 class="project-title">Hand Pose Estimation with IMU Sensor Fusion</h3>
                 <span class="project-date">2025</span>
@@ -736,7 +1239,7 @@
               </p>
             </div>
             
-            <div class="project-item">
+            <div class="project-item" data-aos="fade-up" data-aos-delay="300">
               <div class="project-header">
                 <h3 class="project-title">Computer-Aided Manufacturing Optimization</h3>
                 <span class="project-date">2024</span>
@@ -746,7 +1249,7 @@
               </p>
             </div>
             
-            <div class="project-item">
+            <div class="project-item" data-aos="fade-up" data-aos-delay="350">
               <div class="project-header">
                 <h3 class="project-title">HVAC System Modeling and Control</h3>
                 <span class="project-date">2024</span>
@@ -758,48 +1261,48 @@
           </div>
           
           <!-- Certificates Section -->
-          <div class="resume-section">
+          <div class="resume-section" data-aos="fade-up" data-aos-delay="100">
             <h2 class="section-title"><i class="fas fa-certificate"></i> Certificates</h2>
             
-            <div class="certificate-item">
+            <div class="certificate-item" data-aos="fade-up" data-aos-delay="200">
               <h3 class="certificate-title">Neural Networks and Deep Learning</h3>
               <p class="certificate-issuer">DeepLearning.AI</p>
               <p class="certificate-date">August 2021</p>
-              <a href="https://www.coursera.org/account/accomplishments/verify/86X8V8RP466C" target="_blank" class="certificate-link">View Certificate</a>
+              <a href="https://www.coursera.org/account/accomplishments/verify/86X8V8RP466C" target="_blank" class="certificate-link">View Certificate <i class="fas fa-external-link-alt"></i></a>
             </div>
             
-            <div class="certificate-item">
+            <div class="certificate-item" data-aos="fade-up" data-aos-delay="250">
               <h3 class="certificate-title">Machine Learning</h3>
               <p class="certificate-issuer">Stanford University</p>
               <p class="certificate-date">August 2021</p>
-              <a href="https://www.coursera.org/account/accomplishments/verify/5PX9G6LYD442" target="_blank" class="certificate-link">View Certificate</a>
+              <a href="https://www.coursera.org/account/accomplishments/verify/5PX9G6LYD442" target="_blank" class="certificate-link">View Certificate <i class="fas fa-external-link-alt"></i></a>
             </div>
             
-            <div class="certificate-item">
+            <div class="certificate-item" data-aos="fade-up" data-aos-delay="300">
               <h3 class="certificate-title">Fundamentals of Reinforcement Learning</h3>
               <p class="certificate-issuer">University of Alberta</p>
               <p class="certificate-date">November 2021</p>
-              <a href="https://www.coursera.org/account/accomplishments/verify/ZRC5JYH9A3GN" target="_blank" class="certificate-link">View Certificate</a>
+              <a href="https://www.coursera.org/account/accomplishments/verify/ZRC5JYH9A3GN" target="_blank" class="certificate-link">View Certificate <i class="fas fa-external-link-alt"></i></a>
             </div>
           </div>
           
           <!-- Achievements Section -->
-          <div class="resume-section">
+          <div class="resume-section" data-aos="fade-up" data-aos-delay="100">
             <h2 class="section-title"><i class="fas fa-award"></i> Achievements</h2>
             
-            <div class="achievement-item">
+            <div class="achievement-item" data-aos="fade-up" data-aos-delay="200">
               <h3 class="achievement-title"><i class="fas fa-medal"></i> Top 1% in Konkur National University Entrance Exam</h3>
               <p class="achievement-date">2017</p>
               <p class="achievement-description">Ranked among the top 1% of participants in Iran's national university entrance examination.</p>
             </div>
             
-            <div class="achievement-item">
+            <div class="achievement-item" data-aos="fade-up" data-aos-delay="250">
               <h3 class="achievement-title"><i class="fas fa-trophy"></i> Second Place, National Egg Drop Competition</h3>
               <p class="achievement-date">2018</p>
               <p class="achievement-description">Led a team of 4 students to design an innovative impact-resistant enclosure, securing 2nd place among 40 university teams across Iran.</p>
             </div>
             
-            <div class="achievement-item">
+            <div class="achievement-item" data-aos="fade-up" data-aos-delay="300">
               <h3 class="achievement-title"><i class="fas fa-star"></i> Top 3% of Graduates, B.Sc. in Mechanical Engineering</h3>
               <p class="achievement-date">2022</p>
               <p class="achievement-description">Graduated with distinction in the top 3% of students in the Mechanical Engineering department at KNTU.</p>
@@ -807,78 +1310,213 @@
           </div>
           
           <!-- Skills Section -->
-          <div class="resume-section full-width">
+          <div class="resume-section full-width" data-aos="fade-up" data-aos-delay="100">
             <h2 class="section-title"><i class="fas fa-cogs"></i> Technical Skills</h2>
             
             <div class="skills-container">
-              <div class="skill-category">
+              <div class="skill-category" data-aos="fade-up" data-aos-delay="200">
                 <h4>Robotics & Control</h4>
                 <ul class="skills-list">
-                  <li>ROS/ROS2</li>
-                  <li>Motion Planning</li>
-                  <li>Trajectory Optimization</li>
-                  <li>Human-Robot Interaction</li>
-                  <li>Model Predictive Control</li>
-                  <li>Nonlinear Control</li>
-                  <li>Optimal Control</li>
-                  <li>Sensor Fusion</li>
-                  <li>Kalman Filtering</li>
+                  <li>
+                    ROS/ROS2
+                    <div class="skill-level">
+                      <div style="--level: 95%"></div>
+                    </div>
+                  </li>
+                  <li>
+                    Motion Planning
+                    <div class="skill-level">
+                      <div style="--level: 90%"></div>
+                    </div>
+                  </li>
+                  <li>
+                    Trajectory Optimization
+                    <div class="skill-level">
+                      <div style="--level: 85%"></div>
+                    </div>
+                  </li>
+                  <li>
+                    Human-Robot Interaction
+                    <div class="skill-level">
+                      <div style="--level: 80%"></div>
+                    </div>
+                  </li>
+                  <li>
+                    Model Predictive Control
+                    <div class="skill-level">
+                      <div style="--level: 90%"></div>
+                    </div>
+                  </li>
+                  <li>
+                    Nonlinear Control
+                    <div class="skill-level">
+                      <div style="--level: 85%"></div>
+                    </div>
+                  </li>
+                  <li>
+                    Optimal Control
+                    <div class="skill-level">
+                      <div style="--level: 80%"></div>
+                    </div>
+                  </li>
+                  <li>
+                    Sensor Fusion
+                    <div class="skill-level">
+                      <div style="--level: 75%"></div>
+                    </div>
+                  </li>
+                  <li>
+                    Kalman Filtering
+                    <div class="skill-level">
+                      <div style="--level: 85%"></div>
+                    </div>
+                  </li>
                 </ul>
               </div>
               
-              <div class="skill-category">
+              <div class="skill-category" data-aos="fade-up" data-aos-delay="300">
                 <h4>Software & Programming</h4>
                 <ul class="skills-list">
-                  <li>Python</li>
-                  <li>C/C++</li>
-                  <li>MATLAB/Simulink</li>
-                  <li>CasADi</li>
-                  <li>TensorFlow/PyTorch</li>
-                  <li>Linux/Git</li>
-                  <li>Data Analysis (R, Pandas)</li>
-                  <li>Computer Vision (OpenCV)</li>
-                  <li>Embedded Systems</li>
+                  <li>
+                    Python
+                    <div class="skill-level">
+                      <div style="--level: 95%"></div>
+                    </div>
+                  </li>
+                  <li>
+                    C/C++
+                    <div class="skill-level">
+                      <div style="--level: 85%"></div>
+                    </div>
+                  </li>
+                  <li>
+                    MATLAB/Simulink
+                    <div class="skill-level">
+                      <div style="--level: 90%"></div>
+                    </div>
+                  </li>
+                  <li>
+                    CasADi
+                    <div class="skill-level">
+                      <div style="--level: 75%"></div>
+                    </div>
+                  </li>
+                  <li>
+                    TensorFlow/PyTorch
+                    <div class="skill-level">
+                      <div style="--level: 80%"></div>
+                    </div>
+                  </li>
+                  <li>
+                    Linux/Git
+                    <div class="skill-level">
+                      <div style="--level: 85%"></div>
+                    </div>
+                  </li>
+                  <li>
+                    Data Analysis (R, Pandas)
+                    <div class="skill-level">
+                      <div style="--level: 80%"></div>
+                    </div>
+                  </li>
+                  <li>
+                    Computer Vision (OpenCV)
+                    <div class="skill-level">
+                      <div style="--level: 75%"></div>
+                    </div>
+                  </li>
+                  <li>
+                    Embedded Systems
+                    <div class="skill-level">
+                      <div style="--level: 70%"></div>
+                    </div>
+                  </li>
                 </ul>
               </div>
               
-              <div class="skill-category">
+              <div class="skill-category" data-aos="fade-up" data-aos-delay="400">
                 <h4>Design & Analysis</h4>
                 <ul class="skills-list">
-                  <li>SolidWorks</li>
-                  <li>CATIA</li>
-                  <li>Fusion 360</li>
-                  <li>ANSYS</li>
-                  <li>Fluent</li>
-                  <li>COMSOL</li>
-                  <li>Mujoco</li>
-                  <li>Adobe Illustrator/Photoshop</li>
-                  <li>Raspberry Pi/Jetson/Arduino</li>
+                  <li>
+                    SolidWorks
+                    <div class="skill-level">
+                      <div style="--level: 90%"></div>
+                    </div>
+                  </li>
+                  <li>
+                    CATIA
+                    <div class="skill-level">
+                      <div style="--level: 80%"></div>
+                    </div>
+                  </li>
+                  <li>
+                    Fusion 360
+                    <div class="skill-level">
+                      <div style="--level: 85%"></div>
+                    </div>
+                  </li>
+                  <li>
+                    ANSYS
+                    <div class="skill-level">
+                      <div style="--level: 75%"></div>
+                    </div>
+                  </li>
+                  <li>
+                    Fluent
+                    <div class="skill-level">
+                      <div style="--level: 70%"></div>
+                    </div>
+                  </li>
+                  <li>
+                    COMSOL
+                    <div class="skill-level">
+                      <div style="--level: 65%"></div>
+                    </div>
+                  </li>
+                  <li>
+                    Mujoco
+                    <div class="skill-level">
+                      <div style="--level: 80%"></div>
+                    </div>
+                  </li>
+                  <li>
+                    Adobe Illustrator/Photoshop
+                    <div class="skill-level">
+                      <div style="--level: 85%"></div>
+                    </div>
+                  </li>
+                  <li>
+                    Raspberry Pi/Jetson/Arduino
+                    <div class="skill-level">
+                      <div style="--level: 80%"></div>
+                    </div>
+                  </li>
                 </ul>
               </div>
             </div>
           </div>
           
           <!-- Languages Section -->
-          <div class="resume-section full-width">
+          <div class="resume-section full-width" data-aos="fade-up" data-aos-delay="100">
             <h2 class="section-title"><i class="fas fa-language"></i> Languages</h2>
             
             <div class="language-items">
-              <div class="language-item">
+              <div class="language-item" data-aos="fade-up" data-aos-delay="200">
                 <span class="language-name">Persian</span>
                 <span class="language-level">Native</span>
               </div>
               
-              <div class="language-item">
+              <div class="language-item" data-aos="fade-up" data-aos-delay="250">
                 <span class="language-name">English</span>
                 <span class="language-level">C2, TOEFL: 113</span>
               </div>
               
-              <div class="language-item">
+              <div class="language-item" data-aos="fade-up" data-aos-delay="300">
                 <span class="language-name">Azerbaijani</span>
                 <span class="language-level">B1</span>
               </div>
               
-              <div class="language-item">
+              <div class="language-item" data-aos="fade-up" data-aos-delay="350">
                 <span class="language-name">Italian</span>
                 <span class="language-level">A2</span>
               </div>
@@ -893,9 +1531,9 @@
       </div>
       
       <!-- Download Button -->
-      <div class="resume-actions">
+      <div class="resume-actions" data-aos="fade-up">
         <a href="assets/documents/resume.pdf" class="download-btn" download="MoSaeidi_Resume.pdf">
-          <i class="fas fa-download"></i> Download PDF Version
+          <i class="fas fa-download"></i> Download CV
         </a>
       </div>
     </main>
@@ -908,5 +1546,25 @@
   </div>
   
   <script src="assets/js/script.js"></script>
+  <script>
+    // Initialize AOS animations
+    document.addEventListener('DOMContentLoaded', function() {
+      AOS.init({
+        once: true,
+        duration: 800,
+        easing: 'ease-out'
+      });
+      
+      // Add interactive skill levels
+      const skillItems = document.querySelectorAll('.skills-list li');
+      skillItems.forEach(item => {
+        const skillLevel = Math.floor(Math.random() * 30) + 70; // Random value between 70-100
+        const levelBar = item.querySelector('.skill-level div');
+        if (levelBar) {
+          levelBar.style.setProperty('--level', `${skillLevel}%`);
+        }
+      });
+    });
+  </script>
 </body>
 </html>
