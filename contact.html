@@ -410,6 +410,53 @@
         font-size: 1.8rem;
       }
     }
+
+    /* Fix for ALL icons on contact page - add this to the end of your style tag */
+
+/* 1. Fix for social media icons */
+.social-icon {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: 40px !important;
+  height: 40px !important;
+  flex-shrink: 0 !important;
+  border-radius: 50% !important;
+  margin-right: var(--spacing-md) !important;
+  position: relative !important;
+}
+
+/* Use emoji fallbacks for social icons */
+.social-icon:has(i.fa-github)::before { content: "⚙️"; position: absolute; font-size: 20px; }
+.social-icon:has(i.fa-linkedin-in)::before { content: "🔗"; position: absolute; font-size: 20px; }
+.social-icon:has(i.fa-twitter)::before { content: "🐦"; position: absolute; font-size: 20px; }
+.social-icon:has(i.fa-instagram)::before { content: "📷"; position: absolute; font-size: 20px; }
+.social-icon:has(i.fa-telegram-plane)::before { content: "✈️"; position: absolute; font-size: 20px; }
+.social-icon:has(i.fa-graduation-cap)::before { content: "🎓"; position: absolute; font-size: 20px; }
+
+/* 2. Fix for contact info icons */
+.contact-info-icon {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: 40px !important;
+  height: 40px !important;
+  flex-shrink: 0 !important;
+  background-color: rgba(13, 71, 161, 0.1) !important;
+  border-radius: 50% !important;
+  margin-right: var(--spacing-md) !important;
+  position: relative !important;
+}
+
+/* Use emoji fallbacks for contact info icons */
+.contact-info-icon:has(i.fa-envelope)::before { content: "✉️"; position: absolute; font-size: 20px; }
+.contact-info-icon:has(i.fa-map-marker-alt)::before { content: "📍"; position: absolute; font-size: 20px; }
+.contact-info-icon:has(i.fa-globe)::before { content: "🌐"; position: absolute; font-size: 20px; }
+
+/* Hide the original Font Awesome icons that aren't working */
+.social-icon i, .contact-info-icon i {
+  display: none !important;
+}
   </style>
 </head>
 <body>
