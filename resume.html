@@ -1859,28 +1859,45 @@
   <script>
 
 
-  // Fix section titles by adding the underline element
+
+      // Initialize AOS animations with faster speed
   document.addEventListener('DOMContentLoaded', function() {
-    const sectionTitles = document.querySelectorAll('.section-title');
-    sectionTitles.forEach(title => {
-      // Clear any existing ::after styling
-      title.style.setProperty('border-bottom', 'none', 'important');
-      
-      // Add a new underline element that's guaranteed to be below the text
-      const underline = document.createElement('div');
-      underline.className = 'section-title-underline';
-      title.appendChild(underline);
+    AOS.init({
+      once: true,
+      duration: 400, // Faster animation duration (was 800)
+      easing: 'ease-out',
+      disable: window.innerWidth < 768 // Disable animations on mobile
     });
     
-    // Configure Tippy.js tooltips with higher z-index
-    if (typeof tippy !== 'undefined') {
-      tippy.setDefaultProps({
-        zIndex: 9999,
-        appendTo: document.body
-      });
-    }
+    // Initialize Tippy.js for paper previews
+    tippy('[data-tippy-content]', {
+      allowHTML: true,
+      placement: 'right',
+      animation: 'scale',
+      theme: 'light',
+      maxWidth: 250,
+      interactive: true,
+      arrow: true,
+      class: 'paper-tooltip'
+    });
+    
+    // Add interactive skill levels
+    const skillItems = document.querySelectorAll('.skills-list li');
+    skillItems.forEach(item => {
+      // Get the actual skill level value from CSS if already set,
+      // or use a default between 70-100
+      let levelBar = item.querySelector('.skill-level div');
+      if (levelBar) {
+        const computedStyle = window.getComputedStyle(levelBar);
+        let currentLevel = computedStyle.getPropertyValue('--level');
+        
+        if (!currentLevel || currentLevel === '') {
+          const skillLevel = Math.floor(Math.random() * 30) + 70; // Random between 70-100
+          levelBar.style.setProperty('--level', `${skillLevel}%`);
+        }
+      }
+    });
   });
-
 
   </script>
 </body>
