@@ -13,6 +13,490 @@
     crossorigin="anonymous"
     referrerpolicy="no-referrer"
   />
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@300;400;500;600;700&family=Open+Sans:wght@300;400;600&display=swap" rel="stylesheet">
+  <!-- Custom Resume Styles -->
+  <style>
+    :root {
+      --primary-color: #0066cc;
+      --primary-light: #e6f0ff;
+      --primary-dark: #004d99;
+      --text-dark: #333333;
+      --text-light: #666666;
+      --background-light: #f9f9f9;
+      --border-color: #eaeaea;
+      --success-color: #27ae60;
+    }
+    
+    body {
+      font-family: 'Open Sans', sans-serif;
+      color: var(--text-dark);
+      background-color: var(--background-light);
+    }
+    
+    h1, h2, h3, h4, h5, h6 {
+      font-family: 'Raleway', sans-serif;
+    }
+    
+    /* Resume Container */
+    .resume-container {
+      background-color: white;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+      border-radius: 12px;
+      overflow: hidden;
+      margin: 40px auto;
+      max-width: 1000px;
+    }
+    
+    /* Header Section */
+    .resume-header {
+      background-color: var(--primary-color);
+      color: white;
+      padding: 40px;
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+    
+    .resume-header-content {
+      flex: 1;
+    }
+    
+    .profile-image-container {
+      margin-left: 30px;
+    }
+    
+    .profile-image {
+      width: 180px;
+      height: 180px;
+      border-radius: 50%;
+      border: 5px solid white;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+      object-fit: cover;
+    }
+    
+    .resume-name {
+      font-size: 36px;
+      font-weight: 700;
+      margin-bottom: 5px;
+      letter-spacing: 1px;
+    }
+    
+    .resume-title {
+      font-size: 18px;
+      font-weight: 400;
+      margin-bottom: 25px;
+      opacity: 0.9;
+    }
+    
+    .contact-info {
+      display: flex;
+      flex-wrap: wrap;
+      margin-top: 20px;
+    }
+    
+    .contact-item {
+      display: flex;
+      align-items: center;
+      margin-right: 20px;
+      margin-bottom: 10px;
+    }
+    
+    .contact-item i {
+      margin-right: 8px;
+      font-size: 16px;
+      width: 20px;
+      text-align: center;
+    }
+    
+    .contact-item a {
+      color: white;
+      text-decoration: none;
+      transition: opacity 0.3s;
+    }
+    
+    .contact-item a:hover {
+      opacity: 0.8;
+    }
+    
+    /* Summary Section */
+    .summary-section {
+      background-color: var(--primary-light);
+      padding: 30px 40px;
+      position: relative;
+    }
+    
+    .summary-section p {
+      margin: 0;
+      line-height: 1.6;
+      color: var(--text-dark);
+    }
+    
+    /* Main Content */
+    .resume-body {
+      padding: 40px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 30px;
+    }
+    
+    /* For full-width sections */
+    .full-width {
+      grid-column: 1 / -1;
+    }
+    
+    /* Section Styling */
+    .resume-section {
+      margin-bottom: 30px;
+    }
+    
+    .section-title {
+      color: var(--primary-color);
+      font-size: 24px;
+      font-weight: 600;
+      margin-bottom: 20px;
+      padding-bottom: 10px;
+      border-bottom: 2px solid var(--primary-color);
+      display: flex;
+      align-items: center;
+    }
+    
+    .section-title i {
+      margin-right: 10px;
+    }
+    
+    /* Experience Items */
+    .experience-item, .education-item, .project-item {
+      margin-bottom: 25px;
+      position: relative;
+      padding-left: 20px;
+    }
+    
+    .experience-item:before, .education-item:before, .project-item:before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 8px;
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background-color: var(--primary-color);
+    }
+    
+    .experience-item:after, .education-item:after, .project-item:after {
+      content: '';
+      position: absolute;
+      left: 4px;
+      top: 22px;
+      width: 2px;
+      height: calc(100% - 14px);
+      background-color: var(--border-color);
+    }
+    
+    .experience-header, .education-header, .project-header {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 5px;
+    }
+    
+    .experience-title, .education-degree, .project-title {
+      font-weight: 600;
+      color: var(--text-dark);
+      font-size: 18px;
+    }
+    
+    .experience-date, .education-date, .project-date {
+      color: var(--primary-color);
+      font-weight: 500;
+      white-space: nowrap;
+      font-size: 14px;
+    }
+    
+    .experience-company, .education-institution {
+      font-style: italic;
+      color: var(--text-light);
+      margin-bottom: 10px;
+    }
+    
+    .experience-location {
+      color: var(--text-light);
+      font-size: 14px;
+      margin-bottom: 10px;
+    }
+    
+    .experience-description, .project-description {
+      color: var(--text-dark);
+      line-height: 1.5;
+    }
+    
+    /* Publications */
+    .publication-item {
+      margin-bottom: 20px;
+      padding-bottom: 15px;
+      border-bottom: 1px dashed var(--border-color);
+    }
+    
+    .publication-item:last-child {
+      border-bottom: none;
+    }
+    
+    .publication-title {
+      font-weight: 600;
+      margin-bottom: 5px;
+    }
+    
+    .publication-authors {
+      font-style: italic;
+      margin-bottom: 5px;
+      color: var(--text-light);
+    }
+    
+    .publication-journal {
+      margin-bottom: 5px;
+      color: var(--text-dark);
+    }
+    
+    .publication-year {
+      color: var(--primary-color);
+      font-weight: 600;
+    }
+    
+    .publication-link {
+      display: inline-block;
+      margin-top: 5px;
+      color: var(--primary-color);
+      text-decoration: none;
+    }
+    
+    .publication-link:hover {
+      text-decoration: underline;
+    }
+    
+    /* Skills */
+    .skills-container {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+    }
+    
+    .skill-category {
+      margin-bottom: 25px;
+    }
+    
+    .skill-category h4 {
+      color: var(--primary-dark);
+      font-size: 16px;
+      margin-bottom: 15px;
+      padding-bottom: 5px;
+      border-bottom: 1px dashed var(--border-color);
+    }
+    
+    .skills-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    
+    .skills-list li {
+      margin-bottom: 10px;
+      position: relative;
+      padding-left: 20px;
+      color: var(--text-dark);
+    }
+    
+    .skills-list li:before {
+      content: "▹";
+      color: var(--primary-color);
+      position: absolute;
+      left: 0;
+      font-size: 16px;
+    }
+    
+    /* Achievements */
+    .achievement-item {
+      margin-bottom: 20px;
+      position: relative;
+    }
+    
+    .achievement-title {
+      font-weight: 600;
+      color: var(--text-dark);
+      margin-bottom: 5px;
+      display: flex;
+      align-items: center;
+    }
+    
+    .achievement-title i {
+      color: var(--success-color);
+      margin-right: 10px;
+    }
+    
+    .achievement-date {
+      color: var(--primary-color);
+      font-size: 14px;
+      margin-left: 25px;
+      margin-bottom: 5px;
+    }
+    
+    .achievement-description {
+      color: var(--text-light);
+      margin-left: 25px;
+      font-style: italic;
+    }
+    
+    /* Languages */
+    .languages-section {
+      margin-top: 20px;
+    }
+    
+    .language-items {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+    
+    .language-item {
+      display: flex;
+      flex-direction: column;
+      margin-bottom: 15px;
+    }
+    
+    .language-name {
+      font-weight: 600;
+      margin-bottom: 5px;
+    }
+    
+    .language-level {
+      color: var(--text-light);
+      font-size: 14px;
+    }
+    
+    /* Certificates */
+    .certificate-item {
+      margin-bottom: 15px;
+    }
+    
+    .certificate-title {
+      font-weight: 600;
+      margin-bottom: 5px;
+    }
+    
+    .certificate-issuer {
+      color: var(--text-light);
+      margin-bottom: 5px;
+    }
+    
+    .certificate-date {
+      color: var(--primary-color);
+      font-size: 14px;
+    }
+    
+    .certificate-link {
+      display: inline-block;
+      color: var(--primary-color);
+      text-decoration: none;
+      margin-top: 5px;
+    }
+    
+    .certificate-link:hover {
+      text-decoration: underline;
+    }
+    
+    /* Footer */
+    .resume-footer {
+      padding: 20px 40px;
+      background-color: var(--primary-light);
+      text-align: center;
+      color: var(--text-light);
+      font-size: 14px;
+      border-top: 1px solid var(--border-color);
+    }
+    
+    /* Download Button */
+    .resume-actions {
+      text-align: center;
+      margin: 40px 0 20px;
+    }
+    
+    .download-btn {
+      background-color: var(--primary-color);
+      color: white;
+      padding: 12px 25px;
+      border-radius: 30px;
+      text-decoration: none;
+      font-weight: 600;
+      display: inline-flex;
+      align-items: center;
+      box-shadow: 0 5px 15px rgba(0, 102, 204, 0.3);
+      transition: all 0.3s ease;
+    }
+    
+    .download-btn i {
+      margin-right: 10px;
+    }
+    
+    .download-btn:hover {
+      background-color: var(--primary-dark);
+      transform: translateY(-3px);
+      box-shadow: 0 8px 20px rgba(0, 102, 204, 0.4);
+    }
+    
+    /* Print Styles */
+    @media print {
+      body {
+        background-color: white;
+      }
+      
+      .resume-container {
+        box-shadow: none;
+        margin: 0;
+        max-width: 100%;
+      }
+      
+      .navbar, .resume-actions, footer {
+        display: none;
+      }
+    }
+    
+    /* Responsive Styles */
+    @media (max-width: 992px) {
+      .resume-body {
+        grid-template-columns: 1fr;
+      }
+      
+      .skills-container {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+    
+    @media (max-width: 768px) {
+      .resume-header {
+        flex-direction: column;
+        text-align: center;
+      }
+      
+      .profile-image-container {
+        margin: 0 0 20px 0;
+        order: -1;
+      }
+      
+      .contact-info {
+        justify-content: center;
+      }
+      
+      .skills-container {
+        grid-template-columns: 1fr;
+      }
+      
+      .experience-header, .education-header, .project-header {
+        flex-direction: column;
+      }
+      
+      .experience-date, .education-date, .project-date {
+        margin-top: 5px;
+      }
+    }
+  </style>
 </head>
 <body>
   <div class="page-wrapper">
@@ -30,7 +514,7 @@
             <li><a href="about.html">About Me</a></li>
             <li><a href="blog.html">Blog</a></li>
             <li><a href="academia.html">Academia</a></li>
-            <li><a href="resume.html">Resume</a></li>
+            <li><a href="resume.html" class="active">Resume</a></li>
             <li><a href="contact.html">Contact</a></li>
           </ul>
         </div>
@@ -38,184 +522,294 @@
     </header>
 
     <main>
-      <section id="resume">
-        <div class="container">
-          <h1>Professional Resume</h1>
-          
-          <div class="resume-header">
-            <div class="resume-name">
-              <h2>Mo Saeidi</h2>
-              <p class="resume-title">Robotics & Control Engineer</p>
-            </div>
-            <div class="resume-contact">
-              <p><i class="fas fa-map-marker-alt"></i> Via Filippo Corridoni, 22, 20122 Milano MI, Italy</p>
-              <p><i class="fas fa-phone"></i> +39 351 365 4158</p>
-              <p><i class="fas fa-envelope"></i> mohammadhosein.saeidi@mail.polimi.it</p>
-              <p><i class="fab fa-linkedin"></i> <a href="https://www.linkedin.com/in/mo-saeidi-21a00015a/" target="_blank">linkedin.com/in/mo-saeidi-21a00015a</a></p>
-              <p><i class="fas fa-graduation-cap"></i> <a href="https://scholar.google.com/citations?user=6AucdhQAAAAJ&hl=en" target="_blank">Google Scholar</a></p>
-            </div>
-          </div>
-
-          <div class="resume-summary">
-            <h3>Professional Summary</h3>
-            <p>Robotics engineer with expertise in control systems, reinforcement learning, and computer vision, applying theoretical knowledge to solve complex real-world challenges. Demonstrated capacity for integrating hardware and software systems through innovative research in autonomous navigation, sensor fusion, and human-robot interaction. Seeking to contribute technical proficiency in machine learning and control theory to advance cutting-edge robotics applications while continuously expanding knowledge across interdisciplinary domains.</p>
-          </div>
-
-          <div class="resume-section">
-            <h3><i class="fas fa-user-graduate"></i> Education</h3>
-            <div class="resume-item">
-              <div class="resume-item-header">
-                <h4>M.Sc. in Automation and Control Engineering</h4>
-                <span class="resume-date">2023 - Present</span>
+      <div class="resume-container">
+        <!-- Header Section -->
+        <div class="resume-header">
+          <div class="resume-header-content">
+            <h1 class="resume-name">Mo Saeidi</h1>
+            <p class="resume-title">Robotics & Control Engineer</p>
+            <div class="contact-info">
+              <div class="contact-item">
+                <i class="fas fa-map-marker-alt"></i>
+                <span>Via Filippo Corridoni, 22, 20122 Milano MI, Italy</span>
               </div>
-              <p class="resume-institution">Polytechnic University of Milan (POLIMI), Italy</p>
+              <div class="contact-item">
+                <i class="fas fa-phone"></i>
+                <span>+39 351 365 4158</span>
+              </div>
+              <div class="contact-item">
+                <i class="fas fa-envelope"></i>
+                <a href="mailto:mohammadhosein.saeidi@mail.polimi.it">mohammadhosein.saeidi@mail.polimi.it</a>
+              </div>
+              <div class="contact-item">
+                <i class="fab fa-linkedin"></i>
+                <a href="https://www.linkedin.com/in/mo-saeidi-21a00015a/" target="_blank">linkedin.com/in/mo-saeidi-21a00015a</a>
+              </div>
+              <div class="contact-item">
+                <i class="fas fa-graduation-cap"></i>
+                <a href="https://scholar.google.com/citations?user=6AucdhQAAAAJ&hl=en" target="_blank">Google Scholar</a>
+              </div>
+              <div class="contact-item">
+                <i class="fas fa-globe"></i>
+                <a href="https://zexerv.github.io/" target="_blank">zexerv.github.io</a>
+              </div>
+            </div>
+          </div>
+          <div class="profile-image-container">
+            <img src="assets/images/profile-photo.jpg" alt="Mo Saeidi" class="profile-image">
+          </div>
+        </div>
+        
+        <!-- Summary Section -->
+        <div class="summary-section">
+          <p>I'm a robotics engineer with a passion for integrating control theory with reinforcement learning. My interests lie in engineering innovations that simplify and enhance everyday life, with a strong focus on robotics, automation, control, and machine learning. Through my experience as a research assistant in various university laboratories during my BSc and MSc, I've developed a solid foundation in these fields. Now, as I prepare to enter the workforce, I'm eager to apply my knowledge and take a meaningful step toward making society a better place.</p>
+        </div>
+        
+        <!-- Main Content -->
+        <div class="resume-body">
+          <!-- Education Section -->
+          <div class="resume-section">
+            <h2 class="section-title"><i class="fas fa-user-graduate"></i> Education</h2>
+            
+            <div class="education-item">
+              <div class="education-header">
+                <h3 class="education-degree">M.Sc. in Automation and Control Engineering</h3>
+                <span class="education-date">2023 - Present</span>
+              </div>
+              <p class="education-institution">Polytechnic University of Milan (POLIMI), Italy</p>
               <p>GPA: 27.11/30</p>
-              <p>Thesis: Learning Policies from Human Demonstrations for Testing Optimization</p>
-              <p><strong>MERLIN Laboratory Researcher</strong> (October 2024 - Present)</p>
-              <p>Developing an extension to OMPL motion planners implemented in MoveIt for programming by demonstration of UR5e robot. Implementing learning algorithms to interpret human demonstrations captured via Thrustmaster Airbus joystick for intuitive robot programming in ROS1 environment.</p>
+              <p><strong>Thesis:</strong> Learning Policies from Human Demonstrations for Testing Optimization</p>
             </div>
             
-            <div class="resume-item">
-              <div class="resume-item-header">
-                <h4>B.Sc. in Mechanical Engineering</h4>
-                <span class="resume-date">2017 - 2022</span>
+            <div class="education-item">
+              <div class="education-header">
+                <h3 class="education-degree">B.Sc. in Mechanical Engineering</h3>
+                <span class="education-date">2017 - 2022</span>
               </div>
-              <p class="resume-institution">KNTU University, Tehran, Iran</p>
+              <p class="education-institution">KNTU University, Tehran, Iran</p>
               <p>GPA: 3.88/4.0</p>
-              <p>Top 3% of graduates</p>
-            </div>
-          </div>
-
-          <div class="resume-section">
-            <h3><i class="fas fa-briefcase"></i> Professional Experience</h3>
-            
-            <div class="resume-item">
-              <div class="resume-item-header">
-                <h4>Researcher, AIRLAB Drone Team - POLIMI</h4>
-                <span class="resume-date">April 2023 - July 2024</span>
-              </div>
-              <p class="resume-institution">Milan, Italy</p>
-              <ul>
-                <li>Engineered advanced planning and navigation algorithms for multi-agent drone systems utilizing ROS1/ROS2 frameworks, enhancing coordination capabilities in complex environments.</li>
-                <li>Integrated and calibrated ZED2 stereo camera with laser altimeter systems to enable lightweight point cloud generation, achieving efficient real-time obstacle detection with minimal computational overhead.</li>
-                <li>Led algorithmic development for the Leonardo Drone Contest 2023, implementing exploration strategies that achieved 95% target detection rate in challenging indoor environments.</li>
-                <li>Systematically refined path planning and obstacle avoidance algorithms through iterative testing and optimization, resulting in 40% reduction in collision incidents during autonomous operation.</li>
-              </ul>
-            </div>
-            
-            <div class="resume-item">
-              <div class="resume-item-header">
-                <h4>Researcher, FALCO Project - AEA Association - POLIMI</h4>
-                <span class="resume-date">December 2023 - July 2024</span>
-              </div>
-              <p class="resume-institution">Milan, Italy</p>
-              <ul>
-                <li>Architected flight controllers incorporating Visual-Inertial Odometry techniques for robust navigation in GPS-denied environments, enabling reliable autonomous operation in challenging conditions.</li>
-                <li>Formulated and implemented disturbance compensation algorithms that improved stability of heavy-lift drones by 30%, allowing for secure transportation of sensitive payloads.</li>
-                <li>Developed cost-effective camera-based navigation solutions that reduced hardware expenditure by 50% while maintaining navigation accuracy within operational requirements.</li>
-                <li>Facilitated interdisciplinary collaboration between mechanical, electrical, and software engineering teams to ensure seamless integration of control systems with mechanical designs.</li>
-              </ul>
-            </div>
-            
-            <div class="resume-item">
-              <div class="resume-item-header">
-                <h4>Research Assistant, Mechatronics Laboratory - KNTU</h4>
-                <span class="resume-date">2021 - 2022</span>
-              </div>
-              <p class="resume-institution">Tehran, Iran</p>
-              <ul>
-                <li>Designed and implemented Autonomous Emergency Braking (AEB) system utilizing computer vision algorithms for object detection and classification in dynamic traffic scenarios.</li>
-                <li>Achieved 92% accuracy in monocular depth estimation for obstacle detection through novel algorithmic approaches, enabling reliable distance calculation with single-camera setups.</li>
-                <li>Methodically collected and labeled over 10,000 images for chess piece detection project, creating a comprehensive dataset that enabled high-accuracy machine learning model training.</li>
-                <li>Applied and benchmarked YOLO, Fast R-CNN, and SSD algorithms for real-time object recognition, identifying optimal approaches for various operational constraints.</li>
-              </ul>
-            </div>
-            
-            <div class="resume-item">
-              <div class="resume-item-header">
-                <h4>Research Assistant, Vibration and Control Laboratory - KNTU</h4>
-                <span class="resume-date">2019 - 2022</span>
-              </div>
-              <p class="resume-institution">Tehran, Iran</p>
-              <ul>
-                <li>Engineered neural network-based fault diagnosis systems achieving 95% accuracy in mechanical systems, enabling predictive maintenance capabilities for critical industrial equipment.</li>
-                <li>Developed and implemented control algorithms for 3-axis CNC systems that improved operational performance by 25% through optimized motion planning and execution.</li>
-                <li>Conceptualized and prototyped an innovative accelerometer system using fluid surface monitoring via image processing, providing a cost-effective alternative to conventional sensors.</li>
-                <li>Published three journal articles and two conference papers on control systems and pattern recognition, contributing to the academic knowledge base in these domains.</li>
-              </ul>
-            </div>
-            
-            <div class="resume-item">
-              <div class="resume-item-header">
-                <h4>Junior Graphic Designer (Volunteer), Student Science Community - KNTU</h4>
-                <span class="resume-date">2018 - 2020</span>
-              </div>
-              <p class="resume-institution">Tehran, Iran</p>
-              <ul>
-                <li>Designed professional promotional materials including posters, banners, and digital media for student events, theater gatherings, and academic sessions using Adobe Illustrator and Photoshop.</li>
-                <li>Created consistent visual identity elements across various university events while adapting designs to specific audience demographics and event themes.</li>
-              </ul>
+              <p><strong>Thesis:</strong> Pattern Recognition of Unbalanced Rigid Rotor Bearing Forces</p>
             </div>
           </div>
           
+          <!-- Publications Section -->
           <div class="resume-section">
-            <h3><i class="fas fa-project-diagram"></i> Projects</h3>
+            <h2 class="section-title"><i class="fas fa-file-alt"></i> Publications</h2>
             
-            <div class="resume-item">
-              <div class="resume-item-header">
-                <h4>ARTO (Automated Robotics for Testing Optimization)</h4>
-                <span class="resume-date">2023 - Present</span>
+            <div class="publication-item">
+              <div class="publication-authors">Homaeinezhad, M. R. & Saeidi Mostaghim, M. H.</div>
+              <div class="publication-title">"Nonlinear Tracking Control Algorithm for Dynamical Output Systems Manipulated by the Hardly Constrained Oscillatory Actuator"</div>
+              <div class="publication-journal">Structural Control and Health Monitoring</div>
+              <span class="publication-year">2023</span>
+              <div>
+                <a href="https://onlinelibrary.wiley.com/doi/full/10.1155/2023/3799011" target="_blank" class="publication-link">View Paper</a>
               </div>
-              <ul>
-                <li>Developing a comprehensive learning from demonstration framework for UR5e industrial robot programming to streamline complex task specification for non-technical operators.</li>
-                <li>Implementing and adapting RRT algorithms with specialized cost functions to accurately interpret human intention, bridging the gap between intuitive demonstration and precise robotic execution.</li>
-                <li>Formulating optimization techniques for robotic trajectories while maintaining singularity avoidance to ensure robust performance across the robot's workspace.</li>
-                <li>Engineering solutions that reduce programming time for complex trajectories by an estimated 65%, significantly improving industrial workflow efficiency.</li>
-              </ul>
             </div>
             
-            <div class="resume-item">
-              <div class="resume-item-header">
-                <h4>Reinforcement Learning for Robot Path Planning</h4>
-                <span class="resume-date">2023</span>
+            <div class="publication-item">
+              <div class="publication-authors">Homaeinezhad, M. R. & Saeidi Mostaghim, M. H.</div>
+              <div class="publication-title">"Synthetic Lyapunov Stabilization Technique for Designing Actuation-Constrained Multi-Input Multi-Output Control Systems"</div>
+              <div class="publication-journal">Journal of the Franklin Institute</div>
+              <span class="publication-year">2022</span>
+              <div>
+                <a href="https://www.sciencedirect.com/science/article/pii/S0016003222004094" target="_blank" class="publication-link">View Paper</a>
               </div>
-              <ul>
-                <li>Developed reinforcement learning-based planning algorithm for static obstacle avoidance with custom reward functions that balance efficiency, safety, and path smoothness objectives.</li>
-                <li>Implemented preprocessing pipeline to transform voxelized obstacle data through convolutional neural networks before feeding to reinforcement learning neural network for enhanced feature extraction.</li>
-                <li>Formulated manipulability metrics to avoid singularities during continuous movement, ensuring stable control throughout the robot's operational envelope.</li>
-                <li>Conducted systematic comparison of multiple reinforcement learning algorithms for continuous action spaces to identify optimal approaches for robotic manipulation tasks.</li>
-              </ul>
             </div>
             
-            <div class="resume-item">
-              <div class="resume-item-header">
-                <h4>Hand Pose Estimation with IMU Sensor Fusion</h4>
-                <span class="resume-date">2022</span>
-              </div>
-              <ul>
-                <li>Integrated network of three MPU6050 accelerometers strategically positioned across hand joints to capture comprehensive motion tracking data with minimal sensor footprint.</li>
-                <li>Developed quaternion estimation algorithms that effectively fused gravity and rotational acceleration data to determine precise spatial orientation despite sensor noise.</li>
-                <li>Implemented optimization-based pose estimation techniques adhering to kinematic hand constraints to ensure biologically plausible joint configurations.</li>
-                <li>Engineered a 7-DOF hand model addressing the 6-DOF correspondence problem through constrained optimization techniques for accurate finger position tracking.</li>
-              </ul>
+            <div class="publication-item">
+              <div class="publication-authors">Homaeinezhad, M. R. & Saeidi Mostaghim, M. H.</div>
+              <div class="publication-title">"Constrained Control of Moving Base Robotic System with Cooperative Arms"</div>
+              <div class="publication-journal">30th Annual International Conference of the Iranian Association of Mechanical Engineers, Tehran, Iran</div>
+              <span class="publication-year">2022</span>
             </div>
             
-            <div class="resume-item">
-              <div class="resume-item-header">
-                <h4>Computer-Aided Manufacturing Optimization</h4>
-                <span class="resume-date">2021</span>
+            <div class="publication-item">
+              <div class="publication-authors">Homaeinezhad, M. R. & Saeidi Mostaghim, M. H.</div>
+              <div class="publication-title">"Pattern Recognition of Unbalanced Rigid Rotor Bearing Forces"</div>
+              <div class="publication-journal">Amirkabir Journal of Mechanical Engineering, 54(12), pp. 3591-3606</div>
+              <span class="publication-year">2022</span>
+              <div>
+                <a href="https://mej.aut.ac.ir/article_4852_en.html?lang=en" target="_blank" class="publication-link">View Paper</a>
               </div>
-              <ul>
-                <li>Developed comprehensive optimization methodology for CNC machining processes using Fusion 360, minimizing both tool wear and production time while maintaining specified quality requirements.</li>
-                <li>Conducted detailed analysis of manufacturing manuals to identify optimal tooling configurations based on material properties, part geometry, and finishing requirements.</li>
-                <li>Systematically optimized fixture positions and machining sequences to reduce setup time while ensuring geometric tolerances were consistently achieved.</li>
-                <li>Implemented cost optimization strategies that balanced material utilization, tool life, and production efficiency to achieve maximum economic benefit.</li>
-              </ul>
+            </div>
+            
+            <div class="publication-item">
+              <div class="publication-authors">Homaeinezhad, M. R. & Saeidi Mostaghim, M. H.</div>
+              <div class="publication-title">"Pattern Recognition of Unbalanced Rigid Rotor Bearing Forces"</div>
+              <div class="publication-journal">18th National Conference and 7th International Conference on Manufacturing Engineering in Iran (ICME 2022)</div>
+              <span class="publication-year">2022</span>
             </div>
           </div>
           
+          <!-- Experience Section -->
+          <div class="resume-section full-width">
+            <h2 class="section-title"><i class="fas fa-briefcase"></i> Experience</h2>
+            
+            <div class="experience-item">
+              <div class="experience-header">
+                <h3 class="experience-title">Researcher, MERLIN Laboratory - POLIMI</h3>
+                <span class="experience-date">October 2024 - Present</span>
+              </div>
+              <p class="experience-company">Milan, Italy</p>
+              <p class="experience-description">
+                Conducting my master's thesis (ARTO Project): Applying a PbD algorithm on a UR5e robot, generalizing human demonstrations and extracting patterns while satisfying constraints. The skill set is manipulating cockpit interfaces (levers, thrusters, buttons, switches and etc.)
+              </p>
+            </div>
+            
+            <div class="experience-item">
+              <div class="experience-header">
+                <h3 class="experience-title">Researcher, AIRLAB Drone Team - POLIMI</h3>
+                <span class="experience-date">April 2023 - July 2024</span>
+              </div>
+              <p class="experience-company">Milan, Italy</p>
+              <p class="experience-description">
+                ROS1 to ROS2 translation of navigation and filtering nodes. Developed a high-level navigation (A* algorithm) from scratch in a limited time. Drone Contest of 2023 held in Torino for three days, held by Leonardo.
+              </p>
+            </div>
+            
+            <div class="experience-item">
+              <div class="experience-header">
+                <h3 class="experience-title">Researcher, FALCO Project - AEA Association - POLIMI</h3>
+                <span class="experience-date">December 2023 - July 2024</span>
+              </div>
+              <p class="experience-company">Milan, Italy</p>
+              <p class="experience-description">
+                Polimi's Automation and Control Association: Weekly meeting in order to discuss FALCO project: discussions regarding design of a visual odometry eliminating the need of expensive sensors (high-res GPS, MoCap).
+              </p>
+            </div>
+            
+            <div class="experience-item">
+              <div class="experience-header">
+                <h3 class="experience-title">Research Assistant, Mechatronics Laboratory - KNTU</h3>
+                <span class="experience-date">2021 - 2022</span>
+              </div>
+              <p class="experience-company">Tehran, Iran</p>
+              <p class="experience-description">
+                Participated in Autonomous Emergency Braking system: computer vision team. Benchmarking monocular depth estimation algorithms, object detection and fusing them. Participated in <em>ChessTrack</em> project: gathering and labeling more than 10000 images of chess pieces and training a YOLO; the program used in chess tournaments.
+              </p>
+            </div>
+            
+            <div class="experience-item">
+              <div class="experience-header">
+                <h3 class="experience-title">Research Assistant, Vibration and Control Laboratory - KNTU</h3>
+                <span class="experience-date">2019 - 2022</span>
+              </div>
+              <p class="experience-company">Tehran, Iran</p>
+              <p class="experience-description">
+                Conducted my BSc thesis, simulating a rigid rotor with imbalance disturbution of mass and developing a fault diagnosis NN to detect the where to place the balancing masses, and ultimately reducing the number of required snesors to 2. Further Published 3 journal articles and 2 conference papers in the fields of control, vibration analysis and condition monitoring.
+              </p>
+            </div>
+            
+            <div class="experience-item">
+              <div class="experience-header">
+                <h3 class="experience-title">Junior Graphic Designer (Volunteer), Student Science Community - KNTU</h3>
+                <span class="experience-date">2018 - 2020</span>
+              </div>
+              <p class="experience-company">Tehran, Iran</p>
+              <p class="experience-description">
+                Designed promotional materials for student events using Adobe Illustrator and Photoshop.
+              </p>
+            </div>
+          </div>
+          
+          <!-- Projects Section -->
           <div class="resume-section">
-            <h3><i class="fas fa-cogs"></i> Technical Skills</h3>
+            <h2 class="section-title"><i class="fas fa-project-diagram"></i> Selected Projects</h2>
+            
+            <div class="project-item">
+              <div class="project-header">
+                <h3 class="project-title">Reinforcement Learning for Robot Path Planning</h3>
+                <span class="project-date">2025</span>
+              </div>
+              <p class="project-description">
+                Developed RL-based planning algorithm with custom reward functions for obstacle avoidance. Implemented CNN preprocessing for voxelized obstacles. Formulated manipulability metrics to avoid singularities.
+              </p>
+            </div>
+            
+            <div class="project-item">
+              <div class="project-header">
+                <h3 class="project-title">Hand Pose Estimation with IMU Sensor Fusion</h3>
+                <span class="project-date">2025</span>
+              </div>
+              <p class="project-description">
+                Integrated MPU6050 accelerometer network for hand motion tracking. Developed quaternion estimation algorithms for spatial orientation. Implemented optimization-based pose estimation with kinematic constraints. Engineered 7-DOF hand model addressing 6-DOF correspondence problem.
+              </p>
+            </div>
+            
+            <div class="project-item">
+              <div class="project-header">
+                <h3 class="project-title">Computer-Aided Manufacturing Optimization</h3>
+                <span class="project-date">2024</span>
+              </div>
+              <p class="project-description">
+                Optimized CNC machining processes in Fusion 360 for tool wear and production time. Analyzed manufacturing manuals for optimal tooling configurations.
+              </p>
+            </div>
+            
+            <div class="project-item">
+              <div class="project-header">
+                <h3 class="project-title">HVAC System Modeling and Control</h3>
+                <span class="project-date">2024</span>
+              </div>
+              <p class="project-description">
+                Applied system identification for HVAC dynamics modeling. Implemented Model Predictive Control using SQP. Compared ODE modeling with neural network techniques (prediction vs real models).
+              </p>
+            </div>
+          </div>
+          
+          <!-- Certificates Section -->
+          <div class="resume-section">
+            <h2 class="section-title"><i class="fas fa-certificate"></i> Certificates</h2>
+            
+            <div class="certificate-item">
+              <h3 class="certificate-title">Neural Networks and Deep Learning</h3>
+              <p class="certificate-issuer">DeepLearning.AI</p>
+              <p class="certificate-date">August 2021</p>
+              <a href="https://www.coursera.org/account/accomplishments/verify/86X8V8RP466C" target="_blank" class="certificate-link">View Certificate</a>
+            </div>
+            
+            <div class="certificate-item">
+              <h3 class="certificate-title">Machine Learning</h3>
+              <p class="certificate-issuer">Stanford University</p>
+              <p class="certificate-date">August 2021</p>
+              <a href="https://www.coursera.org/account/accomplishments/verify/5PX9G6LYD442" target="_blank" class="certificate-link">View Certificate</a>
+            </div>
+            
+            <div class="certificate-item">
+              <h3 class="certificate-title">Fundamentals of Reinforcement Learning</h3>
+              <p class="certificate-issuer">University of Alberta</p>
+              <p class="certificate-date">November 2021</p>
+              <a href="https://www.coursera.org/account/accomplishments/verify/ZRC5JYH9A3GN" target="_blank" class="certificate-link">View Certificate</a>
+            </div>
+          </div>
+          
+          <!-- Achievements Section -->
+          <div class="resume-section">
+            <h2 class="section-title"><i class="fas fa-award"></i> Achievements</h2>
+            
+            <div class="achievement-item">
+              <h3 class="achievement-title"><i class="fas fa-medal"></i> Top 1% in Konkur National University Entrance Exam</h3>
+              <p class="achievement-date">2017</p>
+              <p class="achievement-description">Ranked among the top 1% of participants in Iran's national university entrance examination.</p>
+            </div>
+            
+            <div class="achievement-item">
+              <h3 class="achievement-title"><i class="fas fa-trophy"></i> Second Place, National Egg Drop Competition</h3>
+              <p class="achievement-date">2018</p>
+              <p class="achievement-description">Led a team of 4 students to design an innovative impact-resistant enclosure, securing 2nd place among 40 university teams across Iran.</p>
+            </div>
+            
+            <div class="achievement-item">
+              <h3 class="achievement-title"><i class="fas fa-star"></i> Top 3% of Graduates, B.Sc. in Mechanical Engineering</h3>
+              <p class="achievement-date">2022</p>
+              <p class="achievement-description">Graduated with distinction in the top 3% of students in the Mechanical Engineering department at KNTU.</p>
+            </div>
+          </div>
+          
+          <!-- Skills Section -->
+          <div class="resume-section full-width">
+            <h2 class="section-title"><i class="fas fa-cogs"></i> Technical Skills</h2>
+            
             <div class="skills-container">
               <div class="skill-category">
                 <h4>Robotics & Control</h4>
@@ -264,86 +858,46 @@
             </div>
           </div>
           
-          <div class="resume-section">
-            <h3><i class="fas fa-award"></i> Achievements & Honors</h3>
-            <div class="resume-item">
-              <div class="resume-item-header">
-                <h4>Second Place, National Egg Drop Competition</h4>
-                <span class="resume-date">2018</span>
-              </div>
-              <p>Led a team of 4 students to design an impact-resistant enclosure, placing 2nd among 40 teams from universities across Iran.</p>
-            </div>
-          </div>
-          
-          <div class="resume-section">
-            <h3><i class="fas fa-file-alt"></i> Publications</h3>
-            <div class="resume-item">
-              <p><strong>2023:</strong> "Nonlinear Tracking Control Algorithm for Dynamical Output Systems Manipulated by the Hardly Constrained Oscillatory Actuator," <em>Structural Control and Health Monitoring</em>. <a href="https://onlinelibrary.wiley.com/doi/full/10.1155/2023/3799011" target="_blank">DOI: 10.1155/2023/3799011</a></p>
-            </div>
+          <!-- Languages Section -->
+          <div class="resume-section full-width">
+            <h2 class="section-title"><i class="fas fa-language"></i> Languages</h2>
             
-            <div class="resume-item">
-              <p><strong>2022:</strong> "Synthetic Lyapunov stabilization technique for designing actuation-constrained multi-input multi-output control systems," <em>Journal of the Franklin Institute</em>. <a href="https://www.sciencedirect.com/science/article/pii/S0016003222004094" target="_blank">DOI: 10.1016/j.jfranklin.2021.12.022</a></p>
-            </div>
-            
-            <div class="resume-item">
-              <p><strong>2022:</strong> "Constrained Control of Moving Base Robotic System with Cooperative Arms," <em>30th Annual International Conference of the Iranian Association of Mechanical Engineers</em>, Tehran, Iran.</p>
-            </div>
-            
-            <div class="resume-item">
-              <p><strong>2022:</strong> "Pattern Recognition of Unbalanced Rigid Rotor Bearing Forces," <em>Amirkabir Journal of Mechanical Engineering</em>, 54(12), pp. 3591-3606. <a href="https://mej.aut.ac.ir/article_4852_en.html?lang=en" target="_blank">Link</a></p>
-            </div>
-            
-            <div class="resume-item">
-              <p><strong>2022:</strong> "Pattern Recognition of Unbalanced Rigid Rotor Bearing Forces," <em>18th National Conference and 7th International Conference on Manufacturing Engineering in Iran (ICME 2022)</em>.</p>
-            </div>
-          </div>
-          
-          <div class="resume-section">
-            <h3><i class="fas fa-certificate"></i> Certificates</h3>
-            <div class="resume-item">
-              <p>Neural Networks and Deep Learning – <a href="https://www.coursera.org/account/accomplishments/verify/XXXXXXXXXXXX">deeplearning.ai</a></p>
-              <p>Machine Learning – <a href="https://www.coursera.org/account/accomplishments/verify/XXXXXXXXXXXX">coursera.org</a></p>
-              <p>Reinforcement Learning – <a href="https://www.coursera.org/account/accomplishments/verify/XXXXXXXXXXXX">coursera.org</a></p>
-            </div>
-          </div>
-          
-          <div class="resume-section">
-            <h3><i class="fas fa-language"></i> Languages</h3>
-            <div class="language-grid">
+            <div class="language-items">
               <div class="language-item">
-                <p><strong>Persian</strong> <span class="language-level">Native</span></p>
-                <div class="language-bar">
-                  <div class="language-progress" style="width: 100%"></div>
-                </div>
+                <span class="language-name">Persian</span>
+                <span class="language-level">Native</span>
               </div>
+              
               <div class="language-item">
-                <p><strong>English</strong> <span class="language-level">C2, TOEFL: 113</span></p>
-                <div class="language-bar">
-                  <div class="language-progress" style="width: 95%"></div>
-                </div>
+                <span class="language-name">English</span>
+                <span class="language-level">C2, TOEFL: 113</span>
               </div>
+              
               <div class="language-item">
-                <p><strong>Azerbaijani</strong> <span class="language-level">B1</span></p>
-                <div class="language-bar">
-                  <div class="language-progress" style="width: 60%"></div>
-                </div>
+                <span class="language-name">Azerbaijani</span>
+                <span class="language-level">B1</span>
               </div>
+              
               <div class="language-item">
-                <p><strong>Italian</strong> <span class="language-level">A2</span></p>
-                <div class="language-bar">
-                  <div class="language-progress" style="width: 35%"></div>
-                </div>
+                <span class="language-name">Italian</span>
+                <span class="language-level">A2</span>
               </div>
             </div>
-          </div>
-          
-          <div class="resume-actions">
-            <a href="assets/documents/resume.pdf" class="btn download-btn" download="MoSaeidi_Resume.pdf">
-              <i class="fas fa-download"></i> Download PDF
-            </a>
           </div>
         </div>
-      </section>
+        
+        <!-- Footer -->
+        <div class="resume-footer">
+          <p>I hereby consent to the sharing of my CV and the information contained herein with relevant stakeholders within your organization for recruitment purposes.</p>
+        </div>
+      </div>
+      
+      <!-- Download Button -->
+      <div class="resume-actions">
+        <a href="assets/documents/resume.pdf" class="download-btn" download="MoSaeidi_Resume.pdf">
+          <i class="fas fa-download"></i> Download PDF Version
+        </a>
+      </div>
     </main>
 
     <footer>
@@ -352,5 +906,7 @@
       </div>
     </footer>
   </div>
+  
+  <script src="assets/js/script.js"></script>
 </body>
 </html>
