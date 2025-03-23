@@ -133,86 +133,262 @@
         </div>
       </section>
 
-      <!-- Personal Goals Section -->
-      <section id="personal-goals">
+      <!-- GitHub Contributions Section -->
+      <section id="github-contributions">
         <div class="container">
-          <h2 class="section-title">Life Beyond Code</h2>
-          <p class="section-subtitle">Because balance matters in the pursuit of excellence</p>
+          <h2 class="section-title">GitHub Contributions</h2>
+          <p class="section-subtitle">My open source development activity</p>
           
-          <div class="goals-container">
-            <div class="goal-item">
-              <div class="goal-icon-container">
-                <i class="fas fa-bicycle"></i>
-              </div>
-              <div class="goal-details">
-                <h3>Weekly Cycling</h3>
-                <p>Target: 50km per week</p>
-                <div class="circular-progress">
-                  <svg width="120" height="120" viewBox="0 0 120 120">
-                    <circle cx="60" cy="60" r="54" fill="none" stroke="#e6e6e6" stroke-width="12" />
-                    <circle cx="60" cy="60" r="54" fill="none" stroke="#3498db" stroke-width="12" stroke-dasharray="339.3" stroke-dashoffset="118.8" />
-                    <text x="60" y="60" text-anchor="middle" dy="7" font-size="20">65%</text>
-                  </svg>
+          <div class="contributions-wrapper">
+            <div class="contribution-heatmap">
+              <!-- This is a placeholder for the GitHub-like contribution heatmap -->
+              <div class="heatmap-header">
+                <span>Contributions in the last year: <strong>854</strong></span>
+                <div class="heatmap-legend">
+                  <span class="legend-label">Less</span>
+                  <ul class="legend-squares">
+                    <li class="heat-0"></li>
+                    <li class="heat-1"></li>
+                    <li class="heat-2"></li>
+                    <li class="heat-3"></li>
+                    <li class="heat-4"></li>
+                  </ul>
+                  <span class="legend-label">More</span>
                 </div>
-                <p class="goal-stats">32.5 km this week</p>
+              </div>
+              <div class="heatmap-grid" id="contribution-grid">
+                <!-- JavaScript will populate this section -->
               </div>
             </div>
             
-            <div class="goal-item">
-              <div class="goal-icon-container">
-                <i class="fas fa-dumbbell"></i>
-              </div>
-              <div class="goal-details">
-                <h3>Gym Sessions</h3>
-                <p>Target: 4 sessions per week</p>
-                <div class="sessions-tracker">
-                  <div class="session-day completed">
-                    <span>M</span>
-                  </div>
-                  <div class="session-day completed">
-                    <span>T</span>
-                  </div>
-                  <div class="session-day">
-                    <span>W</span>
-                  </div>
-                  <div class="session-day completed">
-                    <span>T</span>
-                  </div>
-                  <div class="session-day">
-                    <span>F</span>
-                  </div>
-                  <div class="session-day rest">
-                    <span>S</span>
-                  </div>
-                  <div class="session-day rest">
-                    <span>S</span>
-                  </div>
+            <div class="contribution-stats">
+              <div class="stat-card">
+                <div class="stat-icon">
+                  <i class="fas fa-code-branch"></i>
                 </div>
-                <p class="goal-stats">3 of 4 completed</p>
+                <div class="stat-number">187</div>
+                <div class="stat-label">Pull Requests</div>
+              </div>
+              <div class="stat-card">
+                <div class="stat-icon">
+                  <i class="fas fa-code"></i>
+                </div>
+                <div class="stat-number">35</div>
+                <div class="stat-label">Repositories</div>
+              </div>
+              <div class="stat-card">
+                <div class="stat-icon">
+                  <i class="fas fa-star"></i>
+                </div>
+                <div class="stat-number">428</div>
+                <div class="stat-label">Stars</div>
+              </div>
+              <div class="stat-card">
+                <div class="stat-icon">
+                  <i class="fas fa-code-commit"></i>
+                </div>
+                <div class="stat-number">1,243</div>
+                <div class="stat-label">Commits</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Projects Section -->
+      <section id="projects">
+        <div class="container">
+          <h2 class="section-title">Projects</h2>
+          <p class="section-subtitle">A selection of my technical work and research implementations</p>
+          
+          <div class="projects-filter">
+            <button class="filter-btn active" data-filter="all">All</button>
+            <button class="filter-btn" data-filter="robotics">Robotics</button>
+            <button class="filter-btn" data-filter="ml">Machine Learning</button>
+            <button class="filter-btn" data-filter="control">Control Systems</button>
+            <button class="filter-btn" data-filter="other">Other</button>
+          </div>
+          
+          <div class="projects-grid">
+            <!-- Project Card 1 -->
+            <div class="project-card" data-category="robotics">
+              <div class="project-header">
+                <div class="project-logo">
+                  <i class="fab fa-github"></i>
+                </div>
+                <div class="project-links">
+                  <a href="https://github.com/zexerv/robot-trajectory-optimization" target="_blank" class="github-link" aria-label="GitHub Repository">
+                    <i class="fas fa-external-link-alt"></i>
+                  </a>
+                </div>
+              </div>
+              <h3 class="project-title">Robot Trajectory Optimization</h3>
+              <p class="project-description">A library for generating optimal trajectories for robotic manipulators using differential dynamic programming.</p>
+              <div class="project-tags">
+                <span class="tag">Python</span>
+                <span class="tag">C++</span>
+                <span class="tag">ROS</span>
+              </div>
+              <div class="project-progress">
+                <div class="progress-container">
+                  <div class="progress-bar">
+                    <div class="progress" style="width: 90%"></div>
+                  </div>
+                  <span class="progress-text">90% Complete</span>
+                </div>
               </div>
             </div>
             
-            <div class="goal-item">
-              <div class="goal-icon-container">
-                <i class="fas fa-brain"></i>
-              </div>
-              <div class="goal-details">
-                <h3>Daily Meditation</h3>
-                <p>Target: 15 minutes daily</p>
-                <div class="habit-calendar">
-                  <div class="habit-week">
-                    <div class="habit-day completed" data-day="Mon"></div>
-                    <div class="habit-day completed" data-day="Tue"></div>
-                    <div class="habit-day completed" data-day="Wed"></div>
-                    <div class="habit-day" data-day="Thu"></div>
-                    <div class="habit-day" data-day="Fri"></div>
-                    <div class="habit-day" data-day="Sat"></div>
-                    <div class="habit-day" data-day="Sun"></div>
-                  </div>
+            <!-- Project Card 2 -->
+            <div class="project-card" data-category="ml">
+              <div class="project-header">
+                <div class="project-logo">
+                  <i class="fab fa-github"></i>
                 </div>
-                <p class="goal-stats">Current streak: 3 days</p>
+                <div class="project-links">
+                  <a href="https://github.com/zexerv/deep-reinforcement-learning" target="_blank" class="github-link" aria-label="GitHub Repository">
+                    <i class="fas fa-external-link-alt"></i>
+                  </a>
+                </div>
+              </div>
+              <h3 class="project-title">Deep Reinforcement Learning</h3>
+              <p class="project-description">Implementations of state-of-the-art DRL algorithms for continuous control problems.</p>
+              <div class="project-tags">
+                <span class="tag">PyTorch</span>
+                <span class="tag">TensorFlow</span>
+                <span class="tag">RL</span>
+              </div>
+              <div class="project-progress">
+                <div class="progress-container">
+                  <div class="progress-bar">
+                    <div class="progress" style="width: 75%"></div>
+                  </div>
+                  <span class="progress-text">75% Complete</span>
+                </div>
               </div>
             </div>
+            
+            <!-- Project Card 3 -->
+            <div class="project-card" data-category="control">
+              <div class="project-header">
+                <div class="project-logo">
+                  <i class="fas fa-code"></i> <!-- Non-GitHub project -->
+                </div>
+                <div class="project-links">
+                  <a href="projects/mpc-toolkit.html" class="project-link" aria-label="Project Details">
+                    <i class="fas fa-external-link-alt"></i>
+                  </a>
+                </div>
+              </div>
+              <h3 class="project-title">MPC Toolkit</h3>
+              <p class="project-description">A comprehensive toolkit for model predictive control with applications in autonomous systems.</p>
+              <div class="project-tags">
+                <span class="tag">MATLAB</span>
+                <span class="tag">Python</span>
+                <span class="tag">Control Theory</span>
+              </div>
+              <div class="project-progress">
+                <div class="progress-container">
+                  <div class="progress-bar">
+                    <div class="progress" style="width: 60%"></div>
+                  </div>
+                  <span class="progress-text">60% Complete</span>
+                </div>
+              </div>
+            </div>
+            
+            <!-- Project Card 4 -->
+            <div class="project-card" data-category="robotics">
+              <div class="project-header">
+                <div class="project-logo">
+                  <i class="fab fa-github"></i>
+                </div>
+                <div class="project-links">
+                  <a href="https://github.com/zexerv/human-robot-imitation" target="_blank" class="github-link" aria-label="GitHub Repository">
+                    <i class="fas fa-external-link-alt"></i>
+                  </a>
+                </div>
+              </div>
+              <h3 class="project-title">Human-Robot Imitation</h3>
+              <p class="project-description">Framework for robots to learn manipulation skills from human demonstrations using visual inputs.</p>
+              <div class="project-tags">
+                <span class="tag">Computer Vision</span>
+                <span class="tag">PyTorch</span>
+                <span class="tag">ROS</span>
+              </div>
+              <div class="project-progress">
+                <div class="progress-container">
+                  <div class="progress-bar">
+                    <div class="progress" style="width: 85%"></div>
+                  </div>
+                  <span class="progress-text">85% Complete</span>
+                </div>
+              </div>
+            </div>
+            
+            <!-- Project Card 5 -->
+            <div class="project-card" data-category="other">
+              <div class="project-header">
+                <div class="project-logo">
+                  <i class="fas fa-code"></i> <!-- Non-GitHub project -->
+                </div>
+                <div class="project-links">
+                  <a href="projects/simulation-environment.html" class="project-link" aria-label="Project Details">
+                    <i class="fas fa-external-link-alt"></i>
+                  </a>
+                </div>
+              </div>
+              <h3 class="project-title">Simulation Environment</h3>
+              <p class="project-description">High-fidelity physics simulation environment for validating control algorithms before deployment.</p>
+              <div class="project-tags">
+                <span class="tag">C++</span>
+                <span class="tag">OpenGL</span>
+                <span class="tag">Physics</span>
+              </div>
+              <div class="project-progress">
+                <div class="progress-container">
+                  <div class="progress-bar">
+                    <div class="progress" style="width: 40%"></div>
+                  </div>
+                  <span class="progress-text">40% Complete</span>
+                </div>
+              </div>
+            </div>
+            
+            <!-- Project Card 6 -->
+            <div class="project-card" data-category="ml">
+              <div class="project-header">
+                <div class="project-logo">
+                  <i class="fab fa-github"></i>
+                </div>
+                <div class="project-links">
+                  <a href="https://github.com/zexerv/uncertainty-estimation" target="_blank" class="github-link" aria-label="GitHub Repository">
+                    <i class="fas fa-external-link-alt"></i>
+                  </a>
+                </div>
+              </div>
+              <h3 class="project-title">Uncertainty Estimation</h3>
+              <p class="project-description">Methods for quantifying uncertainty in deep learning models with applications in robotics.</p>
+              <div class="project-tags">
+                <span class="tag">Bayesian ML</span>
+                <span class="tag">PyTorch</span>
+                <span class="tag">Statistics</span>
+              </div>
+              <div class="project-progress">
+                <div class="progress-container">
+                  <div class="progress-bar">
+                    <div class="progress" style="width: 55%"></div>
+                  </div>
+                  <span class="progress-text">55% Complete</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <div class="projects-cta">
+            <a href="https://github.com/zexerv" target="_blank" class="btn btn-outline">
+              <i class="fab fa-github"></i> View All GitHub Projects
+            </a>
           </div>
         </div>
       </section>
@@ -249,6 +425,7 @@
             <a href="contact.html" class="btn btn-primary">Contact Me</a>
             <a href="https://www.linkedin.com/in/mo-saeidi-21a00015a/" target="_blank" class="btn btn-linkedin"><i class="fab fa-linkedin"></i> LinkedIn</a>
             <a href="https://scholar.google.com/citations?user=6AucdhQAAAAJ&hl=en" target="_blank" class="btn btn-scholar"><i class="fas fa-graduation-cap"></i> Google Scholar</a>
+            <a href="https://github.com/zexerv" target="_blank" class="btn btn-github"><i class="fab fa-github"></i> GitHub</a>
           </div>
         </div>
       </section>
@@ -281,5 +458,6 @@
   </div>
   
   <script src="assets/js/script.js"></script>
+  <script src="assets/js/github-integration.js"></script>
 </body>
 </html>
