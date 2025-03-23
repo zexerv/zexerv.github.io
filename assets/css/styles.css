@@ -2365,3 +2365,300 @@ footer {
     max-width: 200px;
   }
 }
+/* GitHub Button Style */
+.btn-github {
+  background-color: #24292e;
+  color: white !important;
+  padding: 12px 25px;
+  border-radius: 30px;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  border: 2px solid #24292e;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.btn-github:hover {
+  background-color: #0366d6;
+  border-color: #0366d6;
+  transform: translateY(-3px);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.btn-github i {
+  font-size: 1.1rem;
+}
+
+/* Enhanced GitHub Contributions Heatmap */
+.contribution-heatmap {
+  background-color: white;
+  border-radius: 10px;
+  box-shadow: 0 3px 15px rgba(0, 0, 0, 0.05);
+  padding: 25px;
+  margin-bottom: 30px;
+  border: 1px solid #e1e4e8;
+}
+
+.heatmap-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+  padding-bottom: 15px;
+  border-bottom: 1px solid #eaecef;
+}
+
+.heatmap-header strong {
+  color: #24292e;
+  font-weight: 600;
+}
+
+.heatmap-legend {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 5px 10px;
+  background-color: #f6f8fa;
+  border-radius: 6px;
+}
+
+.legend-label {
+  font-size: 0.85rem;
+  color: #586069;
+}
+
+.legend-squares {
+  display: flex;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  gap: 3px;
+}
+
+.legend-squares li {
+  width: 12px;
+  height: 12px;
+  border-radius: 2px;
+  border: 1px solid rgba(27, 31, 35, 0.06);
+}
+
+.heat-0 {
+  background-color: #ebedf0;
+}
+
+.heat-1 {
+  background-color: #9be9a8;
+}
+
+.heat-2 {
+  background-color: #40c463;
+}
+
+.heat-3 {
+  background-color: #30a14e;
+}
+
+.heat-4 {
+  background-color: #216e39;
+}
+
+.heatmap-days {
+  display: flex;
+  font-size: 0.75rem;
+  color: #586069;
+  margin-bottom: 5px;
+  padding-left: 30px;
+}
+
+.heatmap-day {
+  width: calc(100% / 7);
+  text-align: center;
+}
+
+.heatmap-container {
+  position: relative;
+  padding-left: 30px;
+}
+
+.heatmap-months {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.75rem;
+  color: #586069;
+  margin-top: 5px;
+}
+
+.heatmap-grid {
+  display: grid;
+  grid-template-columns: repeat(52, 1fr);
+  grid-template-rows: repeat(7, 1fr);
+  gap: 3px;
+  width: 100%;
+}
+
+.grid-cell {
+  width: 12px;
+  height: 12px;
+  border-radius: 2px;
+  background-color: #ebedf0;
+  transition: all 0.2s ease;
+  border: 1px solid rgba(27, 31, 35, 0.06);
+}
+
+.grid-cell:hover {
+  transform: scale(1.2);
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+  z-index: 10;
+}
+
+.heatmap-tooltip {
+  position: absolute;
+  background-color: #24292e;
+  color: white;
+  padding: 8px 10px;
+  border-radius: 6px;
+  font-size: 0.75rem;
+  z-index: 100;
+  pointer-events: none;
+  white-space: nowrap;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16);
+}
+
+.heatmap-tooltip::after {
+  content: "";
+  position: absolute;
+  bottom: -5px;
+  left: 50%;
+  transform: translateX(-50%);
+  border-width: 5px 5px 0;
+  border-style: solid;
+  border-color: #24292e transparent transparent;
+}
+
+.week-labels {
+  position: absolute;
+  left: 0;
+  top: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  height: 100%;
+  font-size: 0.75rem;
+  color: #586069;
+}
+
+.week-label {
+  height: calc(100% / 7);
+  display: flex;
+  align-items: center;
+}
+
+@media (max-width: 992px) {
+  .heatmap-container {
+    padding-left: 20px;
+  }
+  
+  .heatmap-grid {
+    gap: 2px;
+  }
+  
+  .grid-cell {
+    width: 10px;
+    height: 10px;
+  }
+}
+
+@media (max-width: 768px) {
+  .heatmap-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+  
+  .heatmap-days, .heatmap-months {
+    font-size: 0.7rem;
+  }
+}
+
+@media (max-width: 576px) {
+  .heatmap-container {
+    padding-left: 15px;
+  }
+  
+  .heatmap-grid {
+    gap: 1px;
+  }
+  
+  .grid-cell {
+    width: 8px;
+    height: 8px;
+  }
+  
+  .week-labels, .heatmap-days {
+    font-size: 0.65rem;
+  }
+}
+
+/* Enhanced Project Filter Buttons */
+.projects-filter {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 35px;
+}
+
+.filter-btn {
+  background-color: #f8f9fa;
+  color: #495057;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 30px;
+  cursor: pointer;
+  font-size: 0.95rem;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+  position: relative;
+  overflow: hidden;
+}
+
+.filter-btn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(120deg, rgba(255,255,255,0) 30%, rgba(255,255,255,0.8), rgba(255,255,255,0) 70%);
+  transform: translateX(-100%);
+  transition: all 0.6s ease;
+}
+
+.filter-btn:hover {
+  background-color: #f1f3f5;
+  transform: translateY(-3px);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.filter-btn:hover::before {
+  transform: translateX(100%);
+}
+
+.filter-btn.active {
+  background-color: #3498db;
+  color: white;
+  transform: translateY(-3px);
+  box-shadow: 0 5px 15px rgba(52, 152, 219, 0.3);
+}
+
+.filter-btn:focus {
+  outline: none;
+}
+
+.filter-btn:active {
+  transform: translateY(-1px);
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+}
