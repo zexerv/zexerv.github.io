@@ -24,7 +24,114 @@
   <link rel="stylesheet" href="https://unpkg.com/tippy.js@6/animations/scale.css"/>
   <!-- Custom Resume Styles -->
   <style>
-
+/* Logo styling */
+.logo-container {
+    position: relative;
+    display: inline-block;
+    margin-right: 10px;
+    margin-bottom: 5px;
+  }
+  
+  .experience-logo, .education-logo {
+    width: 40px;
+    height: 40px;
+    opacity: 0.1;
+    filter: grayscale(100%);
+    transition: all var(--transition-normal);
+    border-radius: var(--radius-sm);
+    object-fit: contain;
+  }
+  
+  .experience-item:hover .experience-logo,
+  .education-item:hover .education-logo {
+    opacity: 1;
+    filter: grayscale(0%);
+  }
+  
+  /* Logo positioning */
+  .experience-header, .education-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    position: relative;
+  }
+  
+  .logo-date-container {
+    display: flex;
+    align-items: center;
+  }
+  
+  /* Enhanced animations */
+  @keyframes fadeInScale {
+    0% { opacity: 0; transform: scale(0.8); }
+    100% { opacity: 1; transform: scale(1); }
+  }
+  
+  @keyframes slideInFromRight {
+    0% { opacity: 0; transform: translateX(30px); }
+    100% { opacity: 1; transform: translateX(0); }
+  }
+  
+  @keyframes highlight {
+    0% { background-color: transparent; }
+    50% { background-color: rgba(13, 71, 161, 0.1); }
+    100% { background-color: transparent; }
+  }
+  
+  .skill-category:hover {
+    animation: highlight 1s ease;
+  }
+  
+  .contact-item:hover {
+    animation: fadeInScale 0.3s ease both;
+  }
+  
+  .publication-item:hover {
+    animation: slideInFromRight 0.3s ease both;
+  }
+  
+  /* Fix for paper preview transparency issue */
+  .tippy-box {
+    background-color: white !important;
+    box-shadow: var(--shadow-xl) !important;
+    border-radius: var(--radius-md) !important;
+    border: 1px solid var(--border) !important;
+    opacity: 1 !important;
+    z-index: 9999 !important;
+  }
+  
+  .tippy-box img {
+    width: 100%;
+    height: auto;
+    display: block;
+    opacity: 1 !important;
+    background-color: white !important;
+  }
+  
+  .paper-tooltip-content {
+    background-color: white !important;
+    padding: var(--spacing-xs);
+    text-align: center;
+    border-top: 1px solid var(--border);
+    opacity: 1 !important;
+  }
+  
+  /* Additional hover effects */
+  .section-title {
+    transition: transform var(--transition-normal);
+  }
+  
+  .section-title:hover {
+    transform: translateX(5px);
+  }
+  
+  .resume-name {
+    transition: text-shadow var(--transition-normal);
+  }
+  
+  .resume-name:hover {
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+  }
     /* 1. COMPLETELY NEW CONTACT ICONS IMPLEMENTATION */
     .contact-icon-fix {
         display: inline-flex !important;
@@ -1383,21 +1490,33 @@
           <div class="resume-section" data-aos="fade-up">
             <h2 class="section-title"><i class="fas fa-user-graduate"></i> Education</h2>
             
+
+
             <div class="education-item" data-aos="fade-up" data-aos-delay="100">
-              <div class="education-header">
-                <h3 class="education-degree">M.Sc. in Automation and Control Engineering</h3>
-                <span class="education-date">2023 - Present</span>
-              </div>
+                <div class="education-header">
+                    <h3 class="education-degree">M.Sc. in Automation and Control Engineering</h3>
+                    <div class="logo-date-container">
+                      <div class="logo-container">
+                        <img src="assets/images/logos/polimi.png" alt="POLIMI Logo" class="education-logo">
+                      </div>
+                      <span class="education-date">2023 - Present</span>
+                    </div>
+                </div>
               <p class="education-institution">Polytechnic University of Milan (POLIMI), Italy</p>
               <p>GPA: 27.11/30</p>
               <p><strong>Thesis:</strong> Learning Policies from Human Demonstrations for Testing Optimization</p>
             </div>
             
             <div class="education-item" data-aos="fade-up" data-aos-delay="150">
-              <div class="education-header">
-                <h3 class="education-degree">B.Sc. in Mechanical Engineering</h3>
-                <span class="education-date">2017 - 2022</span>
-              </div>
+                <div class="education-header">
+                    <h3 class="education-degree">B.Sc. in Mechanical Engineering</h3>
+                    <div class="logo-date-container">
+                      <div class="logo-container">
+                        <img src="assets/images/logos/kntu.png" alt="KNTU Logo" class="education-logo">
+                      </div>
+                      <span class="education-date">2017 - 2022</span>
+                    </div>
+                </div>
               <p class="education-institution">KNTU University, Tehran, Iran</p>
               <p>GPA: 3.88/4.0</p>
               <p><strong>Thesis:</strong> Pattern Recognition of Unbalanced Rigid Rotor Bearing Forces</p>
@@ -1458,10 +1577,15 @@
             <h2 class="section-title"><i class="fas fa-briefcase"></i> Experience</h2>
             
             <div class="experience-item" data-aos="fade-up" data-aos-delay="100">
-              <div class="experience-header">
-                <h3 class="experience-title">Researcher, MERLIN Laboratory - POLIMI</h3>
-                <span class="experience-date">October 2024 - Present</span>
-              </div>
+                <div class="experience-header">
+                    <h3 class="experience-title">Researcher, MERLIN Laboratory - POLIMI</h3>
+                    <div class="logo-date-container">
+                      <div class="logo-container">
+                        <img src="assets/images/logos/merlin.png" alt="MERLIN Lab Logo" class="experience-logo">
+                      </div>
+                      <span class="experience-date">October 2024 - Present</span>
+                    </div>
+                </div>
               <p class="experience-company">Milan, Italy</p>
               <p class="experience-description">
                 Conducting my master's thesis (ARTO Project): Applying a PbD algorithm on a UR5e robot, generalizing human demonstrations and extracting patterns while satisfying constraints. The skill set is manipulating cockpit interfaces (levers, thrusters, buttons, switches and etc.)
@@ -1857,6 +1981,63 @@
   <script src="assets/js/script.js"></script>
   <script>
 
+// Function to animate skills when they come into view
+const animateSkills = () => {
+    const skills = document.querySelectorAll('.skill-level div');
+    skills.forEach((skill, index) => {
+      setTimeout(() => {
+        const level = skill.style.getPropertyValue('--level');
+        skill.style.width = level || '80%';
+      }, index * 100);
+    });
+  };
+  
+  // Detect when elements are in viewport
+  function isElementInViewport(el) {
+    const rect = el.getBoundingClientRect();
+    return (
+      rect.top >= 0 &&
+      rect.left >= 0 &&
+      rect.bottom <= (window.innerHeight || document.documentElement.clientHeight) &&
+      rect.right <= (window.innerWidth || document.documentElement.clientWidth)
+    );
+  }
+  
+  // Enhanced tooltip configuration
+  document.addEventListener('DOMContentLoaded', function() {
+    // Initialize tooltips with improved settings
+    tippy('[data-tippy-content]', {
+      allowHTML: true,
+      placement: 'right',
+      animation: 'scale',
+      theme: 'light',
+      maxWidth: 250,
+      interactive: true,
+      arrow: true,
+      class: 'paper-tooltip',
+      appendTo: document.body,
+      zIndex: 9999
+    });
+  
+    // Add hover animation to section titles
+    const sectionTitles = document.querySelectorAll('.section-title');
+    sectionTitles.forEach(title => {
+      title.addEventListener('mouseenter', () => {
+        title.style.transform = 'translateX(5px)';
+      });
+      title.addEventListener('mouseleave', () => {
+        title.style.transform = 'translateX(0)';
+      });
+    });
+  
+    // Trigger skill animations on scroll
+    window.addEventListener('scroll', () => {
+      const skillSection = document.querySelector('.skills-container');
+      if (skillSection && isElementInViewport(skillSection)) {
+        animateSkills();
+      }
+    });
+  });
       // Initialize AOS animations with faster speed
   document.addEventListener('DOMContentLoaded', function() {
     AOS.init({
