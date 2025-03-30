@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Resume - Mo Saeidi</title>
   <link rel="stylesheet" href="assets/css/styles.css" />
-  <!-- Font Awesome -->
   <link
     rel="stylesheet"
     href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
@@ -13,326 +12,286 @@
     crossorigin="anonymous"
     referrerpolicy="no-referrer"
   />
-  <!-- Google Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&family=Lora:ital,wght@0,400;0,500;0,600;1,400&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
-  <!-- AOS Animations -->
   <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
   <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
-  <!-- Tippy.js for Tooltips -->
   <script src="https://unpkg.com/@popperjs/core@2"></script>
   <script src="https://unpkg.com/tippy.js@6"></script>
   <link rel="stylesheet" href="https://unpkg.com/tippy.js@6/animations/scale.css"/>
-  <!-- Custom Resume Styles -->
-
   <style>
-/* Logo styling */
-.logo-container {
-    position: relative;
-    display: inline-block;
-    margin-right: 10px;
-    margin-bottom: 5px;
-  }
-  
-  .experience-logo, .education-logo {
-    width: 40px;
-    height: 40px;
-    opacity: 0.1;
-    filter: grayscale(100%);
-    transition: all var(--transition-normal);
-    border-radius: var(--radius-sm);
-    object-fit: contain;
-  }
-  
-  .experience-item:hover .experience-logo,
-  .education-item:hover .education-logo {
-    opacity: 1;
-    filter: grayscale(0%);
-  }
-  
-  /* Logo positioning */
-  .experience-header, .education-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    position: relative;
-  }
-  
-  .logo-date-container {
-    display: flex;
-    align-items: center;
-  }
-  
-  /* Enhanced animations */
-  @keyframes fadeInScale {
-    0% { opacity: 0; transform: scale(0.8); }
-    100% { opacity: 1; transform: scale(1); }
-  }
+    /* Logo styling */
+    .logo-container {
+      position: relative;
+      display: inline-block;
+      margin-right: 10px;
+      margin-bottom: 5px;
+      width: 40px; /* Added explicit width */
+      height: 40px; /* Added explicit height */
+      overflow: visible; /* Ensure hover effects aren't clipped */
+    }
 
-  @keyframes slideInFromRight {
-    0% { opacity: 0; transform: translateX(30px); }
-    100% { opacity: 1; transform: translateX(0); }
-  }
-  @keyframes highlight {
-    0% { background-color: transparent; }
-    50% { background-color: rgba(13, 71, 161, 0.1); }
-    100% { background-color: transparent; }
-  }
-  .publication-item[data-aos="fade-up"] {
-    animation-name: slideInFromRight;
-    animation-duration: 0.5s;
-    animation-timing-function: ease;
-    animation-fill-mode: backwards;
-  }
-  .skill-category:hover {
-    animation: highlight 1s ease;
-  }
-  
-  .contact-item:hover {
-    animation: fadeInScale 0.3s ease both;
-  }
-  
-  .publication-item:hover {
-    animation: slideInFromRight 0.3s ease both;
-  }
-  
-  /* Fix for paper preview transparency issue */
-  .tippy-box {
-    background-color: white !important;
-    box-shadow: var(--shadow-xl) !important;
-    border-radius: var(--radius-md) !important;
-    border: 1px solid var(--border) !important;
-    opacity: 1 !important;
-    z-index: 9999 !important;
-  }
-  
-  .tippy-box img {
-    width: 100%;
-    height: auto;
-    display: block;
-    opacity: 1 !important;
-    background-color: white !important;
-  }
-  
-  .paper-tooltip-content {
-    background-color: white !important;
-    padding: var(--spacing-xs);
-    text-align: center;
-    border-top: 1px solid var(--border);
-    opacity: 1 !important;
-  }
-  
-  /* Additional hover effects */
-  .section-title {
-    transition: transform var(--transition-normal);
-  }
-  
-  .section-title:hover {
-    transform: translateX(5px);
-  }
-  
-  .resume-name {
-    transition: text-shadow var(--transition-normal);
-  }
-  
-  .resume-name:hover {
-    text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
-  }
-    /* 1. COMPLETELY NEW CONTACT ICONS IMPLEMENTATION */
-    .contact-icon-fix {
-        display: inline-flex !important;
-        align-items: center !important;
-        justify-content: center !important;
-        width: 30px !important;
-        height: 30px !important;
-        min-width: 30px !important;
-        background-color: rgba(255, 255, 255, 0.3) !important;
-        border-radius: 50% !important;
-        margin-right: 10px !important;
+    .experience-logo, .education-logo {
+      width: 40px;
+      height: 40px;
+      /* Increased initial opacity for better visibility */
+      opacity: 0.75;
+      filter: grayscale(70%); /* Slightly reduced grayscale */
+      transition: all var(--transition-normal);
+      border-radius: var(--radius-sm);
+      object-fit: contain;
+      position: relative; /* Ensure stacking context */
+      z-index: 5; /* Lower z-index than hover */
     }
-    
-    .contact-icon-fix i {
-        color: white !important;
-        font-size: 14px !important;
+
+    .experience-item:hover .experience-logo,
+    .education-item:hover .education-logo {
+      opacity: 1;
+      filter: grayscale(0%);
+      transform: scale(1.1); /* Added slight scale effect */
+      z-index: 10; /* Ensure hover is on top */
     }
-    
-    /* 2. COMPLETELY REMOVE LINES FROM SECTION TITLES */
-    .section-title {
-        position: relative !important;
-        padding-bottom: 10px !important;
-        margin-bottom: 20px !important;
-        border-bottom: none !important;
+
+    /* Logo positioning */
+    .experience-header, .education-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      position: relative;
     }
-    
-    /* Remove any ::after pseudo-elements that might be creating lines */
-    .section-title::after {
-        display: none !important;
+
+    .logo-date-container {
+      display: flex;
+      align-items: center;
     }
-    
-    /* Add a new underline that's guaranteed to be below the text */
-    .section-title-underline {
-        position: absolute !important;
-        bottom: 0 !important;
-        left: 0 !important;
-        width: 100% !important;
-        height: 1px !important;
-        background-color: #e0e0e0 !important;
+
+    /* Enhanced animations */
+    @keyframes fadeInScale {
+      0% { opacity: 0; transform: scale(0.8); }
+      100% { opacity: 1; transform: scale(1); }
     }
-    
-    /* 3. FIX PAPER PREVIEW Z-INDEX */
-    /* Make tooltips appear on top of everything */
+
+    @keyframes slideInFromRight {
+      0% { opacity: 0; transform: translateX(30px); }
+      100% { opacity: 1; transform: translateX(0); }
+    }
+    @keyframes highlight {
+      0% { background-color: transparent; }
+      50% { background-color: rgba(13, 71, 161, 0.1); }
+      100% { background-color: transparent; }
+    }
+    /* Removing specific animation rules, relying on AOS + hover */
+    /* .publication-item[data-aos="fade-up"] { ... } */
+    /* .publication-item:hover { ... } */
+
+    .skill-category:hover {
+      animation: highlight 1s ease;
+    }
+
+    .contact-item:hover {
+      animation: fadeInScale 0.3s ease both;
+    }
+
+    /* Fix for paper preview transparency issue */
     .tippy-box {
-        z-index: 9999 !important;
+      background-color: white !important;
+      box-shadow: var(--shadow-xl) !important;
+      border-radius: var(--radius-md) !important;
+      border: 1px solid var(--border) !important;
+      opacity: 1 !important;
+      z-index: 9999 !important; /* Ensure tooltip is on top */
     }
-    
-    /* Add these styles to ensure tooltips are positioned correctly */
-    body .tippy-box[data-placement^=right]>.tippy-arrow {
-        left: -8px;
-    }
-    
-    body .tippy-box[data-placement^=right] {
-        margin-left: 10px !important;
-    }
-    
-    /* Additional fix for contact icons opacity */
-    .resume-header .contact-item * {
-        opacity: 1 !important;
-    }
-      /* Fix for contact icons */
-      .contact-item {
-        display: flex;
-        align-items: center;
-        margin-right: var(--spacing-md);
-        margin-bottom: var(--spacing-sm);
-        transition: transform 150ms ease;
-      }
-      
-      .contact-item:hover {
-        transform: translateY(-2px);
-      }
-      
-      .contact-icon {
-        display: flex !important;
-        align-items: center !important;
-        justify-content: center !important;
-        width: 30px !important;
-        height: 30px !important;
-        min-width: 30px !important;
-        background-color: rgba(255, 255, 255, 0.4) !important;
-        border-radius: 50% !important;
-        margin-right: 10px !important;
-      }
 
-      .contact-icon::before {
-        position: static !important;
-        top: auto !important;
-        left: auto !important;
-        font-size: 14px !important;
-      }
-      .contact-icon i {
-        color: white !important;
-        font-size: 14px !important;
-        opacity: 1 !important;
-      }
-
-
-      /* Fix for all contact section elements */
-    .resume-header .contact-item *,
-    .resume-header .contact-icon *,
-    .resume-header .contact-text * {
-    opacity: 1 !important;
+    .tippy-box img {
+      width: 100%;
+      height: auto;
+      display: block;
+      opacity: 1 !important;
+      background-color: white !important; /* Ensure no transparency issues */
     }
-      /* Fix for section title line */
-      .section-title {
-        color: var(--primary);
-        font-size: var(--font-size-xl);
-        font-weight: 600;
-        margin-bottom: var(--spacing-lg);
-        padding-bottom: var(--spacing-sm);
-        position: relative;
-        display: flex;
-        align-items: center;
-      }
-      
-      .section-title::after {
-        content: '';
-        position: absolute;
-        bottom: 0;
-        left: 0;
-        width: 100%;
-        height: 1px;
-        background: var(--border);
-      }
-      
-      .section-title i {
-        margin-right: var(--spacing-sm);
-        color: white;
-        font-size: var(--font-size-sm);
-        background: var(--primary);
-        width: 26px;
-        height: 26px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        border-radius: var(--radius-full);
-        position: relative;
-        z-index: 2;
-      }
-      
-      /* Faster animations */
-      @keyframes rotate {
+
+    .paper-tooltip-content {
+      background-color: white !important;
+      padding: var(--spacing-xs);
+      text-align: center;
+      border-top: 1px solid var(--border);
+      opacity: 1 !important;
+    }
+
+    /* Additional hover effects */
+    .section-title {
+      transition: transform var(--transition-normal);
+    }
+
+    .section-title:hover {
+      transform: translateX(5px);
+    }
+
+    .resume-name {
+      transition: text-shadow var(--transition-normal);
+    }
+
+    .resume-name:hover {
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+    }
+
+    /* 2. COMPLETELY REMOVE LINES FROM SECTION TITLES */
+    /* Reverted this change - keeping original line style */
+    /* .section-title { ... border-bottom: none !important; } */
+    /* .section-title::after { display: none !important; } */
+    /* .section-title-underline { ... } */
+
+    /* Fix for contact icons - Attempting standard FontAwesome rendering */
+    .contact-item {
+      display: flex !important; /* Use important cautiously */
+      align-items: center !important;
+      margin-right: var(--spacing-md);
+      margin-bottom: var(--spacing-sm);
+      transition: transform 150ms ease;
+    }
+
+    .contact-item:hover {
+      transform: translateY(-2px);
+    }
+
+    .contact-icon {
+      display: flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+      width: 30px !important;
+      height: 30px !important;
+      min-width: 30px !important;
+      background-color: rgba(255, 255, 255, 0.4) !important; /* Slightly more opaque */
+      border-radius: 50% !important;
+      margin-right: 10px !important;
+      opacity: 1 !important; /* Ensure visibility */
+    }
+
+     /* Ensure the actual <i> tag renders */
+    .contact-icon i {
+      color: white !important;
+      font-size: 14px !important;
+      opacity: 1 !important; /* Ensure icon is visible */
+      display: inline-block !important; /* Override potential hiding */
+      visibility: visible !important; /* Ensure visibility */
+    }
+
+    .contact-text {
+      font-size: var(--font-size-sm);
+      color: white !important; /* Ensure text is white */
+      opacity: 1 !important; /* Ensure visibility */
+    }
+
+    .contact-item a.contact-text { /* Style link text specifically */
+         color: white !important;
+         text-decoration: none;
+         transition: all var(--transition-fast);
+    }
+
+    .contact-item a.contact-text:hover {
+         color: var(--accent-light);
+         text-decoration: underline;
+    }
+
+
+    /* Fix for section title line */
+    .section-title {
+      color: var(--primary);
+      font-size: var(--font-size-xl);
+      font-weight: 600;
+      margin-bottom: var(--spacing-lg);
+      padding-bottom: var(--spacing-sm); /* Adjusted padding */
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+
+    .section-title::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 1px;
+      /* Kept original gradient line style */
+      background: linear-gradient(to right, var(--primary) 0%, var(--primary) 40px, var(--border) 40px, var(--border) 100%);
+      z-index: 1; /* Ensure line is behind icon */
+    }
+
+    .section-title i {
+      margin-right: var(--spacing-sm);
+      color: white;
+      font-size: var(--font-size-sm);
+      background: var(--primary);
+      width: 26px;
+      height: 26px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: var(--radius-full);
+      position: relative; /* Ensure icon is above line */
+      z-index: 2;
+    }
+
+    /* Faster animations (if desired, adjust timing here) */
+    @keyframes rotate {
         0% { transform: rotate(0deg); }
         100% { transform: rotate(360deg); }
-      }
-      
-    /* Remove profile picture animation */
-    .profile-image-container::before {
-        display: none;
     }
-      @keyframes float {
-        0% { transform: translateY(0); }
-        50% { transform: translateY(-3px); }
-        100% { transform: translateY(0); }
-      }
-      
-      .float-effect {
-        animation: float 1.5s ease-in-out infinite;
-      }
-      
-      @keyframes subtle-pulse {
-        0% { transform: scale(1); }
-        50% { transform: scale(1.01); }
-        100% { transform: scale(1); }
-      }
-      
-      .pulse-effect {
-        animation: subtle-pulse 1.5s ease-in-out infinite;
-      }
-      
-      /* Shimmer effect faster */
-      @keyframes shimmer {
-        0% { background-position: -100% 0; }
-        100% { background-position: 100% 0; }
-      }
-      
-      .shimmer-effect::after {
-        animation: shimmer 1s infinite;
-      }
+
+    /* --- Removed profile picture animation --- */
+    .profile-image-container::before {
+       display: none; /* Hide the dashed rotating border */
+    }
+
+     /* Keep the subtle solid border */
+     .profile-image-container::after {
+       content: '';
+       position: absolute;
+       top: -5px;
+       left: -5px;
+       right: -5px;
+       bottom: -5px;
+       border-radius: var(--radius-full);
+       border: 1px solid rgba(255, 255, 255, 0.6);
+       z-index: 0;
+     }
+
+    /* --- Removed specific item animations like float, pulse, shimmer --- */
+    /* .float-effect { animation: none; } */
+    /* .pulse-effect { animation: none; } */
+    /* .shimmer-effect::after { animation: none; display: none; } */
+    /* .glow-effect::after { display: none; } */
+
+     /* Keep subtle hover transforms for interaction */
+     .experience-item, .education-item, .project-item, .certificate-item, .achievement-item {
+         transition: transform var(--transition-fast), background-color var(--transition-fast);
+     }
+     .experience-item:hover, .education-item:hover, .project-item:hover, .certificate-item:hover, .achievement-item:hover {
+         transform: translateY(-2px);
+     }
+     .project-item:hover { background-color: rgba(13, 71, 161, 0.03); } /* Example hover bg */
+     .certificate-item:hover { background-color: rgba(13, 71, 161, 0.05); transform: translateX(3px); }
+     .achievement-item:hover { background-color: rgba(0, 137, 123, 0.05); transform: translateY(-3px);}
+     .publication-item:hover { transform: translateX(5px); background-color: rgba(2, 119, 189, 0.03); }
+
+
+    /* Global Variables */
     :root {
       /* Primary color palette - refined professional blue */
       --primary: #0d47a1;
       --primary-light: #5472d3;
       --primary-dark: #002171;
-      
+
       /* Secondary color */
       --secondary: #0277bd;
       --secondary-light: #58a5f0;
       --secondary-dark: #004c8c;
-      
+
       /* Accent color */
       --accent: #ffc107;
       --accent-light: #fff350;
       --accent-dark: #c79100;
-      
+
       /* Neutral colors */
       --text-dark: #263238;
       --text-medium: #455a64;
@@ -340,61 +299,61 @@
       --background: #f5f7fa;
       --card-bg: #ffffff;
       --border: #e0e0e0;
-      
+
       /* Success/achievement colors */
       --success: #00897b;
       --success-light: #4ebaaa;
       --success-dark: #005b4f;
-      
-      /* Spacing - reduced for tighter layout */
-      --spacing-xs: 0.2rem;
-      --spacing-sm: 0.4rem;
-      --spacing-md: 0.8rem;
-      --spacing-lg: 1.2rem;
-      --spacing-xl: 1.6rem;
-      --spacing-2xl: 2.4rem;
-      
-      /* Container widths - narrower than before */
-      --container-width: 900px;
-      
+
+      /* Spacing - slightly adjusted from original comment */
+      --spacing-xs: 0.25rem; /* Was 0.2 */
+      --spacing-sm: 0.5rem;  /* Was 0.4 */
+      --spacing-md: 1rem;    /* Was 0.8 */
+      --spacing-lg: 1.5rem;  /* Was 1.2 */
+      --spacing-xl: 2rem;    /* Was 1.6 */
+      --spacing-2xl: 3rem;   /* Was 2.4 */
+
+      /* Container widths - adjusted slightly */
+      --container-width: 960px; /* Was 900px */
+
       /* Border radius */
       --radius-sm: 0.2rem;
       --radius-md: 0.4rem;
       --radius-lg: 0.6rem;
       --radius-xl: 1rem;
       --radius-full: 9999px;
-      
+
       /* Box shadows */
       --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
       --shadow-md: 0 2px 4px rgba(0, 0, 0, 0.1);
-      --shadow-lg: 0 4px 6px rgba(0, 0, 0, 0.1);
-      --shadow-xl: 0 10px 15px rgba(0, 0, 0, 0.1);
-      
-      /* Typography - smaller font sizes */
+      --shadow-lg: 0 4px 8px rgba(0, 0, 0, 0.1); /* Slightly enhanced */
+      --shadow-xl: 0 10px 20px rgba(0, 0, 0, 0.1); /* Slightly enhanced */
+
+      /* Typography - adjusted sizes slightly */
       --font-heading: 'Montserrat', sans-serif;
       --font-body: 'Roboto', sans-serif;
       --font-serif: 'Lora', serif;
-      --font-size-xs: 0.75rem;
-      --font-size-sm: 0.85rem;
-      --font-size-md: 0.95rem;
-      --font-size-lg: 1.1rem;
-      --font-size-xl: 1.3rem;
-      --font-size-2xl: 1.8rem;
-      --font-size-3xl: 2.2rem;
-      
+      --font-size-xs: 0.78rem; /* ~12.5px */
+      --font-size-sm: 0.875rem;/* ~14px */
+      --font-size-md: 1rem;    /* ~16px */
+      --font-size-lg: 1.125rem;/* ~18px */
+      --font-size-xl: 1.375rem;/* ~22px */
+      --font-size-2xl: 1.75rem; /* ~28px */
+      --font-size-3xl: 2.25rem; /* ~36px */
+
       /* Transitions */
       --transition-fast: 150ms ease;
       --transition-normal: 300ms ease;
       --transition-slow: 500ms ease;
     }
-    
+
     /* Base styles */
     * {
       margin: 0;
       padding: 0;
       box-sizing: border-box;
     }
-    
+
     body {
       font-family: var(--font-body);
       color: var(--text-medium);
@@ -402,7 +361,7 @@
       line-height: 1.6;
       font-size: var(--font-size-md);
     }
-    
+
     h1, h2, h3, h4, h5, h6 {
       font-family: var(--font-heading);
       color: var(--text-dark);
@@ -410,39 +369,41 @@
       font-weight: 600;
       margin-bottom: var(--spacing-md);
     }
-    
+
     p {
       margin-bottom: var(--spacing-md);
       font-size: var(--font-size-md);
     }
-    
+
     a {
       color: var(--primary-light);
       text-decoration: none;
       transition: all var(--transition-fast);
     }
-    
+
     a:hover {
       color: var(--secondary);
+      /* text-decoration: underline; */ /* Optional: remove underlines globally for cleaner look */
     }
-    
+
     img {
       max-width: 100%;
       height: auto;
+      display: block; /* Prevents bottom space */
     }
-    
+
     ul, ol {
       margin-bottom: var(--spacing-md);
       padding-left: var(--spacing-xl);
     }
-    
+
     /* Layout */
     .container {
       max-width: var(--container-width);
       margin: 0 auto;
       padding: 0 var(--spacing-md);
     }
-    
+
     /* Resume Container */
     .resume-container {
       background-color: var(--card-bg);
@@ -452,9 +413,10 @@
       margin: var(--spacing-2xl) auto;
       max-width: var(--container-width);
       position: relative;
+      border: 1px solid var(--border); /* Add subtle border */
     }
-    
-    /* Background accent element */
+
+    /* Background accent elements - kept */
     .resume-container::before {
       content: '';
       position: absolute;
@@ -468,7 +430,7 @@
       transform: translate(100px, -120px);
       z-index: 0;
     }
-    
+
     .resume-container::after {
       content: '';
       position: absolute;
@@ -482,7 +444,7 @@
       transform: translate(-70px, 70px);
       z-index: 0;
     }
-    
+
     /* Header Section */
     .resume-header {
       background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
@@ -493,332 +455,253 @@
       align-items: center;
       justify-content: space-between;
       z-index: 1;
-      border-bottom: 3px solid var(--accent);
+      border-bottom: 4px solid var(--accent); /* Slightly thicker accent */
     }
-    
+
     .resume-header-content {
       flex: 1;
+      padding-right: var(--spacing-lg); /* Add padding between text and image */
     }
-    
+
     .profile-image-container {
       margin-left: var(--spacing-xl);
       position: relative;
     }
-    
+
     .profile-image {
       width: 150px;
       height: 150px;
       border-radius: var(--radius-full);
-      border: 3px solid rgba(255, 255, 255, 0.8);
+      border: 4px solid rgba(255, 255, 255, 0.9); /* Thicker, less transparent border */
       box-shadow: var(--shadow-lg);
       object-fit: cover;
       transition: transform var(--transition-normal);
+      position: relative; /* Needed for ::after */
+       z-index: 1; /* Ensure image is above ::after */
     }
-    
+
     .profile-image:hover {
       transform: scale(1.05);
     }
-    
-    /* Decorative circular outline behind profile image */
-    .profile-image-container::before {
-      content: '';
-      position: absolute;
-      top: -8px;
-      left: -8px;
-      right: -8px;
-      bottom: -8px;
-      border-radius: var(--radius-full);
-      border: 2px dashed rgba(255, 255, 255, 0.3);
-      animation: rotate 20s linear infinite;
-    }
-    
-    @keyframes rotate {
-      0% { transform: rotate(0deg); }
-      100% { transform: rotate(360deg); }
-    }
-    
+
     .resume-name {
       font-size: var(--font-size-3xl);
       font-weight: 700;
-      margin-bottom: var(--spacing-xs);
+      margin-bottom: var(--spacing-sm); /* Adjusted margin */
       letter-spacing: 1px;
       position: relative;
       display: inline-block;
     }
-    
+
     .resume-name::after {
       content: '';
       position: absolute;
-      bottom: -5px;
+      bottom: -6px; /* Adjusted position */
       left: 0;
-      width: 60px;
+      width: 70px; /* Slightly longer */
       height: 3px;
       background: var(--accent);
       border-radius: var(--radius-full);
     }
-    
+
     .resume-title {
       font-size: var(--font-size-lg);
-      font-weight: 500;
+      font-weight: 400; /* Slightly lighter */
       margin-bottom: var(--spacing-lg);
-      color: white;
+      color: rgba(255, 255, 255, 0.9); /* Slightly less bright white */
       font-family: var(--font-serif);
       font-style: italic;
     }
-    
+
     .contact-info {
       display: flex;
       flex-wrap: wrap;
       margin-top: var(--spacing-lg);
-      max-width: 500px;
+      max-width: 550px; /* Slightly wider */
     }
-    
-    .contact-item {
-      display: flex;
-      align-items: center;
-      margin-right: var(--spacing-lg);
-      margin-bottom: var(--spacing-md);
-      transition: transform var(--transition-fast);
-    }
-    
-    .contact-item:hover {
-      transform: translateY(-3px);
-    }
-    
-    .contact-icon {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      width: 28px;
-      height: 28px;
-      border-radius: var(--radius-full);
-      background: rgba(255, 255, 255, 0.15);
-      color: white;
-      margin-right: var(--spacing-sm);
-    }
-    
-    .contact-icon i {
-      font-size: var(--font-size-sm);
-    }
-    
-    .contact-text {
-      font-size: var(--font-size-sm);
-    }
-    
-    .contact-item a {
-      color: white;
-      text-decoration: none;
-      transition: all var(--transition-fast);
-    }
-    
-    .contact-item a:hover {
-      color: var(--accent-light);
-      text-decoration: underline;
-    }
-    
+    /* Contact Item/Icon/Text styles moved up for consolidation */
+
     /* Summary Section */
     .summary-section {
       background-color: var(--card-bg);
       padding: var(--spacing-xl) var(--spacing-2xl);
       position: relative;
       border-bottom: 1px solid var(--border);
-      margin-bottom: var(--spacing-md);
+      margin-bottom: var(--spacing-md); /* Consistent margin */
     }
-    
+
+    /* Subtle quote marks */
     .summary-section::before {
-      content: '"';
+      content: '“'; /* Using actual quote character */
       position: absolute;
-      top: 10px;
-      left: 15px;
-      font-size: 40px;
+      top: var(--spacing-sm);
+      left: var(--spacing-lg);
+      font-size: 50px; /* Slightly larger */
       font-family: var(--font-serif);
       color: var(--primary);
-      opacity: 0.1;
+      opacity: 0.08; /* More subtle */
+      line-height: 1;
     }
-    
+
     .summary-section::after {
-      content: '"';
-      position: absolute;
-      bottom: 0;
-      right: 15px;
-      font-size: 40px;
-      font-family: var(--font-serif);
-      color: var(--primary);
-      opacity: 0.1;
+       content: '”'; /* Using actual quote character */
+       position: absolute;
+       bottom: var(--spacing-xs);
+       right: var(--spacing-lg);
+       font-size: 50px;
+       font-family: var(--font-serif);
+       color: var(--primary);
+       opacity: 0.08;
+       line-height: 1;
     }
-    
+
     .summary-section p {
       margin: 0;
       line-height: 1.7;
-      color: var(--text-medium);
+      color: var(--text-dark); /* Slightly darker text for readability */
       font-size: var(--font-size-md);
-      padding: 0 var(--spacing-xl);
+      padding: 0 var(--spacing-xl); /* Keep padding */
       font-family: var(--font-serif);
       position: relative;
       z-index: 1;
     }
-    
+
     /* Main Content */
     .resume-body {
-      padding: var(--spacing-lg) var(--spacing-xl) var(--spacing-xl);
+      padding: var(--spacing-lg) var(--spacing-2xl) var(--spacing-xl); /* Adjusted padding */
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: var(--spacing-xl);
+      gap: var(--spacing-xl); /* Adjusted gap */
       position: relative;
       z-index: 1;
     }
-    
+
     /* For full-width sections */
     .full-width {
       grid-column: 1 / -1;
     }
-    
+
     /* Section Styling */
     .resume-section {
-      margin-bottom: var(--spacing-xl);
+      margin-bottom: var(--spacing-xl); /* Consistent margin */
       position: relative;
     }
-    
-    .section-title {
-      color: var(--primary);
-      font-size: var(--font-size-xl);
-      font-weight: 600;
-      margin-bottom: var(--spacing-lg);
-      padding-bottom: var(--spacing-xs);
-      position: relative;
-      display: flex;
-      align-items: center;
-    }
-    
-    .section-title::after {
-      content: '';
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      width: 100%;
-      height: 1px;
-      background: linear-gradient(to right, var(--primary) 0%, var(--primary) 40px, var(--border) 40px, var(--border) 100%);
-    }
-    
-    .section-title i {
-      margin-right: var(--spacing-sm);
-      color: white;
-      font-size: var(--font-size-sm);
-      background: var(--primary);
-      width: 26px;
-      height: 26px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      border-radius: var(--radius-full);
-    }
-    
-    /* Experience Items */
+    /* Section title styles moved up for consolidation */
+
+    /* Experience Items / Education / Projects */
     .experience-item, .education-item, .project-item {
       margin-bottom: var(--spacing-lg);
       position: relative;
-      padding-left: var(--spacing-xl);
-      padding-bottom: var(--spacing-md);
+      padding-left: var(--spacing-xl); /* Consistent padding */
+      padding-bottom: var(--spacing-md); /* Add padding below each item */
+      border-left: 2px solid rgba(84, 114, 211, 0.2); /* Subtle left border instead of line/dot */
     }
-    
+
+    /* Remove old timeline styles */
+     .experience-item::before, .education-item::before, .project-item::before,
+     .experience-item::after, .education-item::after, .project-item::after {
+       display: none;
+     }
+
+    /* Adjust last item padding */
     .experience-item:last-child, .education-item:last-child, .project-item:last-child {
-      padding-bottom: 0;
+       padding-bottom: 0; /* No extra padding below last item */
+       margin-bottom: 0; /* No extra margin below last item in section */
     }
-    
-    .experience-item::before, .education-item::before, .project-item::before {
-      content: '';
-      position: absolute;
-      left: 0;
-      top: 6px;
-      width: 10px;
-      height: 10px;
-      border-radius: var(--radius-full);
-      background-color: var(--primary-light);
-      box-shadow: 0 0 0 3px rgba(84, 114, 211, 0.2);
-      z-index: 2;
-    }
-    
-    .experience-item::after, .education-item::after, .project-item::after {
-      content: '';
-      position: absolute;
-      left: 5px;
-      top: 20px;
-      width: 1px;
-      height: calc(100% - 14px);
-      background-color: rgba(84, 114, 211, 0.2);
-      z-index: 1;
-    }
-    
-    .experience-item:last-child::after, .education-item:last-child::after, .project-item:last-child::after {
-      display: none;
-    }
-    
+
+
     .experience-header, .education-header, .project-header {
       display: flex;
       justify-content: space-between;
-      align-items: flex-start;
+      align-items: flex-start; /* Align items to top */
       margin-bottom: var(--spacing-xs);
+      flex-wrap: wrap; /* Allow wrapping on small screens */
+      gap: var(--spacing-sm); /* Add gap between title and date/logo */
     }
-    
+
+     .header-main-content { /* Wrapper for title, company etc. */
+        flex-grow: 1;
+     }
+
+
     .experience-title, .education-degree, .project-title {
       font-weight: 600;
       color: var(--text-dark);
       font-size: var(--font-size-md);
       line-height: 1.4;
-      margin-bottom: var(--spacing-xs);
+      margin-bottom: var(--spacing-xs); /* Reduced margin */
     }
-    
+
     .experience-date, .education-date, .project-date {
-      color: var(--secondary);
+      color: var(--secondary-dark); /* Darker color */
       font-weight: 500;
       white-space: nowrap;
       font-size: var(--font-size-xs);
       background: rgba(2, 119, 189, 0.08);
-      padding: 2px 8px;
+      padding: 3px 10px; /* Slightly larger padding */
       border-radius: var(--radius-full);
+      align-self: flex-start; /* Align date to top */
+       margin-left: auto; /* Push date to the right if space allows */
     }
-    
+
     .experience-company, .education-institution {
-      font-style: italic;
-      color: var(--text-light);
-      margin-bottom: var(--spacing-xs);
-      font-family: var(--font-serif);
+      font-style: normal; /* Removing italics */
+      color: var(--text-medium); /* Less faint */
+      margin-bottom: var(--spacing-sm); /* Increased margin */
+      font-family: var(--font-body); /* Use body font */
       font-size: var(--font-size-sm);
+      display: block; /* Ensure it takes its own line */
     }
-    
-    .experience-location {
+
+     /* Adding location styling to education too */
+    .experience-location, .education-location {
       color: var(--text-light);
       font-size: var(--font-size-xs);
-      margin-bottom: var(--spacing-xs);
+      margin-bottom: var(--spacing-sm);
       display: flex;
       align-items: center;
     }
-    
-    .experience-location i {
+
+    .experience-location i, .education-location i {
       margin-right: var(--spacing-xs);
       color: var(--primary-light);
+      width: 1em; /* Consistent icon width */
+      text-align: center;
     }
-    
+
+
     .experience-description, .project-description {
       color: var(--text-medium);
       line-height: 1.6;
       font-size: var(--font-size-sm);
+      padding-top: var(--spacing-xs); /* Add slight space above description */
     }
-    
+
+    /* Adding bullets for description points if needed */
+    .experience-description ul, .project-description ul {
+        list-style-type: disc; /* Or circle */
+        padding-left: var(--spacing-md);
+        margin-top: var(--spacing-sm);
+    }
+    .experience-description ul li, .project-description ul li {
+        margin-bottom: var(--spacing-xs);
+    }
+
+
     /* Publications */
     .publication-item {
-        transition: transform 0.3s ease, background-color 0.3s ease;
+       /* transition handled globally now */
+       padding: var(--spacing-sm) 0; /* Add vertical padding */
+       border-bottom: 1px solid var(--border); /* Separator line */
+       margin-bottom: var(--spacing-sm); /* Space between items */
     }
-    
-    .publication-item:hover {
-      transform: translateX(5px);
-      background-color: rgba(2, 119, 189, 0.03);
-    }
-    
+
     .publication-item:last-child {
       border-bottom: none;
+      margin-bottom: 0;
+      padding-bottom: 0;
     }
-    
+
     .publication-title {
       font-weight: 600;
       margin-bottom: var(--spacing-xs);
@@ -826,161 +709,152 @@
       line-height: 1.4;
       color: var(--text-dark);
     }
-    
+
     .publication-authors {
-      font-style: italic;
+      font-style: normal; /* Removing italic */
       margin-bottom: var(--spacing-xs);
-      color: var(--text-light);
-      font-family: var(--font-serif);
+      color: var(--text-medium); /* Less faint */
+      font-family: var(--font-body);
       font-size: var(--font-size-xs);
     }
-    
+
     .publication-journal {
       margin-bottom: var(--spacing-xs);
       color: var(--text-medium);
       font-size: var(--font-size-xs);
+      font-style: italic; /* Italicize journal name */
     }
-    
+
     .publication-year {
       color: var(--primary);
       font-weight: 600;
       font-size: var(--font-size-xs);
       display: inline-block;
       background: rgba(13, 71, 161, 0.08);
-      padding: 1px 6px;
+      padding: 2px 8px; /* Adjusted padding */
       border-radius: var(--radius-full);
       margin-top: var(--spacing-xs);
     }
-    
+
     .publication-link {
-      display: inline-block;
-      margin-top: var(--spacing-xs);
+      display: inline-flex; /* Align icon nicely */
+      align-items: center;
+      margin-top: var(--spacing-sm); /* More space */
       color: var(--primary-light);
       text-decoration: none;
       font-size: var(--font-size-xs);
+      font-weight: 500; /* Slightly bolder */
       transition: all var(--transition-fast);
     }
-    
+    .publication-link i {
+        margin-left: var(--spacing-xs); /* Space before icon */
+        font-size: 0.9em; /* Slightly smaller icon */
+    }
+
     .publication-link:hover {
       color: var(--secondary);
       text-decoration: underline;
     }
-    
-    /* Paper preview tooltip */
-    .paper-preview {
-      display: none;
-      position: absolute;
-      top: 0;
-      left: 100%;
-      width: 180px;
-      box-shadow: var(--shadow-xl);
-      border-radius: var(--radius-md);
-      overflow: hidden;
-      z-index: 10;
-    }
-    
-    .paper-preview img {
-      width: 100%;
-      height: auto;
-      display: block;
-    }
-    
-    .publication-item:hover .paper-preview {
-      display: block;
-    }
-    
+
+
     /* Skills */
     .skills-container {
       display: grid;
-      grid-template-columns: repeat(3, 1fr);
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); /* More responsive columns */
       gap: var(--spacing-lg);
     }
-    
+
     .skill-category {
       margin-bottom: var(--spacing-lg);
+      background-color: rgba(245, 247, 250, 0.6); /* Very light bg */
+      padding: var(--spacing-md);
+      border-radius: var(--radius-md);
+      border: 1px solid var(--border);
+      transition: box-shadow var(--transition-normal);
     }
-    
+     .skill-category:hover {
+         box-shadow: var(--shadow-md);
+     }
+
     .skill-category h4 {
-      color: var(--secondary-dark);
-      font-size: var(--font-size-md);
+      color: var(--primary-dark); /* Darker heading */
+      font-size: var(--font-size-md); /* Match item title size */
       margin-bottom: var(--spacing-md);
-      padding-bottom: var(--spacing-xs);
-      border-bottom: 1px dashed rgba(0, 76, 140, 0.2);
-      display: inline-block;
+      padding-bottom: var(--spacing-sm); /* More padding */
+      border-bottom: 2px solid var(--primary-light); /* Thicker, solid border */
+      display: inline-block; /* Keep inline-block */
     }
-    
+
     .skills-list {
       list-style: none;
       padding: 0;
       margin: 0;
     }
-    
+
     .skills-list li {
-      margin-bottom: var(--spacing-xs);
+      margin-bottom: var(--spacing-sm); /* Increased spacing */
       position: relative;
-      padding-left: var(--spacing-md);
+      /* Removed left padding, handled by category padding */
       color: var(--text-medium);
-      transition: transform var(--transition-fast);
+      transition: color var(--transition-fast); /* Smooth color transition */
       font-size: var(--font-size-sm);
+      display: flex; /* Use flex for better alignment */
+      justify-content: space-between; /* Space out name and level */
+      align-items: center;
     }
-    
+
     .skills-list li:hover {
-      transform: translateX(3px);
+      /* transform: translateX(3px); */ /* Remove transform */
       color: var(--primary-dark);
     }
-    
-    /* Fixed the bullet point styling */
+
+    /* Removed bullet point styling */
     .skills-list li::before {
-      content: "";
-      position: absolute;
-      left: 0;
-      top: 9px;
-      width: 5px;
-      height: 5px;
-      border-radius: 50%;
-      background-color: var(--primary-light);
+       display: none;
     }
-    
-    /* Interactive skill level indicators */
+
+    /* Skill level indicators - Static representation */
     .skill-level {
-      height: 3px;
-      background-color: var(--border);
-      border-radius: var(--radius-full);
-      margin-top: var(--spacing-xs);
-      position: relative;
-      overflow: hidden;
+       width: 60px; /* Fixed width for the level indicator */
+       height: 6px; /* Thicker bar */
+       background-color: var(--border);
+       border-radius: var(--radius-full);
+       position: relative;
+       overflow: hidden;
+       margin-left: var(--spacing-sm); /* Space between name and bar */
     }
-    
-    .skill-level::after {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      height: 100%;
-      background: linear-gradient(to right, var(--primary), var(--secondary));
-      border-radius: var(--radius-full);
-      width: 0;
-      transition: width 1s ease;
+
+    .skill-level div { /* The inner div representing the level */
+        position: absolute;
+        top: 0;
+        left: 0;
+        height: 100%;
+        background: linear-gradient(to right, var(--primary-light), var(--primary)); /* Gradient fill */
+        border-radius: var(--radius-full);
+        width: var(--level, 80%); /* Use CSS variable */
+        transition: width 0.5s ease-out; /* Animate on load via JS if needed */
     }
-    
-    .skills-list li:hover .skill-level::after {
-      width: var(--level);
-    }
-    
+
+     /* Optional: Remove hover animation for skill level */
+    /* .skills-list li:hover .skill-level::after { width: var(--level); } */
+
+
     /* Achievements */
     .achievement-item {
       margin-bottom: var(--spacing-md);
       position: relative;
-      transition: transform var(--transition-normal);
+      /* transition handled globally */
       padding: var(--spacing-sm);
-      border-radius: var(--radius-sm);
+      border-radius: var(--radius-md); /* Slightly larger radius */
+      border-left: 3px solid var(--success); /* Accent border */
     }
-    
+
     .achievement-item:hover {
-      transform: translateY(-3px);
+      /* transform handled globally */
       background-color: rgba(0, 137, 123, 0.05);
+      border-left-color: var(--success-dark); /* Darken border on hover */
     }
-    
+
     .achievement-title {
       font-weight: 600;
       color: var(--text-dark);
@@ -989,125 +863,137 @@
       align-items: center;
       font-size: var(--font-size-sm);
     }
-    
+
     .achievement-title i {
       color: white;
       margin-right: var(--spacing-sm);
       background-color: var(--success);
-      width: 20px;
-      height: 20px;
+      width: 22px; /* Slightly larger */
+      height: 22px;
       display: flex;
       align-items: center;
       justify-content: center;
       border-radius: var(--radius-full);
       font-size: var(--font-size-xs);
+      flex-shrink: 0; /* Prevent shrinking */
     }
-    
+
     .achievement-date {
       color: var(--text-light);
       font-size: var(--font-size-xs);
-      margin-left: 28px;
+      margin-left: calc(22px + var(--spacing-sm)); /* Align with description */
       margin-bottom: var(--spacing-xs);
     }
-    
+
     .achievement-description {
       color: var(--text-medium);
-      margin-left: 28px;
-      font-style: italic;
+      margin-left: calc(22px + var(--spacing-sm)); /* Align below icon */
+      /* font-style: italic; */ /* Removing italic */
       font-size: var(--font-size-xs);
       line-height: 1.5;
     }
-    
+
     /* Languages */
     .languages-section {
-      margin-top: var(--spacing-md);
+      margin-top: var(--spacing-md); /* Consistent top margin */
     }
-    
+
     .language-items {
       display: flex;
       flex-wrap: wrap;
       gap: var(--spacing-md);
     }
-    
+
     .language-item {
       display: flex;
-      flex-direction: column;
+      flex-direction: column; /* Keep column */
+      align-items: center; /* Center content */
+      text-align: center;
       margin-bottom: var(--spacing-sm);
       padding: var(--spacing-sm) var(--spacing-md);
-      background-color: rgba(13, 71, 161, 0.05);
-      border-radius: var(--radius-sm);
-      transition: all var(--transition-normal);
-      border: 1px solid transparent;
+      background-color: rgba(13, 71, 161, 0.04); /* More subtle bg */
+      border-radius: var(--radius-md); /* More rounded */
+      /* transition handled globally */
+      border: 1px solid rgba(13, 71, 161, 0.1); /* Subtle border */
+      min-width: 100px; /* Minimum width */
     }
-    
+
     .language-item:hover {
-      transform: translateY(-3px);
-      border-color: rgba(13, 71, 161, 0.1);
-      box-shadow: var(--shadow-md);
+      /* transform handled globally */
+      border-color: rgba(13, 71, 161, 0.2);
+      box-shadow: var(--shadow-sm); /* Subtle shadow */
     }
-    
+
     .language-name {
       font-weight: 600;
       margin-bottom: var(--spacing-xs);
       color: var(--text-dark);
       font-size: var(--font-size-sm);
     }
-    
+
     .language-level {
       color: var(--text-light);
       font-size: var(--font-size-xs);
     }
-    
+
     /* Certificates */
     .certificate-item {
-      margin-bottom: var(--spacing-sm);
+      margin-bottom: var(--spacing-md); /* More space */
       padding: var(--spacing-sm);
       border-radius: var(--radius-sm);
-      transition: all var(--transition-normal);
-      border-left: 2px solid var(--primary-light);
+      /* transition handled globally */
+      border-left: 3px solid var(--secondary-light); /* Use secondary color */
     }
-    
+
     .certificate-item:hover {
-      background-color: rgba(13, 71, 161, 0.05);
-      transform: translateX(3px);
+      background-color: rgba(2, 119, 189, 0.05); /* Match secondary color */
+      /* transform handled globally */
+      border-left-color: var(--secondary); /* Darken border */
     }
-    
+
     .certificate-title {
       font-weight: 600;
       margin-bottom: var(--spacing-xs);
       color: var(--text-dark);
       font-size: var(--font-size-sm);
     }
-    
+
     .certificate-issuer {
-      color: var(--text-light);
+      color: var(--text-medium); /* Less faint */
       margin-bottom: var(--spacing-xs);
       font-size: var(--font-size-xs);
     }
-    
+
     .certificate-date {
-      color: var(--primary);
+      color: var(--secondary); /* Match border */
       font-size: var(--font-size-xs);
       display: inline-block;
-      background: rgba(13, 71, 161, 0.08);
-      padding: 1px 6px;
+      background: rgba(2, 119, 189, 0.08); /* Match secondary */
+      padding: 2px 8px; /* Adjusted padding */
       border-radius: var(--radius-full);
+      margin-top: var(--spacing-xs); /* Add space above date */
     }
-    
+
     .certificate-link {
-      display: inline-block;
-      color: var(--primary-light);
+      display: inline-flex; /* Align icon */
+      align-items: center;
+      color: var(--secondary-light); /* Match border */
       text-decoration: none;
-      margin-top: var(--spacing-xs);
+      margin-top: var(--spacing-sm); /* More space */
       font-size: var(--font-size-xs);
+      font-weight: 500; /* Slightly bolder */
       transition: all var(--transition-fast);
     }
-    
+     .certificate-link i {
+        margin-left: var(--spacing-xs);
+        font-size: 0.9em;
+     }
+
     .certificate-link:hover {
-      color: var(--secondary);
+      color: var(--secondary-dark);
       text-decoration: underline;
     }
-    
+
     /* Footer */
     .resume-footer {
       padding: var(--spacing-md) var(--spacing-xl);
@@ -1117,18 +1003,22 @@
       font-size: var(--font-size-xs);
       position: relative;
       z-index: 1;
+      border-top: 1px solid var(--primary); /* Add top border */
     }
-    
+
     /* Download Button */
     .resume-actions {
       text-align: center;
       margin: var(--spacing-xl) 0 var(--spacing-lg);
+      padding: var(--spacing-lg) 0; /* Add padding */
+      background-color: var(--card-bg); /* Match card background */
+      border-top: 1px solid var(--border); /* Separator line */
     }
-    
+
     .download-btn {
       background-color: var(--primary);
       color: white;
-      padding: var(--spacing-md) var(--spacing-lg);
+      padding: var(--spacing-md) var(--spacing-xl); /* Larger padding */
       border-radius: var(--radius-full);
       text-decoration: none;
       font-weight: 600;
@@ -1136,457 +1026,261 @@
       align-items: center;
       box-shadow: var(--shadow-md);
       transition: all var(--transition-normal);
-      border: 2px solid var(--primary);
+      border: 2px solid transparent; /* Transparent border initially */
       position: relative;
       overflow: hidden;
       z-index: 1;
       font-size: var(--font-size-sm);
     }
-    
-    .download-btn::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: linear-gradient(to right, transparent 0%, rgba(255, 255, 255, 0.2) 50%, transparent 100%);
-      transform: translateX(-100%);
-      transition: transform 0.6s ease;
-      z-index: -1;
-    }
-    
-    .download-btn:hover::before {
-      transform: translateX(100%);
-    }
-    
-    .download-btn i {
-      margin-right: var(--spacing-sm);
-    }
-    
+
+    /* Button hover effect - subtle background change + shadow */
     .download-btn:hover {
       background-color: var(--primary-dark);
-      transform: translateY(-3px);
+      transform: translateY(-2px); /* Use consistent hover lift */
       box-shadow: var(--shadow-lg);
+      border-color: var(--primary-dark);
     }
-    
-    /* Additional cool animations */
-    .glow-effect {
-      position: relative;
-      overflow: hidden;
+
+     /* Removed ::before shimmer effect */
+    /* .download-btn::before { ... } */
+    /* .download-btn:hover::before { ... } */
+
+    .download-btn i {
+      margin-right: var(--spacing-sm);
+      font-size: 1.1em; /* Slightly larger icon */
     }
-    
-    .glow-effect::after {
-      content: '';
-      position: absolute;
-      top: -50%;
-      left: -50%;
-      width: 200%;
-      height: 200%;
-      background: radial-gradient(circle, rgba(255,255,255,0.3) 0%, rgba(255,255,255,0) 70%);
-      opacity: 0;
-      transform: scale(0.5);
-      transition: opacity 0.5s, transform 0.5s;
-    }
-    
-    .glow-effect:hover::after {
-      opacity: 1;
-      transform: scale(1);
-    }
-    
-    /* Shimmer effect */
-    @keyframes shimmer {
-      0% {
-        background-position: -100% 0;
-      }
-      100% {
-        background-position: 100% 0;
-      }
-    }
-    
-    .shimmer-effect {
-      position: relative;
-      overflow: hidden;
-    }
-    
-    .shimmer-effect::after {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: linear-gradient(
-        90deg,
-        rgba(255,255,255,0) 0%,
-        rgba(255,255,255,0.2) 50%,
-        rgba(255,255,255,0) 100%
-      );
-      background-size: 200% 100%;
-      animation: shimmer 2s infinite;
-      opacity: 0;
-      transition: opacity 0.3s;
-    }
-    
-    .shimmer-effect:hover::after {
-      opacity: 1;
-    }
-    
-    /* Floating animation */
-    @keyframes float {
-      0% { transform: translateY(0); }
-      50% { transform: translateY(-5px); }
-      100% { transform: translateY(0); }
-    }
-    
-    .float-effect {
-      animation: float 3s ease-in-out infinite;
-    }
-    
-    /* Subtle pulse animation */
-    @keyframes subtle-pulse {
-      0% { transform: scale(1); }
-      50% { transform: scale(1.02); }
-      100% { transform: scale(1); }
-    }
-    
-    .pulse-effect {
-      animation: subtle-pulse 3s ease-in-out infinite;
-    }
-    
+
+
     /* Print Styles */
     @media print {
       body {
         background-color: white;
+        font-size: 10pt; /* Adjust print font size */
+        color: black;
       }
-      
+
+       :root { /* Override variables for print */
+           --primary: #000000;
+           --primary-light: #333333;
+           --primary-dark: #000000;
+           --secondary: #000000;
+           --secondary-light: #333333;
+           --secondary-dark: #000000;
+           --accent: #555555;
+           --text-dark: #000000;
+           --text-medium: #111111;
+           --text-light: #444444;
+           --card-bg: #ffffff;
+           --border: #cccccc;
+           --success: #000000;
+       }
+
+
       .resume-container {
         box-shadow: none;
         margin: 0;
         max-width: 100%;
-        page-break-after: avoid;
+        border: none;
+        page-break-inside: avoid;
       }
-      
+
       .resume-container::before,
       .resume-container::after {
         display: none;
       }
-      
-      .navbar, .resume-actions, footer {
-        display: none;
-      }
-      
-      a {
-        text-decoration: none !important;
-        color: var(--text-dark) !important;
-      }
-      
+
+       /* Hide non-essential elements */
+       header, .navbar, .resume-actions, footer, .profile-image-container::after {
+          display: none !important;
+       }
+
+       /* Ensure links are printable */
+       a, a:visited {
+          color: var(--primary-dark) !important;
+          text-decoration: none !important;
+       }
+       .contact-item a.contact-text { color: white !important;} /* Header links need special handling */
+       .contact-item a.contact-text::after { content: " (" attr(href) ")"; font-size: 8pt;} /* Show URLs */
+
+
       .resume-header {
         -webkit-print-color-adjust: exact;
         print-color-adjust: exact;
+        background: #eeeeee !important; /* Light gray for print header */
+        color: black !important;
+        border-bottom: 2px solid black !important;
+        padding: 1cm;
       }
-      
-      .paper-preview {
-        display: none !important;
+       .resume-header .contact-icon { background-color: #cccccc !important; }
+       .resume-header .contact-icon i { color: black !important; }
+       .resume-header .contact-text, .resume-header .contact-item a.contact-text { color: black !important; }
+       .resume-name { color: black !important; }
+       .resume-name::after { background: black !important; }
+       .resume-title { color: #333333 !important; }
+       .profile-image { border-color: #555555 !important;}
+
+
+      .resume-body {
+         grid-template-columns: 1fr 1fr; /* Keep 2 columns if possible */
+         padding: 0.5cm;
+         gap: 0.8cm;
       }
+
+      .resume-section { page-break-inside: avoid; }
+      .experience-item, .education-item, .project-item, .publication-item { page-break-inside: avoid; }
+
+       .section-title { color: black !important; }
+       .section-title i { background: #555555 !important; color: white !important; }
+       .section-title::after { background: linear-gradient(to right, #555 #555 40px, #ccc 40px, #ccc 100%) !important; }
+
+
+       .experience-date, .education-date, .project-date, .publication-year, .certificate-date {
+           background: #f0f0f0 !important;
+           color: black !important;
+           border: 1px solid #ccc;
+       }
+
+       .skill-level { background-color: #ccc !important; }
+       .skill-level div { background: #555 !important; }
+
+       .achievement-item { border-left-color: #555 !important; }
+       .achievement-title i { background-color: #555 !important; color: white !important;}
+
+       .language-item { background-color: #f0f0f0 !important; border-color: #ccc !important;}
+       .certificate-item { border-left-color: #555 !important; }
+
+       .paper-preview, .tippy-box { display: none !important; } /* Hide tooltips */
+       .experience-logo, .education-logo { opacity: 1 !important; filter: grayscale(100%) !important; } /* Show logos in B&W */
+       .resume-footer { color: #555 !important; background: #f0f0f0 !important; border-top-color: #ccc !important;}
     }
-    
-    /* Responsive Styles */
+
+    /* Responsive Styles (Minor adjustments based on new layout/spacing) */
     @media (max-width: 992px) {
-      .resume-body {
-        grid-template-columns: 1fr;
-        padding: var(--spacing-md);
-      }
-      
-      .skills-container {
-        grid-template-columns: repeat(2, 1fr);
-      }
-      
-      .resume-header {
-        padding: var(--spacing-lg);
-      }
-      
-      .profile-image {
-        width: 120px;
-        height: 120px;
-      }
+       :root { /* Slightly smaller fonts on medium screens */
+           --font-size-md: 0.95rem;
+           --font-size-lg: 1.05rem;
+           --font-size-xl: 1.25rem;
+           --font-size-2xl: 1.6rem;
+           --font-size-3xl: 2rem;
+       }
+       .resume-body {
+          grid-template-columns: 1fr; /* Stack columns earlier */
+          padding: var(--spacing-lg);
+          gap: var(--spacing-lg);
+       }
+       .resume-header {
+          padding: var(--spacing-lg);
+       }
+       .profile-image {
+          width: 130px; /* Adjust size */
+          height: 130px;
+       }
     }
-    
+
     @media (max-width: 768px) {
-      .resume-header {
-        flex-direction: column;
-        text-align: center;
-      }
-      
-      .resume-name::after {
-        left: 50%;
-        transform: translateX(-50%);
-      }
-      
-      .profile-image-container {
-        margin: 0 0 var(--spacing-lg) 0;
-        order: -1;
-      }
-      
-      .contact-info {
-        justify-content: center;
-        margin-left: auto;
-        margin-right: auto;
-      }
-      
-      .skills-container {
-        grid-template-columns: 1fr;
-      }
-      
-      .experience-header, .education-header, .project-header {
-        flex-direction: column;
-      }
-      
-      .experience-date, .education-date, .project-date {
-        margin-top: var(--spacing-xs);
-        margin-bottom: var(--spacing-xs);
-      }
-      
-      .resume-name {
-        font-size: var(--font-size-2xl);
-      }
-      
-      .resume-title {
-        font-size: var(--font-size-md);
-      }
-      
-      .summary-section p {
-        padding: 0;
-      }
-      
-      .paper-preview {
-        display: none !important;
-      }
+       .resume-header {
+          flex-direction: column;
+          text-align: center;
+          padding: var(--spacing-md);
+       }
+       .resume-header-content { padding-right: 0; }
+       .resume-name::after {
+          left: 50%;
+          transform: translateX(-50%);
+       }
+       .profile-image-container {
+          margin: 0 auto var(--spacing-lg) auto; /* Center image */
+          order: -1; /* Image first */
+       }
+       .profile-image {
+           width: 120px;
+           height: 120px;
+       }
+       .contact-info {
+          justify-content: center; /* Center contact items */
+          margin-left: auto;
+          margin-right: auto;
+          max-width: 100%; /* Allow full width */
+       }
+       .experience-header, .education-header, .project-header {
+          /* Keep flex for logo alignment, but allow wrap */
+          align-items: flex-start;
+       }
+       .experience-date, .education-date, .project-date {
+          margin-left: 0; /* Reset margin */
+          margin-top: var(--spacing-xs);
+       }
+       .resume-name { font-size: var(--font-size-2xl); }
+       .resume-title { font-size: var(--font-size-md); }
+       .summary-section p { padding: 0; }
+       .resume-body { padding: var(--spacing-md); }
+       .paper-preview, .tippy-box { display: none !important; } /* Hide tooltips on mobile */
     }
-    
+
     @media (max-width: 576px) {
-      .resume-container {
-        margin: var(--spacing-md) var(--spacing-sm);
-      }
-      
-      .resume-body {
-        padding: var(--spacing-sm);
-      }
-      
-      .section-title {
-        font-size: var(--font-size-lg);
-      }
-      
-      .contact-item {
-        margin-right: var(--spacing-sm);
-      }
-      
-      .language-items {
-        flex-direction: column;
-        gap: var(--spacing-sm);
-      }
-      
-      .certificate-item, .achievement-item {
-        padding: var(--spacing-xs);
-      }
-      
-      .profile-image-container::before {
-        display: none;
-      }
+      :root { /* Further reduce font sizes on small screens */
+           --font-size-xs: 0.75rem;
+           --font-size-sm: 0.8rem;
+           --font-size-md: 0.9rem;
+       }
+       .resume-container {
+          margin: var(--spacing-md) var(--spacing-sm);
+          border-radius: var(--radius-md);
+       }
+       .resume-body { padding: var(--spacing-sm); }
+       .section-title { font-size: var(--font-size-lg); }
+       .contact-item { margin-right: var(--spacing-sm); }
+       .language-items { gap: var(--spacing-sm); }
+       .certificate-item, .achievement-item { padding: var(--spacing-xs); }
+       .profile-image { width: 100px; height: 100px;}
+       .profile-image-container::after { display: none; } /* Hide border on small screens */
     }
-    
-    /* Tippy tooltip styling */
+
+    /* Tippy tooltip styling - Generally okay, ensure z-index */
     .tippy-box {
-      background-color: white;
-      color: var(--text-dark);
-      box-shadow: var(--shadow-xl);
-      border-radius: var(--radius-md);
-      overflow: hidden;
-      border: 1px solid var(--border);
-    }
-    
-    .tippy-box img {
-      width: 100%;
-      height: auto;
-      display: block;
-    }
-    
-    .tippy-arrow {
-      color: white;
-    }
-    
-    .paper-tooltip {
-      padding: 0;
-      max-width: 200px !important;
+      /* Styles moved up for consolidation */
       font-size: var(--font-size-xs);
     }
-    
+    .tippy-arrow { color: white; }
+    .paper-tooltip {
+       padding: 0;
+       max-width: 200px !important;
+    }
     .paper-tooltip-content {
-      padding: var(--spacing-xs);
-      text-align: center;
-      border-top: 1px solid var(--border);
+       /* Styles moved up */
     }
-    /* Add this to your CSS (at the end of your style tag) */
-    .experience-logo, .education-logo {
-        width: 40px;
-        height: 40px;
-        opacity: 0.6;  /* Increased from 0.1 for better visibility */
-        filter: grayscale(70%);
-        transition: all 0.3s ease;
-        border-radius: 4px;
-        object-fit: contain;
-        z-index: 10;  /* Ensure it's on top */
-        position: relative;
-    }
-    
-    .experience-item:hover .experience-logo,
-    .education-item:hover .education-logo {
-        opacity: 1;
-        filter: grayscale(0%);
-        transform: scale(1.1);  /* Add slight scale effect */
-    }
-    
-    /* Improved logo container to ensure proper positioning */
-    .logo-container {
-        position: relative;
-        display: inline-block;
-        margin-right: 10px;
-        width: 40px;
-        height: 40px;
-        overflow: visible;
-    }
-    .resume-header .contact-icon {
-        display: flex !important;
-        align-items: center !important;
-        justify-content: center !important;
-        width: 30px !important;
-        height: 30px !important;
-        min-width: 30px !important;
-        background-color: rgba(255, 255, 255, 0.25) !important;
-        border-radius: 50% !important;
-        margin-right: 10px !important;
-        opacity: 1 !important;
-      }
-      
-      .resume-header .contact-icon i {
-        color: white !important;
-        font-size: 14px !important;
-        opacity: 1 !important;
-        visibility: visible !important;
-      }
-      
-      .resume-header .contact-text {
-        color: white !important;
-        opacity: 1 !important;
-      }
-      /* Improved profile picture animation */
-.profile-image-container::before {
-    content: '';
-    position: absolute;
-    top: -10px;
-    left: -10px;
-    right: -10px;
-    bottom: -10px;
-    border-radius: var(--radius-full);
-    border: 3px dashed rgba(255, 255, 255, 0.4);
-    animation: rotate 15s linear infinite;
-    z-index: 0;
-  }
-  
-  .profile-image-container::after {
-    content: '';
-    position: absolute;
-    top: -5px;
-    left: -5px;
-    right: -5px;
-    bottom: -5px;
-    border-radius: var(--radius-full);
-    border: 1px solid rgba(255, 255, 255, 0.6);
-    z-index: 0;
-  }
-  
-  .profile-image {
-    position: relative;
-    z-index: 1;
-  }
-  
-  @keyframes rotate {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
-  }
 
-/* Complete icon fix - paste this at the end of your style tag */
-.contact-item {
-    display: flex !important;
-    align-items: center !important;
-    margin-bottom: var(--spacing-sm) !important;
-  }
-  
-  .contact-icon {
-    width: 30px !important;
-    height: 30px !important;
-    min-width: 30px !important;
-    background-color: rgba(255, 255, 255, 0.4) !important;
-    border-radius: 50% !important;
-    margin-right: 10px !important;
-    position: relative !important;
-  }
-  
-  /* Force the icons to appear by using content property */
-  .contact-icon:has(i.fa-map-marker-alt)::before { content: "📍"; position: absolute; top: 7px; left: 9px; }
-  .contact-icon:has(i.fa-phone)::before { content: "📞"; position: absolute; top: 7px; left: 8px; }
-  .contact-icon:has(i.fa-envelope)::before { content: "✉️"; position: absolute; top: 7px; left: 8px; }
-  .contact-icon:has(i.fa-linkedin)::before { content: "🔗"; position: absolute; top: 7px; left: 8px; }
-  .contact-icon:has(i.fa-graduation-cap)::before { content: "🎓"; position: absolute; top: 7px; left: 8px; }
-  .contact-icon:has(i.fa-globe)::before { content: "🌐"; position: absolute; top: 7px; left: 8px; }
-  
-  /* Hide the original Font Awesome icons that aren't working */
-  .contact-icon i {
-    display: none !important;
-  }
-  
-  .contact-text {
-    color: white !important;
-    font-size: var(--font-size-sm) !important;
-  }
-  .project-item.pulse-effect {
-    animation: none !important;
-    transform: none !important;
-  }
   </style>
 </head>
 <body>
   <div class="page-wrapper">
     <header>
-      <nav class="navbar">
-        <div class="container">
-          <a href="index.html" class="logo">MoSa</a>
-          <button id="mobile-menu-btn" class="mobile-menu-btn">
-            <span class="bar"></span>
-            <span class="bar"></span>
-            <span class="bar"></span>
-          </button>
-          <ul class="nav-links">
-            <li><a href="index.html">Home</a></li>
-            <li><a href="about.html">About Me</a></li>
-            <li><a href="blog.html">Blog</a></li>
-            <li><a href="academia.html">Academia</a></li>
-            <li><a href="resume.html" class="active">Resume</a></li>
-            <li><a href="contact.html">Contact</a></li>
-          </ul>
-        </div>
-      </nav>
+        <nav class="navbar">
+          <div class="container">
+            <a href="index.html" class="logo">MoSa</a>
+            <button id="mobile-menu-btn" class="mobile-menu-btn">
+              <span class="bar"></span>
+              <span class="bar"></span>
+              <span class="bar"></span>
+            </button>
+            <ul class="nav-links">
+              <li><a href="index.html">Home</a></li>
+              <li><a href="about.html">About Me</a></li>
+              <li><a href="blog.html">Blog</a></li>
+              <li><a href="academia.html">Academia</a></li>
+              <li><a href="resume.html" class="active">Resume</a></li>
+              <li><a href="contact.html">Contact</a></li>
+            </ul>
+          </div>
+        </nav>
     </header>
 
     <main>
-      <div class="resume-container" data-aos="fade-up" data-aos-duration="800">
-        <!-- Header Section -->
-        <div class="resume-header">
-          <div class="resume-header-content" data-aos="fade-right" data-aos-delay="200">
+      <div class="resume-container" data-aos="fade-up" data-aos-duration="600"> <div class="resume-header">
+          <div class="resume-header-content" data-aos="fade-right" data-aos-delay="100">
             <h1 class="resume-name">Mo Saeidi</h1>
             <p class="resume-title">Robotics & Control Engineer</p>
 
-    
             <div class="contact-info">
                 <div class="contact-item">
                   <div class="contact-icon"><i class="fas fa-map-marker-alt"></i></div>
@@ -1613,615 +1307,458 @@
                   <a href="https://zexerv.github.io/" target="_blank" class="contact-text">zexerv.github.io</a>
                 </div>
               </div>
-            
+
           </div>
-          <div class="profile-image-container" data-aos="fade-left" data-aos-delay="300">
+          <div class="profile-image-container" data-aos="fade-left" data-aos-delay="200">
             <img src="assets/images/profile-photo.jpg" alt="Mo Saeidi" class="profile-image">
           </div>
         </div>
-        
-        <!-- Summary Section -->
-        <div class="summary-section" data-aos="fade-up" data-aos-delay="400">
+
+        <div class="summary-section" data-aos="fade-up" data-aos-delay="300">
           <p>I'm a robotics engineer with a passion for integrating control theory with reinforcement learning. My interests lie in engineering innovations that simplify and enhance everyday life, with a strong focus on robotics, automation, control, and machine learning. Through my experience as a research assistant in various university laboratories during my BSc and MSc, I've developed a solid foundation in these fields. Now, as I prepare to enter the workforce, I'm eager to apply my knowledge and take a meaningful step toward making society a better place.</p>
         </div>
-        
-        <!-- Main Content -->
+
         <div class="resume-body">
-          <!-- Education Section -->
           <div class="resume-section" data-aos="fade-up">
             <h2 class="section-title"><i class="fas fa-user-graduate"></i> Education</h2>
-            
-
 
             <div class="education-item" data-aos="fade-up" data-aos-delay="100">
                 <div class="education-header">
+                  <div class="header-main-content">
                     <h3 class="education-degree">M.Sc. in Automation and Control Engineering</h3>
-                    <div class="logo-date-container">
-                      <div class="logo-container">
-                        <img src="assets/images/logos/polimi.png" alt="POLIMI Logo" class="education-logo">
-                      </div>
-                      <span class="education-date">2023 - Present</span>
+                    <p class="education-institution">Polytechnic University of Milan (POLIMI)</p>
+                    <p class="education-location"><i class="fas fa-map-marker-alt"></i>Milan, Italy</p>
+                  </div>
+                  <div class="logo-date-container">
+                    <div class="logo-container">
+                      <img src="assets/images/logos/polimi.png" alt="POLIMI Logo" class="education-logo">
                     </div>
+                    <span class="education-date">2023 - Present</span>
+                  </div>
                 </div>
-              <p class="education-institution">Polytechnic University of Milan (POLIMI), Italy</p>
-              <p>GPA: 27.11/30</p>
-              <p><strong>Thesis:</strong> Learning Policies from Human Demonstrations for Testing Optimization</p>
-            </div>
-            
-            <div class="education-item" data-aos="fade-up" data-aos-delay="150">
+                <div class="education-description"> <p>GPA: 27.11/30</p>
+                    <p><strong>Thesis:</strong> Learning Policies from Human Demonstrations for Testing Optimization</p>
+                </div>
+              </div>
+
+              <div class="education-item" data-aos="fade-up" data-aos-delay="150">
                 <div class="education-header">
-                    <h3 class="education-degree">B.Sc. in Mechanical Engineering</h3>
-                    <div class="logo-date-container">
-                      <div class="logo-container">
-                        <img src="assets/images/logos/kntu.png" alt="KNTU Logo" class="education-logo">
-                      </div>
-                      <span class="education-date">2017 - 2022</span>
+                    <div class="header-main-content">
+                        <h3 class="education-degree">B.Sc. in Mechanical Engineering</h3>
+                        <p class="education-institution">K. N. Toosi University of Technology (KNTU)</p>
+                        <p class="education-location"><i class="fas fa-map-marker-alt"></i>Tehran, Iran</p>
+                     </div>
+                  <div class="logo-date-container">
+                    <div class="logo-container">
+                      <img src="assets/images/logos/kntu.png" alt="KNTU Logo" class="education-logo">
                     </div>
+                    <span class="education-date">2017 - 2022</span>
+                  </div>
                 </div>
-              <p class="education-institution">KNTU University, Tehran, Iran</p>
-              <p>GPA: 3.88/4.0</p>
-              <p><strong>Thesis:</strong> Pattern Recognition of Unbalanced Rigid Rotor Bearing Forces</p>
-            </div>
+                 <div class="education-description">
+                    <p>GPA: 3.88/4.0 (Top 3% Graduate)</p>
+                    <p><strong>Thesis:</strong> Pattern Recognition of Unbalanced Rigid Rotor Bearing Forces</p>
+                 </div>
+              </div>
           </div>
-          
-          <!-- Publications Section -->
+
           <div class="resume-section" data-aos="fade-up">
             <h2 class="section-title"><i class="fas fa-file-alt"></i> Publications</h2>
-            
+
             <div class="publication-item" data-aos="fade-up" data-aos-delay="100">
+              <div class="publication-title">Nonlinear Tracking Control Algorithm for Dynamical Output Systems Manipulated by the Hardly Constrained Oscillatory Actuator</div>
               <div class="publication-authors">Homaeinezhad, M. R. & Saeidi Mostaghim, M. H.</div>
-              <div class="publication-title">"Nonlinear Tracking Control Algorithm for Dynamical Output Systems Manipulated by the Hardly Constrained Oscillatory Actuator"</div>
               <div class="publication-journal">Structural Control and Health Monitoring</div>
               <span class="publication-year">2023</span>
               <div>
                 <a href="https://onlinelibrary.wiley.com/doi/full/10.1155/2023/3799011" target="_blank" class="publication-link" data-tippy-content="<img src='assets/images/papers/paper1.jpg'><div class='paper-tooltip-content'>First page preview</div>">View Paper <i class="fas fa-external-link-alt"></i></a>
               </div>
             </div>
-            
+
             <div class="publication-item" data-aos="fade-up" data-aos-delay="150">
+              <div class="publication-title">Synthetic Lyapunov Stabilization Technique for Designing Actuation-Constrained Multi-Input Multi-Output Control Systems</div>
               <div class="publication-authors">Homaeinezhad, M. R. & Saeidi Mostaghim, M. H.</div>
-              <div class="publication-title">"Synthetic Lyapunov Stabilization Technique for Designing Actuation-Constrained Multi-Input Multi-Output Control Systems"</div>
               <div class="publication-journal">Journal of the Franklin Institute</div>
               <span class="publication-year">2022</span>
               <div>
                 <a href="https://www.sciencedirect.com/science/article/pii/S0016003222004094" target="_blank" class="publication-link" data-tippy-content="<img src='assets/images/papers/paper2.jpg'><div class='paper-tooltip-content'>First page preview</div>">View Paper <i class="fas fa-external-link-alt"></i></a>
               </div>
             </div>
-            
+
             <div class="publication-item" data-aos="fade-up" data-aos-delay="200">
-              <div class="publication-authors">Homaeinezhad, M. R. & Saeidi Mostaghim, M. H.</div>
-              <div class="publication-title">"Constrained Control of Moving Base Robotic System with Cooperative Arms"</div>
-              <div class="publication-journal">30th Annual International Conference of the Iranian Association of Mechanical Engineers, Tehran, Iran</div>
+              <div class="publication-title">Constrained Control of Moving Base Robotic System with Cooperative Arms</div>
+               <div class="publication-authors">Homaeinezhad, M. R. & Saeidi Mostaghim, M. H.</div>
+              <div class="publication-journal">30th Annual International Conference of the Iranian Association of Mechanical Engineers (ISME 2022), Tehran, Iran</div>
               <span class="publication-year">2022</span>
             </div>
-            
+
             <div class="publication-item" data-aos="fade-up" data-aos-delay="250">
-              <div class="publication-authors">Homaeinezhad, M. R. & Saeidi Mostaghim, M. H.</div>
-              <div class="publication-title">"Pattern Recognition of Unbalanced Rigid Rotor Bearing Forces"</div>
-              <div class="publication-journal">Amirkabir Journal of Mechanical Engineering, 54(12), pp. 3591-3606</div>
-              <span class="publication-year">2022</span>
+               <div class="publication-title">Pattern Recognition of Unbalanced Rigid Rotor Bearing Forces</div>
+               <div class="publication-authors">Homaeinezhad, M. R. & Saeidi Mostaghim, M. H.</div>
+               <div class="publication-journal">Amirkabir Journal of Mechanical Engineering, 54(12), pp. 3591-3606</div>
+               <span class="publication-year">2022</span>
               <div>
                 <a href="https://mej.aut.ac.ir/article_4852_en.html?lang=en" target="_blank" class="publication-link" data-tippy-content="<img src='assets/images/papers/paper3.jpg'><div class='paper-tooltip-content'>First page preview</div>">View Paper <i class="fas fa-external-link-alt"></i></a>
               </div>
             </div>
-            
+
             <div class="publication-item" data-aos="fade-up" data-aos-delay="300">
-              <div class="publication-authors">Homaeinezhad, M. R. & Saeidi Mostaghim, M. H.</div>
-              <div class="publication-title">"Pattern Recognition of Unbalanced Rigid Rotor Bearing Forces"</div>
-              <div class="publication-journal">18th National Conference and 7th International Conference on Manufacturing Engineering in Iran (ICME 2022)</div>
-              <span class="publication-year">2022</span>
+                 <div class="publication-title">Pattern Recognition of Unbalanced Rigid Rotor Bearing Forces (Conference)</div>
+                 <div class="publication-authors">Homaeinezhad, M. R. & Saeidi Mostaghim, M. H.</div>
+                 <div class="publication-journal">18th National & 7th International Conference on Manufacturing Engineering (ICME 2022)</div>
+                 <span class="publication-year">2022</span>
             </div>
           </div>
-          
-          <!-- Experience Section -->
+
           <div class="resume-section full-width" data-aos="fade-up">
             <h2 class="section-title"><i class="fas fa-briefcase"></i> Experience</h2>
-            
+
             <div class="experience-item" data-aos="fade-up" data-aos-delay="100">
                 <div class="experience-header">
-                    <h3 class="experience-title">Researcher, MERLIN Laboratory - POLIMI</h3>
-                    <div class="logo-date-container">
-                      <div class="logo-container">
-                        <img src="assets/images/logos/merlin.png" alt="MERLIN Lab Logo" class="experience-logo">
-                      </div>
-                      <span class="experience-date">October 2024 - Present</span>
+                  <div class="header-main-content">
+                    <h3 class="experience-title">Researcher (M.Sc. Thesis)</h3>
+                    <p class="experience-company">MERLIN Laboratory, Polytechnic University of Milan</p>
+                     <p class="experience-location"><i class="fas fa-map-marker-alt"></i>Milan, Italy</p>
+                  </div>
+                  <div class="logo-date-container">
+                    <div class="logo-container">
+                      <img src="assets/images/logos/merlin.png" alt="MERLIN Lab Logo" class="experience-logo">
                     </div>
+                    <span class="experience-date">Oct 2024 - Present</span>
+                  </div>
                 </div>
-              <p class="experience-company">Milan, Italy</p>
-              <p class="experience-description">
-                Conducting my master's thesis (ARTO Project): Applying a PbD algorithm on a UR5e robot, generalizing human demonstrations and extracting patterns while satisfying constraints. The skill set is manipulating cockpit interfaces (levers, thrusters, buttons, switches and etc.)
-              </p>
-            </div>
-            
+                <div class="experience-description">
+                  <p>Conducting master's thesis (ARTO Project): Applying a Programming-by-Demonstration (PbD) algorithm on a UR5e robot for cockpit interface manipulation (levers, buttons, etc.), focusing on generalizing human demonstrations and constraint satisfaction.</p>
+                </div>
+              </div>
+
+
             <div class="experience-item" data-aos="fade-up" data-aos-delay="150">
               <div class="experience-header">
-                <h3 class="experience-title">Researcher, AIRLAB Drone Team - POLIMI</h3>
+                 <div class="header-main-content">
+                    <h3 class="experience-title">Researcher</h3>
+                    <p class="experience-company">AIRLAB Drone Team, Polytechnic University of Milan</p>
+                    <p class="experience-location"><i class="fas fa-map-marker-alt"></i>Milan, Italy</p>
+                 </div>
                 <div class="logo-date-container">
-                    <div class="logo-container">
-                      <img src="assets/images/logos/airlab.png" alt="AIRLAB Logo" class="experience-logo">
-                    </div>
-                    <span class="experience-date">April 2024 - July 2024</span>
+                  <div class="logo-container">
+                    <img src="assets/images/logos/airlab.png" alt="AIRLAB Logo" class="experience-logo">
                   </div>
+                  <span class="experience-date">Apr 2024 - Jul 2024</span>
+                </div>
               </div>
-              <p class="experience-company">Milan, Italy</p>
-              <p class="experience-description">
-                ROS1 to ROS2 translation of navigation and filtering nodes. Developed a high-level navigation (A* algorithm) from scratch in a limited time. Drone Contest of 2023 held in Torino for three days, held by Leonardo.
-              </p>
+              <div class="experience-description">
+                <p>Translated ROS1 navigation and filtering nodes to ROS2. Developed a high-level A* path planning algorithm under time constraints for the Leonardo Drone Contest 2023 (held in Torino).</p>
+              </div>
             </div>
-            
+
             <div class="experience-item" data-aos="fade-up" data-aos-delay="200">
               <div class="experience-header">
-                <h3 class="experience-title">Researcher, FALCO Project - AEA Association - POLIMI</h3>
-                <span class="experience-date">December 2023 - July 2024</span>
+                <div class="header-main-content">
+                    <h3 class="experience-title">Researcher (FALCO Project)</h3>
+                    <p class="experience-company">AEA Student Association, Polytechnic University of Milan</p>
+                    <p class="experience-location"><i class="fas fa-map-marker-alt"></i>Milan, Italy</p>
+                </div>
+                <span class="experience-date">Dec 2023 - Jul 2024</span>
               </div>
-              <p class="experience-company">Milan, Italy</p>
-              <p class="experience-description">
-                Polimi's Automation and Control Association: Weekly meeting in order to discuss FALCO project: discussions regarding design of a visual odometry eliminating the need of expensive sensors (high-res GPS, MoCap).
-              </p>
+              <div class="experience-description">
+                <p>Contributed to weekly meetings for the FALCO project within Polimi's Automation and Control Association, discussing the design of visual odometry systems to reduce reliance on expensive sensors (e.g., high-res GPS, MoCap).</p>
+              </div>
             </div>
-            
+
             <div class="experience-item" data-aos="fade-up" data-aos-delay="250">
               <div class="experience-header">
-                <h3 class="experience-title">Research Assistant, Mechatronics Laboratory - KNTU</h3>
+                 <div class="header-main-content">
+                    <h3 class="experience-title">Research Assistant</h3>
+                    <p class="experience-company">Mechatronics Laboratory, K. N. Toosi University of Technology</p>
+                    <p class="experience-location"><i class="fas fa-map-marker-alt"></i>Tehran, Iran</p>
+                </div>
                 <span class="experience-date">2021 - 2022</span>
               </div>
-              <p class="experience-company">Tehran, Iran</p>
-              <p class="experience-description">
-                Participated in Autonomous Emergency Braking system: computer vision team. Benchmarking monocular depth estimation algorithms, object detection and fusing them. Participated in <em>ChessTrack</em> project: gathering and labeling more than 10000 images of chess pieces and training a YOLO; the program used in chess tournaments.
-              </p>
+              <div class="experience-description">
+                  <ul>
+                      <li>Participated in the Autonomous Emergency Braking (AEB) system project (Computer Vision team): Benchmarked monocular depth estimation algorithms, integrated object detection, and fused sensor data.</li>
+                      <li>Contributed to the <em>ChessTrack</em> project: Gathered and labeled over 10,000 images of chess pieces, trained a YOLO object detection model for use in chess tournaments.</li>
+                  </ul>
+              </div>
             </div>
-            
+
             <div class="experience-item" data-aos="fade-up" data-aos-delay="300">
               <div class="experience-header">
-                <h3 class="experience-title">Research Assistant, Vibration and Control Laboratory - KNTU</h3>
-                <span class="experience-date">2019 - 2022</span>
+                 <div class="header-main-content">
+                     <h3 class="experience-title">Research Assistant (B.Sc. Thesis & Publications)</h3>
+                     <p class="experience-company">Vibration and Control Laboratory, K. N. Toosi University of Technology</p>
+                     <p class="experience-location"><i class="fas fa-map-marker-alt"></i>Tehran, Iran</p>
+                 </div>
+                  <span class="experience-date">2019 - 2022</span>
               </div>
-              <p class="experience-company">Tehran, Iran</p>
-              <p class="experience-description">
-                Conducted my BSc thesis, simulating a rigid rotor with imbalance disturbution of mass and developing a fault diagnosis NN to detect the where to place the balancing masses, and ultimately reducing the number of required snesors to 2. Further Published 3 journal articles and 2 conference papers in the fields of control, vibration analysis and condition monitoring.
-              </p>
+              <div class="experience-description">
+                <p>Conducted B.Sc. thesis involving simulation of a rigid rotor with mass imbalance and development of a neural network-based fault diagnosis system to identify optimal balancing mass placement, reducing required sensors. Authored/co-authored 3 journal articles and 2 conference papers in control, vibration analysis, and condition monitoring.</p>
+              </div>
             </div>
-            
+
             <div class="experience-item" data-aos="fade-up" data-aos-delay="350">
               <div class="experience-header">
-                <h3 class="experience-title">Junior Graphic Designer (Volunteer), Student Science Community - KNTU</h3>
-                <span class="experience-date">2018 - 2020</span>
+                 <div class="header-main-content">
+                    <h3 class="experience-title">Junior Graphic Designer (Volunteer)</h3>
+                    <p class="experience-company">Student Science Community, K. N. Toosi University of Technology</p>
+                    <p class="experience-location"><i class="fas fa-map-marker-alt"></i>Tehran, Iran</p>
+                 </div>
+                 <span class="experience-date">2018 - 2020</span>
               </div>
-              <p class="experience-company">Tehran, Iran</p>
-              <p class="experience-description">
-                Designed promotional materials for student events using Adobe Illustrator and Photoshop.
-              </p>
+              <div class="experience-description">
+                <p>Designed promotional materials (posters, flyers, social media graphics) for student events and workshops using Adobe Illustrator and Photoshop.</p>
+              </div>
             </div>
           </div>
-          
-          <!-- Projects Section -->
+
           <div class="resume-section" data-aos="fade-up">
             <h2 class="section-title"><i class="fas fa-project-diagram"></i> Selected Projects</h2>
-            
-            <div class="project-item pulse-effect" data-aos="fade-up" data-aos-delay="100">
+
+            <div class="project-item" data-aos="fade-up" data-aos-delay="100">
               <div class="project-header">
-                <h3 class="project-title">Reinforcement Learning for Robot Path Planning</h3>
-                <span class="project-date">2025</span>
+                 <div class="header-main-content">
+                    <h3 class="project-title">Reinforcement Learning for Robot Path Planning</h3>
+                 </div>
+                <span class="project-date">2025 (Est.)</span>
               </div>
-              <p class="project-description">
-                Developed RL-based planning algorithm with custom reward functions for obstacle avoidance. Implemented CNN preprocessing for voxelized obstacles. Formulated manipulability metrics to avoid singularities.
-              </p>
-            </div>
-            
-            <div class="project-item shimmer-effect" data-aos="fade-up" data-aos-delay="150">
-              <div class="project-header">
-                <h3 class="project-title">Hand Pose Estimation with IMU Sensor Fusion</h3>
-                <span class="project-date">2025</span>
+              <div class="project-description">
+                <p>Developed RL-based planning algorithm with custom reward functions for obstacle avoidance. Implemented CNN preprocessing for voxelized obstacles. Formulated manipulability metrics to avoid singularities.</p>
               </div>
-              <p class="project-description">
-                Integrated MPU6050 accelerometer network for hand motion tracking. Developed quaternion estimation algorithms for spatial orientation. Implemented optimization-based pose estimation with kinematic constraints. Engineered 7-DOF hand model addressing 6-DOF correspondence problem.
-              </p>
             </div>
-            
-            <div class="project-item glow-effect" data-aos="fade-up" data-aos-delay="200">
+
+            <div class="project-item" data-aos="fade-up" data-aos-delay="150">
               <div class="project-header">
-                <h3 class="project-title">Computer-Aided Manufacturing Optimization</h3>
+                 <div class="header-main-content">
+                    <h3 class="project-title">Hand Pose Estimation with IMU Sensor Fusion</h3>
+                 </div>
+                 <span class="project-date">2025 (Est.)</span>
+              </div>
+              <div class="project-description">
+                <p>Integrated MPU6050 accelerometer network for hand motion tracking. Developed quaternion estimation algorithms for spatial orientation. Implemented optimization-based pose estimation with kinematic constraints. Engineered 7-DOF hand model addressing 6-DOF correspondence problem.</p>
+              </div>
+            </div>
+
+            <div class="project-item" data-aos="fade-up" data-aos-delay="200">
+              <div class="project-header">
+                <div class="header-main-content">
+                    <h3 class="project-title">Computer-Aided Manufacturing Optimization</h3>
+                </div>
                 <span class="project-date">2024</span>
               </div>
-              <p class="project-description">
-                Optimized CNC machining processes in Fusion 360 for tool wear and production time. Analyzed manufacturing manuals for optimal tooling configurations.
-              </p>
-            </div>
-            
-            <div class="project-item shimmer-effect" data-aos="fade-up" data-aos-delay="250">
-              <div class="project-header">
-                <h3 class="project-title">HVAC System Modeling and Control</h3>
-                <span class="project-date">2024</span>
+              <div class="project-description">
+                <p>Optimized CNC machining processes in Fusion 360, focusing on reducing tool wear and production time. Analyzed manufacturing manuals to determine optimal tooling configurations and machining strategies.</p>
               </div>
-              <p class="project-description">
-                Applied system identification for HVAC dynamics modeling. Implemented Model Predictive Control using SQP. Compared ODE modeling with neural network techniques (prediction vs real models).
-              </p>
+            </div>
+
+            <div class="project-item" data-aos="fade-up" data-aos-delay="250">
+              <div class="project-header">
+                <div class="header-main-content">
+                    <h3 class="project-title">HVAC System Modeling and Control</h3>
+                </div>
+                 <span class="project-date">2024</span>
+              </div>
+              <div class="project-description">
+                <p>Applied system identification techniques for modeling HVAC dynamics. Implemented Model Predictive Control (MPC) strategies using Sequential Quadratic Programming (SQP). Compared traditional ODE modeling approaches with neural network-based predictive models.</p>
+              </div>
             </div>
           </div>
-          
-          <!-- Certificates Section -->
+
           <div class="resume-section" data-aos="fade-up">
-            <h2 class="section-title"><i class="fas fa-certificate"></i> Certificates</h2>
-            
-            <div class="certificate-item float-effect" data-aos="fade-up" data-aos-delay="100">
-              <h3 class="certificate-title">Neural Networks and Deep Learning</h3>
-              <p class="certificate-issuer">DeepLearning.AI</p>
-              <p class="certificate-date">August 2021</p>
-              <a href="https://www.coursera.org/account/accomplishments/verify/86X8V8RP466C" target="_blank" class="certificate-link">View Certificate <i class="fas fa-external-link-alt"></i></a>
-            </div>
-            
-            <div class="certificate-item float-effect" data-aos="fade-up" data-aos-delay="150">
-              <h3 class="certificate-title">Machine Learning</h3>
-              <p class="certificate-issuer">Stanford University</p>
-              <p class="certificate-date">August 2021</p>
-              <a href="https://www.coursera.org/account/accomplishments/verify/5PX9G6LYD442" target="_blank" class="certificate-link">View Certificate <i class="fas fa-external-link-alt"></i></a>
-            </div>
-            
-            <div class="certificate-item float-effect" data-aos="fade-up" data-aos-delay="200">
-              <h3 class="certificate-title">Fundamentals of Reinforcement Learning</h3>
-              <p class="certificate-issuer">University of Alberta</p>
-              <p class="certificate-date">November 2021</p>
-              <a href="https://www.coursera.org/account/accomplishments/verify/ZRC5JYH9A3GN" target="_blank" class="certificate-link">View Certificate <i class="fas fa-external-link-alt"></i></a>
-            </div>
-          </div>
-          
-          <!-- Achievements Section -->
+             <h2 class="section-title"><i class="fas fa-certificate"></i> Certificates</h2>
+
+             <div class="certificate-item" data-aos="fade-up" data-aos-delay="100">
+               <h3 class="certificate-title">Neural Networks and Deep Learning</h3>
+               <p class="certificate-issuer">DeepLearning.AI (Coursera)</p>
+               <p class="certificate-date">August 2021</p>
+               <a href="https://www.coursera.org/account/accomplishments/verify/86X8V8RP466C" target="_blank" class="certificate-link">View Certificate <i class="fas fa-external-link-alt"></i></a>
+             </div>
+
+             <div class="certificate-item" data-aos="fade-up" data-aos-delay="150">
+               <h3 class="certificate-title">Machine Learning</h3>
+               <p class="certificate-issuer">Stanford University (Coursera)</p>
+               <p class="certificate-date">August 2021</p>
+               <a href="https://www.coursera.org/account/accomplishments/verify/5PX9G6LYD442" target="_blank" class="certificate-link">View Certificate <i class="fas fa-external-link-alt"></i></a>
+             </div>
+
+             <div class="certificate-item" data-aos="fade-up" data-aos-delay="200">
+               <h3 class="certificate-title">Fundamentals of Reinforcement Learning</h3>
+               <p class="certificate-issuer">University of Alberta (Coursera)</p>
+               <p class="certificate-date">November 2021</p>
+               <a href="https://www.coursera.org/account/accomplishments/verify/ZRC5JYH9A3GN" target="_blank" class="certificate-link">View Certificate <i class="fas fa-external-link-alt"></i></a>
+             </div>
+           </div>
+
+
           <div class="resume-section" data-aos="fade-up">
             <h2 class="section-title"><i class="fas fa-award"></i> Achievements</h2>
-            
+
             <div class="achievement-item" data-aos="fade-up" data-aos-delay="100">
               <h3 class="achievement-title"><i class="fas fa-medal"></i> Top 1% in Konkur National University Entrance Exam</h3>
               <p class="achievement-date">2017</p>
-              <p class="achievement-description">Ranked among the top 1% of participants in Iran's national university entrance examination.</p>
+              <p class="achievement-description">Ranked among the top 1% of over 500,000 participants in Iran's highly competitive national university entrance examination (Mathematics discipline).</p>
             </div>
-            
+
             <div class="achievement-item" data-aos="fade-up" data-aos-delay="150">
               <h3 class="achievement-title"><i class="fas fa-trophy"></i> Second Place, National Egg Drop Competition</h3>
               <p class="achievement-date">2018</p>
-              <p class="achievement-description">Led a team of 4 students to design an innovative impact-resistant enclosure, securing 2nd place among 40 university teams across Iran.</p>
+              <p class="achievement-description">Led a team of 4 students to design and build an innovative impact-resistant enclosure, securing 2nd place among 40 university teams across Iran.</p>
             </div>
-            
+
             <div class="achievement-item" data-aos="fade-up" data-aos-delay="200">
-              <h3 class="achievement-title"><i class="fas fa-star"></i> Top 3% of Graduates, B.Sc. in Mechanical Engineering</h3>
+              <h3 class="achievement-title"><i class="fas fa-star"></i> Top 3% Graduate, B.Sc. Mechanical Engineering</h3>
               <p class="achievement-date">2022</p>
-              <p class="achievement-description">Graduated with distinction in the top 3% of students in the Mechanical Engineering department at KNTU.</p>
+              <p class="achievement-description">Graduated with distinction, ranking academically within the top 3% of the Mechanical Engineering department's graduating class at KNTU.</p>
             </div>
           </div>
-          
-          <!-- Skills Section -->
+
           <div class="resume-section full-width" data-aos="fade-up">
             <h2 class="section-title"><i class="fas fa-cogs"></i> Technical Skills</h2>
-            
+
             <div class="skills-container">
               <div class="skill-category" data-aos="fade-up" data-aos-delay="100">
                 <h4>Robotics & Control</h4>
                 <ul class="skills-list">
-                  <li>
-                    ROS/ROS2
-                    <div class="skill-level">
-                      <div style="--level: 95%"></div>
-                    </div>
-                  </li>
-                  <li>
-                    Motion Planning
-                    <div class="skill-level">
-                      <div style="--level: 90%"></div>
-                    </div>
-                  </li>
-                  <li>
-                    Trajectory Optimization
-                    <div class="skill-level">
-                      <div style="--level: 85%"></div>
-                    </div>
-                  </li>
-                  <li>
-                    Human-Robot Interaction
-                    <div class="skill-level">
-                      <div style="--level: 80%"></div>
-                    </div>
-                  </li>
-                  <li>
-                    Model Predictive Control
-                    <div class="skill-level">
-                      <div style="--level: 90%"></div>
-                    </div>
-                  </li>
-                  <li>
-                    Nonlinear Control
-                    <div class="skill-level">
-                      <div style="--level: 85%"></div>
-                    </div>
-                  </li>
-                  <li>
-                    Optimal Control
-                    <div class="skill-level">
-                      <div style="--level: 80%"></div>
-                    </div>
-                  </li>
-                  <li>
-                    Sensor Fusion
-                    <div class="skill-level">
-                      <div style="--level: 75%"></div>
-                    </div>
-                  </li>
-                  <li>
-                    Kalman Filtering
-                    <div class="skill-level">
-                      <div style="--level: 85%"></div>
-                    </div>
-                  </li>
-                </ul>
+                  <li>ROS/ROS2 <div class="skill-level"><div style="--level: 90%"></div></div></li>
+                  <li>Motion Planning <div class="skill-level"><div style="--level: 90%"></div></div></li>
+                  <li>Trajectory Optimization <div class="skill-level"><div style="--level: 85%"></div></div></li>
+                  <li>Human-Robot Interaction <div class="skill-level"><div style="--level: 80%"></div></div></li>
+                  <li>Model Predictive Control <div class="skill-level"><div style="--level: 90%"></div></div></li>
+                  <li>Nonlinear Control <div class="skill-level"><div style="--level: 85%"></div></div></li>
+                  <li>Optimal Control <div class="skill-level"><div style="--level: 80%"></div></div></li>
+                  <li>Sensor Fusion <div class="skill-level"><div style="--level: 75%"></div></div></li>
+                  <li>Kalman Filtering <div class="skill-level"><div style="--level: 85%"></div></div></li>
+                  <li>**PLC (Siemens S7-1200)** <div class="skill-level"><div style="--level: 80%"></div></div></li> </ul>
               </div>
-              
+
               <div class="skill-category" data-aos="fade-up" data-aos-delay="150">
                 <h4>Software & Programming</h4>
                 <ul class="skills-list">
-                  <li>
-                    Python
-                    <div class="skill-level">
-                      <div style="--level: 95%"></div>
-                    </div>
-                  </li>
-                  <li>
-                    C/C++
-                    <div class="skill-level">
-                      <div style="--level: 85%"></div>
-                    </div>
-                  </li>
-                  <li>
-                    MATLAB/Simulink
-                    <div class="skill-level">
-                      <div style="--level: 90%"></div>
-                    </div>
-                  </li>
-                  <li>
-                    CasADi
-                    <div class="skill-level">
-                      <div style="--level: 75%"></div>
-                    </div>
-                  </li>
-                  <li>
-                    TensorFlow/PyTorch
-                    <div class="skill-level">
-                      <div style="--level: 80%"></div>
-                    </div>
-                  </li>
-                  <li>
-                    Linux/Git
-                    <div class="skill-level">
-                      <div style="--level: 85%"></div>
-                    </div>
-                  </li>
-                  <li>
-                    Data Analysis (R, Pandas)
-                    <div class="skill-level">
-                      <div style="--level: 80%"></div>
-                    </div>
-                  </li>
-                  <li>
-                    Computer Vision (OpenCV)
-                    <div class="skill-level">
-                      <div style="--level: 75%"></div>
-                    </div>
-                  </li>
-                  <li>
-                    Embedded Systems
-                    <div class="skill-level">
-                      <div style="--level: 70%"></div>
-                    </div>
-                  </li>
-                </ul>
+                  <li>Python <div class="skill-level"><div style="--level: 95%"></div></div></li>
+                  <li>C/C++ <div class="skill-level"><div style="--level: 85%"></div></div></li>
+                  <li>MATLAB/Simulink <div class="skill-level"><div style="--level: 90%"></div></div></li>
+                  <li>CasADi <div class="skill-level"><div style="--level: 75%"></div></div></li>
+                  <li>TensorFlow/PyTorch <div class="skill-level"><div style="--level: 80%"></div></div></li>
+                  <li>Linux/Git <div class="skill-level"><div style="--level: 85%"></div></div></li>
+                  <li>Data Analysis (Pandas) <div class="skill-level"><div style="--level: 80%"></div></div></li> <li>Computer Vision (OpenCV) <div class="skill-level"><div style="--level: 75%"></div></div></li>
+                  <li>**SQL** <div class="skill-level"><div style="--level: 75%"></div></div></li> <li>Embedded Systems (Basic) <div class="skill-level"><div style="--level: 70%"></div></div></li>
+                 </ul>
               </div>
-              
+
               <div class="skill-category" data-aos="fade-up" data-aos-delay="200">
-                <h4>Design & Analysis</h4>
-                <ul class="skills-list">
-                  <li>
-                    SolidWorks
-                    <div class="skill-level">
-                      <div style="--level: 90%"></div>
-                    </div>
-                  </li>
-                  <li>
-                    CATIA
-                    <div class="skill-level">
-                      <div style="--level: 80%"></div>
-                    </div>
-                  </li>
-                  <li>
-                    Fusion 360
-                    <div class="skill-level">
-                      <div style="--level: 85%"></div>
-                    </div>
-                  </li>
-                  <li>
-                    ANSYS
-                    <div class="skill-level">
-                      <div style="--level: 75%"></div>
-                    </div>
-                  </li>
-                  <li>
-                    Fluent
-                    <div class="skill-level">
-                      <div style="--level: 70%"></div>
-                    </div>
-                  </li>
-                  <li>
-                    COMSOL
-                    <div class="skill-level">
-                      <div style="--level: 65%"></div>
-                    </div>
-                  </li>
-                  <li>
-                    Mujoco
-                    <div class="skill-level">
-                      <div style="--level: 80%"></div>
-                    </div>
-                  </li>
-                  <li>
-                    Adobe Illustrator/Photoshop
-                    <div class="skill-level">
-                      <div style="--level: 85%"></div>
-                    </div>
-                  </li>
-                  <li>
-                    Raspberry Pi/Jetson/Arduino
-                    <div class="skill-level">
-                      <div style="--level: 80%"></div>
-                    </div>
-                  </li>
+                <h4>Design & Simulation</h4> <ul class="skills-list">
+                  <li>SolidWorks <div class="skill-level"><div style="--level: 90%"></div></div></li>
+                  <li>CATIA <div class="skill-level"><div style="--level: 80%"></div></div></li>
+                  <li>Fusion 360 (CAD/CAM) <div class="skill-level"><div style="--level: 85%"></div></div></li>
+                  <li>ANSYS (FEA) <div class="skill-level"><div style="--level: 75%"></div></div></li>
+                  <li>ANSYS Fluent (CFD) <div class="skill-level"><div style="--level: 70%"></div></div></li> <li>COMSOL <div class="skill-level"><div style="--level: 65%"></div></div></li>
+                  <li>Mujoco <div class="skill-level"><div style="--level: 80%"></div></div></li>
+                  <li>Adobe Illustrator/Photoshop <div class="skill-level"><div style="--level: 85%"></div></div></li>
+                  <li>Raspberry Pi/Jetson/Arduino <div class="skill-level"><div style="--level: 80%"></div></div></li>
                 </ul>
               </div>
             </div>
           </div>
-          
-          <!-- Languages Section -->
+
           <div class="resume-section full-width" data-aos="fade-up">
             <h2 class="section-title"><i class="fas fa-language"></i> Languages</h2>
-            
+
             <div class="language-items">
               <div class="language-item" data-aos="fade-up" data-aos-delay="100">
                 <span class="language-name">Persian</span>
                 <span class="language-level">Native</span>
               </div>
-              
+
               <div class="language-item" data-aos="fade-up" data-aos-delay="150">
                 <span class="language-name">English</span>
-                <span class="language-level">C2, TOEFL: 113</span>
+                <span class="language-level">Fluent (C2), TOEFL: 113</span>
               </div>
-              
+
               <div class="language-item" data-aos="fade-up" data-aos-delay="200">
                 <span class="language-name">Azerbaijani</span>
-                <span class="language-level">B1</span>
-              </div>
-              
+                <span class="language-level">Conversational (B1)</span> </div>
+
               <div class="language-item" data-aos="fade-up" data-aos-delay="250">
                 <span class="language-name">Italian</span>
-                <span class="language-level">A2</span>
-              </div>
+                <span class="language-level">Basic (A2)</span> </div>
             </div>
           </div>
         </div>
-        
-        <!-- Footer -->
+
         <div class="resume-footer">
-          <p>I hereby consent to the sharing of my CV and the information contained herein with relevant stakeholders within your organization for recruitment purposes.</p>
-        </div>
+          <p>I hereby consent to the processing of my personal data for recruitment purposes.</p> </div>
       </div>
-      
-      <!-- Download Button -->
+
       <div class="resume-actions" data-aos="fade-up">
         <a href="assets/documents/resume.pdf" class="download-btn" download="MoSaeidi_Resume.pdf">
-          <i class="fas fa-download"></i> Download CV
+          <i class="fas fa-download"></i> Download CV (PDF)
         </a>
       </div>
     </main>
 
     <footer>
-      <div class="container">
-        <p>&copy; 2025 MoSa. All rights reserved.</p>
-      </div>
-    </footer>
+       <div class="container">
+         <p>&copy; 2025 Mo Saeidi. All rights reserved.</p> </div>
+     </footer>
   </div>
-  
-  <script src="assets/js/script.js"></script>
-  <script>
 
-// Function to animate skills when they come into view
-const animateSkills = () => {
-    const skills = document.querySelectorAll('.skill-level div');
-    skills.forEach((skill, index) => {
-      setTimeout(() => {
-        const level = skill.style.getPropertyValue('--level');
-        skill.style.width = level || '80%';
-      }, index * 100);
-    });
-  };
-  
-  // Detect when elements are in viewport
-  function isElementInViewport(el) {
-    const rect = el.getBoundingClientRect();
-    return (
-      rect.top >= 0 &&
-      rect.left >= 0 &&
-      rect.bottom <= (window.innerHeight || document.documentElement.clientHeight) &&
-      rect.right <= (window.innerWidth || document.documentElement.clientWidth)
-    );
-  }
-  
-  // Enhanced tooltip configuration
-  document.addEventListener('DOMContentLoaded', function() {
-    // Initialize tooltips with improved settings
-    tippy('[data-tippy-content]', {
-      allowHTML: true,
-      placement: 'right',
-      animation: 'scale',
-      theme: 'light',
-      maxWidth: 250,
-      interactive: true,
-      arrow: true,
-      class: 'paper-tooltip',
-      appendTo: document.body,
-      zIndex: 9999
-    });
-  
-    // Add hover animation to section titles
-    const sectionTitles = document.querySelectorAll('.section-title');
-    sectionTitles.forEach(title => {
-      title.addEventListener('mouseenter', () => {
-        title.style.transform = 'translateX(5px)';
+  <script src="assets/js/script.js"></script> <script>
+    // Function to animate skill bars when they become visible (optional)
+    const animateSkillBars = () => {
+      const skillLevels = document.querySelectorAll('.skill-level div');
+      const observer = new IntersectionObserver(entries => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            const level = entry.target.style.getPropertyValue('--level');
+            entry.target.style.width = level || '0%'; // Animate to level
+            observer.unobserve(entry.target); // Stop observing once animated
+          }
+        });
+      }, { threshold: 0.5 }); // Trigger when 50% visible
+
+      skillLevels.forEach(levelDiv => {
+         levelDiv.style.width = '0%'; // Start at 0 width
+         observer.observe(levelDiv);
       });
-      title.addEventListener('mouseleave', () => {
-        title.style.transform = 'translateX(0)';
+    };
+
+
+    document.addEventListener('DOMContentLoaded', function() {
+      // Initialize AOS animations
+      AOS.init({
+        once: true, // Animate only once
+        duration: 500, // Slightly slower animation duration
+        easing: 'ease-out-quad', // Smoother easing
+        // disable: window.innerWidth < 768 // Keep disabling on mobile if preferred
       });
+
+      // Initialize Tippy.js for paper previews
+      tippy('[data-tippy-content]', {
+        allowHTML: true,
+        placement: 'right-start', // Adjusted placement
+        animation: 'scale-subtle', // Smoother animation
+        theme: 'light-border', // Use Tippy's built-in themes
+        maxWidth: 220, // Adjusted max width
+        interactive: true,
+        arrow: true,
+        appendTo: () => document.body, // Ensure it appends correctly
+        zIndex: 9999 // Keep high z-index
+      });
+
+      // Trigger skill bar animation on load/scroll
+      // animateSkillBars(); // Uncomment this line to enable the static skill bar animation
+
+       // Mobile menu toggle (Assuming this is in your script.js, otherwise add here)
+       const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+       const navLinks = document.querySelector('.nav-links');
+       if (mobileMenuBtn && navLinks) {
+            mobileMenuBtn.addEventListener('click', () => {
+                navLinks.classList.toggle('active');
+                mobileMenuBtn.classList.toggle('active');
+            });
+       }
+
     });
-  
-    // Trigger skill animations on scroll
-    window.addEventListener('scroll', () => {
-      const skillSection = document.querySelector('.skills-container');
-      if (skillSection && isElementInViewport(skillSection)) {
-        animateSkills();
-      }
-    });
-  });
-      // Initialize AOS animations with faster speed
-  document.addEventListener('DOMContentLoaded', function() {
-    AOS.init({
-      once: true,
-      duration: 400, // Faster animation duration (was 800)
-      easing: 'ease-out',
-      disable: window.innerWidth < 768 // Disable animations on mobile
-    });
-    
-    // Initialize Tippy.js for paper previews
-    tippy('[data-tippy-content]', {
-      allowHTML: true,
-      placement: 'right',
-      animation: 'scale',
-      theme: 'light',
-      maxWidth: 250,
-      interactive: true,
-      arrow: true,
-      class: 'paper-tooltip'
-    });
-    
-    // Add interactive skill levels
-    const skillItems = document.querySelectorAll('.skills-list li');
-    skillItems.forEach(item => {
-      // Get the actual skill level value from CSS if already set,
-      // or use a default between 70-100
-      let levelBar = item.querySelector('.skill-level div');
-      if (levelBar) {
-        const computedStyle = window.getComputedStyle(levelBar);
-        let currentLevel = computedStyle.getPropertyValue('--level');
-        
-        if (!currentLevel || currentLevel === '') {
-          const skillLevel = Math.floor(Math.random() * 30) + 70; // Random between 70-100
-          levelBar.style.setProperty('--level', `${skillLevel}%`);
-        }
-      }
-    });
-  });
 
   </script>
 </body>
