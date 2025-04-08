@@ -1,221 +1,208 @@
 /* ==========================================================================
-   Button Component Styles
+   Button Component Styles (buttons.css) - DARK THEME UPDATE
    ========================================================================== */
 
 /* Base Button Style */
 .btn {
-    display: inline-flex; /* Use inline-flex for alignment with icons */
+    display: inline-flex;
     align-items: center;
     justify-content: center;
-    gap: var(--space-2); /* 8px gap between icon and text */
-    padding: var(--space-3) var(--space-5); /* 12px 24px - Adjust as needed */
-    border: var(--border-width) solid transparent; /* Start with transparent border */
-    border-radius: var(--border-radius-md); /* 6px rounded corners */
-    font-family: var(--font-family-sans);
-    font-size: var(--font-size-base); /* 16px */
-    font-weight: var(--font-weight-medium); /* 500 */
-    line-height: 1.5; /* Ensure consistent height */
+    gap: var(--space-2, 0.5rem);
+    padding: var(--space-2, 0.5rem) var(--space-4, 1rem); /* Adjusted padding */
+    border: var(--border-width, 1px) solid var(--color-border-primary); /* Default border */
+    border-radius: var(--border-radius-md, 6px);
+    font-family: var(--font-family-sans, sans-serif);
+    font-size: var(--font-size-sm, 0.875rem); /* Slightly smaller base size */
+    font-weight: var(--font-weight-medium, 500);
+    line-height: 1.5;
     text-align: center;
     vertical-align: middle;
     cursor: pointer;
-    text-decoration: none; /* Remove underline from link buttons */
-    white-space: nowrap; /* Prevent wrapping */
-    user-select: none; /* Prevent text selection */
-    transition: background-color var(--transition-fast),
-                border-color var(--transition-fast),
-                color var(--transition-fast),
-                box-shadow var(--transition-fast),
-                transform var(--transition-fast);
+    text-decoration: none;
+    white-space: nowrap;
+    user-select: none;
+    transition: background-color var(--transition-fast, 150ms ease-in-out),
+                border-color var(--transition-fast, 150ms ease-in-out),
+                color var(--transition-fast, 150ms ease-in-out),
+                box-shadow var(--transition-fast, 150ms ease-in-out);
+    /* Default state for dark theme (like secondary) */
+    background-color: #21262d; /* GitHub dark secondary bg */
+    color: var(--color-text-primary); /* Light gray text */
   }
   
-  /* Prevent double borders on buttons inside links */
-  a.btn {
-    text-decoration: none;
-  }
+  a.btn { text-decoration: none; }
   
   /* Focus State (Accessibility) */
   .btn:focus {
-    outline: 2px solid var(--color-accent-primary);
+    outline: 2px solid var(--color-accent-secondary); /* Light blue outline */
     outline-offset: 2px;
+    box-shadow: none; /* Remove other shadows on focus */
   }
-  .btn:focus:not(:focus-visible) {
-    outline: none; /* Remove outline if focus is not keyboard-driven */
-  }
+  .btn:focus:not(:focus-visible) { outline: none; }
   
   /* Hover & Active States */
   .btn:hover {
-    text-decoration: none; /* Ensure no underline on hover */
-    transform: translateY(-2px); /* Subtle lift */
-    box-shadow: 0 4px 8px var(--color-shadow);
+    text-decoration: none;
+    background-color: var(--color-border-primary); /* Slightly lighter gray on hover */
+    border-color: #8b949e; /* GitHub dark secondary hover border */
+    color: var(--color-text-primary);
+    /* Remove transform for more standard button feel */
+    /* transform: translateY(-2px); */
+    /* box-shadow: 0 4px 8px var(--color-shadow-primary); */
   }
   
   .btn:active {
-    transform: translateY(-1px);
-    box-shadow: 0 2px 4px var(--color-shadow);
+    background-color: #2a2f36; /* Slightly darker */
+    border-color: #8b949e;
+    /* transform: translateY(-1px); */
+    /* box-shadow: 0 2px 4px var(--color-shadow-primary); */
   }
   
   /* Disabled State */
   .btn:disabled,
   .btn.disabled {
-    opacity: 0.65;
+    opacity: 0.5;
     cursor: not-allowed;
     box-shadow: none;
     transform: none;
+    background-color: var(--color-bg-secondary); /* Use secondary bg */
+    border-color: var(--color-border-primary);
+    color: var(--color-text-secondary);
   }
   
   /* --- Button Variations --- */
   
-  /* Primary Button (GitHub Blue) */
+  /* Primary Button (GREEN) */
   .btn-primary {
-    background-color: var(--color-accent-primary);
-    color: var(--color-text-inverse);
+    background-color: var(--color-accent-primary); /* Green */
+    color: var(--color-text-inverse); /* White text */
     border-color: var(--color-accent-primary);
+    box-shadow: 0 1px 0 rgba(27, 31, 35, 0.1);
   }
-  
   .btn-primary:hover {
-    background-color: var(--color-text-link-hover); /* Slightly darker blue */
-    border-color: var(--color-text-link-hover);
+    background-color: #2ea043; /* GitHub green hover */
+    border-color: #2ea043;
     color: var(--color-text-inverse);
   }
+  .btn-primary:active {
+     background-color: #2a8f4a; /* GitHub green active */
+     border-color: #2a8f4a;
+  }
+  .btn-primary:disabled, .btn-primary.disabled {
+    background-color: var(--color-accent-primary); /* Keep green but faded */
+    border-color: var(--color-accent-primary);
+    color: rgba(255, 255, 255, 0.7);
+    opacity: 0.6;
+  }
   
-  /* Secondary Button (GitHub Gray) */
+  
+  /* Secondary Button (Default dark theme button style) */
   .btn-secondary {
-    background-color: var(--color-bg-tertiary); /* Light gray background */
-    color: var(--color-text-primary);
-    border-color: var(--color-border-secondary); /* Subtle border */
-    box-shadow: 0 1px 0 rgba(27, 31, 35, 0.04);
+    /* Uses the base .btn styles */
+  }
+  .btn-secondary:disabled, .btn-secondary.disabled {
+     /* Uses base disabled styles */
   }
   
-  .btn-secondary:hover {
-    background-color: #e6ebf1; /* Slightly darker gray */
-    border-color: var(--color-border-secondary);
-    color: var(--color-text-primary);
-  }
-  
-  /* Outline Button */
+  /* Outline Button (Green Outline) */
   .btn-outline {
     background-color: transparent;
-    color: var(--color-text-link);
-    border-color: var(--color-text-link);
+    color: var(--color-accent-primary); /* Green text */
+    border-color: var(--color-accent-primary); /* Green border */
   }
-  
   .btn-outline:hover {
-    background-color: var(--color-text-link);
-    color: var(--color-text-inverse);
-    border-color: var(--color-text-link);
+    background-color: rgba(35, 134, 54, 0.15); /* Subtle green background */
+    border-color: var(--color-accent-primary);
+    color: var(--color-accent-primary);
+  }
+  .btn-outline:active {
+     background-color: rgba(35, 134, 54, 0.2);
+  }
+  .btn-outline:disabled, .btn-outline.disabled {
+    background-color: transparent;
+    border-color: var(--color-border-primary);
+    color: var(--color-text-secondary);
+    opacity: 0.5;
   }
   
-  /* Green Button (e.g., for "Confirm") */
-  .btn-success {
-    background-color: var(--color-accent-secondary);
-    color: var(--color-text-inverse);
-    border-color: var(--color-accent-secondary);
-  }
-  
-  .btn-success:hover {
-    background-color: #259740; /* Darker green */
-    border-color: #259740;
-    color: var(--color-text-inverse);
-  }
-  
-  /* Red Button (e.g., for "Delete") */
+  /* Danger Button (Red) */
   .btn-danger {
-    background-color: var(--color-accent-tertiary);
+    background-color: #da3633; /* GitHub dark danger bg */
     color: var(--color-text-inverse);
-    border-color: var(--color-accent-tertiary);
+    border-color: #da3633;
   }
-  
   .btn-danger:hover {
-    background-color: #cb2431; /* Darker red */
-    border-color: #cb2431;
+    background-color: #f0413d; /* Lighter red hover */
+    border-color: #f0413d;
     color: var(--color-text-inverse);
+  }
+  .btn-danger:active {
+     background-color: #c82a27; /* Darker red active */
+     border-color: #c82a27;
+  }
+  .btn-danger:disabled, .btn-danger.disabled {
+     background-color: #da3633;
+     border-color: #da3633;
+     color: rgba(255, 255, 255, 0.7);
+     opacity: 0.6;
   }
   
   
-  /* Download Button Specific Style (from resume page) */
+  /* Download Button Specific Style */
   .btn-download {
-    /* Inherits from .btn, add specific overrides if needed */
-    /* Example: use primary style */
+    /* Style like primary (green) */
     background-color: var(--color-accent-primary);
     color: var(--color-text-inverse);
     border-color: var(--color-accent-primary);
-    position: relative; /* Needed for pseudo-elements if adding sheen */
-    overflow: hidden; /* Needed for sheen */
+    position: relative;
+    overflow: hidden;
   }
-  
   .btn-download:hover {
-    background-color: var(--color-text-link-hover);
-    border-color: var(--color-text-link-hover);
+    background-color: #2ea043;
+    border-color: #2ea043;
+    color: var(--color-text-inverse);
   }
-  
-  /* Optional: Add sheen effect from original resume style */
+  /* Optional sheen effect - keep if desired */
   .btn-download::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: -100%; /* Start off-screen */
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(120deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+    content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 100%;
+    background: linear-gradient(120deg, transparent, rgba(255, 255, 255, 0.15), transparent);
     transition: left 0.6s ease;
   }
-  
-  .btn-download:hover::before {
-    left: 100%; /* Move across the button */
-  }
+  .btn-download:hover::before { left: 100%; }
   
   
-  /* Filter Button Specific Style (from index page) */
+  /* Filter Button Specific Style */
   .btn-filter {
-    /* Use secondary style */
-    background-color: var(--color-bg-tertiary);
-    color: var(--color-text-primary);
-    border-color: var(--color-border-secondary);
-    box-shadow: 0 1px 0 rgba(27, 31, 35, 0.04);
-    padding: var(--space-2) var(--space-4); /* 8px 16px */
-    font-size: var(--font-size-sm); /* 14px */
+    /* Default uses base .btn style (dark gray) */
+    padding: var(--space-2, 0.5rem) var(--space-4, 1rem);
+    font-size: var(--font-size-sm, 0.875rem);
   }
-  
-  .btn-filter:hover {
-    background-color: #e6ebf1;
-    border-color: var(--color-border-secondary);
-  }
-  
   .btn-filter.active {
+    /* Active state uses green */
     background-color: var(--color-accent-primary);
     color: var(--color-text-inverse);
     border-color: var(--color-accent-primary);
-    box-shadow: inset 0 1px 0 rgba(27, 31, 35, 0.15);
   }
-  .btn-filter.active:hover {
-    background-color: var(--color-text-link-hover);
-    border-color: var(--color-text-link-hover);
+  .btn-filter.active:hover { /* Keep hover consistent with active state */
+    background-color: #2ea043;
+    border-color: #2ea043;
   }
   
-  /* Social Buttons (from contact/index page) */
-  /* Define base social button */
+  
+  /* Social Buttons (Background only) */
+  /* Base .btn provides text color, padding etc. */
   .btn-social {
     color: var(--color-text-inverse);
-    border-width: 0; /* Social buttons usually don't have borders */
+    border-width: 0; /* No border for social */
   }
   .btn-social:hover {
-    color: var(--color-text-inverse); /* Keep text white on hover */
-    opacity: 0.9; /* Slight fade effect */
+    color: var(--color-text-inverse);
+    opacity: 0.9; /* Subtle fade on hover */
+    border-width: 0; /* Ensure no border appears on hover */
   }
-  
-  .btn-linkedin {
-    background-color: #0077b5;
-  }
-  .btn-linkedin:hover { background-color: #005e8b; }
-  
-  .btn-scholar {
-    background-color: #4285F4;
-  }
-  .btn-scholar:hover { background-color: #1a73e8; }
-  
-  .btn-github {
-    background-color: #333; /* Or var(--color-text-primary) */
-  }
-  .btn-github:hover { background-color: #1b1f23; }
-  
-  /* Add others if needed: twitter, email, etc. */
+  .btn-linkedin { background-color: #0A66C2; } /* Updated LinkedIn blue */
+  .btn-linkedin:hover { background-color: #0A66C2; opacity: 0.9; }
+  .btn-scholar { background-color: #4285F4; }
+  .btn-scholar:hover { background-color: #4285F4; opacity: 0.9; }
+  .btn-github { background-color: #333; }
+  .btn-github:hover { background-color: #333; opacity: 0.9; }

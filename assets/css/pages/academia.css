@@ -1,521 +1,167 @@
 /* ==========================================================================
-   Academia Page Specific Styles (pages/academia.css)
+   Academia Page Specific Styles (pages/academia.css) - DARK THEME UPDATE
    ========================================================================== */
 
-/* CHUNK 1 START: Page Hero & Grid Layout */
-
-/* Page Hero Styling (Common style for top banner on subpages) */
+/* --- Page Hero Styling --- */
 .page-hero {
-    /* Example background: Use a subtle gradient or solid color */
-    background: linear-gradient(to right, #eef2f7, #f6f8fa); /* Light blue/gray gradient */
-    /* Or use primary accent: background-color: var(--color-accent-primary); */
-    /* Or use a background image with overlay */
-    /* background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('../images/academia-hero.jpg') center/cover no-repeat; */
-    color: var(--color-text-primary); /* Adjust text color based on background */
-    /* color: var(--color-text-inverse); */
+    /* Use secondary dark bg for hero */
+    background-color: var(--color-bg-secondary);
+    /* Example gradient if preferred:
+    background: linear-gradient(to right, var(--color-bg-secondary), var(--color-bg-primary)); */
+    color: var(--color-text-primary); /* Light text */
     text-align: center;
-    padding: var(--space-7) var(--space-5); /* 48px top/bottom, 24px left/right */
-    margin-bottom: var(--space-7); /* Space below hero */
-    border-bottom: var(--border-width) solid var(--color-border-primary);
+    padding: var(--space-7, 3rem) var(--space-5, 1.5rem);
+    margin-bottom: var(--space-7, 3rem);
+    border-bottom: var(--border-width, 1px) solid var(--color-border-primary); /* Dark theme border */
   }
-  
   .page-hero h1 {
-    font-size: var(--font-size-3xl); /* 40px */
-    margin-bottom: var(--space-3); /* 12px */
-    font-weight: var(--font-weight-bold);
+    font-size: var(--font-size-3xl, 2.5rem);
+    margin-bottom: var(--space-3, 0.75rem);
+    font-weight: var(--font-weight-bold, 700);
+    color: var(--color-text-primary); /* Ensure primary light text */
   }
-  
   .page-hero .hero-subtitle {
-    font-size: var(--font-size-lg); /* 20px */
-    color: var(--color-text-secondary); /* Adjust color based on background */
-    /* color: rgba(255, 255, 255, 0.85); */
+    font-size: var(--font-size-lg, 1.25rem);
+    color: var(--color-text-secondary); /* Muted light gray */
     max-width: 750px;
     margin: 0 auto;
     line-height: 1.6;
   }
   
-  /* Main Content Area Layout */
-  #academia-content {
-   /* Padding is handled by <main> tag styles in layout.css */
-   /* container class handles max-width and horizontal centering/padding */
-  }
+  /* --- Main Content Area Layout --- */
+  #academia-content { /* Padding handled by main */ }
   
-  /* Two-Column Grid Layout */
   .academia-grid {
     display: grid;
-    /* Adjust column ratio: 2fr for main, 1fr for sidebar */
-    grid-template-columns: 2fr 1fr;
-    gap: var(--space-7); /* 48px gap */
+    grid-template-columns: 2fr 1fr; /* Keep 2:1 ratio */
+    gap: var(--space-7, 3rem);
   }
   
-  /* Responsive adjustments for Grid */
-  @media (max-width: 992px) { /* Example breakpoint */
-    .academia-grid {
-      grid-template-columns: 1fr; /* Stack to single column */
-      gap: var(--space-6); /* Reduce gap */
-    }
+  /* --- Main Content Area (.academia-main) --- */
+  .academia-main { /* Optional styles */ }
   
-    /* Ensure sidebar appears below main content when stacked */
-    .academia-sidebar {
-       /* order: 2; */ /* Use if needed, but default source order should work */
-       /* Add margin-top when stacked */
-       margin-top: var(--space-6);
-    }
-  }
-  
-  /* Optional: Adjust hero padding on smaller screens */
-  @media (max-width: 576px) {
-    .page-hero {
-       padding: var(--space-6) var(--space-4);
-    }
-    .page-hero h1 { font-size: var(--font-size-2xl); }
-    .page-hero .hero-subtitle { font-size: var(--font-size-base); }
-  }
-  
-  
-  /* CHUNK 1 END */
-  /* --- Styles for Main Content & Sidebar sections will be added below --- */
-
-  /* CHUNK 2 START: Main Content Area Styling */
-
-/* ==========================================================================
-   2. Main Content Area (.academia-main)
-   ========================================================================== */
-
-/* Optional: Add styles for the .academia-main container itself if needed */
-.academia-main {
-    /* Example: border-right: 1px solid var(--color-border-primary); */
-    /* Example: padding-right: var(--space-7); */
-  }
-  
-  /* Common style for content blocks within the main area */
   .section-block {
-    background: var(--color-bg-primary); /* White background */
-    border-radius: var(--border-radius-md); /* 6px */
-    border: var(--border-width) solid var(--color-border-primary);
-    padding: var(--space-6); /* 32px */
-    margin-bottom: var(--space-6); /* 32px space between blocks */
-    box-shadow: 0 2px 5px var(--color-shadow);
+    background: var(--color-bg-secondary); /* Use secondary dark bg */
+    border-radius: var(--border-radius-md, 6px);
+    border: var(--border-width, 1px) solid var(--color-border-primary);
+    padding: var(--space-6, 2rem);
+    margin-bottom: var(--space-6, 2rem);
+    /* Minimal shadow */
+    box-shadow: 0 1px 3px rgba(0,0,0,0.2);
   }
-  .section-block:last-child {
-    margin-bottom: 0;
-  }
+  .section-block:last-child { margin-bottom: 0; }
   
   .section-block h2 {
-    font-size: var(--font-size-xl); /* 24px */
+    font-size: var(--font-size-xl, 1.5rem);
     color: var(--color-text-primary);
-    margin-bottom: var(--space-5); /* 24px */
-    padding-bottom: var(--space-3); /* 12px */
-    border-bottom: var(--border-width) solid var(--color-border-secondary);
+    margin-bottom: var(--space-5, 1.5rem);
+    padding-bottom: var(--space-3, 0.75rem);
+    border-bottom: var(--border-width, 1px) solid var(--color-border-primary); /* Use theme border */
   }
   
   /* Research Interests Area */
   .research-areas {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); /* Responsive grid */
-    gap: var(--space-5); /* 24px */
-    margin-top: var(--space-5);
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: var(--space-5, 1.5rem);
+    margin-top: var(--space-5, 1.5rem);
   }
-  
   .research-area {
-    padding: var(--space-5); /* 24px */
-    background: var(--color-bg-secondary); /* Light background */
-    border-radius: var(--border-radius-md);
-    border-left: 4px solid var(--color-accent-primary); /* Blue accent border */
+    padding: var(--space-5, 1.5rem);
+    background: var(--color-bg-primary); /* Darker background */
+    border-radius: var(--border-radius-md, 6px);
+    border-left: 4px solid var(--color-accent-primary); /* Green accent border */
   }
-  
   .research-area h3 {
-    font-size: var(--font-size-md); /* 18px */
-    margin-bottom: var(--space-3); /* 12px */
+    font-size: var(--font-size-md, 1.125rem);
+    margin-bottom: var(--space-3, 0.75rem);
     color: var(--color-text-primary);
-    display: flex;
-    align-items: center;
-    gap: var(--space-3); /* 12px */
+    display: flex; align-items: center; gap: var(--space-3, 0.75rem);
   }
-  
   .research-area h3 i {
-    color: var(--color-accent-primary); /* Blue icon */
-    font-size: 1.1em; /* Slightly larger icon */
-    width: 24px; /* Ensure consistent alignment */
-    text-align: center;
+    color: var(--color-accent-primary); /* Green icon */
+    font-size: 1.1em; width: 24px; text-align: center;
   }
-  
   .research-area p {
-    font-size: var(--font-size-sm); /* 14px */
+    font-size: var(--font-size-sm, 0.875rem);
     color: var(--color-text-secondary);
-    line-height: 1.6;
-    margin-bottom: 0; /* Reset bottom margin */
+    line-height: 1.6; margin-bottom: 0;
   }
-  
   
   /* Current Research Project Display */
-  .current-project {
-    margin-bottom: var(--space-6); /* 32px if multiple projects */
-  }
-  .section-block > .current-project:last-child {
-     margin-bottom: 0;
-  }
-  
-  .current-project h3 {
-    font-size: var(--font-size-lg); /* 20px */
-    color: var(--color-text-primary);
-    margin-bottom: var(--space-1); /* 4px */
-  }
-  
-  .project-affiliation {
-    font-style: italic;
-    color: var(--color-text-secondary);
-    margin-bottom: var(--space-1); /* 4px */
-    font-size: var(--font-size-sm); /* 14px */
-  }
-  
-  .project-date {
-    color: var(--color-text-tertiary); /* Muted color */
-    font-size: var(--font-size-xs); /* 12px */
-    margin-bottom: var(--space-4); /* 16px */
-  }
-  
-  .project-content {
-    display: flex;
-    gap: var(--space-6); /* 32px */
-    margin-top: var(--space-4); /* 16px */
-  }
-  
-  .project-image {
-    width: 200px; /* Adjust image width */
-    height: auto;
-    object-fit: cover;
-    border-radius: var(--border-radius-md); /* 6px */
-    border: var(--border-width) solid var(--color-border-primary);
-    flex-shrink: 0; /* Prevent shrinking */
-  }
-  
-  .project-description {
-    flex: 1; /* Take remaining space */
-    font-size: var(--font-size-base); /* 16px */
-    color: var(--color-text-secondary);
-  }
-  
-  .project-description p {
-    margin-bottom: var(--space-3); /* 12px */
-  }
-  
-  .project-description ul {
-    margin: var(--space-3) 0 var(--space-4) var(--space-5); /* Margins & indent */
-    list-style: disc;
-  }
-  
-  .project-description li {
-    margin-bottom: var(--space-2); /* 8px */
-  }
+  .current-project { margin-bottom: var(--space-6, 2rem); }
+  .section-block > .current-project:last-child { margin-bottom: 0; }
+  .current-project h3 { font-size: var(--font-size-lg, 1.25rem); color: var(--color-text-primary); margin-bottom: var(--space-1, 0.25rem); }
+  .project-affiliation { font-style: italic; color: var(--color-text-secondary); margin-bottom: var(--space-1, 0.25rem); font-size: var(--font-size-sm, 0.875rem); }
+  .project-date { color: var(--color-text-secondary); font-size: var(--font-size-xs, 0.75rem); margin-bottom: var(--space-4, 1rem); }
+  .project-content { display: flex; gap: var(--space-6, 2rem); margin-top: var(--space-4, 1rem); }
+  .project-image { width: 200px; height: auto; object-fit: cover; border-radius: var(--border-radius-md, 6px); border: var(--border-width, 1px) solid var(--color-border-primary); flex-shrink: 0; }
+  .project-description { flex: 1; font-size: var(--font-size-base, 1rem); color: var(--color-text-secondary); }
+  .project-description p { margin-bottom: var(--space-3, 0.75rem); color: var(--color-text-secondary); }
+  .project-description ul { margin: var(--space-3, 0.75rem) 0 var(--space-4, 1rem) var(--space-5, 1.5rem); list-style: disc; color: var(--color-text-secondary); }
+  .project-description li { margin-bottom: var(--space-2, 0.5rem); }
+  .project-description strong { color: var(--color-text-primary); font-weight: var(--font-weight-medium, 500); }
   
   
   /* Publications List */
-  .publications-list {
-    /* Container for publication items */
-  }
+  .publications-list { /* Container */ }
+  .publication-item { margin-bottom: var(--space-5, 1.5rem); }
+  .publication-item:last-child { margin-bottom: 0; }
+  .publication-item h3 { font-size: var(--font-size-md, 1.125rem); color: var(--color-text-secondary); margin-bottom: var(--space-4, 1rem); padding-bottom: var(--space-2, 0.5rem); border-bottom: 1px dashed var(--color-border-primary); }
+  .publication { margin-bottom: var(--space-5, 1.5rem); padding-left: var(--space-4, 1rem); border-left: 3px solid var(--color-border-primary); transition: border-left-color var(--transition-fast, 150ms ease-in-out); }
+  .publication:last-child { margin-bottom: 0; }
+  .publication:hover { border-left-color: var(--color-accent-primary); } /* Green hover */
+  .publication-authors { margin-bottom: var(--space-1, 0.25rem); color: var(--color-text-secondary); font-size: var(--font-size-sm, 0.875rem); }
+  .publication-title { font-weight: var(--font-weight-semibold, 600); margin-bottom: var(--space-1, 0.25rem); font-size: var(--font-size-base, 1rem); line-height: 1.4; color: var(--color-text-primary); }
+  .publication-journal { font-style: italic; margin-bottom: var(--space-2, 0.5rem); color: var(--color-text-secondary); font-size: var(--font-size-sm, 0.875rem); }
+  .publication-links { display: flex; flex-wrap: wrap; gap: var(--space-4, 1rem); font-size: var(--font-size-sm, 0.875rem); margin-top: var(--space-2, 0.5rem); }
+  .publication-links a { display: inline-flex; align-items: center; gap: var(--space-1, 0.25rem); color: var(--color-link); font-weight: var(--font-weight-medium, 500); }
+  .publication-links a:hover { color: var(--color-link); text-decoration: underline; }
+  .publication-links a i { font-size: 0.85em; }
+  .publication-abstract-toggle { cursor: pointer; }
+  .publication-abstract { background: var(--color-bg-primary); padding: var(--space-4, 1rem); border-radius: var(--border-radius-md, 6px); margin-top: var(--space-3, 0.75rem); display: none; font-size: var(--font-size-sm, 0.875rem); color: var(--color-text-secondary); border: 1px solid var(--color-border-primary); }
+  .publication-abstract.show { display: block; }
   
-  .publication-item {
-    margin-bottom: var(--space-5); /* 24px space between types (Journal/Conf) */
-  }
-  .publication-item:last-child {
-    margin-bottom: 0;
-  }
+  /* --- Sidebar Area (.academia-sidebar) --- */
+  .academia-sidebar { position: sticky; top: calc(var(--space-7, 3rem) + 70px); align-self: start; }
   
-  .publication-item h3 { /* e.g., "Journal Articles" heading */
-    font-size: var(--font-size-md); /* 18px */
-    color: var(--color-text-secondary);
-    margin-bottom: var(--space-4); /* 16px */
-    padding-bottom: var(--space-2); /* 8px */
-    border-bottom: 1px dashed var(--color-border-secondary);
-  }
+  .sidebar-block { background: var(--color-bg-secondary); border-radius: var(--border-radius-md, 6px); border: var(--border-width, 1px) solid var(--color-border-primary); padding: var(--space-5, 1.5rem); margin-bottom: var(--space-5, 1.5rem); box-shadow: 0 1px 3px rgba(0,0,0,0.2); }
+  .sidebar-block:last-child { margin-bottom: 0; }
+  .sidebar-block h3 { font-size: var(--font-size-md, 1.125rem); font-weight: var(--font-weight-semibold, 600); color: var(--color-text-primary); margin-bottom: var(--space-4, 1rem); padding-bottom: var(--space-2, 0.5rem); border-bottom: 1px solid var(--color-border-primary); }
   
-  /* Individual Publication Entry */
-  .publication {
-    margin-bottom: var(--space-5); /* 24px */
-    padding-left: var(--space-4); /* 16px indent */
-    border-left: 3px solid var(--color-border-secondary); /* Subtle left border */
-    transition: border-left-color var(--transition-fast);
-  }
-  .publication:last-child {
-    margin-bottom: 0;
-  }
+  /* Profile Block */
+  .profile-block { text-align: center; }
+  .profile-block .profile-image { width: 120px; height: 120px; border-radius: 50%; object-fit: cover; margin: 0 auto var(--space-4, 1rem); border: 3px solid var(--color-bg-secondary); /* Match card bg */ box-shadow: 0 0 0 1px var(--color-border-primary), 0 3px 8px var(--color-shadow-primary); }
+  .profile-block h3 { border-bottom: none; margin-bottom: var(--space-1, 0.25rem); font-size: var(--font-size-lg, 1.25rem); }
+  .profile-block p { font-size: var(--font-size-base, 1rem); color: var(--color-text-secondary); margin-bottom: var(--space-4, 1rem); }
+  .profile-links { display: flex; flex-direction: column; gap: var(--space-3, 0.75rem); margin-top: var(--space-4, 1rem); }
+  .profile-links a { display: inline-flex; align-items: center; justify-content: center; gap: var(--space-2, 0.5rem); padding: var(--space-2, 0.5rem) var(--space-3, 0.75rem); border-radius: var(--border-radius-md, 6px); background: var(--color-bg-primary); /* Darker bg */ border: 1px solid var(--color-border-primary); color: var(--color-link); font-size: var(--font-size-sm, 0.875rem); font-weight: var(--font-weight-medium, 500); transition: background-color var(--transition-fast, 150ms ease-in-out), color var(--transition-fast, 150ms ease-in-out); text-decoration: none; }
+  .profile-links a:hover { background-color: var(--color-accent-primary); /* Green hover */ color: var(--color-text-inverse); border-color: var(--color-accent-primary); text-decoration: none; }
+  .profile-links a i { font-size: 1.1em; width: 16px; text-align: center; }
   
-  .publication:hover {
-    border-left-color: var(--color-accent-primary); /* Highlight on hover */
-  }
-  
-  .publication-authors {
-    margin-bottom: var(--space-1); /* 4px */
-    color: var(--color-text-secondary);
-    font-size: var(--font-size-sm); /* 14px */
-  }
-  
-  .publication-title {
-    font-weight: var(--font-weight-semibold); /* 600 */
-    margin-bottom: var(--space-1); /* 4px */
-    font-size: var(--font-size-base); /* 16px */
-    line-height: 1.4;
-    color: var(--color-text-primary);
-  }
-  
-  .publication-journal {
-    font-style: italic;
-    margin-bottom: var(--space-2); /* 8px */
-    color: var(--color-text-secondary);
-    font-size: var(--font-size-sm); /* 14px */
-  }
-  
-  .publication-links {
-    display: flex;
-    flex-wrap: wrap; /* Allow links to wrap */
-    gap: var(--space-4); /* 16px */
-    font-size: var(--font-size-sm); /* 14px */
-    margin-top: var(--space-2); /* 8px */
-  }
-  
-  .publication-links a {
-    display: inline-flex;
-    align-items: center;
-    gap: var(--space-1); /* 4px */
-    color: var(--color-text-link);
-    font-weight: var(--font-weight-medium);
-  }
-  
-  .publication-links a:hover {
-    color: var(--color-text-link-hover);
-    text-decoration: underline;
-  }
-  
-  .publication-links a i {
-    font-size: 0.85em; /* Slightly smaller icon */
-  }
-  
-  /* Abstract Toggle Link */
-  .publication-abstract-toggle {
-    cursor: pointer;
-  }
-  
-  /* Abstract Content Box */
-  .publication-abstract {
-    background: var(--color-bg-secondary); /* Light background */
-    padding: var(--space-4); /* 16px */
-    border-radius: var(--border-radius-md);
-    margin-top: var(--space-3); /* 12px */
-    display: none; /* Hidden by default */
-    font-size: var(--font-size-sm); /* 14px */
-    color: var(--color-text-secondary);
-    border: 1px solid var(--color-border-primary);
-  }
-  
-  .publication-abstract.show {
-    display: block; /* Shown via JS */
-  }
-  
-  
-  /* Responsive adjustments for Main Content */
-  @media (max-width: 768px) {
-    .section-block {
-       padding: var(--space-5); /* Adjust padding */
-    }
-    .project-content {
-       flex-direction: column; /* Stack image and text */
-    }
-    .project-image {
-       width: 100%; /* Full width */
-       max-width: 300px; /* Limit max width */
-       margin-bottom: var(--space-4);
-    }
-    .research-areas {
-       grid-template-columns: 1fr; /* Stack research areas */
-    }
-  }
-  
-  /* CHUNK 2 END */
-  /* --- Styles for Sidebar sections will be added below --- */
-  /* CHUNK 3 START: Sidebar Area Styling */
-
-/* ==========================================================================
-   3. Sidebar Area (.academia-sidebar)
-   ========================================================================== */
-
-.academia-sidebar {
-    /* Make sidebar sticky within its grid column on larger screens */
-    position: sticky;
-    top: calc(var(--space-7) + 70px); /* Adjust top offset: ~navbar height + desired space */
-    align-self: start; /* Align to the top of the grid area */
-    /* Fallback for browsers not supporting sticky */
-    /* position: relative; */
-  }
-  
-  /* Common style for blocks within the sidebar */
-  .sidebar-block {
-    background: var(--color-bg-primary); /* White background */
-    border-radius: var(--border-radius-md); /* 6px */
-    border: var(--border-width) solid var(--color-border-primary);
-    padding: var(--space-5); /* 24px */
-    margin-bottom: var(--space-5); /* 24px space between blocks */
-    box-shadow: 0 2px 5px var(--color-shadow);
-  }
-  .sidebar-block:last-child {
-    margin-bottom: 0;
-  }
-  
-  .sidebar-block h3 {
-    font-size: var(--font-size-md); /* 18px */
-    font-weight: var(--font-weight-semibold);
-    color: var(--color-text-primary);
-    margin-bottom: var(--space-4); /* 16px */
-    padding-bottom: var(--space-2); /* 8px */
-    border-bottom: 1px solid var(--color-border-secondary);
-  }
-  
-  /* Profile Block Styling */
-  .profile-block {
-    text-align: center;
-  }
-  
-  .profile-block .profile-image { /* Assuming same class as resume */
-    width: 120px; /* Sidebar image size */
-    height: 120px;
-    border-radius: 50%;
-    object-fit: cover;
-    margin: 0 auto var(--space-4); /* Centered, 16px bottom margin */
-    border: 3px solid var(--color-bg-primary); /* Match background */
-    box-shadow: 0 0 0 1px var(--color-border-primary), 0 3px 8px var(--color-shadow);
-  }
-  
-  .profile-block h3 { /* Name */
-    border-bottom: none; /* Remove border for name */
-    margin-bottom: var(--space-1); /* 4px */
-    font-size: var(--font-size-lg); /* 20px */
-  }
-  
-  .profile-block p { /* Title */
-    font-size: var(--font-size-base); /* 16px */
-    color: var(--color-text-secondary);
-    margin-bottom: var(--space-4); /* 16px */
-  }
-  
-  .profile-links {
-    display: flex;
-    flex-direction: column; /* Stack links vertically */
-    gap: var(--space-3); /* 12px */
-    margin-top: var(--space-4);
-  }
-  
-  .profile-links a {
-    display: inline-flex; /* Use inline-flex for icon alignment */
-    align-items: center;
-    justify-content: center; /* Center content */
-    gap: var(--space-2); /* 8px */
-    padding: var(--space-2) var(--space-3); /* 8px 12px */
-    border-radius: var(--border-radius-md); /* 6px */
-    background: var(--color-bg-secondary); /* Light gray background */
-    color: var(--color-text-link);
-    font-size: var(--font-size-sm); /* 14px */
-    font-weight: var(--font-weight-medium);
-    transition: background-color var(--transition-fast), color var(--transition-fast);
-    text-decoration: none;
-    border: 1px solid var(--color-border-primary);
-  }
-  
-  .profile-links a:hover {
-    background-color: var(--color-accent-primary); /* Blue background */
-    color: var(--color-text-inverse); /* White text */
-    border-color: var(--color-accent-primary);
-    text-decoration: none;
-  }
-  
-  .profile-links a i {
-    font-size: 1.1em; /* Adjust icon size relative to text */
-    width: 16px; /* Ensure consistent icon alignment */
-    text-align: center;
-  }
-  
-  
-  /* Education & Experience Items (Simplified Sidebar Version) */
-  .sidebar-block .education-item,
-  .sidebar-block .experience-item {
-    margin-bottom: var(--space-4); /* 16px */
-    padding-bottom: var(--space-4);
-    border-bottom: 1px dashed var(--color-border-secondary);
-  }
-  
-  .sidebar-block .education-item:last-child,
-  .sidebar-block .experience-item:last-child {
-    margin-bottom: 0;
-    padding-bottom: 0;
-    border-bottom: none;
-  }
-  
-  .sidebar-block .education-item h4,
-  .sidebar-block .experience-item h4 {
-    font-size: var(--font-size-base); /* 16px */
-    font-weight: var(--font-weight-medium);
-    margin-bottom: var(--space-1); /* 4px */
-    color: var(--color-text-primary);
-  }
-  
-  .sidebar-block .education-item p, /* University/Company */
-  .sidebar-block .experience-item p {
-    font-size: var(--font-size-sm); /* 14px */
-    color: var(--color-text-secondary);
-    margin-bottom: var(--space-1); /* 4px */
-  }
-  
-  .sidebar-block .education-date, /* Date */
-  .sidebar-block .experience-date {
-    font-size: var(--font-size-xs); /* 12px */
-    color: var(--color-text-tertiary);
-    margin-top: 0;
-  }
-  
+  /* Education & Experience Items (Sidebar Version) */
+  .sidebar-block .education-item, .sidebar-block .experience-item { margin-bottom: var(--space-4, 1rem); padding-bottom: var(--space-4, 1rem); border-bottom: 1px dashed var(--color-border-primary); }
+  .sidebar-block .education-item:last-child, .sidebar-block .experience-item:last-child { margin-bottom: 0; padding-bottom: 0; border-bottom: none; }
+  .sidebar-block .education-item h4, .sidebar-block .experience-item h4 { font-size: var(--font-size-base, 1rem); font-weight: var(--font-weight-medium, 500); margin-bottom: var(--space-1, 0.25rem); color: var(--color-text-primary); }
+  .sidebar-block .education-item p, .sidebar-block .experience-item p { font-size: var(--font-size-sm, 0.875rem); color: var(--color-text-secondary); margin-bottom: var(--space-1, 0.25rem); }
+  .sidebar-block .education-date, .sidebar-block .experience-date { font-size: var(--font-size-xs, 0.75rem); color: var(--color-text-secondary); margin-top: 0; }
   
   /* Learning Topics List */
-  .learning-topics {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-  }
+  .learning-topics { list-style: none; padding: 0; margin: 0; }
+  .learning-topics li { padding: var(--space-2, 0.5rem) 0 var(--space-2, 0.5rem) var(--space-4, 1rem); margin-bottom: var(--space-2, 0.5rem); border-bottom: 1px dashed var(--color-border-primary); position: relative; font-size: var(--font-size-sm, 0.875rem); color: var(--color-text-secondary); }
+  .learning-topics li:last-child { margin-bottom: 0; border-bottom: none; }
+  .learning-topics li::before { content: "▹"; position: absolute; left: 0; top: var(--space-2, 0.5rem); color: var(--color-accent-primary); font-size: 1em; line-height: inherit;} /* Green bullet */
   
-  .learning-topics li {
-    padding: var(--space-2) 0 var(--space-2) var(--space-4); /* 8px vert, 16px left */
-    margin-bottom: var(--space-2); /* 8px */
-    border-bottom: 1px dashed var(--color-border-secondary);
-    position: relative; /* For pseudo-element */
-    font-size: var(--font-size-sm); /* 14px */
-    color: var(--color-text-secondary);
-  }
-  
-  .learning-topics li:last-child {
-    margin-bottom: 0;
-    border-bottom: none;
-  }
-  
-  /* Custom bullet point for learning topics */
-  .learning-topics li::before {
-    content: "▹"; /* Example: right-pointing triangle */
-    /* Or use Font Awesome: content: "\f0da"; font-family: "Font Awesome 6 Free"; font-weight: 900; */
-    position: absolute;
-    left: 0;
-    top: var(--space-2); /* Align with text */
-    color: var(--color-accent-primary); /* Blue bullet */
-    font-size: 1em;
-  }
-  
-  
-  /* Responsive adjustments for Sidebar */
+  /* --- Responsive --- */
   @media (max-width: 992px) {
-    .academia-sidebar {
-       position: static; /* Remove sticky positioning when stacked */
-       margin-top: var(--space-7); /* Add space above when stacked */
-    }
+    .academia-grid { grid-template-columns: 1fr; gap: var(--space-6, 2rem); }
+    .academia-sidebar { position: static; margin-top: var(--space-7, 3rem); }
   }
-  
-  
-  /* CHUNK 3 END */
-  
-  /* ==========================================================================
-     End of Academia Page Specific Styles (assets/css/pages/academia.css)
-     ========================================================================== */
+  @media (max-width: 576px) {
+    .page-hero { padding: var(--space-6, 2rem) var(--space-4, 1rem); }
+    .page-hero h1 { font-size: var(--font-size-2xl, 2rem); }
+    .page-hero .hero-subtitle { font-size: var(--font-size-base, 1rem); }
+    .section-block { padding: var(--space-5, 1.5rem); }
+    .project-content { flex-direction: column; }
+    .project-image { width: 100%; max-width: 300px; margin-bottom: var(--space-4, 1rem); }
+  }

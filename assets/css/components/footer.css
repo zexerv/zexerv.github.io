@@ -1,16 +1,15 @@
 /* ==========================================================================
-   Footer Component Styles
+   Footer Component Styles (footer.css) - DARK THEME UPDATE
    ========================================================================== */
 
    footer {
-    background-color: var(--color-text-primary); /* Dark background */
-    color: var(--color-text-secondary); /* Use secondary text color for less emphasis */
-    padding: var(--space-6) 0 var(--space-5); /* 32px top, 24px bottom */
-    margin-top: auto; /* Pushes footer to bottom (works with flex setup in base.css) */
-    border-top: var(--border-width) solid var(--color-border-secondary);
+    background-color: var(--color-bg-secondary); /* Match navbar dark bg */
+    color: var(--color-text-secondary); /* Muted light gray text */
+    padding: var(--space-6, 2rem) 0 var(--space-5, 1.5rem);
+    margin-top: auto; /* Pushes footer to bottom */
+    border-top: var(--border-width, 1px) solid var(--color-border-primary); /* Lighter border */
   }
   
-  /* Uses the .container class from layout.css for centering */
   footer .container {
     /* Styles specific to the container *within* the footer, if any */
   }
@@ -18,42 +17,42 @@
   .footer-content {
     display: flex;
     justify-content: space-between;
-    flex-wrap: wrap; /* Allow wrapping on smaller screens */
-    gap: var(--space-6); /* Gap between items when they wrap */
-    margin-bottom: var(--space-5); /* Space before the bottom copyright */
+    flex-wrap: wrap;
+    gap: var(--space-6, 2rem);
+    margin-bottom: var(--space-5, 1.5rem);
   }
   
   .footer-logo {
-    flex-basis: 200px; /* Give it a base width */
-    margin-bottom: var(--space-4); /* Add margin for wrapping scenario */
+    flex-basis: 200px;
+    margin-bottom: var(--space-4, 1rem);
   }
   
   .footer-logo span {
-    font-size: var(--font-size-lg); /* 20px */
-    font-weight: var(--font-weight-bold);
-    color: var(--color-text-inverse); /* White for logo */
+    font-size: var(--font-size-lg, 1.25rem);
+    font-weight: var(--font-weight-bold, 700);
+    color: var(--color-text-primary); /* Brighter light gray for logo */
     display: block;
-    margin-bottom: var(--space-2); /* 8px */
+    margin-bottom: var(--space-2, 0.5rem);
   }
   
   .footer-logo p {
-    font-size: var(--font-size-sm); /* 14px */
-    color: var(--color-text-tertiary); /* Muted text */
+    font-size: var(--font-size-sm, 0.875rem);
+    color: var(--color-text-secondary); /* Muted */
     margin-bottom: 0;
   }
   
   .footer-links {
-    flex-basis: 200px; /* Give it a base width */
-    margin-bottom: var(--space-4);
+    flex-basis: 200px;
+    margin-bottom: var(--space-4, 1rem);
   }
   
   .footer-links h3 {
-    font-size: var(--font-size-base); /* 16px */
-    font-weight: var(--font-weight-semibold);
-    color: var(--color-text-inverse); /* White heading */
-    margin-bottom: var(--space-4); /* 16px */
-    padding-bottom: var(--space-2); /* 8px */
-    border-bottom: 1px solid var(--color-text-secondary); /* Subtle underline */
+    font-size: var(--font-size-base, 1rem);
+    font-weight: var(--font-weight-semibold, 600);
+    color: var(--color-text-primary); /* Brighter text for heading */
+    margin-bottom: var(--space-4, 1rem);
+    padding-bottom: var(--space-2, 0.5rem);
+    border-bottom: 1px solid var(--color-border-primary); /* Use dark theme border */
   }
   
   .footer-links ul {
@@ -63,61 +62,59 @@
   }
   
   .footer-links li {
-    margin-bottom: var(--space-2); /* 8px */
+    margin-bottom: var(--space-2, 0.5rem);
   }
   
   .footer-links a {
-    color: var(--color-text-secondary); /* Muted link color */
+    color: var(--color-text-secondary); /* Muted text for links */
     text-decoration: none;
-    font-size: var(--font-size-sm); /* 14px */
-    transition: color var(--transition-fast);
+    font-size: var(--font-size-sm, 0.875rem);
+    transition: color var(--transition-fast, 150ms ease-in-out);
   }
   
   .footer-links a:hover {
-    color: var(--color-text-link); /* Use standard link hover color */
+    color: var(--color-link); /* Use theme link color on hover */
     text-decoration: underline;
   }
   
   .footer-bottom {
     text-align: center;
-    padding-top: var(--space-5); /* 24px */
-    border-top: 1px solid var(--color-text-secondary); /* Separator line */
-    font-size: var(--font-size-sm); /* 14px */
-    color: var(--color-text-tertiary); /* Muted text */
+    padding-top: var(--space-5, 1.5rem);
+    border-top: 1px solid var(--color-border-primary); /* Use dark theme border */
+    font-size: var(--font-size-sm, 0.875rem);
+    color: var(--color-text-secondary); /* Muted text */
   }
   
-  /* Resume Footer Specific (if needed, or handle in pages/resume.css) */
-  /* This style was specific to the resume page, might be better in resume.css */
+  /* Resume Footer Specific (If used - should match theme) */
+  /* Consider moving this entirely to resume.css if layout is very different */
   .resume-footer {
-    padding: var(--space-4) var(--space-5); /* Adjust padding if different */
-    background-color: var(--color-text-primary); /* Consistent background */
+    padding: var(--space-4, 1rem) var(--space-5, 1.5rem);
+    background-color: var(--color-bg-secondary); /* Match footer bg */
     text-align: center;
-    color: rgba(255, 255, 255, 0.7);
-    font-size: var(--font-size-xs); /* 12px */
-    position: relative;
-    z-index: 1; /* Ensure it's above background elements if any */
-    border-top: none; /* Remove double border if default footer is also used */
-    margin-top: 0; /* Override default margin-top if needed */
+    color: var(--color-text-secondary);
+    font-size: var(--font-size-xs, 0.75rem);
+    border-top: 1px solid var(--color-border-primary);
+    margin-top: 0; /* Override layout.css margin */
   }
   
   
   /* Responsive adjustments for footer */
   @media (max-width: 768px) {
     .footer-content {
-      flex-direction: column; /* Stack items vertically */
-      text-align: center; /* Center-align text content */
-      gap: var(--space-5);
+      flex-direction: column;
+      text-align: center;
+      gap: var(--space-5, 1.5rem);
     }
   
     .footer-logo, .footer-links {
-      flex-basis: auto; /* Reset basis */
-      width: 100%; /* Take full width */
-      margin-bottom: var(--space-5);
+      flex-basis: auto;
+      width: 100%;
+      margin-bottom: var(--space-5, 1.5rem);
     }
   
     .footer-links h3 {
-      border-bottom: none; /* Remove border */
-      padding-bottom: 0;
-      margin-bottom: var(--space-3);
+      /* border-bottom: none; */ /* Keep border? */
+      /* padding-bottom: 0; */
+      margin-bottom: var(--space-3, 0.75rem);
     }
   }

@@ -1,178 +1,194 @@
 /* ==========================================================================
-   Card Component Styles
+   Card Component Styles (cards.css) - DARK THEME UPDATE
    ========================================================================== */
 
 /* Base Card Style */
 .card {
-    background-color: var(--color-bg-primary); /* White background */
-    border-radius: var(--border-radius-lg); /* 10px */
-    border: var(--border-width) solid var(--color-border-primary);
-    box-shadow: 0 3px 10px var(--color-shadow);
-    padding: var(--space-5); /* 24px default padding */
-    transition: transform var(--transition-base), box-shadow var(--transition-base);
-    display: flex; /* Allow flex column layout */
+    background-color: var(--color-bg-secondary); /* Slightly lighter dark bg */
+    border-radius: var(--border-radius-md, 6px); /* Use medium radius */
+    border: var(--border-width, 1px) solid var(--color-border-primary); /* Lighter border */
+    /* Use a very subtle shadow or none for dark theme */
+    box-shadow: 0 1px 2px rgba(0,0,0,0.1); /* Minimal shadow */
+    /* box-shadow: none; */
+    padding: var(--space-5, 1.5rem);
+    transition: transform var(--transition-base, 300ms ease-in-out), box-shadow var(--transition-base, 300ms ease-in-out);
+    display: flex;
     flex-direction: column;
-    height: 100%; /* Make cards in a grid equal height if needed */
-    overflow: hidden; /* Ensure content respects border-radius */
+    height: 100%;
+    overflow: hidden;
   }
   
   .card:hover {
-    transform: translateY(-5px); /* Lift effect */
-    box-shadow: 0 8px 20px var(--color-shadow);
+    /* Optional: Slightly change border or background on hover */
+    border-color: var(--color-text-secondary); /* Example: Muted gray border */
+    /* transform: translateY(-3px); */ /* Keep hover subtle */
+    /* box-shadow: 0 5px 15px rgba(0,0,0,0.2); */
   }
   
   /* Card Header (Optional) */
   .card-header {
-    padding-bottom: var(--space-4); /* 16px */
-    margin-bottom: var(--space-4);
-    border-bottom: var(--border-width) solid var(--color-border-primary);
-    /* Add flex styles if header contains multiple items */
-    /* display: flex; */
-    /* justify-content: space-between; */
-    /* align-items: center; */
+    padding-bottom: var(--space-4, 1rem);
+    margin-bottom: var(--space-4, 1rem);
+    border-bottom: var(--border-width, 1px) solid var(--color-border-primary);
   }
   
   /* Card Body (Main content area) */
   .card-body {
-    flex-grow: 1; /* Allows body to expand, pushing footer down */
+    flex-grow: 1;
   }
   
   /* Card Footer (Optional) */
   .card-footer {
-    padding-top: var(--space-4); /* 16px */
-    margin-top: var(--space-4);
-    border-top: var(--border-width) solid var(--color-border-primary);
-    font-size: var(--font-size-sm); /* 14px */
-    color: var(--color-text-secondary);
+    padding-top: var(--space-4, 1rem);
+    margin-top: var(--space-4, 1rem);
+    border-top: var(--border-width, 1px) solid var(--color-border-primary);
+    font-size: var(--font-size-sm, 0.875rem);
+    color: var(--color-text-secondary); /* Muted light gray */
   }
   
   /* Common Card Elements */
   .card-title {
-    font-size: var(--font-size-lg); /* 20px */
-    font-weight: var(--font-weight-semibold);
-    color: var(--color-text-primary);
-    margin-bottom: var(--space-3); /* 12px */
+    font-size: var(--font-size-lg, 1.25rem);
+    font-weight: var(--font-weight-semibold, 600);
+    color: var(--color-text-primary); /* Primary light gray */
+    margin-bottom: var(--space-3, 0.75rem);
+  }
+  .card-title a { /* Ensure links in titles inherit color correctly */
+    color: inherit;
+    text-decoration: none;
+  }
+  .card-title a:hover {
+    color: var(--color-link); /* Use link color on hover */
+    text-decoration: underline;
   }
   
-  /* Use for main descriptive text */
+  
   .card-text {
+    color: var(--color-text-secondary); /* Muted light gray */
+    font-size: var(--font-size-base, 1rem);
+    margin-bottom: var(--space-4, 1rem);
+    line-height: var(--line-height-base, 1.5);
+  }
+  .card-text.text-muted { /* For date/time stamps etc. */
     color: var(--color-text-secondary);
-    font-size: var(--font-size-base); /* 16px */
-    margin-bottom: var(--space-4); /* 16px */
-    line-height: 1.6;
+    font-size: var(--font-size-sm, 0.875rem);
+    margin-bottom: var(--space-3, 0.75rem);
   }
   
-  /* Icon Styling (e.g., focus cards) */
+  /* Icon Styling */
   .card-icon {
-    display: inline-flex; /* Allows background */
+    display: inline-flex;
     align-items: center;
     justify-content: center;
-    width: 50px; /* Adjust size */
+    width: 50px;
     height: 50px;
     border-radius: 50%;
-    margin-bottom: var(--space-4); /* 16px */
-    font-size: var(--font-size-xl); /* 24px */
-    /* Default subtle background/color */
-    background-color: var(--color-bg-secondary);
-    color: var(--color-accent-primary);
+    margin-bottom: var(--space-4, 1rem);
+    font-size: var(--font-size-xl, 1.5rem);
+    /* Use darker bg than card, light gray icon */
+    background-color: #21262d;
+    color: var(--color-text-secondary);
   }
-  /* Add specific colors if needed */
-  .card-icon.icon-research { background-color: rgba(52, 152, 219, 0.1); color: #3498db; }
-  .card-icon.icon-publication { background-color: rgba(231, 76, 60, 0.1); color: #e74c3c; }
-  .card-icon.icon-learning { background-color: rgba(46, 204, 113, 0.1); color: #2ecc71; }
+  /* Specific colors using RGBA backgrounds for dark theme */
+  .card-icon.icon-research { background-color: rgba(88, 166, 255, 0.15); color: #58a6ff; } /* Blue */
+  .card-icon.icon-publication { background-color: rgba(240, 65, 61, 0.15); color: #f0413d; } /* Red */
+  .card-icon.icon-learning { background-color: rgba(46, 160, 67, 0.15); color: #2ea043; } /* Green */
   
   
-  /* Tags Styling (e.g., project cards) */
+  /* Tags Styling */
   .card-tags {
     display: flex;
     flex-wrap: wrap;
-    gap: var(--space-2); /* 8px */
-    margin-bottom: var(--space-4); /* 16px */
+    gap: var(--space-2, 0.5rem);
+    margin-bottom: var(--space-4, 1rem);
   }
   
   .tag {
-    background-color: var(--color-bg-secondary); /* Light gray */
-    color: var(--color-text-secondary);
-    padding: var(--space-1) var(--space-3); /* 4px 12px */
-    border-radius: var(--border-radius-sm); /* 3px */
-    font-size: var(--font-size-xs); /* 12px */
-    font-weight: var(--font-weight-medium);
-    border: 1px solid var(--color-border-primary);
+    background-color: rgba(88, 166, 255, 0.15); /* Subtle blue background */
+    color: var(--color-link); /* Use link color */
+    padding: var(--space-1, 0.25rem) var(--space-3, 0.75rem);
+    border-radius: var(--border-radius-full, 999px); /* Pill shape */
+    font-size: var(--font-size-xs, 0.75rem);
+    font-weight: var(--font-weight-medium, 500);
+    line-height: 1.4; /* Adjust line height */
+    border: none; /* Remove border */
   }
-  /* Example colored tags (optional) */
-  .tag-python { background-color: rgba(52, 152, 219, 0.1); color: #2980b9; border-color: transparent; }
-  .tag-pytorch { background-color: rgba(238, 110, 45, 0.1); color: #EE4C2C; border-color: transparent;}
-  .tag-ros { background-color: rgba(32, 56, 84, 0.1); color: #203854; border-color: transparent;}
+  /* Specific tag colors (Optional - using blue as default) */
+  /* You can create more specific classes if needed */
+  .tag-python { /* Keep blue */ }
+  .tag-pytorch { background-color: rgba(238, 110, 45, 0.15); color: #ffa95c; } /* Orange-ish */
+  .tag-ros { background-color: rgba(139, 148, 158, 0.2); color: #8b949e; } /* Gray */
+  .tag-cpp { background-color: rgba(139, 148, 158, 0.2); color: #8b949e; } /* Gray */
+  .tag-matlab { background-color: rgba(240, 65, 61, 0.15); color: #f0413d; } /* Red-ish */
+  .tag-control { background-color: rgba(167, 130, 255, 0.15); color: #a782ff; } /* Purple-ish */
   
   
-  /* Progress Indicator (e.g., project cards) */
+  /* Progress Indicator */
   .card-progress {
-    margin-top: var(--space-4); /* 16px */
+    margin-top: var(--space-4, 1rem);
   }
-  
-  .progress-container {
-    /* Styles for container holding bar + text if needed */
-    margin-bottom: var(--space-1); /* 4px */
-  }
-  
+  .progress-container { margin-bottom: var(--space-1, 0.25rem); }
   .progress-bar {
-    height: 6px; /* Slimmer progress bar */
-    background-color: var(--color-bg-tertiary); /* Gray background */
-    border-radius: var(--border-radius-sm); /* 3px */
+    height: 6px;
+    background-color: var(--color-border-primary); /* Darker gray background */
+    border-radius: var(--border-radius-sm, 3px);
     overflow: hidden;
   }
-  
   .progress {
     height: 100%;
-    background-color: var(--color-accent-primary); /* Blue progress */
-    border-radius: var(--border-radius-sm);
+    background-color: var(--color-accent-primary); /* Green progress */
+    border-radius: var(--border-radius-sm, 3px);
     transition: width 0.5s ease-out;
   }
-  
   .progress-text {
-    font-size: var(--font-size-xs); /* 12px */
-    color: var(--color-text-secondary);
-    text-align: right; /* Align text if needed */
+    font-size: var(--font-size-xs, 0.75rem);
+    color: var(--color-text-secondary); /* Muted light gray */
+    text-align: right;
   }
   
-  /* Milestone Tracker (e.g., focus cards) */
-  .milestone-tracker {
-    /* Styles adapted from index.html styles if needed */
-    /* ... */
-  }
+  /* Milestone Tracker - Copied from index.css, adjust colors */
+  .milestone-tracker { display: flex; justify-content: space-between; margin-top: var(--space-5, 1.5rem); padding-top: var(--space-4, 1rem); position: relative; }
+  .milestone-tracker::before { content: ''; position: absolute; top: calc(var(--space-4, 1rem) + 10px); left: 10%; width: 80%; height: 2px; background-color: var(--color-border-primary); z-index: 1; }
+  .milestone { display: flex; flex-direction: column; align-items: center; position: relative; z-index: 2; flex-basis: 20%; text-align: center; }
+  .milestone-dot { width: 16px; height: 16px; border-radius: 50%; background-color: var(--color-border-primary); margin-bottom: var(--space-2, 0.5rem); border: 3px solid var(--color-bg-secondary); /* Use card bg for cutout */ box-shadow: 0 0 0 1px var(--color-border-primary); }
+  .milestone.completed .milestone-dot { background-color: var(--color-accent-primary); /* Green */ box-shadow: 0 0 0 1px var(--color-accent-primary); }
+  .milestone.in-progress .milestone-dot { background-color: var(--color-link); /* Blue */ box-shadow: 0 0 0 1px var(--color-link); }
+  .milestone-label { font-size: var(--font-size-xs, 0.75rem); color: var(--color-text-secondary); line-height: 1.3; }
+  .milestone.completed .milestone-label { color: var(--color-text-primary); font-weight: var(--font-weight-medium, 500); }
   
-  /* Books Progress (e.g., focus cards) */
-  .books-progress {
-   /* Styles adapted from index.html styles if needed */
-   /* ... */
-  }
+  /* Books Progress - Copied from index.css, adjust colors */
+  .books-progress { margin-top: var(--space-5, 1.5rem); }
+  .book-item { margin-bottom: var(--space-3, 0.75rem); display: flex; align-items: center; gap: var(--space-3, 0.75rem); }
+  .book-item:last-child { margin-bottom: 0; }
+  .book-title { flex-basis: 100px; flex-shrink: 0; font-size: var(--font-size-sm, 0.875rem); color: var(--color-text-secondary); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .book-progress-bar { flex-grow: 1; } /* Uses .progress-bar styles from above */
+  .book-percentage { flex-basis: 40px; flex-shrink: 0; text-align: right; font-size: var(--font-size-sm, 0.875rem); color: var(--color-text-secondary); font-weight: var(--font-weight-medium, 500); }
   
   /* Links within cards */
   .card-link {
-    color: var(--color-text-link);
+    color: var(--color-link); /* Blue link color */
     text-decoration: none;
-    font-weight: var(--font-weight-medium);
+    font-weight: var(--font-weight-medium, 500);
     display: inline-flex;
     align-items: center;
-    gap: var(--space-1);
+    gap: var(--space-1, 0.25rem);
   }
   .card-link:hover {
-    color: var(--color-text-link-hover);
+    /* Use variable defined in base.css if exists, or direct value */
+    /* color: var(--color-link-hover); */
     text-decoration: underline;
   }
-  .card-link i {
-    transition: transform var(--transition-fast);
-  }
-  .card-link:hover i {
-    transform: translateX(3px);
-  }
+  .card-link i { transition: transform var(--transition-fast, 150ms ease-in-out); }
+  .card-link:hover i { transform: translateX(3px); }
   
-  /* Modifier for image-top cards (if needed later) */
+  /* Image-top cards modifier */
   .card-img-top {
-    width: 100%;
-    height: 200px; /* Example height */
+    width: calc(100% + 2 * var(--space-5, 1.5rem)); /* Span full padding */
+    height: 200px;
     object-fit: cover;
-    border-top-left-radius: var(--border-radius-lg); /* Match card radius */
-    border-top-right-radius: var(--border-radius-lg);
-    margin: -var(--space-5) -var(--space-5) var(--space-4); /* Adjust negative margin to match padding */
+    border-top-left-radius: var(--border-radius-md, 6px); /* Match card radius */
+    border-top-right-radius: var(--border-radius-md, 6px);
+    /* Negative margin equal to padding */
+    margin: calc(-1 * var(--space-5, 1.5rem)) calc(-1 * var(--space-5, 1.5rem)) var(--space-4, 1rem);
+    border-bottom: 1px solid var(--color-border-primary); /* Add separator */
   }

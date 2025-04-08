@@ -1,0 +1,20 @@
+[
+    {
+      "title": "The Bellman Optimal Q-Value Function",
+      "content": "In Reinforcement Learning, the Q-value function evaluates the best action to take at a given state using the Bellman optimality equation. Understanding this is key to many RL algorithms.",
+      "date": "February 25, 2025",
+      "link": "blog/bellman-q-value.html"
+    },
+    {
+      "title": "Why Learning Every Day Matters",
+      "content": "Continuous learning is the key to growth. Whether it's reading, experimenting, or thinking critically, embracing the process ensures you stay adaptable and innovative.",
+      "date": "February 8, 2025",
+      "link": "blog/learning-matters.html"
+    },
+    {
+      "title": "The Journey Begins",
+      "content": "Welcome to my personal blog! This is where I'll share my thoughts, experiences, and insights on robotics, control, learning, and the process of discovery itself.",
+      "date": "February 2, 2025",
+      "link": "blog/journey-begins.html"
+    }
+  ]

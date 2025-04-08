@@ -11,7 +11,7 @@
     min-height: 600px; /* Minimum height */
     /* Dark overlay + background image + fixed attachment for simple parallax */
     background: linear-gradient(rgba(0, 0, 0, 0.65), rgba(0, 0, 0, 0.65)),
-                url('../images/hero-bg.jpg') center/cover no-repeat fixed;
+                url('../../images/hero-bg.jpg') center/cover no-repeat fixed;
     color: var(--color-text-inverse); /* White text */
     display: flex;
     justify-content: center;
@@ -340,7 +340,12 @@
       gap: var(--space-5); /* Adjust gap */
     }
   }
-  
+    /* --- Index Page Spacing Fixes --- */
+
+    /* Add margin above the "View All GitHub Projects" button container */
+    .projects-cta {
+        margin-top: var(--space-7); /* 48px - Increase space */
+    }
   
   /* CHUNK 3 END */
   /* --- Styles for Latest Posts section etc. will be added below --- */

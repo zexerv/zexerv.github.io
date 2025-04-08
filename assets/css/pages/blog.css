@@ -1,58 +1,47 @@
 /* ==========================================================================
-   Blog List Page Specific Styles (pages/blog.css)
+   Blog List Page Specific Styles (pages/blog.css) - DARK THEME UPDATE
    ========================================================================== */
 
 /* Section container for the blog list */
 #blog {
     /* Padding is handled by <main> tag styles in layout.css */
-    /* Example: Add specific padding if needed */
-    /* padding-top: var(--space-7); */
-    /* padding-bottom: var(--space-7); */
+    /* Background color inherited from body/main (dark) */
   }
   
   /* Blog Page Header (Title and Intro Paragraph) */
   #blog h1 {
     text-align: center;
-    font-size: var(--font-size-3xl); /* 40px */
-    margin-bottom: var(--space-4); /* 16px */
-    color: var(--color-text-primary);
+    font-size: var(--font-size-3xl, 2.5rem);
+    margin-bottom: var(--space-4, 1rem);
+    color: var(--color-text-primary); /* Primary light text */
   }
   
   #blog > .container > p { /* Target the introductory paragraph directly */
     text-align: center;
-    font-size: var(--font-size-md); /* 18px */
-    color: var(--color-text-secondary);
-    max-width: 700px; /* Limit width */
+    font-size: var(--font-size-md, 1.125rem);
+    color: var(--color-text-secondary); /* Muted light text */
+    max-width: 700px;
     margin-left: auto;
     margin-right: auto;
-    margin-bottom: var(--space-7); /* 48px space below intro */
+    margin-bottom: var(--space-7, 3rem); /* Spacing below intro */
   }
   
   /* Grid container for blog post previews */
   /* Uses .posts-grid class, same as index page */
   .posts-grid {
     display: grid;
-    /* Adjust minmax for desired card size */
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: var(--space-6); /* 32px */
-    margin-top: var(--space-6); /* In case used without intro p */
+    gap: var(--space-6, 2rem);
+    margin-top: var(--space-6, 2rem); /* Spacing above grid if no intro */
   }
   
   /* Individual blog post styling relies on .card from components/cards.css */
-  /* Ensure HTML uses <article class="card post"> or similar structure */
+  /* The .card class already has dark theme styles */
   
   
   /* Responsive adjustments for Blog Page */
   @media (max-width: 576px) {
-    #blog h1 {
-      font-size: var(--font-size-2xl); /* 32px */
-    }
-    #blog > .container > p {
-      font-size: var(--font-size-base); /* 16px */
-      margin-bottom: var(--space-6); /* 32px */
-    }
-    .posts-grid {
-      grid-template-columns: 1fr; /* Stack cards */
-      gap: var(--space-5); /* Adjust gap */
-    }
+    #blog h1 { font-size: var(--font-size-2xl, 2rem); }
+    #blog > .container > p { font-size: var(--font-size-base, 1rem); margin-bottom: var(--space-6, 2rem); }
+    .posts-grid { grid-template-columns: 1fr; gap: var(--space-5, 1.5rem); }
   }

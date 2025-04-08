@@ -1,15 +1,16 @@
 /* ==========================================================================
-   Navbar Component Styles
+   Navbar Component Styles (navbar.css) - DARK THEME UPDATE
    ========================================================================== */
 
    .navbar {
-    background-color: var(--color-text-primary); /* Dark background */
-    padding: var(--space-4) 0; /* 16px top/bottom */
-    border-bottom: var(--border-width) solid var(--color-border-secondary);
-    position: sticky; /* Keep navbar visible on scroll */
+    background-color: var(--color-bg-secondary); /* Slightly lighter dark bg */
+    padding: var(--space-4, 1rem) 0;
+    border-bottom: var(--border-width, 1px) solid var(--color-border-primary); /* Lighter border on dark */
+    position: sticky;
     top: 0;
-    z-index: 1000; /* Ensure navbar stays on top */
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+    /* Optional subtle shadow for depth */
+    /* box-shadow: 0 1px 2px var(--color-shadow-primary); */
   }
   
   .navbar .container {
@@ -19,9 +20,9 @@
   }
   
   .navbar .logo {
-    font-size: var(--font-size-lg); /* 20px */
-    font-weight: var(--font-weight-bold);
-    color: var(--color-text-inverse); /* White text */
+    font-size: var(--font-size-lg, 1.25rem);
+    font-weight: var(--font-weight-semibold, 600);
+    color: var(--color-text-primary); /* Light gray text */
     text-decoration: none;
     letter-spacing: 1px;
   }
@@ -35,7 +36,7 @@
   }
   
   .nav-links li {
-    margin-left: var(--space-5); /* 24px */
+    margin-left: var(--space-5, 1.5rem);
   }
   
   .nav-links li:first-child {
@@ -43,36 +44,35 @@
   }
   
   .nav-links a {
-    color: rgba(255, 255, 255, 0.8); /* Slightly muted white */
+    color: var(--color-text-secondary); /* Muted light gray */
     text-decoration: none;
-    font-size: var(--font-size-base); /* 16px */
-    font-weight: var(--font-weight-medium); /* 500 */
-    padding: var(--space-2) var(--space-3); /* 8px 12px */
-    border-radius: var(--border-radius-md); /* 6px */
-    transition: background-color var(--transition-fast), color var(--transition-fast);
+    font-size: var(--font-size-base, 1rem);
+    font-weight: var(--font-weight-medium, 500);
+    padding: var(--space-2, 0.5rem) var(--space-3, 0.75rem);
+    border-radius: var(--border-radius-md, 6px);
+    transition: background-color var(--transition-fast, 150ms ease-in-out), color var(--transition-fast, 150ms ease-in-out);
   }
   
-  .nav-links a:hover {
-    color: var(--color-text-inverse); /* White text on hover */
-    background-color: rgba(255, 255, 255, 0.1); /* Subtle background */
+  .nav-links a:hover,
+  .nav-links a.active {
+    color: var(--color-text-primary); /* Brighter light gray */
+    background-color: rgba(139, 148, 158, 0.1); /* Subtle light background */
     text-decoration: none;
   }
   
   .nav-links a.active {
-    color: var(--color-text-inverse);
-    background-color: rgba(255, 255, 255, 0.15);
-    font-weight: var(--font-weight-semibold); /* 600 */
+    font-weight: var(--font-weight-semibold, 600);
   }
   
   /* Mobile Menu Button */
   .mobile-menu-btn {
-    display: none; /* Hidden by default */
+    display: none;
     cursor: pointer;
     background: none;
     border: none;
-    padding: var(--space-2); /* 8px */
-    margin-left: var(--space-4); /* 16px */
-    z-index: 1001; /* Above navbar content */
+    padding: var(--space-2, 0.5rem);
+    margin-left: var(--space-4, 1rem);
+    z-index: 1001;
   }
   
   .mobile-menu-btn .bar {
@@ -80,20 +80,18 @@
     width: 25px;
     height: 3px;
     margin: 5px auto;
-    background-color: var(--color-text-inverse); /* White bars */
+    background-color: var(--color-text-primary); /* Light gray bars */
     border-radius: 2px;
-    transition: all var(--transition-base);
+    transition: all var(--transition-base, 300ms ease-in-out);
   }
   
   /* Mobile Menu Button Animation (Open State) */
   .mobile-menu-btn.open .bar:nth-child(1) {
     transform: translateY(8px) rotate(45deg);
   }
-  
   .mobile-menu-btn.open .bar:nth-child(2) {
     opacity: 0;
   }
-  
   .mobile-menu-btn.open .bar:nth-child(3) {
     transform: translateY(-8px) rotate(-45deg);
   }
@@ -102,42 +100,44 @@
   /* Responsive Styles for Navbar */
   @media (max-width: 768px) {
     .mobile-menu-btn {
-      display: block; /* Show button on smaller screens */
+      display: block;
     }
   
     .nav-links {
-      position: fixed; /* Take over screen */
-      left: -100%; /* Start off-screen */
-      top: 0; /* Align to top */
-      width: 80%; /* Or a fixed width like 280px */
+      position: fixed;
+      left: -100%;
+      top: 0;
+      width: 80%;
       max-width: 300px;
       height: 100vh;
-      flex-direction: column; /* Stack links vertically */
-      background-color: var(--color-text-primary); /* Same dark background */
-      padding: var(--space-7) var(--space-5); /* 48px top/bottom, 24px left/right */
-      align-items: flex-start; /* Align links to the left */
-      box-shadow: 4px 0px 15px rgba(0, 0, 0, 0.2);
-      transition: left var(--transition-base);
-      z-index: 1000; /* Below the button */
+      flex-direction: column;
+      /* Use secondary dark bg for mobile menu */
+      background-color: var(--color-bg-secondary);
+      padding: var(--space-7, 3rem) var(--space-5, 1.5rem);
+      align-items: flex-start;
+      box-shadow: 4px 0px 15px rgba(0, 0, 0, 0.3); /* Darker shadow */
+      transition: left var(--transition-base, 300ms ease-in-out);
+      z-index: 1000;
+      border-right: 1px solid var(--color-border-primary); /* Add border */
     }
   
     .nav-links.active {
-      left: 0; /* Slide in */
+      left: 0;
     }
   
     .nav-links li {
-      margin: var(--space-4) 0; /* 16px top/bottom margin */
+      margin: var(--space-3, 0.75rem) 0; /* Adjust spacing */
       width: 100%;
     }
   
     .nav-links a {
-      display: block; /* Make links take full width */
-      padding: var(--space-3) var(--space-4); /* 12px 16px */
-      font-size: var(--font-size-md); /* 18px, larger for touch */
+      display: block;
+      padding: var(--space-3, 0.75rem) var(--space-4, 1rem);
+      font-size: var(--font-size-md, 1.125rem);
     }
   
     .nav-links a:hover,
     .nav-links a.active {
-      background-color: rgba(255, 255, 255, 0.1);
+      background-color: rgba(139, 148, 158, 0.1); /* Keep subtle background */
     }
   }
