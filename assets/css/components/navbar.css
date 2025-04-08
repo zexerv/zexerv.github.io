@@ -1,0 +1,143 @@
+/* ==========================================================================
+   Navbar Component Styles
+   ========================================================================== */
+
+   .navbar {
+    background-color: var(--color-text-primary); /* Dark background */
+    padding: var(--space-4) 0; /* 16px top/bottom */
+    border-bottom: var(--border-width) solid var(--color-border-secondary);
+    position: sticky; /* Keep navbar visible on scroll */
+    top: 0;
+    z-index: 1000; /* Ensure navbar stays on top */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  }
+  
+  .navbar .container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .navbar .logo {
+    font-size: var(--font-size-lg); /* 20px */
+    font-weight: var(--font-weight-bold);
+    color: var(--color-text-inverse); /* White text */
+    text-decoration: none;
+    letter-spacing: 1px;
+  }
+  
+  .nav-links {
+    display: flex;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    align-items: center;
+  }
+  
+  .nav-links li {
+    margin-left: var(--space-5); /* 24px */
+  }
+  
+  .nav-links li:first-child {
+    margin-left: 0;
+  }
+  
+  .nav-links a {
+    color: rgba(255, 255, 255, 0.8); /* Slightly muted white */
+    text-decoration: none;
+    font-size: var(--font-size-base); /* 16px */
+    font-weight: var(--font-weight-medium); /* 500 */
+    padding: var(--space-2) var(--space-3); /* 8px 12px */
+    border-radius: var(--border-radius-md); /* 6px */
+    transition: background-color var(--transition-fast), color var(--transition-fast);
+  }
+  
+  .nav-links a:hover {
+    color: var(--color-text-inverse); /* White text on hover */
+    background-color: rgba(255, 255, 255, 0.1); /* Subtle background */
+    text-decoration: none;
+  }
+  
+  .nav-links a.active {
+    color: var(--color-text-inverse);
+    background-color: rgba(255, 255, 255, 0.15);
+    font-weight: var(--font-weight-semibold); /* 600 */
+  }
+  
+  /* Mobile Menu Button */
+  .mobile-menu-btn {
+    display: none; /* Hidden by default */
+    cursor: pointer;
+    background: none;
+    border: none;
+    padding: var(--space-2); /* 8px */
+    margin-left: var(--space-4); /* 16px */
+    z-index: 1001; /* Above navbar content */
+  }
+  
+  .mobile-menu-btn .bar {
+    display: block;
+    width: 25px;
+    height: 3px;
+    margin: 5px auto;
+    background-color: var(--color-text-inverse); /* White bars */
+    border-radius: 2px;
+    transition: all var(--transition-base);
+  }
+  
+  /* Mobile Menu Button Animation (Open State) */
+  .mobile-menu-btn.open .bar:nth-child(1) {
+    transform: translateY(8px) rotate(45deg);
+  }
+  
+  .mobile-menu-btn.open .bar:nth-child(2) {
+    opacity: 0;
+  }
+  
+  .mobile-menu-btn.open .bar:nth-child(3) {
+    transform: translateY(-8px) rotate(-45deg);
+  }
+  
+  
+  /* Responsive Styles for Navbar */
+  @media (max-width: 768px) {
+    .mobile-menu-btn {
+      display: block; /* Show button on smaller screens */
+    }
+  
+    .nav-links {
+      position: fixed; /* Take over screen */
+      left: -100%; /* Start off-screen */
+      top: 0; /* Align to top */
+      width: 80%; /* Or a fixed width like 280px */
+      max-width: 300px;
+      height: 100vh;
+      flex-direction: column; /* Stack links vertically */
+      background-color: var(--color-text-primary); /* Same dark background */
+      padding: var(--space-7) var(--space-5); /* 48px top/bottom, 24px left/right */
+      align-items: flex-start; /* Align links to the left */
+      box-shadow: 4px 0px 15px rgba(0, 0, 0, 0.2);
+      transition: left var(--transition-base);
+      z-index: 1000; /* Below the button */
+    }
+  
+    .nav-links.active {
+      left: 0; /* Slide in */
+    }
+  
+    .nav-links li {
+      margin: var(--space-4) 0; /* 16px top/bottom margin */
+      width: 100%;
+    }
+  
+    .nav-links a {
+      display: block; /* Make links take full width */
+      padding: var(--space-3) var(--space-4); /* 12px 16px */
+      font-size: var(--font-size-md); /* 18px, larger for touch */
+    }
+  
+    .nav-links a:hover,
+    .nav-links a.active {
+      background-color: rgba(255, 255, 255, 0.1);
+    }
+  }

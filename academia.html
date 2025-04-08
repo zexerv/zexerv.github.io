@@ -4,8 +4,9 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Academia & Research - Mo Saeidi</title>
-  <link rel="stylesheet" href="assets/css/styles.css" />
-  <!-- Font Awesome -->
+
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&family=Roboto:wght@300;400;500;700&family=Lora:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+
   <link
     rel="stylesheet"
     href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
@@ -13,16 +14,24 @@
     crossorigin="anonymous"
     referrerpolicy="no-referrer"
   />
-  <!-- Google Scholar Icon -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css"/>
+
+  <link rel="stylesheet" href="assets/css/base.css" />
+  <link rel="stylesheet" href="assets/css/layout.css" />
+  <link rel="stylesheet" href="assets/css/components/navbar.css" />
+  <link rel="stylesheet" href="assets/css/components/buttons.css" />
+  <link rel="stylesheet" href="assets/css/components/footer.css" />
+  <link rel="stylesheet" href="assets/css/pages/academia.css" />
+
 </head>
 <body>
   <div class="page-wrapper">
+
     <header>
       <nav class="navbar">
         <div class="container">
           <a href="index.html" class="logo">MoSa</a>
-          <button id="mobile-menu-btn" class="mobile-menu-btn">
+          <button id="mobile-menu-btn" class="mobile-menu-btn" aria-label="Toggle Menu" aria-expanded="false">
             <span class="bar"></span>
             <span class="bar"></span>
             <span class="bar"></span>
@@ -31,7 +40,7 @@
             <li><a href="index.html">Home</a></li>
             <li><a href="about.html">About Me</a></li>
             <li><a href="blog.html">Blog</a></li>
-            <li><a href="academia.html">Academia</a></li>
+            <li><a href="academia.html" class="active">Academia</a></li>
             <li><a href="resume.html">Resume</a></li>
             <li><a href="contact.html">Contact</a></li>
           </ul>
@@ -41,54 +50,42 @@
 
     <main>
       <section id="academia-hero" class="page-hero">
-        <div class="container">
-          <h1>Academia & Research</h1>
+        <div class="container"> <h1>Academia & Research</h1>
           <p class="hero-subtitle">Exploring the intersection of control theory, robotics, and artificial intelligence</p>
         </div>
       </section>
 
       <section id="academia-content">
-        <div class="container">
-          <div class="academia-grid">
-            <!-- Left Column -->
+        <div class="container"> <div class="academia-grid">
+
             <div class="academia-main">
               <div class="section-block">
                 <h2>Research Interests</h2>
                 <p>My research spans the intersection of robotics, control systems, and machine learning with a focus on developing intelligent systems that can learn from experience and adapt to complex, dynamic environments.</p>
-                
                 <div class="research-areas">
                   <div class="research-area">
                     <h3><i class="fas fa-robot"></i> Robotics & Automation</h3>
                     <p>Human-robot interaction, programming by demonstration, motion planning, and trajectory optimization for robotic manipulators. My current work focuses on developing intuitive interfaces for robot programming through demonstration.</p>
                   </div>
-                  
                   <div class="research-area">
                     <h3><i class="fas fa-brain"></i> Reinforcement Learning</h3>
                     <p>Application of reinforcement learning algorithms to robotics problems, particularly in path planning and decision-making under uncertainty. I'm exploring ways to combine model-based control with learning-based approaches.</p>
                   </div>
-                  
                   <div class="research-area">
                     <h3><i class="fas fa-cogs"></i> Control Systems</h3>
                     <p>Nonlinear control theory, model predictive control, and optimal control strategies for complex mechanical systems. I have particular interest in constrained control problems and their application to robotics.</p>
                   </div>
-                  
-                  <div class="research-area">
-                    <h3><i class="fas fa-drone"></i> Autonomous Navigation</h3>
-                    <p>Navigation algorithms for aerial robots, with emphasis on visual-inertial odometry, sensor fusion, and obstacle avoidance in GPS-denied environments.</p>
-                  </div>
-                </div>
-              </div>
-
-              <div class="section-block">
+                   <div class="research-area">
+                     <h3><i class="fas fa-fighter-jet"></i> Autonomous Navigation</h3> <p>Navigation algorithms for aerial robots, with emphasis on visual-inertial odometry, sensor fusion, and obstacle avoidance in GPS-denied environments.</p>
+                   </div>
+                </div></div><div class="section-block">
                 <h2>Current Research</h2>
-                
                 <div class="current-project">
                   <h3>ARTO: Automated Robotics for Testing Optimization</h3>
                   <p class="project-affiliation">MERLIN Laboratory, Polytechnic University of Milan</p>
                   <p class="project-date">October 2024 - Present</p>
                   <div class="project-content">
-                    <img src="assets/images/robot-arm.jpg" alt="UR5e Robot Arm" class="project-image">
-                    <div class="project-description">
+                    <img src="assets/images/robot-arm.jpg" alt="UR5e Robot Arm in Lab" class="project-image"> <div class="project-description">
                       <p>This research focuses on developing intuitive programming-by-demonstration frameworks for industrial robots. The goal is to enable non-technical operators to efficiently program complex robot trajectories through natural demonstration.</p>
                       <p>Key contributions include:</p>
                       <ul>
@@ -99,35 +96,25 @@
                       </ul>
                       <p>This work bridges the gap between intuitive human demonstration and precise robotic execution, potentially reducing programming time for complex trajectories by up to 65%.</p>
                     </div>
-                  </div>
-                </div>
-                
-                <div class="current-project">
-                  <h3>Reinforcement Learning for Robot Path Planning</h3>
-                  <p class="project-affiliation">Polytechnic University of Milan</p>
-                  <p class="project-date">2023</p>
-                  <div class="project-content">
-                    <div class="project-description">
-                      <p>This project focuses on using reinforcement learning techniques for robot path planning in environments with static obstacles. The approach combines traditional planning algorithms with learning-based methods to develop robust navigation strategies.</p>
-                      <p>Research highlights:</p>
-                      <ul>
-                        <li>Custom reward functions balancing efficiency, safety, and path smoothness</li>
-                        <li>Preprocessing pipeline using CNNs to transform voxelized obstacle data</li>
-                        <li>Formulation of manipulability metrics to avoid singularities during continuous movement</li>
-                        <li>Comparative analysis of RL algorithms for continuous action spaces in robotic manipulation</li>
-                      </ul>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <div class="section-block">
+                  </div></div><div class="current-project">
+                   <h3>Reinforcement Learning for Robot Path Planning</h3>
+                   <p class="project-affiliation">Polytechnic University of Milan</p>
+                   <p class="project-date">2023</p>
+                   <div class="project-content">
+                     <div class="project-description" style="width: 100%;"> <p>This project focuses on using reinforcement learning techniques for robot path planning in environments with static obstacles. The approach combines traditional planning algorithms with learning-based methods to develop robust navigation strategies.</p>
+                       <p>Research highlights:</p>
+                       <ul>
+                         <li>Custom reward functions balancing efficiency, safety, and path smoothness</li>
+                         <li>Preprocessing pipeline using CNNs to transform voxelized obstacle data</li>
+                         <li>Formulation of manipulability metrics to avoid singularities during continuous movement</li>
+                         <li>Comparative analysis of RL algorithms for continuous action spaces in robotic manipulation</li>
+                       </ul>
+                     </div>
+                   </div></div></div><div class="section-block">
                 <h2>Publications</h2>
-                
                 <div class="publications-list">
                   <div class="publication-item">
                     <h3>Journal Articles</h3>
-                    
                     <div class="publication">
                       <p class="publication-authors">Saeidi, M., et al.</p>
                       <p class="publication-title">"Nonlinear Tracking Control Algorithm for Dynamical Output Systems Manipulated by the Hardly Constrained Oscillatory Actuator"</p>
@@ -136,71 +123,49 @@
                         <a href="https://onlinelibrary.wiley.com/doi/full/10.1155/2023/3799011" target="_blank"><i class="fas fa-external-link-alt"></i> DOI: 10.1155/2023/3799011</a>
                         <a href="#" class="publication-abstract-toggle"><i class="fas fa-chevron-down"></i> Abstract</a>
                       </p>
-                      <div class="publication-abstract">
-                        <p>This paper introduces a novel nonlinear tracking control algorithm for dynamical output systems with constraints on the actuation mechanism. The proposed approach addresses challenges in systems where traditional control methods fail due to actuation limitations. We demonstrate the algorithm's effectiveness through both theoretical analysis and experimental validation on an oscillatory mechanical system.</p>
-                      </div>
+                      <div class="publication-abstract"> <p>This paper introduces a novel nonlinear tracking control algorithm for dynamical output systems with constraints on the actuation mechanism. The proposed approach addresses challenges in systems where traditional control methods fail due to actuation limitations. We demonstrate the algorithm's effectiveness through both theoretical analysis and experimental validation on an oscillatory mechanical system.</p> </div>
                     </div>
-                    
                     <div class="publication">
-                      <p class="publication-authors">Saeidi, M., et al.</p>
-                      <p class="publication-title">"Synthetic Lyapunov stabilization technique for designing actuation-constrained multi-input multi-output control systems"</p>
-                      <p class="publication-journal"><em>Journal of the Franklin Institute</em>, 2022</p>
-                      <p class="publication-links">
-                        <a href="https://www.sciencedirect.com/science/article/pii/S0016003222004094" target="_blank"><i class="fas fa-external-link-alt"></i> DOI: 10.1016/j.jfranklin.2021.12.022</a>
-                        <a href="#" class="publication-abstract-toggle"><i class="fas fa-chevron-down"></i> Abstract</a>
-                      </p>
-                      <div class="publication-abstract">
-                        <p>This research presents a synthetic Lyapunov stabilization technique for designing control systems in multi-input multi-output (MIMO) scenarios where actuation constraints present significant challenges. We develop a novel approach that guarantees system stability while respecting practical limitations on actuator performance. The method is demonstrated through both simulation and experimental validation on a mechanical control system.</p>
-                      </div>
+                       <p class="publication-authors">Saeidi, M., et al.</p>
+                       <p class="publication-title">"Synthetic Lyapunov stabilization technique for designing actuation-constrained multi-input multi-output control systems"</p>
+                       <p class="publication-journal"><em>Journal of the Franklin Institute</em>, 2022</p>
+                       <p class="publication-links">
+                          <a href="https://www.sciencedirect.com/science/article/pii/S0016003222004094" target="_blank"><i class="fas fa-external-link-alt"></i> DOI: 10.1016/j.jfranklin.2021.12.022</a>
+                          <a href="#" class="publication-abstract-toggle"><i class="fas fa-chevron-down"></i> Abstract</a>
+                       </p>
+                       <div class="publication-abstract"> <p>This research presents a synthetic Lyapunov stabilization technique for designing control systems in multi-input multi-output (MIMO) scenarios where actuation constraints present significant challenges. We develop a novel approach that guarantees system stability while respecting practical limitations on actuator performance. The method is demonstrated through both simulation and experimental validation on a mechanical control system.</p> </div>
                     </div>
-                    
-                    <div class="publication">
-                      <p class="publication-authors">Saeidi, M., et al.</p>
-                      <p class="publication-title">"Pattern Recognition of Unbalanced Rigid Rotor Bearing Forces"</p>
-                      <p class="publication-journal"><em>Amirkabir Journal of Mechanical Engineering</em>, 54(12), pp. 3591-3606, 2022</p>
-                      <p class="publication-links">
-                        <a href="https://mej.aut.ac.ir/article_4852_en.html?lang=en" target="_blank"><i class="fas fa-external-link-alt"></i> Link</a>
-                        <a href="#" class="publication-abstract-toggle"><i class="fas fa-chevron-down"></i> Abstract</a>
-                      </p>
-                      <div class="publication-abstract">
-                        <p>This study presents a novel pattern recognition approach for identifying and characterizing forces in unbalanced rigid rotor bearing systems. We develop and validate advanced computational methods to detect patterns in vibration signatures that indicate specific types of imbalance. The approach provides a robust method for condition monitoring and predictive maintenance in rotating machinery.</p>
-                      </div>
+                     <div class="publication">
+                       <p class="publication-authors">Saeidi, M., et al.</p>
+                       <p class="publication-title">"Pattern Recognition of Unbalanced Rigid Rotor Bearing Forces"</p>
+                       <p class="publication-journal"><em>Amirkabir Journal of Mechanical Engineering</em>, 54(12), pp. 3591-3606, 2022</p>
+                       <p class="publication-links">
+                          <a href="https://mej.aut.ac.ir/article_4852_en.html?lang=en" target="_blank"><i class="fas fa-external-link-alt"></i> Link</a>
+                          <a href="#" class="publication-abstract-toggle"><i class="fas fa-chevron-down"></i> Abstract</a>
+                       </p>
+                       <div class="publication-abstract"> <p>This study presents a novel pattern recognition approach for identifying and characterizing forces in unbalanced rigid rotor bearing systems. We develop and validate advanced computational methods to detect patterns in vibration signatures that indicate specific types of imbalance. The approach provides a robust method for condition monitoring and predictive maintenance in rotating machinery.</p> </div>
                     </div>
-                  </div>
-                  
-                  <div class="publication-item">
-                    <h3>Conference Proceedings</h3>
-                    
-                    <div class="publication">
-                      <p class="publication-authors">Saeidi, M., et al.</p>
-                      <p class="publication-title">"Constrained Control of Moving Base Robotic System with Cooperative Arms"</p>
-                      <p class="publication-journal"><em>30th Annual International Conference of the Iranian Association of Mechanical Engineers</em>, Tehran, Iran, 2022</p>
-                      <p class="publication-links">
-                        <a href="#" class="publication-abstract-toggle"><i class="fas fa-chevron-down"></i> Abstract</a>
-                      </p>
-                      <div class="publication-abstract">
-                        <p>This paper addresses the complex control challenges in moving base robotic systems with cooperative manipulator arms. We propose a constrained control framework that maintains stable performance despite the dynamic coupling between the mobile base and the mounted manipulators. Experimental results demonstrate improved performance in tasks requiring coordination between locomotion and manipulation.</p>
-                      </div>
-                    </div>
-                    
-                    <div class="publication">
-                      <p class="publication-authors">Saeidi, M., et al.</p>
-                      <p class="publication-title">"Pattern Recognition of Unbalanced Rigid Rotor Bearing Forces"</p>
-                      <p class="publication-journal"><em>18th National Conference and 7th International Conference on Manufacturing Engineering in Iran (ICME 2022)</em></p>
-                      <p class="publication-links">
-                        <a href="#" class="publication-abstract-toggle"><i class="fas fa-chevron-down"></i> Abstract</a>
-                      </p>
-                      <div class="publication-abstract">
-                        <p>This conference paper presents an innovative approach to recognizing patterns in force distributions within unbalanced rigid rotor bearing systems. The methodology combines signal processing techniques with machine learning to identify characteristic signatures of various imbalance conditions. The proposed approach enables more accurate diagnosis and proactive maintenance strategies for industrial rotating machinery.</p>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            
-            <!-- Right Column - Sidebar -->
-            <div class="academia-sidebar">
+                  </div><div class="publication-item">
+                     <h3>Conference Proceedings</h3>
+                     <div class="publication">
+                       <p class="publication-authors">Saeidi, M., et al.</p>
+                       <p class="publication-title">"Constrained Control of Moving Base Robotic System with Cooperative Arms"</p>
+                       <p class="publication-journal"><em>30th Annual International Conference of the Iranian Association of Mechanical Engineers</em>, Tehran, Iran, 2022</p>
+                       <p class="publication-links">
+                          <a href="#" class="publication-abstract-toggle"><i class="fas fa-chevron-down"></i> Abstract</a>
+                       </p>
+                       <div class="publication-abstract"> <p>This paper addresses the complex control challenges in moving base robotic systems with cooperative manipulator arms. We propose a constrained control framework that maintains stable performance despite the dynamic coupling between the mobile base and the mounted manipulators. Experimental results demonstrate improved performance in tasks requiring coordination between locomotion and manipulation.</p> </div>
+                     </div>
+                     <div class="publication">
+                        <p class="publication-authors">Saeidi, M., et al.</p>
+                        <p class="publication-title">"Pattern Recognition of Unbalanced Rigid Rotor Bearing Forces"</p>
+                        <p class="publication-journal"><em>18th National Conference and 7th International Conference on Manufacturing Engineering in Iran (ICME 2022)</em></p>
+                        <p class="publication-links">
+                           <a href="#" class="publication-abstract-toggle"><i class="fas fa-chevron-down"></i> Abstract</a>
+                        </p>
+                        <div class="publication-abstract"> <p>This conference paper presents an innovative approach to recognizing patterns in force distributions within unbalanced rigid rotor bearing systems. The methodology combines signal processing techniques with machine learning to identify characteristic signatures of various imbalance conditions. The proposed approach enables more accurate diagnosis and proactive maintenance strategies for industrial rotating machinery.</p> </div>
+                     </div>
+                  </div></div></div></div><aside class="academia-sidebar">
               <div class="sidebar-block profile-block">
                 <img src="assets/images/profile-photo.jpg" alt="Mo Saeidi" class="profile-image">
                 <h3>Mo Saeidi</h3>
@@ -211,7 +176,7 @@
                   <a href="resume.html"><i class="fas fa-file-alt"></i> Resume</a>
                 </div>
               </div>
-              
+
               <div class="sidebar-block">
                 <h3>Education</h3>
                 <div class="education-item">
@@ -226,36 +191,35 @@
                   <p>GPA: 3.88/4.0 (Top 3%)</p>
                 </div>
               </div>
-              
+
               <div class="sidebar-block">
-                <h3>Research Experience</h3>
-                <div class="experience-item">
-                  <h4>MERLIN Laboratory Researcher</h4>
-                  <p>Polytechnic University of Milan</p>
-                  <p class="experience-date">October 2024 - Present</p>
-                </div>
-                <div class="experience-item">
-                  <h4>Researcher, AIRLAB Drone Team</h4>
-                  <p>Polytechnic University of Milan</p>
-                  <p class="experience-date">April 2023 - July 2024</p>
-                </div>
-                <div class="experience-item">
-                  <h4>Researcher, FALCO Project</h4>
-                  <p>AEA Association - POLIMI</p>
-                  <p class="experience-date">December 2023 - July 2024</p>
-                </div>
-                <div class="experience-item">
-                  <h4>Research Assistant</h4>
-                  <p>Mechatronics Laboratory - KNTU</p>
-                  <p class="experience-date">2021 - 2022</p>
-                </div>
-                <div class="experience-item">
-                  <h4>Research Assistant</h4>
-                  <p>Vibration and Control Laboratory - KNTU</p>
-                  <p class="experience-date">2019 - 2022</p>
-                </div>
+                 <h3>Research Experience</h3>
+                 <div class="experience-item">
+                   <h4>MERLIN Laboratory Researcher</h4>
+                   <p>Polytechnic University of Milan</p>
+                   <p class="experience-date">October 2024 - Present</p>
+                 </div>
+                 <div class="experience-item">
+                    <h4>Researcher, AIRLAB Drone Team</h4>
+                    <p>Polytechnic University of Milan</p>
+                    <p class="experience-date">April 2023 - July 2024</p> </div>
+                 <div class="experience-item">
+                   <h4>Researcher, FALCO Project</h4>
+                   <p>AEA Association - POLIMI</p>
+                   <p class="experience-date">December 2023 - July 2024</p>
+                 </div>
+                 <div class="experience-item">
+                    <h4>Research Assistant</h4>
+                    <p>Mechatronics Laboratory - KNTU</p>
+                    <p class="experience-date">2021 - 2022</p>
+                 </div>
+                 <div class="experience-item">
+                    <h4>Research Assistant</h4>
+                    <p>Vibration and Control Laboratory - KNTU</p>
+                    <p class="experience-date">2019 - 2022</p>
+                 </div>
               </div>
-              
+
               <div class="sidebar-block">
                 <h3>Topics I'm Learning</h3>
                 <ul class="learning-topics">
@@ -266,42 +230,18 @@
                   <li>Human-Robot Interaction</li>
                 </ul>
               </div>
-            </div>
-          </div>
-        </div>
-      </section>
+            </aside></div></div></section>
     </main>
 
-    <footer>
-      <div class="container">
-        <p>&copy; 2025 MoSa. All rights reserved.</p>
-      </div>
+    <footer> <div class="container">
+         <div class="footer-bottom">
+           <p>&copy; 2025 Mo Saeidi. All rights reserved.</p>
+         </div>
+       </div>
     </footer>
-  </div>
-  
-  <script src="assets/js/script.js"></script>
-  <script>
-    // Toggle publication abstracts
-    document.addEventListener('DOMContentLoaded', function() {
-      const abstractToggles = document.querySelectorAll('.publication-abstract-toggle');
-      
-      abstractToggles.forEach(toggle => {
-        toggle.addEventListener('click', function(e) {
-          e.preventDefault();
-          const abstract = this.parentNode.nextElementSibling;
-          abstract.classList.toggle('show');
-          
-          const icon = this.querySelector('i');
-          if (icon.classList.contains('fa-chevron-down')) {
-            icon.classList.remove('fa-chevron-down');
-            icon.classList.add('fa-chevron-up');
-          } else {
-            icon.classList.remove('fa-chevron-up');
-            icon.classList.add('fa-chevron-down');
-          }
-        });
-      });
-    });
-  </script>
+
+  </div> <script src="assets/js/main.js"></script>
+  <script src="assets/js/pages/academia.js"></script>
+
 </body>
 </html>

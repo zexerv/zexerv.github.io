@@ -1,0 +1,221 @@
+/* ==========================================================================
+   Button Component Styles
+   ========================================================================== */
+
+/* Base Button Style */
+.btn {
+    display: inline-flex; /* Use inline-flex for alignment with icons */
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-2); /* 8px gap between icon and text */
+    padding: var(--space-3) var(--space-5); /* 12px 24px - Adjust as needed */
+    border: var(--border-width) solid transparent; /* Start with transparent border */
+    border-radius: var(--border-radius-md); /* 6px rounded corners */
+    font-family: var(--font-family-sans);
+    font-size: var(--font-size-base); /* 16px */
+    font-weight: var(--font-weight-medium); /* 500 */
+    line-height: 1.5; /* Ensure consistent height */
+    text-align: center;
+    vertical-align: middle;
+    cursor: pointer;
+    text-decoration: none; /* Remove underline from link buttons */
+    white-space: nowrap; /* Prevent wrapping */
+    user-select: none; /* Prevent text selection */
+    transition: background-color var(--transition-fast),
+                border-color var(--transition-fast),
+                color var(--transition-fast),
+                box-shadow var(--transition-fast),
+                transform var(--transition-fast);
+  }
+  
+  /* Prevent double borders on buttons inside links */
+  a.btn {
+    text-decoration: none;
+  }
+  
+  /* Focus State (Accessibility) */
+  .btn:focus {
+    outline: 2px solid var(--color-accent-primary);
+    outline-offset: 2px;
+  }
+  .btn:focus:not(:focus-visible) {
+    outline: none; /* Remove outline if focus is not keyboard-driven */
+  }
+  
+  /* Hover & Active States */
+  .btn:hover {
+    text-decoration: none; /* Ensure no underline on hover */
+    transform: translateY(-2px); /* Subtle lift */
+    box-shadow: 0 4px 8px var(--color-shadow);
+  }
+  
+  .btn:active {
+    transform: translateY(-1px);
+    box-shadow: 0 2px 4px var(--color-shadow);
+  }
+  
+  /* Disabled State */
+  .btn:disabled,
+  .btn.disabled {
+    opacity: 0.65;
+    cursor: not-allowed;
+    box-shadow: none;
+    transform: none;
+  }
+  
+  /* --- Button Variations --- */
+  
+  /* Primary Button (GitHub Blue) */
+  .btn-primary {
+    background-color: var(--color-accent-primary);
+    color: var(--color-text-inverse);
+    border-color: var(--color-accent-primary);
+  }
+  
+  .btn-primary:hover {
+    background-color: var(--color-text-link-hover); /* Slightly darker blue */
+    border-color: var(--color-text-link-hover);
+    color: var(--color-text-inverse);
+  }
+  
+  /* Secondary Button (GitHub Gray) */
+  .btn-secondary {
+    background-color: var(--color-bg-tertiary); /* Light gray background */
+    color: var(--color-text-primary);
+    border-color: var(--color-border-secondary); /* Subtle border */
+    box-shadow: 0 1px 0 rgba(27, 31, 35, 0.04);
+  }
+  
+  .btn-secondary:hover {
+    background-color: #e6ebf1; /* Slightly darker gray */
+    border-color: var(--color-border-secondary);
+    color: var(--color-text-primary);
+  }
+  
+  /* Outline Button */
+  .btn-outline {
+    background-color: transparent;
+    color: var(--color-text-link);
+    border-color: var(--color-text-link);
+  }
+  
+  .btn-outline:hover {
+    background-color: var(--color-text-link);
+    color: var(--color-text-inverse);
+    border-color: var(--color-text-link);
+  }
+  
+  /* Green Button (e.g., for "Confirm") */
+  .btn-success {
+    background-color: var(--color-accent-secondary);
+    color: var(--color-text-inverse);
+    border-color: var(--color-accent-secondary);
+  }
+  
+  .btn-success:hover {
+    background-color: #259740; /* Darker green */
+    border-color: #259740;
+    color: var(--color-text-inverse);
+  }
+  
+  /* Red Button (e.g., for "Delete") */
+  .btn-danger {
+    background-color: var(--color-accent-tertiary);
+    color: var(--color-text-inverse);
+    border-color: var(--color-accent-tertiary);
+  }
+  
+  .btn-danger:hover {
+    background-color: #cb2431; /* Darker red */
+    border-color: #cb2431;
+    color: var(--color-text-inverse);
+  }
+  
+  
+  /* Download Button Specific Style (from resume page) */
+  .btn-download {
+    /* Inherits from .btn, add specific overrides if needed */
+    /* Example: use primary style */
+    background-color: var(--color-accent-primary);
+    color: var(--color-text-inverse);
+    border-color: var(--color-accent-primary);
+    position: relative; /* Needed for pseudo-elements if adding sheen */
+    overflow: hidden; /* Needed for sheen */
+  }
+  
+  .btn-download:hover {
+    background-color: var(--color-text-link-hover);
+    border-color: var(--color-text-link-hover);
+  }
+  
+  /* Optional: Add sheen effect from original resume style */
+  .btn-download::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%; /* Start off-screen */
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(120deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+    transition: left 0.6s ease;
+  }
+  
+  .btn-download:hover::before {
+    left: 100%; /* Move across the button */
+  }
+  
+  
+  /* Filter Button Specific Style (from index page) */
+  .btn-filter {
+    /* Use secondary style */
+    background-color: var(--color-bg-tertiary);
+    color: var(--color-text-primary);
+    border-color: var(--color-border-secondary);
+    box-shadow: 0 1px 0 rgba(27, 31, 35, 0.04);
+    padding: var(--space-2) var(--space-4); /* 8px 16px */
+    font-size: var(--font-size-sm); /* 14px */
+  }
+  
+  .btn-filter:hover {
+    background-color: #e6ebf1;
+    border-color: var(--color-border-secondary);
+  }
+  
+  .btn-filter.active {
+    background-color: var(--color-accent-primary);
+    color: var(--color-text-inverse);
+    border-color: var(--color-accent-primary);
+    box-shadow: inset 0 1px 0 rgba(27, 31, 35, 0.15);
+  }
+  .btn-filter.active:hover {
+    background-color: var(--color-text-link-hover);
+    border-color: var(--color-text-link-hover);
+  }
+  
+  /* Social Buttons (from contact/index page) */
+  /* Define base social button */
+  .btn-social {
+    color: var(--color-text-inverse);
+    border-width: 0; /* Social buttons usually don't have borders */
+  }
+  .btn-social:hover {
+    color: var(--color-text-inverse); /* Keep text white on hover */
+    opacity: 0.9; /* Slight fade effect */
+  }
+  
+  .btn-linkedin {
+    background-color: #0077b5;
+  }
+  .btn-linkedin:hover { background-color: #005e8b; }
+  
+  .btn-scholar {
+    background-color: #4285F4;
+  }
+  .btn-scholar:hover { background-color: #1a73e8; }
+  
+  .btn-github {
+    background-color: #333; /* Or var(--color-text-primary) */
+  }
+  .btn-github:hover { background-color: #1b1f23; }
+  
+  /* Add others if needed: twitter, email, etc. */

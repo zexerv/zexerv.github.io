@@ -1,0 +1,283 @@
+/* ==========================================================================
+   Contact Page Specific Styles (pages/contact.css)
+   ========================================================================== */
+
+/* Overall Section Padding */
+.contact-section {
+    /* Uses default padding from main tag in layout.css */
+    /* Add specific padding overrides if needed */
+    /* padding: var(--space-7) 0; */ /* Example: 48px top/bottom */
+  }
+  
+  /* Contact Header Area */
+  .contact-header {
+    text-align: center;
+    margin-bottom: var(--space-7); /* 48px */
+  }
+  
+  .contact-header h1 {
+    font-size: var(--font-size-3xl); /* 40px */
+    font-weight: var(--font-weight-bold);
+    margin-bottom: var(--space-4); /* 16px */
+    color: var(--color-text-primary);
+    position: relative;
+    display: inline-block; /* Allows ::after to position correctly */
+  }
+  
+  /* Accent line below heading */
+  .contact-header h1::after {
+    content: '';
+    position: absolute;
+    bottom: -10px; /* Adjust position */
+    left: 50%;
+    transform: translateX(-50%);
+    width: 60px; /* Line width */
+    height: 3px; /* Line thickness */
+    background-color: var(--color-accent-primary); /* Blue accent */
+    border-radius: 2px;
+  }
+  
+  .contact-header p {
+    font-size: var(--font-size-md); /* 18px */
+    color: var(--color-text-secondary);
+    max-width: 700px; /* Limit width of intro text */
+    margin: var(--space-5) auto 0; /* 24px top margin, centered */
+  }
+  
+  /* Main Layout Grid (Info Card + Form Card) */
+  .contact-layout {
+    display: grid;
+    /* Adjust column ratio as needed */
+    grid-template-columns: 1fr 1.5fr; /* Example: Info card takes less space */
+    gap: var(--space-6); /* 32px gap */
+    margin: var(--space-6) 0; /* 32px vertical margin */
+  }
+  
+  /* Card Styling (Common for both info and form cards) */
+  .contact-info-card,
+  .contact-form-card {
+    background-color: var(--color-bg-primary); /* White background */
+    border-radius: var(--border-radius-lg); /* 10px */
+    box-shadow: 0 4px 15px var(--color-shadow);
+    border: var(--border-width) solid var(--color-border-primary);
+    padding: var(--space-6); /* 32px padding */
+    height: fit-content; /* Ensure card height fits content */
+  }
+  
+  /* Card Heading */
+  .card-heading {
+    color: var(--color-text-primary);
+    font-size: var(--font-size-lg); /* 20px */
+    font-weight: var(--font-weight-semibold);
+    margin-bottom: var(--space-5); /* 24px */
+    padding-bottom: var(--space-3); /* 12px */
+    border-bottom: var(--border-width) solid var(--color-border-primary);
+  }
+  
+  /* Left Card: Social Media Grid */
+  .social-grid {
+    display: grid;
+    grid-template-columns: 1fr; /* Ensure single column */
+    gap: var(--space-3); /* 12px gap */
+    margin-bottom: var(--space-6); /* 32px space below grid */
+  }
+  
+  .social-item {
+    display: flex;
+    align-items: center;
+    padding: var(--space-3); /* 12px */
+    border-radius: var(--border-radius-md); /* 6px */
+    transition: background-color var(--transition-fast), transform var(--transition-fast);
+    background-color: var(--color-bg-secondary);
+    border: 1px solid var(--color-border-primary);
+    text-decoration: none; /* Ensure links don't underline by default */
+  }
+  
+  .social-item:hover {
+    background-color: var(--color-bg-tertiary);
+    transform: scale(1.03); /* Slight grow effect */
+    text-decoration: none;
+  }
+  
+  .social-icon {
+    display: inline-flex; /* Use flex for centering */
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    flex-shrink: 0;
+    border-radius: 50%;
+    margin-right: var(--space-4); /* 16px */
+    color: var(--color-text-inverse); /* White icon text */
+    font-size: 1.1rem; /* Icon size */
+  }
+  
+  /* Background colors for social icons */
+  /* Reusing button variables where applicable or defining new ones */
+  .social-icon.github-bg { background-color: #333; }
+  .social-icon.linkedin-bg { background-color: #0077b5; }
+  .social-icon.twitter-bg { background-color: #1DA1F2; }
+  .social-icon.instagram-bg { background-color: #E1306C; }
+  .social-icon.telegram-bg { background-color: #0088cc; }
+  .social-icon.scholar-bg { background-color: #4285F4; }
+  .social-icon.email-bg { background-color: #D44638; } /* If needed */
+  
+  
+  .social-text {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .social-platform {
+    font-weight: var(--font-weight-medium); /* 500 */
+    color: var(--color-text-primary);
+    font-size: var(--font-size-sm); /* 14px */
+  }
+  
+  .social-handle {
+    color: var(--color-text-secondary);
+    font-size: var(--font-size-xs); /* 12px */
+    word-break: break-all; /* Prevent long handles from breaking layout */
+  }
+  
+  
+  /* Left Card: Contact Info List */
+  .contact-info-list {
+    list-style: none;
+    padding: 0;
+    margin: 0; /* Reset margin */
+  }
+  
+  .contact-info-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: var(--space-4); /* 16px */
+    gap: var(--space-4); /* 16px */
+  }
+  .contact-info-item:last-child {
+    margin-bottom: 0;
+  }
+  
+  .contact-info-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    flex-shrink: 0;
+    background-color: rgba(3, 102, 214, 0.1); /* Light blue background */
+    border-radius: 50%;
+    color: var(--color-accent-primary); /* Blue icon color */
+    font-size: 1rem;
+  }
+  
+  .contact-info-content {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .contact-info-label {
+    font-weight: var(--font-weight-medium); /* 500 */
+    color: var(--color-text-primary);
+    font-size: var(--font-size-sm); /* 14px */
+    margin-bottom: 2px;
+  }
+  
+  .contact-info-value {
+    color: var(--color-text-secondary);
+    font-size: var(--font-size-sm); /* 14px */
+  }
+  .contact-info-value a {
+    color: var(--color-text-link); /* Ensure links are styled correctly */
+  }
+  .contact-info-value a:hover {
+    color: var(--color-text-link-hover);
+  }
+  
+  /* Right Card: Contact Form */
+  .contact-form-card {
+    /* Uses common card styles */
+  }
+  
+  .form-group {
+    margin-bottom: var(--space-5); /* 24px */
+  }
+  
+  .form-group label {
+    display: block;
+    margin-bottom: var(--space-2); /* 8px */
+    font-weight: var(--font-weight-medium); /* 500 */
+    color: var(--color-text-primary);
+    font-size: var(--font-size-sm); /* 14px */
+  }
+  
+  .form-control {
+    width: 100%;
+    padding: var(--space-3) var(--space-4); /* 12px 16px */
+    border: var(--border-width) solid var(--color-border-secondary); /* Use secondary border */
+    border-radius: var(--border-radius-md); /* 6px */
+    font-family: var(--font-family-sans);
+    font-size: var(--font-size-base); /* 16px */
+    line-height: 1.5;
+    background-color: var(--color-bg-primary); /* Ensure white background */
+    color: var(--color-text-primary);
+    transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+  }
+  
+  .form-control:focus {
+    outline: none;
+    border-color: var(--color-accent-primary); /* Highlight border */
+    box-shadow: 0 0 0 3px rgba(3, 102, 214, 0.15); /* Subtle glow */
+  }
+  
+  textarea.form-control {
+    min-height: 150px;
+    resize: vertical; /* Allow vertical resize */
+  }
+  
+  /* Form Status Messages */
+  .form-status {
+    margin-top: var(--space-5); /* 24px */
+  }
+  
+  .success-message,
+  .error-message {
+    padding: var(--space-3) var(--space-4); /* 12px 16px */
+    border-radius: var(--border-radius-md); /* 6px */
+    display: flex;
+    align-items: center;
+    gap: var(--space-3); /* 12px */
+    font-size: var(--font-size-sm); /* 14px */
+  }
+  
+  .success-message {
+    background-color: rgba(46, 204, 113, 0.1); /* Light green */
+    color: #1f7a41; /* Darker green text */
+    border: 1px solid rgba(46, 204, 113, 0.2);
+  }
+  .success-message i { color: var(--color-accent-secondary); }
+  
+  .error-message {
+    background-color: rgba(231, 76, 60, 0.1); /* Light red */
+    color: #a91d2a; /* Darker red text */
+    border: 1px solid rgba(231, 76, 60, 0.2);
+  }
+  .error-message i { color: var(--color-accent-tertiary); }
+  
+  
+  /* Responsive adjustments for Contact Page */
+  @media (max-width: 992px) {
+     .contact-layout {
+        grid-template-columns: 1fr; /* Stack columns */
+     }
+  }
+  
+  @media (max-width: 576px) {
+     .contact-header h1 { font-size: var(--font-size-2xl); } /* 32px */
+     .contact-header p { font-size: var(--font-size-base); } /* 16px */
+  
+     .contact-info-card,
+     .contact-form-card {
+       padding: var(--space-5); /* 24px */
+     }
+  }

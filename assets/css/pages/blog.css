@@ -1,0 +1,58 @@
+/* ==========================================================================
+   Blog List Page Specific Styles (pages/blog.css)
+   ========================================================================== */
+
+/* Section container for the blog list */
+#blog {
+    /* Padding is handled by <main> tag styles in layout.css */
+    /* Example: Add specific padding if needed */
+    /* padding-top: var(--space-7); */
+    /* padding-bottom: var(--space-7); */
+  }
+  
+  /* Blog Page Header (Title and Intro Paragraph) */
+  #blog h1 {
+    text-align: center;
+    font-size: var(--font-size-3xl); /* 40px */
+    margin-bottom: var(--space-4); /* 16px */
+    color: var(--color-text-primary);
+  }
+  
+  #blog > .container > p { /* Target the introductory paragraph directly */
+    text-align: center;
+    font-size: var(--font-size-md); /* 18px */
+    color: var(--color-text-secondary);
+    max-width: 700px; /* Limit width */
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: var(--space-7); /* 48px space below intro */
+  }
+  
+  /* Grid container for blog post previews */
+  /* Uses .posts-grid class, same as index page */
+  .posts-grid {
+    display: grid;
+    /* Adjust minmax for desired card size */
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: var(--space-6); /* 32px */
+    margin-top: var(--space-6); /* In case used without intro p */
+  }
+  
+  /* Individual blog post styling relies on .card from components/cards.css */
+  /* Ensure HTML uses <article class="card post"> or similar structure */
+  
+  
+  /* Responsive adjustments for Blog Page */
+  @media (max-width: 576px) {
+    #blog h1 {
+      font-size: var(--font-size-2xl); /* 32px */
+    }
+    #blog > .container > p {
+      font-size: var(--font-size-base); /* 16px */
+      margin-bottom: var(--space-6); /* 32px */
+    }
+    .posts-grid {
+      grid-template-columns: 1fr; /* Stack cards */
+      gap: var(--space-5); /* Adjust gap */
+    }
+  }

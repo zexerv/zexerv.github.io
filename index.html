@@ -4,8 +4,9 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Mo Saeidi - Robotics & Control Engineer</title>
-  <link rel="stylesheet" href="assets/css/styles.css" />
-  <!-- Font Awesome -->
+
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&family=Roboto:wght@300;400;500;700&family=Lora:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+
   <link
     rel="stylesheet"
     href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
@@ -13,14 +14,25 @@
     crossorigin="anonymous"
     referrerpolicy="no-referrer"
   />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css"/>
+
+  <link rel="stylesheet" href="assets/css/base.css" />
+  <link rel="stylesheet" href="assets/css/layout.css" />
+  <link rel="stylesheet" href="assets/css/components/navbar.css" />
+  <link rel="stylesheet" href="assets/css/components/buttons.css" />
+  <link rel="stylesheet" href="assets/css/components/cards.css" />
+  <link rel="stylesheet" href="assets/css/components/footer.css" />
+  <link rel="stylesheet" href="assets/css/pages/index.css" />
+
 </head>
 <body>
   <div class="page-wrapper">
+
     <header>
       <nav class="navbar">
         <div class="container">
           <a href="index.html" class="logo">MoSa</a>
-          <button id="mobile-menu-btn" class="mobile-menu-btn">
+          <button id="mobile-menu-btn" class="mobile-menu-btn" aria-label="Toggle Menu" aria-expanded="false">
             <span class="bar"></span>
             <span class="bar"></span>
             <span class="bar"></span>
@@ -37,341 +49,183 @@
       </nav>
     </header>
 
-    <!-- Hero Section with Parallax -->
-    <section id="hero" class="parallax-hero">
-      <div class="hero-content">
-        <h1 class="animated-text">Exploring the Intersection of <span class="highlight">Robotics</span>, <span class="highlight">Control</span>, and <span class="highlight">Learning</span></h1>
-        <p>Robotics engineer passionate about creating intelligent systems that adapt to complex environments</p>
-        <div class="hero-buttons">
-          <a href="resume.html" class="btn btn-primary">View Resume</a>
-          <a href="assets/documents/resume.pdf" class="btn btn-secondary" download="MoSaeidi_Resume.pdf">Download CV</a>
-        </div>
-      </div>
-      <div class="scroll-indicator">
-        <span>Scroll Down</span>
-        <i class="fas fa-chevron-down"></i>
-      </div>
-    </section>
-
     <main>
-      <!-- Current Focus Section -->
+
+      <section id="hero" class="parallax-hero">
+        <div class="hero-content">
+          <h1 class="animated-text">Exploring the Intersection of <span class="highlight">Robotics</span>, <span class="highlight">Control</span>, and <span class="highlight">Learning</span></h1>
+          <p>Robotics engineer passionate about creating intelligent systems that adapt to complex environments</p>
+          <div class="hero-buttons">
+            <a href="resume.html" class="btn btn-primary">View Resume</a>
+            <a href="assets/documents/resume.pdf" class="btn btn-secondary" download="MoSaeidi_Resume.pdf">Download CV</a>
+          </div>
+        </div>
+        <div class="scroll-indicator">
+          <span>Scroll Down</span>
+          <i class="fas fa-chevron-down"></i>
+        </div>
+      </section>
+
       <section id="current-focus">
         <div class="container">
           <h2 class="section-title">Current Focus</h2>
           <div class="focus-wrapper">
-            <div class="focus-card research">
-              <div class="focus-icon">
-                <i class="fas fa-robot"></i>
+            <div class="card focus-card">
+              <div class="card-icon icon-research"> <i class="fas fa-robot"></i> </div>
+              <div class="card-body">
+                <h3 class="card-title">ARTO Project</h3>
+                <p class="card-text">Teaching robots to learn from human demonstrations using reinforcement learning and trajectory optimization</p>
               </div>
-              <h3>ARTO Project</h3>
-              <p>Teaching robots to learn from human demonstrations using reinforcement learning and trajectory optimization</p>
-              <div class="progress-container">
-                <div class="progress-bar">
-                  <div class="progress" style="width: 75%"></div>
-                </div>
-                <span class="progress-text">75% Complete</span>
-              </div>
-            </div>
-            
-            <div class="focus-card publication">
-              <div class="focus-icon">
-                <i class="fas fa-file-alt"></i>
-              </div>
-              <h3>Upcoming Publication</h3>
-              <p>Research paper on human-guided reinforcement learning for robotic manipulation tasks</p>
-              <div class="milestone-tracker">
-                <div class="milestone completed">
-                  <span class="milestone-dot"></span>
-                  <span class="milestone-label">Research</span>
-                </div>
-                <div class="milestone completed">
-                  <span class="milestone-dot"></span>
-                  <span class="milestone-label">Draft</span>
-                </div>
-                <div class="milestone in-progress">
-                  <span class="milestone-dot"></span>
-                  <span class="milestone-label">Review</span>
-                </div>
-                <div class="milestone">
-                  <span class="milestone-dot"></span>
-                  <span class="milestone-label">Submit</span>
+              <div class="card-footer">
+                <div class="progress-container">
+                   <div class="progress-bar">
+                      <div class="progress" style="width: 75%"></div>
+                   </div>
+                   <span class="progress-text">75% Complete</span>
                 </div>
               </div>
             </div>
-            
-            <div class="focus-card learning">
-              <div class="focus-icon">
-                <i class="fas fa-book"></i>
-              </div>
-              <h3>Learning Journey</h3>
-              <p>Advancing knowledge in statistical ML, reinforcement learning, and optimal control</p>
-              <div class="books-progress">
-                <div class="book-item">
-                  <span class="book-title">Statistical ML</span>
-                  <div class="book-progress-bar">
-                    <div class="book-progress" style="width: 65%"></div>
-                  </div>
-                  <span class="book-percentage">65%</span>
-                </div>
-                <div class="book-item">
-                  <span class="book-title">Reinforcement Learning</span>
-                  <div class="book-progress-bar">
-                    <div class="book-progress" style="width: 80%"></div>
-                  </div>
-                  <span class="book-percentage">80%</span>
-                </div>
-                <div class="book-item">
-                  <span class="book-title">Optimal Control</span>
-                  <div class="book-progress-bar">
-                    <div class="book-progress" style="width: 40%"></div>
-                  </div>
-                  <span class="book-percentage">40%</span>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
 
+            <div class="card focus-card">
+              <div class="card-icon icon-publication"> <i class="fas fa-file-alt"></i> </div>
+               <div class="card-body">
+                 <h3 class="card-title">Upcoming Publication</h3>
+                 <p class="card-text">Research paper on human-guided reinforcement learning for robotic manipulation tasks</p>
+               </div>
+               <div class="card-footer">
+                 <div class="milestone-tracker">
+                   <div class="milestone completed"> <span class="milestone-dot"></span> <span class="milestone-label">Research</span> </div>
+                   <div class="milestone completed"> <span class="milestone-dot"></span> <span class="milestone-label">Draft</span> </div>
+                   <div class="milestone in-progress"> <span class="milestone-dot"></span> <span class="milestone-label">Review</span> </div>
+                   <div class="milestone"> <span class="milestone-dot"></span> <span class="milestone-label">Submit</span> </div>
+                 </div>
+               </div>
+            </div>
 
-      <!-- Projects Section -->
+            <div class="card focus-card">
+              <div class="card-icon icon-learning"> <i class="fas fa-book"></i> </div>
+               <div class="card-body">
+                 <h3 class="card-title">Learning Journey</h3>
+                 <p class="card-text">Advancing knowledge in statistical ML, reinforcement learning, and optimal control</p>
+               </div>
+               <div class="card-footer">
+                 <div class="books-progress">
+                    <div class="book-item"> <span class="book-title">Statistical ML</span> <div class="book-progress-bar"><div class="book-progress" style="width: 65%"></div></div> <span class="book-percentage">65%</span> </div>
+                    <div class="book-item"> <span class="book-title">Reinforcement Learning</span> <div class="book-progress-bar"><div class="book-progress" style="width: 80%"></div></div> <span class="book-percentage">80%</span> </div>
+                    <div class="book-item"> <span class="book-title">Optimal Control</span> <div class="book-progress-bar"><div class="book-progress" style="width: 40%"></div></div> <span class="book-percentage">40%</span> </div>
+                 </div>
+               </div>
+            </div>
+          </div></div></section>
+
       <section id="projects">
         <div class="container">
           <h2 class="section-title">Projects</h2>
           <p class="section-subtitle">A selection of my technical work and research implementations</p>
-          
+
           <div class="projects-filter">
-            <button class="filter-btn active" data-filter="all">All</button>
-            <button class="filter-btn" data-filter="robotics">Robotics</button>
-            <button class="filter-btn" data-filter="ml">Machine Learning</button>
-            <button class="filter-btn" data-filter="control">Control Systems</button>
-            <button class="filter-btn" data-filter="other">Other</button>
+             <button class="btn btn-filter active" data-filter="all">All</button>
+            <button class="btn btn-filter" data-filter="robotics">Robotics</button>
+            <button class="btn btn-filter" data-filter="ml">Machine Learning</button>
+            <button class="btn btn-filter" data-filter="control">Control Systems</button>
+            <button class="btn btn-filter" data-filter="other">Other</button>
           </div>
-          
+
           <div class="projects-grid">
-            <!-- Project Card 1 -->
-            <div class="project-card" data-category="robotics">
-              <div class="project-header">
-                <div class="project-logo">
-                  <i class="fab fa-github"></i>
-                </div>
-                <div class="project-links">
-                  <a href="https://github.com/zexerv/robot-trajectory-optimization" target="_blank" class="github-link" aria-label="GitHub Repository">
-                    <i class="fas fa-external-link-alt"></i>
-                  </a>
-                </div>
+            <div class="card project-card" data-category="robotics">
+              <div class="card-header project-header"> <div class="project-logo card-icon"> <i class="fab fa-github"></i> </div>
+                 <div class="project-links"> <a href="https://github.com/zexerv/robot-trajectory-optimization" target="_blank" class="card-link" aria-label="GitHub Repository"> <i class="fas fa-external-link-alt"></i> </a> </div>
               </div>
-              <h3 class="project-title">Robot Trajectory Optimization</h3>
-              <p class="project-description">A library for generating optimal trajectories for robotic manipulators using differential dynamic programming.</p>
-              <div class="project-tags">
-                <span class="tag">Python</span>
-                <span class="tag">C++</span>
-                <span class="tag">ROS</span>
+              <div class="card-body">
+                 <h3 class="card-title project-title">Robot Trajectory Optimization</h3>
+                 <p class="card-text project-description">A library for generating optimal trajectories for robotic manipulators using differential dynamic programming.</p>
+                 <div class="card-tags project-tags">
+                    <span class="tag tag-python">Python</span> <span class="tag tag-cpp">C++</span> <span class="tag tag-ros">ROS</span>
+                 </div>
               </div>
-              <div class="project-progress">
-                <div class="progress-container">
-                  <div class="progress-bar">
-                    <div class="progress" style="width: 90%"></div>
-                  </div>
-                  <span class="progress-text">90% Complete</span>
-                </div>
+              <div class="card-footer project-progress"> <div class="progress-container"> <div class="progress-bar"><div class="progress" style="width: 90%"></div></div> <span class="progress-text">90% Complete</span> </div>
               </div>
             </div>
-            
-            <!-- Project Card 2 -->
-            <div class="project-card" data-category="ml">
-              <div class="project-header">
-                <div class="project-logo">
-                  <i class="fab fa-github"></i>
-                </div>
-                <div class="project-links">
-                  <a href="https://github.com/zexerv/deep-reinforcement-learning" target="_blank" class="github-link" aria-label="GitHub Repository">
-                    <i class="fas fa-external-link-alt"></i>
-                  </a>
-                </div>
-              </div>
-              <h3 class="project-title">Deep Reinforcement Learning</h3>
-              <p class="project-description">Implementations of state-of-the-art DRL algorithms for continuous control problems.</p>
-              <div class="project-tags">
-                <span class="tag">PyTorch</span>
-                <span class="tag">TensorFlow</span>
-                <span class="tag">RL</span>
-              </div>
-              <div class="project-progress">
-                <div class="progress-container">
-                  <div class="progress-bar">
-                    <div class="progress" style="width: 75%"></div>
-                  </div>
-                  <span class="progress-text">75% Complete</span>
-                </div>
-              </div>
+
+            <div class="card project-card" data-category="ml">
+               <div class="card-header project-header"> <div class="project-logo card-icon"> <i class="fab fa-github"></i> </div> <div class="project-links"> <a href="https://github.com/zexerv/deep-reinforcement-learning" target="_blank" class="card-link" aria-label="GitHub Repository"> <i class="fas fa-external-link-alt"></i> </a> </div> </div>
+               <div class="card-body"> <h3 class="card-title project-title">Deep Reinforcement Learning</h3> <p class="card-text project-description">Implementations of state-of-the-art DRL algorithms for continuous control problems.</p> <div class="card-tags project-tags"> <span class="tag tag-pytorch">PyTorch</span> <span class="tag tag-tensorflow">TensorFlow</span> <span class="tag tag-rl">RL</span> </div> </div>
+               <div class="card-footer project-progress"> <div class="progress-container"> <div class="progress-bar"><div class="progress" style="width: 75%"></div></div> <span class="progress-text">75% Complete</span> </div> </div>
             </div>
-            
-            <!-- Project Card 3 -->
-            <div class="project-card" data-category="control">
-              <div class="project-header">
-                <div class="project-logo">
-                  <i class="fas fa-code"></i> <!-- Non-GitHub project -->
-                </div>
-                <div class="project-links">
-                  <a href="projects/mpc-toolkit.html" class="project-link" aria-label="Project Details">
-                    <i class="fas fa-external-link-alt"></i>
-                  </a>
-                </div>
-              </div>
-              <h3 class="project-title">MPC Toolkit</h3>
-              <p class="project-description">A comprehensive toolkit for model predictive control with applications in autonomous systems.</p>
-              <div class="project-tags">
-                <span class="tag">MATLAB</span>
-                <span class="tag">Python</span>
-                <span class="tag">Control Theory</span>
-              </div>
-              <div class="project-progress">
-                <div class="progress-container">
-                  <div class="progress-bar">
-                    <div class="progress" style="width: 60%"></div>
-                  </div>
-                  <span class="progress-text">60% Complete</span>
-                </div>
-              </div>
+
+             <div class="card project-card" data-category="control">
+               <div class="card-header project-header"> <div class="project-logo card-icon"> <i class="fas fa-code"></i> </div> <div class="project-links"> <a href="projects/mpc-toolkit.html" class="card-link" aria-label="Project Details"> <i class="fas fa-external-link-alt"></i> </a> </div> </div>
+               <div class="card-body"> <h3 class="card-title project-title">MPC Toolkit</h3> <p class="card-text project-description">A comprehensive toolkit for model predictive control with applications in autonomous systems.</p> <div class="card-tags project-tags"> <span class="tag tag-matlab">MATLAB</span> <span class="tag tag-python">Python</span> <span class="tag tag-control">Control Theory</span> </div> </div>
+               <div class="card-footer project-progress"> <div class="progress-container"> <div class="progress-bar"><div class="progress" style="width: 60%"></div></div> <span class="progress-text">60% Complete</span> </div> </div>
             </div>
-            
-            <!-- Project Card 4 -->
-            <div class="project-card" data-category="robotics">
-              <div class="project-header">
-                <div class="project-logo">
-                  <i class="fab fa-github"></i>
-                </div>
-                <div class="project-links">
-                  <a href="https://github.com/zexerv/human-robot-imitation" target="_blank" class="github-link" aria-label="GitHub Repository">
-                    <i class="fas fa-external-link-alt"></i>
-                  </a>
-                </div>
-              </div>
-              <h3 class="project-title">Human-Robot Imitation</h3>
-              <p class="project-description">Framework for robots to learn manipulation skills from human demonstrations using visual inputs.</p>
-              <div class="project-tags">
-                <span class="tag">Computer Vision</span>
-                <span class="tag">PyTorch</span>
-                <span class="tag">ROS</span>
-              </div>
-              <div class="project-progress">
-                <div class="progress-container">
-                  <div class="progress-bar">
-                    <div class="progress" style="width: 85%"></div>
-                  </div>
-                  <span class="progress-text">85% Complete</span>
-                </div>
-              </div>
+
+            <div class="card project-card" data-category="robotics"> <div class="card-body"><h3 class="card-title project-title">Human-Robot Imitation</h3><p class="card-text project-description">Placeholder description...</p></div>
             </div>
-            
-            <!-- Project Card 5 -->
-            <div class="project-card" data-category="other">
-              <div class="project-header">
-                <div class="project-logo">
-                  <i class="fas fa-code"></i> <!-- Non-GitHub project -->
-                </div>
-                <div class="project-links">
-                  <a href="projects/simulation-environment.html" class="project-link" aria-label="Project Details">
-                    <i class="fas fa-external-link-alt"></i>
-                  </a>
-                </div>
-              </div>
-              <h3 class="project-title">Simulation Environment</h3>
-              <p class="project-description">High-fidelity physics simulation environment for validating control algorithms before deployment.</p>
-              <div class="project-tags">
-                <span class="tag">C++</span>
-                <span class="tag">OpenGL</span>
-                <span class="tag">Physics</span>
-              </div>
-              <div class="project-progress">
-                <div class="progress-container">
-                  <div class="progress-bar">
-                    <div class="progress" style="width: 40%"></div>
-                  </div>
-                  <span class="progress-text">40% Complete</span>
-                </div>
-              </div>
+            <div class="card project-card" data-category="other"> <div class="card-body"><h3 class="card-title project-title">Simulation Environment</h3><p class="card-text project-description">Placeholder description...</p></div>
             </div>
-            
-            <!-- Project Card 6 -->
-            <div class="project-card" data-category="ml">
-              <div class="project-header">
-                <div class="project-logo">
-                  <i class="fab fa-github"></i>
-                </div>
-                <div class="project-links">
-                  <a href="https://github.com/zexerv/uncertainty-estimation" target="_blank" class="github-link" aria-label="GitHub Repository">
-                    <i class="fas fa-external-link-alt"></i>
-                  </a>
-                </div>
-              </div>
-              <h3 class="project-title">Uncertainty Estimation</h3>
-              <p class="project-description">Methods for quantifying uncertainty in deep learning models with applications in robotics.</p>
-              <div class="project-tags">
-                <span class="tag">Bayesian ML</span>
-                <span class="tag">PyTorch</span>
-                <span class="tag">Statistics</span>
-              </div>
-              <div class="project-progress">
-                <div class="progress-container">
-                  <div class="progress-bar">
-                    <div class="progress" style="width: 55%"></div>
-                  </div>
-                  <span class="progress-text">55% Complete</span>
-                </div>
-              </div>
+             <div class="card project-card" data-category="ml"> <div class="card-body"><h3 class="card-title project-title">Uncertainty Estimation</h3><p class="card-text project-description">Placeholder description...</p></div>
             </div>
-          </div>
-          
-          <div class="projects-cta">
-            <a href="https://github.com/zexerv" target="_blank" class="btn btn-outline">
-              <i class="fab fa-github"></i> View All GitHub Projects
+
+          </div><div class="projects-cta view-all-posts"> <a href="https://github.com/zexerv" target="_blank" class="btn btn-github"> <i class="fab fa-github"></i> View All GitHub Projects
             </a>
           </div>
-        </div>
-      </section>
+        </div></section>
 
-      <!-- Latest Blog Posts Section -->
       <section id="latest-posts">
         <div class="container">
           <h2 class="section-title">Latest Insights</h2>
           <div class="posts-grid" id="posts">
-            <!-- Posts will be loaded here via JavaScript -->
-          </div>
-          <div class="see-more-container">
-            <a href="blog.html" class="btn btn-outline">View All Posts</a>
-          </div>
-        </div>
-      </section>
-      
-      <!-- Quote Section -->
+            <article class="card post-preview" data-category="blog">
+                 <div class="card-body">
+                     <h3 class="card-title"><a href="blog/journey-begins.html" class="card-link">The Journey Begins</a></h3>
+                     <small class="card-text text-muted">Posted on February 2, 2025</small>
+                     <p class="card-text">Welcome to my personal blog! This is where I'll share my thoughts, experiences, and insights.</p>
+                     <a href="blog/journey-begins.html" class="card-link">Read More <i class="fas fa-arrow-right"></i></a>
+                 </div>
+             </article>
+             <article class="card post-preview" data-category="blog">
+                  <div class="card-body">
+                      <h3 class="card-title"><a href="blog/learning-matters.html" class="card-link">Why Learning Every Day Matters</a></h3>
+                      <small class="card-text text-muted">Posted on February 8, 2025</small>
+                      <p class="card-text">Continuous learning is the key to growth. Whether it's reading, experimenting, or thinking critically...</p>
+                      <a href="blog/learning-matters.html" class="card-link">Read More <i class="fas fa-arrow-right"></i></a>
+                  </div>
+             </article>
+             <article class="card post-preview" data-category="blog">
+                  <div class="card-body">
+                     <h3 class="card-title"><a href="blog/bellman-q-value.html" class="card-link">The Bellman Optimal Q-Value Function</a></h3>
+                     <small class="card-text text-muted">Posted on February 25, 2025</small>
+                     <p class="card-text">In Reinforcement Learning, the Q-value function evaluates the best action to take at a given state...</p>
+                     <a href="blog/bellman-q-value.html" class="card-link">Read More <i class="fas fa-arrow-right"></i></a>
+                  </div>
+             </article>
+             </div>
+          <div class="view-all-posts"> <a href="blog.html" class="btn btn-outline">View All Posts</a> </div>
+        </div></section>
+
       <section id="quote-section">
         <div class="container">
           <blockquote>
             <p>"Exploration is not just a core challenge in reinforcement learning algorithms; it's a guiding philosophy for life."</p>
             <cite>— My Research Philosophy</cite>
           </blockquote>
-        </div>
-      </section>
-      
-      <!-- Connect Section -->
+        </div></section>
+
       <section id="connect">
         <div class="container">
           <h2 class="section-title">Let's Connect</h2>
           <p class="connect-description">Interested in robotics, control systems, or potential collaborations? Reach out to discuss possibilities or just exchange ideas.</p>
           <div class="connect-buttons">
-            <a href="contact.html" class="btn btn-primary">Contact Me</a>
-            <a href="https://www.linkedin.com/in/mo-saeidi-21a00015a/" target="_blank" class="btn btn-linkedin"><i class="fab fa-linkedin"></i> LinkedIn</a>
-            <a href="https://scholar.google.com/citations?user=6AucdhQAAAAJ&hl=en" target="_blank" class="btn btn-scholar"><i class="fas fa-graduation-cap"></i> Google Scholar</a>
-            <a href="https://github.com/zexerv" target="_blank" class="btn btn-github"><i class="fab fa-github"></i> GitHub</a>
+             <a href="contact.html" class="btn btn-primary">Contact Me</a>
+            <a href="https://www.linkedin.com/in/mo-saeidi-21a00015a/" target="_blank" class="btn btn-social btn-linkedin"><i class="fab fa-linkedin"></i> LinkedIn</a>
+            <a href="https://scholar.google.com/citations?user=6AucdhQAAAAJ&hl=en" target="_blank" class="btn btn-social btn-scholar"><i class="fas fa-graduation-cap"></i> Google Scholar</a>
+            <a href="https://github.com/zexerv" target="_blank" class="btn btn-social btn-github"><i class="fab fa-github"></i> GitHub</a>
           </div>
-        </div>
-      </section>
+        </div></section>
+
     </main>
 
-    <footer>
-      <div class="container">
+    <footer> <div class="container">
         <div class="footer-content">
           <div class="footer-logo">
             <span>MoSa</span>
@@ -390,13 +244,11 @@
           </div>
         </div>
         <div class="footer-bottom">
-          <p>&copy; 2025 Mo Saeidi. All rights reserved.</p>
-        </div>
+          <p>&copy; 2025 Mo Saeidi. All rights reserved.</p> </div>
       </div>
     </footer>
-  </div>
-  
-  <script src="assets/js/script.js"></script>
-  <script src="assets/js/github-integration.js"></script>
-</body>
+
+  </div> <script src="assets/js/main.js"></script>
+  <script src="assets/js/pages/index.js"></script>
+  </body>
 </html>

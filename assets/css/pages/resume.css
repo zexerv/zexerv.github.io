@@ -1,0 +1,1175 @@
+/* ==========================================================================
+   Resume Page Specific Styles (assets/css/pages/resume.css)
+   ========================================================================== */
+
+/* CHUNK 1 START: Overall Container & Header Section */
+
+/* Overall Resume Container */
+.resume-container {
+    background-color: var(--color-bg-primary); /* White background */
+    border-radius: var(--border-radius-md); /* 6px */
+    box-shadow: 0 3px 10px var(--color-shadow);
+    border: var(--border-width) solid var(--color-border-primary);
+    margin: var(--space-6) auto; /* 32px auto margin */
+    max-width: var(--container-max-width, 900px); /* Use layout max-width */
+    overflow: hidden; /* Contain child elements */
+    position: relative; /* For potential pseudo-elements if needed later */
+  }
+  
+  /* 1. Resume Header Section
+     -------------------------------------------------------------------------- */
+  .resume-header {
+    background-color: var(--color-text-primary); /* Dark background, same as navbar */
+    color: var(--color-text-inverse); /* White text */
+    padding: var(--space-6) var(--space-7); /* 32px 48px padding */
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-6); /* 32px gap */
+    border-bottom: 3px solid var(--color-accent-primary); /* Blue accent border */
+  }
+  
+  .resume-header-content {
+    flex: 1; /* Allow content to take available space */
+  }
+  
+  /* Name and Title */
+  .resume-name {
+    font-size: var(--font-size-3xl); /* 40px */
+    font-weight: var(--font-weight-bold); /* 700 */
+    margin-bottom: var(--space-1); /* 4px */
+    color: var(--color-text-inverse);
+    line-height: 1.2;
+  }
+  
+  .resume-title {
+    font-size: var(--font-size-lg); /* 20px */
+    font-weight: var(--font-weight-light); /* 300 */
+    margin-bottom: var(--space-5); /* 24px */
+    color: var(--color-text-tertiary); /* Use muted text color for subtitle */
+    font-style: italic;
+  }
+  
+  /* Profile Image */
+  .profile-image-container {
+    flex-shrink: 0; /* Prevent image from shrinking */
+  }
+  
+  .profile-image {
+    width: 150px; /* Keep size or adjust as desired */
+    height: 150px;
+    border-radius: 50%; /* Circular image */
+    border: 4px solid var(--color-bg-primary); /* White border */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    object-fit: cover; /* Ensure image covers the area */
+    transition: transform var(--transition-base);
+  }
+  
+  .profile-image:hover {
+    transform: scale(1.05); /* Slight scale on hover */
+  }
+  
+  /* Contact Info */
+  .contact-info {
+    display: flex;
+    flex-wrap: wrap; /* Allow wrapping */
+    gap: var(--space-3) var(--space-5); /* 12px vertical, 24px horizontal gap */
+    margin-top: var(--space-5); /* 24px */
+  }
+  
+  .contact-item {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3); /* 12px */
+    font-size: var(--font-size-sm); /* 14px */
+    color: var(--color-text-secondary); /* Muted text color */
+    transition: transform var(--transition-fast);
+  }
+  .contact-item:hover {
+     transform: scale(1.05); /* Add subtle hover effect */
+  }
+  
+  .contact-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px; /* Slightly larger touch target */
+    height: 32px;
+    border-radius: 50%;
+    background-color: rgba(255, 255, 255, 0.15); /* Subtle background */
+    color: var(--color-text-inverse); /* White icon */
+    flex-shrink: 0; /* Prevent icon shrinking */
+  }
+  
+  .contact-icon i {
+    font-size: 0.9rem; /* Adjust icon size if needed */
+  }
+  
+  .contact-text {
+     color: var(--color-text-secondary); /* Muted text for non-links */
+  }
+  
+  /* Links within contact info */
+  .contact-item a {
+    color: var(--color-text-link); /* Use standard link color */
+    text-decoration: none;
+    display: inline-flex; /* Fix potential layout issues with links */
+    align-items: center;
+  }
+  
+  .contact-item a:hover {
+    color: var(--color-text-link-hover); /* Standard link hover */
+    text-decoration: underline;
+  }
+  
+  /* Responsive adjustments for Header */
+  @media (max-width: 768px) {
+    .resume-header {
+      flex-direction: column; /* Stack vertically */
+      text-align: center;
+      padding: var(--space-6) var(--space-5); /* Adjust padding */
+    }
+  
+    .profile-image-container {
+      order: -1; /* Move image to the top */
+      margin-bottom: var(--space-5); /* Add space below image */
+    }
+  
+    .profile-image {
+      width: 120px; /* Slightly smaller image on mobile */
+      height: 120px;
+    }
+  
+    .resume-title {
+      margin-bottom: var(--space-4);
+    }
+  
+    .contact-info {
+      justify-content: center; /* Center contact items */
+      gap: var(--space-3) var(--space-4); /* Adjust gap */
+    }
+  }
+  
+  @media (max-width: 576px) {
+     .resume-name { font-size: var(--font-size-2xl); } /* 32px */
+     .resume-title { font-size: var(--font-size-md); } /* 18px */
+     .contact-item { font-size: var(--font-size-xs); } /* 12px */
+     .contact-icon { width: 28px; height: 28px; }
+     .contact-icon i { font-size: 0.8rem; }
+  }
+  
+  /* CHUNK 1 END */
+  /* CHUNK 2 START: Summary Section */
+
+/* ==========================================================================
+   2. Summary Section
+   ========================================================================== */
+.summary-section {
+    padding: var(--space-6) var(--space-7); /* 32px 48px padding */
+    background-color: var(--color-bg-secondary); /* Light background */
+    border-bottom: var(--border-width) solid var(--color-border-primary);
+    position: relative; /* For quote pseudo-elements */
+  }
+  
+  /* Subtle decorative quotes */
+  .summary-section::before,
+  .summary-section::after {
+    content: '"';
+    position: absolute;
+    font-size: 6rem; /* Large size */
+    font-family: var(--font-family-serif, serif); /* Use serif if available */
+    color: var(--color-border-primary); /* Very light color */
+    opacity: 0.6;
+    line-height: 1;
+    z-index: 0; /* Ensure quotes are behind text */
+  }
+  
+  .summary-section::before {
+    top: var(--space-4);  /* 16px */
+    left: var(--space-4); /* 16px */
+  }
+  
+  .summary-section::after {
+    bottom: var(--space-2); /* 8px */
+    right: var(--space-4); /* 16px */
+  }
+  
+  .summary-section p {
+    margin: 0; /* Reset paragraph margin within summary */
+    padding: 0 var(--space-5); /* Indent text from quotes */
+    font-size: var(--font-size-md); /* 18px - slightly larger for emphasis */
+    color: var(--color-text-primary); /* Primary text color */
+    line-height: 1.7;
+    position: relative; /* Ensure text is above pseudo-elements */
+    z-index: 1;
+    /* Consider font-family: var(--font-family-serif); if desired */
+  }
+  
+  /* Responsive adjustments for Summary */
+  @media (max-width: 768px) {
+    .summary-section {
+       padding: var(--space-5) var(--space-6); /* Adjust padding */
+    }
+    .summary-section p {
+       padding: 0 var(--space-4); /* Adjust indent */
+       font-size: var(--font-size-base); /* 16px */
+    }
+    .summary-section::before,
+    .summary-section::after {
+       font-size: 5rem; /* Slightly smaller quotes */
+    }
+  }
+  
+  @media (max-width: 576px) {
+    .summary-section {
+       padding: var(--space-5); /* Adjust padding */
+    }
+     .summary-section p {
+       padding: 0 var(--space-2); /* Less indent */
+     }
+     .summary-section::before,
+     .summary-section::after {
+       font-size: 4rem; /* Even smaller quotes */
+     }
+  }
+  
+  /* CHUNK 2 END */
+  
+  /* --- Styles for other resume sections will be added below in subsequent chunks --- */
+  /* CHUNK 3 START: Resume Body Layout & Section Titles */
+
+/* ==========================================================================
+   3. Resume Body Layout & Sections
+   ========================================================================== */
+
+.resume-body {
+    padding: var(--space-6) var(--space-7); /* 32px 48px padding */
+    display: grid;
+    /* Default to two equal columns, adjust gap */
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-7); /* 48px gap */
+    position: relative; /* If needed for absolute positioned children */
+    z-index: 1; /* Ensure content is above background elements */
+  }
+  
+  /* Modifier for sections that should span the full width */
+  .resume-body .full-width {
+    grid-column: 1 / -1; /* Span across all columns */
+  }
+  
+  /* Individual Section Styling */
+  .resume-section {
+    margin-bottom: var(--space-6); /* 32px space between sections */
+    /* Add other section-level defaults if needed */
+  }
+  
+  /* Last section might not need bottom margin */
+  .resume-section:last-child {
+    margin-bottom: 0;
+  }
+  
+  /* Section Title Styling */
+  .section-title {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3); /* 12px gap between icon and text */
+    font-size: var(--font-size-xl); /* 24px */
+    font-weight: var(--font-weight-semibold); /* 600 */
+    color: var(--color-text-primary);
+    margin-bottom: var(--space-5); /* 24px space below title */
+    padding-bottom: var(--space-3); /* 12px space for underline */
+    border-bottom: var(--border-width) solid var(--color-border-primary); /* Simple underline */
+    position: relative; /* For potential pseudo-elements */
+  }
+  
+  /* Icon within the section title */
+  .section-title i {
+    display: inline-flex; /* Use flex for centering */
+    align-items: center;
+    justify-content: center;
+    width: 30px; /* Icon container size */
+    height: 30px;
+    border-radius: 50%; /* Circular background */
+    background-color: var(--color-accent-primary); /* Blue background */
+    color: var(--color-text-inverse); /* White icon */
+    font-size: var(--font-size-sm); /* 14px icon size */
+    flex-shrink: 0; /* Prevent icon shrinking */
+  }
+  
+  /* Optional: Add a short accent line below the icon/start of the title */
+  /* .section-title::after {
+    content: '';
+    position: absolute;
+    bottom: -1px; */ /* Align with border-bottom */
+  /* left: 0;
+    width: 50px; */ /* Adjust width as desired */
+  /* height: 3px; */ /* Make it slightly thicker */
+  /* background-color: var(--color-accent-primary);
+    border-radius: 2px;
+  } */
+  
+  
+  /* Responsive Adjustments for Body Layout */
+  @media (max-width: 992px) { /* Matches variable --breakpoint-lg if defined */
+    .resume-body {
+      padding: var(--space-5) var(--space-6); /* Adjust padding */
+      gap: var(--space-6); /* Reduce gap */
+    }
+  }
+  
+  @media (max-width: 768px) { /* Matches variable --breakpoint-md if defined */
+    .resume-body {
+      grid-template-columns: 1fr; /* Stack to a single column */
+      padding: var(--space-5); /* Further adjust padding */
+      gap: var(--space-5); /* Reduce gap */
+    }
+    .section-title {
+       font-size: var(--font-size-lg); /* 20px */
+       margin-bottom: var(--space-4); /* 16px */
+    }
+    .section-title i {
+       width: 26px;
+       height: 26px;
+       font-size: var(--font-size-xs); /* 12px */
+    }
+  }
+  
+  
+  /* CHUNK 3 END */
+  /* --- Styles for specific content items (Experience, Education, Skills) will be added below --- */
+  /* CHUNK 4 START: Experience & Education Items */
+
+/* ==========================================================================
+   4. Experience & Education Item Styling
+   ========================================================================== */
+
+/* Common styling for items in timeline-like sections */
+.experience-item,
+.education-item {
+  margin-bottom: var(--space-5); /* 24px space between items */
+  padding-left: var(--space-6); /* 32px space for timeline elements */
+  padding-bottom: var(--space-4); /* 16px bottom padding */
+  position: relative; /* Required for timeline pseudo-elements */
+}
+
+/* Remove padding from the very last item in a section */
+.resume-section > div:last-of-type.experience-item,
+.resume-section > div:last-of-type.education-item {
+   padding-bottom: 0;
+   margin-bottom: 0; /* Also remove margin if it's the absolute last */
+}
+
+/* Timeline Dot */
+.experience-item::before,
+.education-item::before {
+  content: '';
+  position: absolute;
+  left: 0; /* Position at the start of the padding */
+  top: 6px; /* Adjust vertical alignment */
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background-color: var(--color-accent-primary); /* Blue dot */
+  border: 2px solid var(--color-bg-primary); /* Match background for "cutout" look */
+  box-shadow: 0 0 0 1px var(--color-accent-primary); /* Thin outer ring */
+  z-index: 2; /* Above the line */
+}
+
+/* Timeline Vertical Line */
+.experience-item::after,
+.education-item::after {
+  content: '';
+  position: absolute;
+  left: 6px; /* Center the line with the dot (12px / 2) */
+  top: 20px; /* Start below the dot */
+  bottom: -6px; /* Extend slightly below padding-bottom */
+  width: 1px; /* Line thickness */
+  background-color: var(--color-border-primary); /* Use primary border color */
+  z-index: 1; /* Behind the dot */
+}
+
+/* Hide line for the very last item in a section */
+.resume-section > div:last-of-type.experience-item::after,
+.resume-section > div:last-of-type.education-item::after {
+  display: none;
+}
+
+/* Item Header Layout (Title, Logo, Date) */
+.experience-header,
+.education-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start; /* Align items to the top */
+  gap: var(--space-4); /* 16px gap */
+  margin-bottom: var(--space-1); /* 4px */
+}
+
+/* Title/Degree */
+.experience-title,
+.education-degree {
+  font-weight: var(--font-weight-semibold); /* 600 */
+  color: var(--color-text-primary);
+  font-size: var(--font-size-md); /* 18px */
+  line-height: 1.4;
+  margin-bottom: var(--space-1); /* 4px */
+}
+
+/* Container for Logo + Date (to keep them together) */
+.logo-date-container {
+  display: flex;
+  align-items: center; /* Vertically align logo and date */
+  gap: var(--space-3); /* 12px */
+  flex-shrink: 0; /* Prevent shrinking */
+  text-align: right; /* Align date text to the right */
+}
+
+/* Date Styling */
+.experience-date,
+.education-date {
+  color: var(--color-text-secondary);
+  font-weight: var(--font-weight-medium); /* 500 */
+  white-space: nowrap;
+  font-size: var(--font-size-sm); /* 14px */
+  background: var(--color-bg-secondary); /* Light gray background */
+  padding: var(--space-1) var(--space-3); /* 4px 12px */
+  border-radius: var(--border-radius-sm); /* 3px */
+  border: 1px solid var(--color-border-primary);
+}
+
+/* Logo Container & Styling */
+.logo-container {
+  /* Optional: Add container styles if needed for positioning */
+  /* Example: line-height: 0; to remove extra space */
+}
+
+.experience-logo,
+.education-logo {
+  width: 36px; /* Adjust size as desired */
+  height: 36px;
+  opacity: 0.6; /* Start semi-transparent */
+  filter: grayscale(80%); /* Start mostly grayscale */
+  transition: opacity var(--transition-base), filter var(--transition-base), transform var(--transition-base);
+  border-radius: var(--border-radius-sm); /* 3px */
+  object-fit: contain; /* Ensure logo fits without distortion */
+  background-color: var(--color-bg-primary); /* Add white background for logos with transparency */
+}
+
+/* Reveal logo on hover of the parent item */
+.experience-item:hover .experience-logo,
+.education-item:hover .education-logo {
+  opacity: 1;
+  filter: grayscale(0%);
+  transform: scale(1.1); /* Slight zoom effect */
+}
+
+/* Company / Institution Styling */
+.experience-company,
+.education-institution {
+  font-style: italic;
+  color: var(--color-text-secondary);
+  margin-bottom: var(--space-2); /* 8px */
+  font-size: var(--font-size-base); /* 16px */
+}
+
+/* Location Styling */
+.experience-location {
+  color: var(--color-text-tertiary); /* Muted color */
+  font-size: var(--font-size-sm); /* 14px */
+  margin-bottom: var(--space-3); /* 12px */
+  display: flex;
+  align-items: center;
+  gap: var(--space-2); /* 8px */
+}
+
+.experience-location i {
+  color: var(--color-text-tertiary); /* Match text color */
+  font-size: 0.9em; /* Slightly smaller icon */
+}
+
+/* Description Styling */
+.experience-description,
+.project-description /* Added project description for similar styling */ {
+  color: var(--color-text-secondary);
+  line-height: 1.6;
+  font-size: var(--font-size-base); /* 16px */
+}
+
+.experience-description ul,
+.project-description ul {
+   list-style: disc; /* Use standard bullets */
+   margin-top: var(--space-3); /* 12px */
+   margin-bottom: var(--space-3);
+   padding-left: var(--space-5); /* 24px indent */
+}
+
+.experience-description li,
+.project-description li {
+    margin-bottom: var(--space-2); /* 8px */
+}
+
+
+/* Responsive Adjustments for Items */
+@media (max-width: 576px) {
+  .experience-item,
+  .education-item {
+    padding-left: var(--space-5); /* Reduce padding */
+  }
+
+  .experience-header,
+  .education-header {
+    flex-direction: column; /* Stack header items */
+    align-items: flex-start; /* Align left */
+  }
+
+  .logo-date-container {
+     margin-top: var(--space-2); /* Add space when stacked */
+     width: 100%; /* Take full width */
+     justify-content: flex-start; /* Align left */
+  }
+  .experience-date,
+  .education-date {
+    order: 1; /* Ensure date comes after logo */
+  }
+  .logo-container {
+    order: 0; /* Ensure logo comes first */
+  }
+
+  .experience-title,
+  .education-degree {
+     font-size: var(--font-size-base); /* 16px */
+  }
+  .experience-date,
+  .education-date {
+     font-size: var(--font-size-xs); /* 12px */
+  }
+   .experience-company,
+   .education-institution {
+      font-size: var(--font-size-sm); /* 14px */
+   }
+}
+
+/* CHUNK 4 END */
+/* --- Styles for Publications, Projects, Skills etc. will be added below --- */
+
+/* CHUNK 5 START: Publications & Tooltips */
+
+/* ==========================================================================
+   5. Publications Section Styling
+   ========================================================================== */
+
+   .publication-item {
+    padding: var(--space-4) 0; /* 16px top/bottom padding */
+    border-bottom: var(--border-width) solid var(--color-border-primary);
+    transition: background-color var(--transition-fast); /* Add subtle hover background */
+  }
+  
+  .publication-item:last-of-type {
+    border-bottom: none; /* No border for the last item */
+    padding-bottom: 0;
+  }
+  
+  .publication-item:hover {
+    background-color: var(--color-bg-secondary); /* Light background on hover */
+  }
+  
+  /* Publication Details */
+  .publication-title {
+    font-weight: var(--font-weight-semibold); /* 600 */
+    margin-bottom: var(--space-1); /* 4px */
+    font-size: var(--font-size-base); /* 16px */
+    line-height: 1.4;
+    color: var(--color-text-primary);
+  }
+  
+  .publication-authors {
+    font-style: italic;
+    margin-bottom: var(--space-1); /* 4px */
+    color: var(--color-text-secondary);
+    font-size: var(--font-size-sm); /* 14px */
+  }
+  
+  .publication-journal {
+    margin-bottom: var(--space-2); /* 8px */
+    color: var(--color-text-secondary);
+    font-size: var(--font-size-sm); /* 14px */
+  }
+  
+  .publication-year {
+    color: var(--color-accent-primary); /* Blue text */
+    font-weight: var(--font-weight-medium); /* 500 */
+    font-size: var(--font-size-xs); /* 12px */
+    display: inline-block;
+    background: rgba(3, 102, 214, 0.1); /* Light blue background pill */
+    padding: 2px var(--space-3); /* 12px */
+    border-radius: var(--border-radius-sm); /* 3px */
+    margin-top: var(--space-1); /* 4px */
+  }
+  
+  /* Publication Link (View Paper) */
+  .publication-link {
+    display: inline-flex; /* Align icon and text */
+    align-items: center;
+    gap: var(--space-2); /* 8px */
+    margin-top: var(--space-2); /* 8px */
+    color: var(--color-text-link);
+    text-decoration: none;
+    font-size: var(--font-size-sm); /* 14px */
+    font-weight: var(--font-weight-medium);
+    transition: color var(--transition-fast);
+  }
+  
+  .publication-link:hover {
+    color: var(--color-text-link-hover);
+    text-decoration: underline;
+  }
+  
+  .publication-link i {
+    font-size: 0.8em; /* Make icon slightly smaller than text */
+  }
+  
+  
+  /* ==========================================================================
+     6. Tippy.js Tooltip Styling (for Paper Previews)
+     ========================================================================== */
+  
+  /* Base tooltip box */
+  .tippy-box {
+    background-color: var(--color-bg-primary); /* White background */
+    color: var(--color-text-primary);
+    box-shadow: 0 5px 15px var(--color-shadow);
+    border-radius: var(--border-radius-md); /* 6px */
+    border: var(--border-width) solid var(--color-border-primary);
+    font-size: var(--font-size-sm); /* 14px */
+    line-height: 1.4;
+    outline: 0;
+    transition-property: transform, visibility, opacity;
+    z-index: 9999 !important; /* Ensure tooltip is on top, using !important if necessary */
+    padding: 0; /* Remove default padding for image tooltips */
+    max-width: 250px !important; /* Override default max-width if needed */
+  }
+  
+  /* Tooltip Arrow */
+  .tippy-arrow {
+    color: var(--color-bg-primary); /* Arrow matches background */
+    /* Add stroke if needed */
+    /* stroke: var(--color-border-primary); */
+    /* stroke-width: 1px; */
+  }
+  
+  /* Specific styles for paper preview tooltips */
+  .paper-tooltip .tippy-content {
+    padding: 0; /* Ensure no padding inside the content area */
+    overflow: hidden; /* Ensure image fits within border-radius */
+  }
+  
+  .paper-tooltip img {
+    width: 100%;
+    height: auto;
+    display: block;
+    /* Ensure image background is white if transparent */
+    background-color: var(--color-bg-primary);
+  }
+  
+  /* Optional caption area below the image */
+  .paper-tooltip-content {
+    padding: var(--space-2) var(--space-3); /* 8px 12px */
+    text-align: center;
+    font-size: var(--font-size-xs); /* 12px */
+    color: var(--color-text-secondary);
+    border-top: var(--border-width) solid var(--color-border-primary);
+    background-color: var(--color-bg-secondary); /* Light gray background for caption */
+  }
+  
+  /* Ensure Tippy appears correctly when triggered from within resume items */
+  /* (May need adjustment based on final layout and potential stacking context issues) */
+  body .tippy-box[data-placement^=right] {
+    margin-left: var(--space-3); /* Add space between trigger and tooltip */
+  }
+  body .tippy-box[data-placement^=left] {
+    margin-right: var(--space-3);
+  }
+  
+  /* CHUNK 5 END */
+  /* --- Styles for Projects, Skills etc. will be added below --- */
+  /* CHUNK 6 START: Skills Section */
+
+/* ==========================================================================
+   7. Skills Section Styling
+   ========================================================================== */
+
+/* Container for all skill categories */
+.skills-container {
+    display: grid;
+    /* Default to 3 columns, adjust as needed */
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-6); /* 32px gap between columns */
+  }
+  
+  /* Individual skill category block */
+  .skill-category {
+    /* No specific styles needed unless adding background/border */
+    /* margin-bottom: var(--space-5); */ /* Add if needed when stacked */
+  }
+  
+  /* Skill category title (e.g., Robotics & Control) */
+  .skill-category h4 {
+    font-size: var(--font-size-base); /* 16px */
+    font-weight: var(--font-weight-semibold); /* 600 */
+    color: var(--color-text-primary);
+    margin-bottom: var(--space-4); /* 16px */
+    padding-bottom: var(--space-2); /* 8px */
+    border-bottom: 1px solid var(--color-border-secondary); /* Subtle underline */
+    /* display: inline-block; */ /* Use if title shouldn't span full width */
+  }
+  
+  /* List of skills within a category */
+  .skills-list {
+    list-style: none; /* Remove default bullets */
+    padding: 0;
+    margin: 0;
+  }
+  
+  .skills-list li {
+    margin-bottom: var(--space-3); /* 12px */
+    position: relative; /* For custom bullet and level bar */
+    padding-left: var(--space-4); /* 16px space for custom bullet */
+    color: var(--color-text-secondary);
+    font-size: var(--font-size-sm); /* 14px */
+    transition: color var(--transition-fast);
+  }
+  
+  .skills-list li:hover {
+    color: var(--color-text-primary); /* Darken text on hover */
+  }
+  
+  /* Custom bullet point */
+  .skills-list li::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    /* Center vertically with text line-height (approximate) */
+    top: calc( (1em * 1.6 / 2) - 4px ); /* (font-size * line-height / 2) - (bullet-height / 2) */
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background-color: var(--color-text-tertiary); /* Muted bullet color */
+    transition: background-color var(--transition-fast);
+  }
+  
+  .skills-list li:hover::before {
+     background-color: var(--color-accent-primary); /* Highlight bullet on hover */
+  }
+  
+  /* Skill level indicator bar */
+  .skill-level {
+    height: 4px; /* Bar height */
+    background-color: var(--color-border-primary); /* Background of the bar */
+    border-radius: var(--border-radius-sm); /* 3px */
+    margin-top: var(--space-2); /* 8px space above bar */
+    position: relative;
+    overflow: hidden; /* Hide the overflowing fill */
+  }
+  
+  /* Fill element for the skill level */
+  .skill-level div { /* Corresponds to <div style="--level: 95%"></div> */
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    background: var(--color-accent-primary); /* Blue fill */
+    /* Use linear gradient for visual interest */
+    /* background: linear-gradient(to right, var(--color-accent-secondary), var(--color-accent-primary)); */
+    border-radius: var(--border-radius-sm);
+    width: 0; /* Start with 0 width */
+    transition: width 0.8s ease-in-out; /* Animate width change */
+    /* Read level from inline style variable */
+    width: var(--level, 0%);
+  }
+  
+  /* Trigger animation on hover of the list item (optional) */
+  /* If you want animation only on hover, uncomment below and remove width: var(--level...) from above */
+  /*
+  .skills-list li:hover .skill-level div {
+    width: var(--level, 80%); */ /* Default to 80% if --level not set */
+  /* }
+  */
+  
+  
+  /* Responsive adjustments for Skills */
+  @media (max-width: 992px) {
+    .skills-container {
+      grid-template-columns: repeat(2, 1fr); /* 2 columns on medium screens */
+      gap: var(--space-5); /* Adjust gap */
+    }
+  }
+  
+  @media (max-width: 576px) {
+    .skills-container {
+      grid-template-columns: 1fr; /* 1 column on small screens */
+      gap: var(--space-6); /* Increase gap when stacked */
+    }
+    .skill-category {
+       /* Add bottom margin if needed when stacked */
+       /* margin-bottom: var(--space-5); */
+    }
+  }
+  
+  
+  /* CHUNK 6 END */
+  /* --- Styles for Projects, Achievements etc. will be added below --- */
+  /* CHUNK 7 START: Projects Section */
+
+/* ==========================================================================
+   8. Projects Section Styling
+   ========================================================================== */
+
+/* Styling for individual project items */
+.project-item {
+    margin-bottom: var(--space-5); /* 24px space between items */
+    padding-left: var(--space-6); /* 32px space for timeline elements */
+    padding-bottom: var(--space-4); /* 16px bottom padding */
+    position: relative; /* Required for timeline pseudo-elements */
+    transition: transform var(--transition-fast), box-shadow var(--transition-fast); /* Add subtle transition */
+  }
+  
+  /* Apply timeline styles like Experience/Education */
+  .project-item::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 6px;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background-color: var(--color-accent-secondary); /* Use green accent for projects? */
+    /* Or use primary accent: background-color: var(--color-accent-primary); */
+    border: 2px solid var(--color-bg-primary);
+    box-shadow: 0 0 0 1px var(--color-accent-secondary); /* Match background */
+    /* box-shadow: 0 0 0 1px var(--color-accent-primary); */
+    z-index: 2;
+  }
+  
+  .project-item::after {
+    content: '';
+    position: absolute;
+    left: 6px;
+    top: 20px;
+    bottom: -6px;
+    width: 1px;
+    background-color: var(--color-border-primary);
+    z-index: 1;
+  }
+  
+  /* Hide line/padding for the last item */
+  .resume-section > div:last-of-type.project-item {
+    padding-bottom: 0;
+    margin-bottom: 0;
+  }
+  .resume-section > div:last-of-type.project-item::after {
+    display: none;
+  }
+  
+  /* Subtle hover effect */
+  .project-item:hover {
+    transform: translateY(-3px); /* Slight lift */
+    /* Optional: Add a subtle background or shadow on hover */
+    /* background-color: var(--color-bg-secondary); */
+    /* box-shadow: 0 4px 10px var(--color-shadow); */
+  }
+  
+  
+  /* Project Item Header (Title, Date) */
+  .project-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: var(--space-4);
+    margin-bottom: var(--space-1);
+  }
+  
+  .project-title {
+    font-weight: var(--font-weight-semibold);
+    color: var(--color-text-primary);
+    font-size: var(--font-size-md); /* 18px */
+    line-height: 1.4;
+    margin-bottom: var(--space-1);
+  }
+  
+  .project-date {
+    color: var(--color-text-secondary);
+    font-weight: var(--font-weight-medium);
+    white-space: nowrap;
+    font-size: var(--font-size-sm); /* 14px */
+    background: var(--color-bg-secondary);
+    padding: var(--space-1) var(--space-3);
+    border-radius: var(--border-radius-sm);
+    border: 1px solid var(--color-border-primary);
+    flex-shrink: 0; /* Prevent date shrinking */
+  }
+  
+  /* Project Description */
+  /* Uses .project-description styles defined in Chunk 4 */
+  
+  
+  /* Responsive adjustments for Project Items */
+  @media (max-width: 576px) {
+    .project-item {
+      padding-left: var(--space-5); /* Reduce padding */
+    }
+  
+    .project-header {
+      flex-direction: column; /* Stack header items */
+      align-items: flex-start; /* Align left */
+    }
+  
+    .project-date {
+       margin-top: var(--space-2); /* Add space when stacked */
+    }
+  
+    .project-title {
+       font-size: var(--font-size-base); /* 16px */
+    }
+  }
+  
+  
+  /* Note: Keyframe animations (.pulse-effect, .shimmer-effect, .glow-effect)
+     from the original CSS are intentionally omitted here for simplification.
+     They can be added back later if desired. */
+  
+  /* CHUNK 7 END */
+  /* --- Styles for Achievements, Certificates, Languages etc. will be added below --- */
+  /* CHUNK 8 START: Achievements Section */
+
+/* ==========================================================================
+   9. Achievements Section Styling
+   ========================================================================== */
+
+.achievement-item {
+    margin-bottom: var(--space-4); /* 16px */
+    padding: var(--space-3); /* 12px padding */
+    border-radius: var(--border-radius-md); /* 6px */
+    border-left: 3px solid transparent; /* Start with transparent border */
+    transition: background-color var(--transition-fast),
+                border-left-color var(--transition-fast),
+                transform var(--transition-fast);
+  }
+  
+  .achievement-item:last-of-type {
+    margin-bottom: 0;
+  }
+  
+  .achievement-item:hover {
+    background-color: var(--color-bg-secondary); /* Light background */
+    border-left-color: var(--color-accent-secondary); /* Green border on hover */
+    transform: translateX(5px); /* Slight shift right */
+  }
+  
+  /* Achievement Title (includes icon and text) */
+  .achievement-title {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3); /* 12px */
+    font-weight: var(--font-weight-semibold); /* 600 */
+    color: var(--color-text-primary);
+    margin-bottom: var(--space-1); /* 4px */
+    font-size: var(--font-size-base); /* 16px */
+  }
+  
+  /* Icon Styling (Trophy, Medal etc.) */
+  .achievement-title i {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px; /* Icon container size */
+    height: 24px;
+    border-radius: 50%;
+    background-color: var(--color-accent-secondary); /* Green background */
+    color: var(--color-text-inverse); /* White icon */
+    font-size: var(--font-size-xs); /* 12px icon size */
+    flex-shrink: 0;
+  }
+  
+  /* Indentation for Date and Description */
+  /* Calculate indentation based on icon width + gap */
+  /* Icon (24px) + Gap (12px) = 36px */
+  .achievement-date,
+  .achievement-description {
+    margin-left: calc(24px + var(--space-3)); /* 36px */
+    color: var(--color-text-secondary);
+    font-size: var(--font-size-sm); /* 14px */
+  }
+  
+  .achievement-date {
+    margin-bottom: var(--space-1); /* 4px */
+    color: var(--color-text-tertiary); /* More muted for date */
+  }
+  
+  .achievement-description {
+    line-height: 1.5;
+    /* Optional: font-style: italic; */
+  }
+  
+  /* Responsive adjustments if needed */
+  @media (max-width: 576px) {
+    .achievement-item {
+       padding: var(--space-2);
+    }
+    .achievement-title {
+       font-size: var(--font-size-sm); /* 14px */
+    }
+    .achievement-date,
+    .achievement-description {
+       font-size: var(--font-size-xs); /* 12px */
+    }
+  }
+  
+  /* CHUNK 8 END */
+  /* --- Styles for Certificates, Languages etc. will be added below --- */
+  /* CHUNK 9 START: Certificates Section */
+
+/* ==========================================================================
+   10. Certificates Section Styling
+   ========================================================================== */
+
+.certificate-item {
+    margin-bottom: var(--space-4); /* 16px */
+    padding: var(--space-3); /* 12px */
+    border-radius: var(--border-radius-md); /* 6px */
+    border-left: 3px solid var(--color-border-primary); /* Start with primary border color */
+    transition: background-color var(--transition-fast),
+                border-left-color var(--transition-fast),
+                transform var(--transition-fast);
+  }
+  
+  .certificate-item:last-of-type {
+    margin-bottom: 0;
+  }
+  
+  .certificate-item:hover {
+    background-color: var(--color-bg-secondary); /* Light background */
+    border-left-color: var(--color-accent-primary); /* Blue border on hover */
+    transform: translateX(5px); /* Slight shift right */
+  }
+  
+  /* Certificate Details */
+  .certificate-title {
+    font-weight: var(--font-weight-semibold); /* 600 */
+    margin-bottom: var(--space-1); /* 4px */
+    font-size: var(--font-size-base); /* 16px */
+    color: var(--color-text-primary);
+  }
+  
+  .certificate-issuer {
+    color: var(--color-text-secondary);
+    margin-bottom: var(--space-2); /* 8px */
+    font-size: var(--font-size-sm); /* 14px */
+  }
+  
+  .certificate-date {
+    color: var(--color-accent-primary); /* Blue text */
+    font-weight: var(--font-weight-medium); /* 500 */
+    font-size: var(--font-size-xs); /* 12px */
+    display: inline-block;
+    background: rgba(3, 102, 214, 0.1); /* Light blue background pill */
+    padding: 2px var(--space-3); /* 12px */
+    border-radius: var(--border-radius-sm); /* 3px */
+    margin-top: var(--space-1); /* 4px */
+    margin-bottom: var(--space-2); /* Add margin below date */
+  }
+  
+  /* Certificate Link (View Certificate) */
+  .certificate-link {
+    display: inline-flex; /* Align icon and text */
+    align-items: center;
+    gap: var(--space-2); /* 8px */
+    /* margin-top: var(--space-2); */ /* Removed, use margin-bottom on date */
+    color: var(--color-text-link);
+    text-decoration: none;
+    font-size: var(--font-size-sm); /* 14px */
+    font-weight: var(--font-weight-medium);
+    transition: color var(--transition-fast);
+    display: block; /* Make link take its own line */
+  }
+  
+  .certificate-link:hover {
+    color: var(--color-text-link-hover);
+    text-decoration: underline;
+  }
+  
+  .certificate-link i {
+    font-size: 0.8em; /* Make icon slightly smaller than text */
+  }
+  
+  /* Note: .float-effect animation intentionally omitted */
+  
+  
+  /* CHUNK 9 END */
+  /* --- Styles for Languages section will be added below --- */
+  /* CHUNK 10 START: Languages Section */
+
+/* ==========================================================================
+   11. Languages Section Styling
+   ========================================================================== */
+
+.languages-section {
+    /* Add margin-top if needed, usually handled by .resume-section margin */
+    /* margin-top: var(--space-5); */
+  }
+  
+  /* Flex container for language items */
+  .language-items {
+    display: flex;
+    flex-wrap: wrap; /* Allow items to wrap onto next line */
+    gap: var(--space-4); /* 16px gap between items */
+  }
+  
+  /* Individual language item block */
+  .language-item {
+    display: flex;
+    flex-direction: column; /* Stack name and level vertically */
+    padding: var(--space-3) var(--space-4); /* 12px 16px */
+    background-color: var(--color-bg-secondary); /* Light gray background */
+    border-radius: var(--border-radius-md); /* 6px */
+    border: 1px solid var(--color-border-primary);
+    transition: transform var(--transition-fast), box-shadow var(--transition-fast);
+    flex-grow: 1; /* Allow items to grow to fill space if needed */
+    min-width: 120px; /* Ensure items have a minimum width */
+  }
+  
+  .language-item:hover {
+    transform: translateY(-3px); /* Slight lift */
+    box-shadow: 0 3px 8px var(--color-shadow);
+  }
+  
+  /* Language Name */
+  .language-name {
+    font-weight: var(--font-weight-semibold); /* 600 */
+    margin-bottom: var(--space-1); /* 4px */
+    color: var(--color-text-primary);
+    font-size: var(--font-size-base); /* 16px */
+  }
+  
+  /* Language Level */
+  .language-level {
+    color: var(--color-text-secondary);
+    font-size: var(--font-size-sm); /* 14px */
+  }
+  
+  
+  /* Responsive Adjustments for Languages */
+  @media (max-width: 576px) {
+    .language-items {
+      /* Items will naturally wrap, but force single column if preferred */
+      /* flex-direction: column; */
+      gap: var(--space-3); /* Reduce gap */
+    }
+    .language-item {
+      min-width: 100px; /* Adjust min-width */
+    }
+  }
+  
+  /* CHUNK 10 END */
+  
+  /* ==========================================================================
+     End of Resume Page Specific Styles (assets/css/pages/resume.css)
+     ========================================================================== */

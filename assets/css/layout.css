@@ -1,0 +1,80 @@
+/* ==========================================================================
+   Global Layout Styles
+   ========================================================================== */
+
+/* Container
+   -------------------------------------------------------------------------- */
+/* Defines the main content width and centers it on the page. */
+.container {
+    width: 100%; /* Take full width available */
+    max-width: var(--container-max-width, 1100px); /* Max width from variables */
+    margin-left: auto;  /* Center the container */
+    margin-right: auto; /* Center the container */
+    padding-left: var(--container-padding, 1.5rem); /* Horizontal padding */
+    padding-right: var(--container-padding, 1.5rem); /* Horizontal padding */
+  }
+  
+  /* Page Wrapper & Sticky Footer Structure
+     -------------------------------------------------------------------------- */
+  /* Works with body and main styles in base.css (display: flex, flex-direction: column)
+     to ensure the footer sticks to the bottom even on short content pages. */
+  
+  .page-wrapper {
+    /* Already set to display: flex, flex-direction: column in base.css on body */
+    /* min-height: 100vh; already set on body in base.css */
+    /* No additional styles needed here unless overriding base flex behavior */
+  }
+  
+  main {
+    /* Already set to flex-grow: 1 in base.css */
+    /* This allows the main content area to expand and push the footer down. */
+    /* Add some default vertical padding to main content area */
+    padding-top: var(--space-6);    /* 32px */
+    padding-bottom: var(--space-7); /* 48px */
+  }
+  
+  /* Basic Header/Footer structure */
+  header {
+    /* Styles for the header element itself (if any needed beyond navbar) */
+    /* Example: border-bottom: 1px solid var(--color-border-primary); */
+  }
+  
+  footer {
+    /* Styles specific to the footer element, will be refined in footer.css */
+    background-color: var(--color-text-primary); /* Example background */
+    color: var(--color-text-inverse);          /* Example text color */
+    padding: var(--space-6) 0;                 /* Example padding */
+    text-align: center;
+    margin-top: auto; /* Pushes footer to bottom in flex container */
+  }
+  
+  /* Grid Layout Helpers (Optional - can be expanded later)
+     -------------------------------------------------------------------------- */
+  /* Example of a simple reusable grid class */
+  .grid {
+    display: grid;
+    gap: var(--space-5); /* Default gap */
+  }
+  
+  /* Example grid column variations */
+  .grid-cols-1 { grid-template-columns: 1fr; }
+  .grid-cols-2 { grid-template-columns: repeat(2, 1fr); }
+  .grid-cols-3 { grid-template-columns: repeat(3, 1fr); }
+  /* Add more as needed */
+  
+  @media (max-width: 768px) {
+    .grid-cols-3 {
+       grid-template-columns: repeat(2, 1fr); /* Stack to 2 columns on medium screens */
+    }
+  }
+  
+  @media (max-width: 576px) {
+    .grid-cols-2,
+    .grid-cols-3 {
+       grid-template-columns: 1fr; /* Stack to 1 column on small screens */
+    }
+    main {
+      padding-top: var(--space-5);    /* Reduce padding on small screens */
+      padding-bottom: var(--space-6);
+    }
+  }

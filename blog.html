@@ -3,57 +3,85 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Blog - My Personal Website</title>
-  <link rel="stylesheet" href="assets/css/styles.css" />
+  <title>Blog - Mo Saeidi</title> <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&family=Roboto:wght@300;400;500;700&family=Lora:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+    integrity="sha512-Fo3rlrZj/k7ujTnH/PR5njL16VsdhE5W8aXjz/r+5M6l5NjF/YSO0UOeAcH6rOr1v6Z1bOiHx6sF8Jb4iMJ5gw=="
+    crossorigin="anonymous"
+    referrerpolicy="no-referrer"
+  />
+  <link rel="stylesheet" href="assets/css/base.css" />
+  <link rel="stylesheet" href="assets/css/layout.css" />
+  <link rel="stylesheet" href="assets/css/components/navbar.css" />
+  <link rel="stylesheet" href="assets/css/components/buttons.css" />
+  <link rel="stylesheet" href="assets/css/components/cards.css" />
+  <link rel="stylesheet" href="assets/css/components/footer.css" />
+  <link rel="stylesheet" href="assets/css/pages/blog.css" />
+
 </head>
 <body>
-    <div class="page-wrapper">
+  <div class="page-wrapper">
 
-        
-        <header>
-            <nav class="navbar">
-              <div class="container">
-                <a href="index.html" class="logo">MoSa</a>
-                
-                <button id="mobile-menu-btn" class="mobile-menu-btn">
-                  <span class="bar"></span>
-                  <span class="bar"></span>
-                  <span class="bar"></span>
-                </button>
-                
-                <ul class="nav-links">
-                  <li><a href="index.html">Home</a></li>
-                  <li><a href="about.html">About Me</a></li>
-                  <li><a href="blog.html">Blog</a></li>
-                  <li><a href="academia.html">Academia</a></li>
-                  <li><a href="resume.html">Resume</a></li>
-                  <li><a href="contact.html">Contact</a></li>
-                </ul>
-              </div>
-            </nav>
-          </header>
-        
-        <main>
-    <section id="blog">
-      <div class="container">
-        <h1>My Blog</h1>
-        <p>
-            Welcome to my blog! Here, I share my thoughts, ideas, and experiences.
-        </p>
-        <div class="posts-grid" id="posts">
-            <!-- Dynamic blog posts loaded via JavaScript -->
+    <header>
+      <nav class="navbar">
+        <div class="container">
+          <a href="index.html" class="logo">MoSa</a>
+          <button id="mobile-menu-btn" class="mobile-menu-btn" aria-label="Toggle Menu" aria-expanded="false">
+            <span class="bar"></span>
+            <span class="bar"></span>
+            <span class="bar"></span>
+          </button>
+          <ul class="nav-links">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="about.html">About Me</a></li>
+            <li><a href="blog.html" class="active">Blog</a></li>
+            <li><a href="academia.html">Academia</a></li>
+            <li><a href="resume.html">Resume</a></li>
+            <li><a href="contact.html">Contact</a></li>
+          </ul>
         </div>
-    </div>
-</section>
-</main>
+      </nav>
+    </header>
 
-<footer>
-    <div class="container">
-        <p>&copy; 2025 My Personal Website. All rights reserved.</p>
-    </div>
-</footer>
-</div>
+    <main>
+      <section id="blog">
+        <div class="container">
+          <h1>My Blog</h1>
+          <p>Welcome to my personal blog! Here, I share my thoughts, ideas, and experiences in robotics, control, learning, and beyond.</p> <div class="posts-grid" id="posts">
+             <article class="card post"> <div class="card-body">
+                     <h3 class="card-title"><a href="blog/journey-begins.html" class="card-link">The Journey Begins</a></h3>
+                     <small class="card-text text-muted">Posted on February 2, 2025</small> <p class="card-text">Welcome to my personal blog! This is where I'll share my thoughts, experiences, and insights.</p>
+                     <a href="blog/journey-begins.html" class="card-link">Read More <i class="fas fa-arrow-right"></i></a>
+                 </div>
+             </article>
 
-  <script src="assets/js/script.js"></script>
-</body>
+             <article class="card post"> <div class="card-body">
+                      <h3 class="card-title"><a href="blog/learning-matters.html" class="card-link">Why Learning Every Day Matters</a></h3>
+                      <small class="card-text text-muted">Posted on February 8, 2025</small>
+                      <p class="card-text">Continuous learning is the key to growth. Whether it's reading, experimenting, or thinking critically, learning should never stop.</p>
+                      <a href="blog/learning-matters.html" class="card-link">Read More <i class="fas fa-arrow-right"></i></a>
+                  </div>
+             </article>
+
+             <article class="card post"> <div class="card-body">
+                     <h3 class="card-title"><a href="blog/bellman-q-value.html" class="card-link">The Bellman Optimal Q-Value Function</a></h3>
+                     <small class="card-text text-muted">Posted on February 25, 2025</small>
+                     <p class="card-text">In Reinforcement Learning, the Q-value function evaluates the best action to take at a given state using the Bellman optimality equation.</p>
+                     <a href="blog/bellman-q-value.html" class="card-link">Read More <i class="fas fa-arrow-right"></i></a>
+                  </div>
+             </article>
+
+             </div> </div> </section>
+    </main>
+
+    <footer> <div class="container">
+         <div class="footer-bottom">
+           <p>&copy; 2025 Mo Saeidi. All rights reserved.</p> </div>
+      </div>
+    </footer>
+
+  </div> <script src="assets/js/main.js"></script>
+  </body>
 </html>

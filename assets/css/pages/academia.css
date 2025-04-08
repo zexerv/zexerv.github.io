@@ -1,0 +1,521 @@
+/* ==========================================================================
+   Academia Page Specific Styles (pages/academia.css)
+   ========================================================================== */
+
+/* CHUNK 1 START: Page Hero & Grid Layout */
+
+/* Page Hero Styling (Common style for top banner on subpages) */
+.page-hero {
+    /* Example background: Use a subtle gradient or solid color */
+    background: linear-gradient(to right, #eef2f7, #f6f8fa); /* Light blue/gray gradient */
+    /* Or use primary accent: background-color: var(--color-accent-primary); */
+    /* Or use a background image with overlay */
+    /* background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('../images/academia-hero.jpg') center/cover no-repeat; */
+    color: var(--color-text-primary); /* Adjust text color based on background */
+    /* color: var(--color-text-inverse); */
+    text-align: center;
+    padding: var(--space-7) var(--space-5); /* 48px top/bottom, 24px left/right */
+    margin-bottom: var(--space-7); /* Space below hero */
+    border-bottom: var(--border-width) solid var(--color-border-primary);
+  }
+  
+  .page-hero h1 {
+    font-size: var(--font-size-3xl); /* 40px */
+    margin-bottom: var(--space-3); /* 12px */
+    font-weight: var(--font-weight-bold);
+  }
+  
+  .page-hero .hero-subtitle {
+    font-size: var(--font-size-lg); /* 20px */
+    color: var(--color-text-secondary); /* Adjust color based on background */
+    /* color: rgba(255, 255, 255, 0.85); */
+    max-width: 750px;
+    margin: 0 auto;
+    line-height: 1.6;
+  }
+  
+  /* Main Content Area Layout */
+  #academia-content {
+   /* Padding is handled by <main> tag styles in layout.css */
+   /* container class handles max-width and horizontal centering/padding */
+  }
+  
+  /* Two-Column Grid Layout */
+  .academia-grid {
+    display: grid;
+    /* Adjust column ratio: 2fr for main, 1fr for sidebar */
+    grid-template-columns: 2fr 1fr;
+    gap: var(--space-7); /* 48px gap */
+  }
+  
+  /* Responsive adjustments for Grid */
+  @media (max-width: 992px) { /* Example breakpoint */
+    .academia-grid {
+      grid-template-columns: 1fr; /* Stack to single column */
+      gap: var(--space-6); /* Reduce gap */
+    }
+  
+    /* Ensure sidebar appears below main content when stacked */
+    .academia-sidebar {
+       /* order: 2; */ /* Use if needed, but default source order should work */
+       /* Add margin-top when stacked */
+       margin-top: var(--space-6);
+    }
+  }
+  
+  /* Optional: Adjust hero padding on smaller screens */
+  @media (max-width: 576px) {
+    .page-hero {
+       padding: var(--space-6) var(--space-4);
+    }
+    .page-hero h1 { font-size: var(--font-size-2xl); }
+    .page-hero .hero-subtitle { font-size: var(--font-size-base); }
+  }
+  
+  
+  /* CHUNK 1 END */
+  /* --- Styles for Main Content & Sidebar sections will be added below --- */
+
+  /* CHUNK 2 START: Main Content Area Styling */
+
+/* ==========================================================================
+   2. Main Content Area (.academia-main)
+   ========================================================================== */
+
+/* Optional: Add styles for the .academia-main container itself if needed */
+.academia-main {
+    /* Example: border-right: 1px solid var(--color-border-primary); */
+    /* Example: padding-right: var(--space-7); */
+  }
+  
+  /* Common style for content blocks within the main area */
+  .section-block {
+    background: var(--color-bg-primary); /* White background */
+    border-radius: var(--border-radius-md); /* 6px */
+    border: var(--border-width) solid var(--color-border-primary);
+    padding: var(--space-6); /* 32px */
+    margin-bottom: var(--space-6); /* 32px space between blocks */
+    box-shadow: 0 2px 5px var(--color-shadow);
+  }
+  .section-block:last-child {
+    margin-bottom: 0;
+  }
+  
+  .section-block h2 {
+    font-size: var(--font-size-xl); /* 24px */
+    color: var(--color-text-primary);
+    margin-bottom: var(--space-5); /* 24px */
+    padding-bottom: var(--space-3); /* 12px */
+    border-bottom: var(--border-width) solid var(--color-border-secondary);
+  }
+  
+  /* Research Interests Area */
+  .research-areas {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); /* Responsive grid */
+    gap: var(--space-5); /* 24px */
+    margin-top: var(--space-5);
+  }
+  
+  .research-area {
+    padding: var(--space-5); /* 24px */
+    background: var(--color-bg-secondary); /* Light background */
+    border-radius: var(--border-radius-md);
+    border-left: 4px solid var(--color-accent-primary); /* Blue accent border */
+  }
+  
+  .research-area h3 {
+    font-size: var(--font-size-md); /* 18px */
+    margin-bottom: var(--space-3); /* 12px */
+    color: var(--color-text-primary);
+    display: flex;
+    align-items: center;
+    gap: var(--space-3); /* 12px */
+  }
+  
+  .research-area h3 i {
+    color: var(--color-accent-primary); /* Blue icon */
+    font-size: 1.1em; /* Slightly larger icon */
+    width: 24px; /* Ensure consistent alignment */
+    text-align: center;
+  }
+  
+  .research-area p {
+    font-size: var(--font-size-sm); /* 14px */
+    color: var(--color-text-secondary);
+    line-height: 1.6;
+    margin-bottom: 0; /* Reset bottom margin */
+  }
+  
+  
+  /* Current Research Project Display */
+  .current-project {
+    margin-bottom: var(--space-6); /* 32px if multiple projects */
+  }
+  .section-block > .current-project:last-child {
+     margin-bottom: 0;
+  }
+  
+  .current-project h3 {
+    font-size: var(--font-size-lg); /* 20px */
+    color: var(--color-text-primary);
+    margin-bottom: var(--space-1); /* 4px */
+  }
+  
+  .project-affiliation {
+    font-style: italic;
+    color: var(--color-text-secondary);
+    margin-bottom: var(--space-1); /* 4px */
+    font-size: var(--font-size-sm); /* 14px */
+  }
+  
+  .project-date {
+    color: var(--color-text-tertiary); /* Muted color */
+    font-size: var(--font-size-xs); /* 12px */
+    margin-bottom: var(--space-4); /* 16px */
+  }
+  
+  .project-content {
+    display: flex;
+    gap: var(--space-6); /* 32px */
+    margin-top: var(--space-4); /* 16px */
+  }
+  
+  .project-image {
+    width: 200px; /* Adjust image width */
+    height: auto;
+    object-fit: cover;
+    border-radius: var(--border-radius-md); /* 6px */
+    border: var(--border-width) solid var(--color-border-primary);
+    flex-shrink: 0; /* Prevent shrinking */
+  }
+  
+  .project-description {
+    flex: 1; /* Take remaining space */
+    font-size: var(--font-size-base); /* 16px */
+    color: var(--color-text-secondary);
+  }
+  
+  .project-description p {
+    margin-bottom: var(--space-3); /* 12px */
+  }
+  
+  .project-description ul {
+    margin: var(--space-3) 0 var(--space-4) var(--space-5); /* Margins & indent */
+    list-style: disc;
+  }
+  
+  .project-description li {
+    margin-bottom: var(--space-2); /* 8px */
+  }
+  
+  
+  /* Publications List */
+  .publications-list {
+    /* Container for publication items */
+  }
+  
+  .publication-item {
+    margin-bottom: var(--space-5); /* 24px space between types (Journal/Conf) */
+  }
+  .publication-item:last-child {
+    margin-bottom: 0;
+  }
+  
+  .publication-item h3 { /* e.g., "Journal Articles" heading */
+    font-size: var(--font-size-md); /* 18px */
+    color: var(--color-text-secondary);
+    margin-bottom: var(--space-4); /* 16px */
+    padding-bottom: var(--space-2); /* 8px */
+    border-bottom: 1px dashed var(--color-border-secondary);
+  }
+  
+  /* Individual Publication Entry */
+  .publication {
+    margin-bottom: var(--space-5); /* 24px */
+    padding-left: var(--space-4); /* 16px indent */
+    border-left: 3px solid var(--color-border-secondary); /* Subtle left border */
+    transition: border-left-color var(--transition-fast);
+  }
+  .publication:last-child {
+    margin-bottom: 0;
+  }
+  
+  .publication:hover {
+    border-left-color: var(--color-accent-primary); /* Highlight on hover */
+  }
+  
+  .publication-authors {
+    margin-bottom: var(--space-1); /* 4px */
+    color: var(--color-text-secondary);
+    font-size: var(--font-size-sm); /* 14px */
+  }
+  
+  .publication-title {
+    font-weight: var(--font-weight-semibold); /* 600 */
+    margin-bottom: var(--space-1); /* 4px */
+    font-size: var(--font-size-base); /* 16px */
+    line-height: 1.4;
+    color: var(--color-text-primary);
+  }
+  
+  .publication-journal {
+    font-style: italic;
+    margin-bottom: var(--space-2); /* 8px */
+    color: var(--color-text-secondary);
+    font-size: var(--font-size-sm); /* 14px */
+  }
+  
+  .publication-links {
+    display: flex;
+    flex-wrap: wrap; /* Allow links to wrap */
+    gap: var(--space-4); /* 16px */
+    font-size: var(--font-size-sm); /* 14px */
+    margin-top: var(--space-2); /* 8px */
+  }
+  
+  .publication-links a {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-1); /* 4px */
+    color: var(--color-text-link);
+    font-weight: var(--font-weight-medium);
+  }
+  
+  .publication-links a:hover {
+    color: var(--color-text-link-hover);
+    text-decoration: underline;
+  }
+  
+  .publication-links a i {
+    font-size: 0.85em; /* Slightly smaller icon */
+  }
+  
+  /* Abstract Toggle Link */
+  .publication-abstract-toggle {
+    cursor: pointer;
+  }
+  
+  /* Abstract Content Box */
+  .publication-abstract {
+    background: var(--color-bg-secondary); /* Light background */
+    padding: var(--space-4); /* 16px */
+    border-radius: var(--border-radius-md);
+    margin-top: var(--space-3); /* 12px */
+    display: none; /* Hidden by default */
+    font-size: var(--font-size-sm); /* 14px */
+    color: var(--color-text-secondary);
+    border: 1px solid var(--color-border-primary);
+  }
+  
+  .publication-abstract.show {
+    display: block; /* Shown via JS */
+  }
+  
+  
+  /* Responsive adjustments for Main Content */
+  @media (max-width: 768px) {
+    .section-block {
+       padding: var(--space-5); /* Adjust padding */
+    }
+    .project-content {
+       flex-direction: column; /* Stack image and text */
+    }
+    .project-image {
+       width: 100%; /* Full width */
+       max-width: 300px; /* Limit max width */
+       margin-bottom: var(--space-4);
+    }
+    .research-areas {
+       grid-template-columns: 1fr; /* Stack research areas */
+    }
+  }
+  
+  /* CHUNK 2 END */
+  /* --- Styles for Sidebar sections will be added below --- */
+  /* CHUNK 3 START: Sidebar Area Styling */
+
+/* ==========================================================================
+   3. Sidebar Area (.academia-sidebar)
+   ========================================================================== */
+
+.academia-sidebar {
+    /* Make sidebar sticky within its grid column on larger screens */
+    position: sticky;
+    top: calc(var(--space-7) + 70px); /* Adjust top offset: ~navbar height + desired space */
+    align-self: start; /* Align to the top of the grid area */
+    /* Fallback for browsers not supporting sticky */
+    /* position: relative; */
+  }
+  
+  /* Common style for blocks within the sidebar */
+  .sidebar-block {
+    background: var(--color-bg-primary); /* White background */
+    border-radius: var(--border-radius-md); /* 6px */
+    border: var(--border-width) solid var(--color-border-primary);
+    padding: var(--space-5); /* 24px */
+    margin-bottom: var(--space-5); /* 24px space between blocks */
+    box-shadow: 0 2px 5px var(--color-shadow);
+  }
+  .sidebar-block:last-child {
+    margin-bottom: 0;
+  }
+  
+  .sidebar-block h3 {
+    font-size: var(--font-size-md); /* 18px */
+    font-weight: var(--font-weight-semibold);
+    color: var(--color-text-primary);
+    margin-bottom: var(--space-4); /* 16px */
+    padding-bottom: var(--space-2); /* 8px */
+    border-bottom: 1px solid var(--color-border-secondary);
+  }
+  
+  /* Profile Block Styling */
+  .profile-block {
+    text-align: center;
+  }
+  
+  .profile-block .profile-image { /* Assuming same class as resume */
+    width: 120px; /* Sidebar image size */
+    height: 120px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin: 0 auto var(--space-4); /* Centered, 16px bottom margin */
+    border: 3px solid var(--color-bg-primary); /* Match background */
+    box-shadow: 0 0 0 1px var(--color-border-primary), 0 3px 8px var(--color-shadow);
+  }
+  
+  .profile-block h3 { /* Name */
+    border-bottom: none; /* Remove border for name */
+    margin-bottom: var(--space-1); /* 4px */
+    font-size: var(--font-size-lg); /* 20px */
+  }
+  
+  .profile-block p { /* Title */
+    font-size: var(--font-size-base); /* 16px */
+    color: var(--color-text-secondary);
+    margin-bottom: var(--space-4); /* 16px */
+  }
+  
+  .profile-links {
+    display: flex;
+    flex-direction: column; /* Stack links vertically */
+    gap: var(--space-3); /* 12px */
+    margin-top: var(--space-4);
+  }
+  
+  .profile-links a {
+    display: inline-flex; /* Use inline-flex for icon alignment */
+    align-items: center;
+    justify-content: center; /* Center content */
+    gap: var(--space-2); /* 8px */
+    padding: var(--space-2) var(--space-3); /* 8px 12px */
+    border-radius: var(--border-radius-md); /* 6px */
+    background: var(--color-bg-secondary); /* Light gray background */
+    color: var(--color-text-link);
+    font-size: var(--font-size-sm); /* 14px */
+    font-weight: var(--font-weight-medium);
+    transition: background-color var(--transition-fast), color var(--transition-fast);
+    text-decoration: none;
+    border: 1px solid var(--color-border-primary);
+  }
+  
+  .profile-links a:hover {
+    background-color: var(--color-accent-primary); /* Blue background */
+    color: var(--color-text-inverse); /* White text */
+    border-color: var(--color-accent-primary);
+    text-decoration: none;
+  }
+  
+  .profile-links a i {
+    font-size: 1.1em; /* Adjust icon size relative to text */
+    width: 16px; /* Ensure consistent icon alignment */
+    text-align: center;
+  }
+  
+  
+  /* Education & Experience Items (Simplified Sidebar Version) */
+  .sidebar-block .education-item,
+  .sidebar-block .experience-item {
+    margin-bottom: var(--space-4); /* 16px */
+    padding-bottom: var(--space-4);
+    border-bottom: 1px dashed var(--color-border-secondary);
+  }
+  
+  .sidebar-block .education-item:last-child,
+  .sidebar-block .experience-item:last-child {
+    margin-bottom: 0;
+    padding-bottom: 0;
+    border-bottom: none;
+  }
+  
+  .sidebar-block .education-item h4,
+  .sidebar-block .experience-item h4 {
+    font-size: var(--font-size-base); /* 16px */
+    font-weight: var(--font-weight-medium);
+    margin-bottom: var(--space-1); /* 4px */
+    color: var(--color-text-primary);
+  }
+  
+  .sidebar-block .education-item p, /* University/Company */
+  .sidebar-block .experience-item p {
+    font-size: var(--font-size-sm); /* 14px */
+    color: var(--color-text-secondary);
+    margin-bottom: var(--space-1); /* 4px */
+  }
+  
+  .sidebar-block .education-date, /* Date */
+  .sidebar-block .experience-date {
+    font-size: var(--font-size-xs); /* 12px */
+    color: var(--color-text-tertiary);
+    margin-top: 0;
+  }
+  
+  
+  /* Learning Topics List */
+  .learning-topics {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  
+  .learning-topics li {
+    padding: var(--space-2) 0 var(--space-2) var(--space-4); /* 8px vert, 16px left */
+    margin-bottom: var(--space-2); /* 8px */
+    border-bottom: 1px dashed var(--color-border-secondary);
+    position: relative; /* For pseudo-element */
+    font-size: var(--font-size-sm); /* 14px */
+    color: var(--color-text-secondary);
+  }
+  
+  .learning-topics li:last-child {
+    margin-bottom: 0;
+    border-bottom: none;
+  }
+  
+  /* Custom bullet point for learning topics */
+  .learning-topics li::before {
+    content: "▹"; /* Example: right-pointing triangle */
+    /* Or use Font Awesome: content: "\f0da"; font-family: "Font Awesome 6 Free"; font-weight: 900; */
+    position: absolute;
+    left: 0;
+    top: var(--space-2); /* Align with text */
+    color: var(--color-accent-primary); /* Blue bullet */
+    font-size: 1em;
+  }
+  
+  
+  /* Responsive adjustments for Sidebar */
+  @media (max-width: 992px) {
+    .academia-sidebar {
+       position: static; /* Remove sticky positioning when stacked */
+       margin-top: var(--space-7); /* Add space above when stacked */
+    }
+  }
+  
+  
+  /* CHUNK 3 END */
+  
+  /* ==========================================================================
+     End of Academia Page Specific Styles (assets/css/pages/academia.css)
+     ========================================================================== */

@@ -1,0 +1,178 @@
+/* ==========================================================================
+   Card Component Styles
+   ========================================================================== */
+
+/* Base Card Style */
+.card {
+    background-color: var(--color-bg-primary); /* White background */
+    border-radius: var(--border-radius-lg); /* 10px */
+    border: var(--border-width) solid var(--color-border-primary);
+    box-shadow: 0 3px 10px var(--color-shadow);
+    padding: var(--space-5); /* 24px default padding */
+    transition: transform var(--transition-base), box-shadow var(--transition-base);
+    display: flex; /* Allow flex column layout */
+    flex-direction: column;
+    height: 100%; /* Make cards in a grid equal height if needed */
+    overflow: hidden; /* Ensure content respects border-radius */
+  }
+  
+  .card:hover {
+    transform: translateY(-5px); /* Lift effect */
+    box-shadow: 0 8px 20px var(--color-shadow);
+  }
+  
+  /* Card Header (Optional) */
+  .card-header {
+    padding-bottom: var(--space-4); /* 16px */
+    margin-bottom: var(--space-4);
+    border-bottom: var(--border-width) solid var(--color-border-primary);
+    /* Add flex styles if header contains multiple items */
+    /* display: flex; */
+    /* justify-content: space-between; */
+    /* align-items: center; */
+  }
+  
+  /* Card Body (Main content area) */
+  .card-body {
+    flex-grow: 1; /* Allows body to expand, pushing footer down */
+  }
+  
+  /* Card Footer (Optional) */
+  .card-footer {
+    padding-top: var(--space-4); /* 16px */
+    margin-top: var(--space-4);
+    border-top: var(--border-width) solid var(--color-border-primary);
+    font-size: var(--font-size-sm); /* 14px */
+    color: var(--color-text-secondary);
+  }
+  
+  /* Common Card Elements */
+  .card-title {
+    font-size: var(--font-size-lg); /* 20px */
+    font-weight: var(--font-weight-semibold);
+    color: var(--color-text-primary);
+    margin-bottom: var(--space-3); /* 12px */
+  }
+  
+  /* Use for main descriptive text */
+  .card-text {
+    color: var(--color-text-secondary);
+    font-size: var(--font-size-base); /* 16px */
+    margin-bottom: var(--space-4); /* 16px */
+    line-height: 1.6;
+  }
+  
+  /* Icon Styling (e.g., focus cards) */
+  .card-icon {
+    display: inline-flex; /* Allows background */
+    align-items: center;
+    justify-content: center;
+    width: 50px; /* Adjust size */
+    height: 50px;
+    border-radius: 50%;
+    margin-bottom: var(--space-4); /* 16px */
+    font-size: var(--font-size-xl); /* 24px */
+    /* Default subtle background/color */
+    background-color: var(--color-bg-secondary);
+    color: var(--color-accent-primary);
+  }
+  /* Add specific colors if needed */
+  .card-icon.icon-research { background-color: rgba(52, 152, 219, 0.1); color: #3498db; }
+  .card-icon.icon-publication { background-color: rgba(231, 76, 60, 0.1); color: #e74c3c; }
+  .card-icon.icon-learning { background-color: rgba(46, 204, 113, 0.1); color: #2ecc71; }
+  
+  
+  /* Tags Styling (e.g., project cards) */
+  .card-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2); /* 8px */
+    margin-bottom: var(--space-4); /* 16px */
+  }
+  
+  .tag {
+    background-color: var(--color-bg-secondary); /* Light gray */
+    color: var(--color-text-secondary);
+    padding: var(--space-1) var(--space-3); /* 4px 12px */
+    border-radius: var(--border-radius-sm); /* 3px */
+    font-size: var(--font-size-xs); /* 12px */
+    font-weight: var(--font-weight-medium);
+    border: 1px solid var(--color-border-primary);
+  }
+  /* Example colored tags (optional) */
+  .tag-python { background-color: rgba(52, 152, 219, 0.1); color: #2980b9; border-color: transparent; }
+  .tag-pytorch { background-color: rgba(238, 110, 45, 0.1); color: #EE4C2C; border-color: transparent;}
+  .tag-ros { background-color: rgba(32, 56, 84, 0.1); color: #203854; border-color: transparent;}
+  
+  
+  /* Progress Indicator (e.g., project cards) */
+  .card-progress {
+    margin-top: var(--space-4); /* 16px */
+  }
+  
+  .progress-container {
+    /* Styles for container holding bar + text if needed */
+    margin-bottom: var(--space-1); /* 4px */
+  }
+  
+  .progress-bar {
+    height: 6px; /* Slimmer progress bar */
+    background-color: var(--color-bg-tertiary); /* Gray background */
+    border-radius: var(--border-radius-sm); /* 3px */
+    overflow: hidden;
+  }
+  
+  .progress {
+    height: 100%;
+    background-color: var(--color-accent-primary); /* Blue progress */
+    border-radius: var(--border-radius-sm);
+    transition: width 0.5s ease-out;
+  }
+  
+  .progress-text {
+    font-size: var(--font-size-xs); /* 12px */
+    color: var(--color-text-secondary);
+    text-align: right; /* Align text if needed */
+  }
+  
+  /* Milestone Tracker (e.g., focus cards) */
+  .milestone-tracker {
+    /* Styles adapted from index.html styles if needed */
+    /* ... */
+  }
+  
+  /* Books Progress (e.g., focus cards) */
+  .books-progress {
+   /* Styles adapted from index.html styles if needed */
+   /* ... */
+  }
+  
+  /* Links within cards */
+  .card-link {
+    color: var(--color-text-link);
+    text-decoration: none;
+    font-weight: var(--font-weight-medium);
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-1);
+  }
+  .card-link:hover {
+    color: var(--color-text-link-hover);
+    text-decoration: underline;
+  }
+  .card-link i {
+    transition: transform var(--transition-fast);
+  }
+  .card-link:hover i {
+    transform: translateX(3px);
+  }
+  
+  /* Modifier for image-top cards (if needed later) */
+  .card-img-top {
+    width: 100%;
+    height: 200px; /* Example height */
+    object-fit: cover;
+    border-top-left-radius: var(--border-radius-lg); /* Match card radius */
+    border-top-right-radius: var(--border-radius-lg);
+    margin: -var(--space-5) -var(--space-5) var(--space-4); /* Adjust negative margin to match padding */
+  }
