@@ -111,6 +111,8 @@ code, pre {
 code { /* Inline code */
     padding: 0.2em 0.4em;
     color: var(--color-text-primary);
+    background-color: rgba(110, 118, 129, 0.2); /* Subtle inline code bg */
+    border: none; /* Remove border for inline */
 }
 
 pre { /* Code blocks */
@@ -118,17 +120,19 @@ pre { /* Code blocks */
     overflow-x: auto; /* Enable horizontal scrolling for long lines */
     color: var(--color-text-primary);
     margin-bottom: var(--spacing-md);
+    border-radius: var(--border-radius-md); /* Match other components */
+}
+pre code { /* Reset inline styles for code within pre */
+    background-color: transparent;
+    padding: 0;
+    border: none;
+    border-radius: 0;
+    font-size: 1em; /* Inherit from pre */
+    color: inherit;
 }
 
-/* Helper Classes (Optional) */
-.text-muted {
-    color: var(--color-text-tertiary) !important;
-}
 
-.text-center {
-    text-align: center;
-}
-/* Add to base.css or a new components/icons.css */
+/* SVG Icon Styling (Added in Step 9) */
 .icon-link svg {
     width: 1.3em; /* Control size relative to text */
     height: 1.3em;
@@ -138,7 +142,7 @@ pre { /* Code blocks */
     transition: fill 0.2s ease;
 }
 
-/* Specific adjustments if needed */
+/* Specific adjustments for SVG links in MoSa page */
 .mosa-link-item svg {
      width: 20px; /* Fixed width like before */
      height: 20px;
@@ -149,6 +153,7 @@ pre { /* Code blocks */
     fill: var(--color-link); /* Change color on hover */
 }
 
+/* Specific adjustments for SVG links in Academia sidebar */
 .profile-links a svg {
     width: 18px; /* Match sidebar icon width */
     height: 18px;
@@ -157,4 +162,25 @@ pre { /* Code blocks */
 }
 .profile-links a:hover svg {
      fill: var(--color-link);
+}
+
+
+/* Helper Classes (Optional) */
+.text-muted {
+    color: var(--color-text-tertiary) !important;
+}
+
+.text-center {
+    text-align: center;
+}
+
+/* Basic focus visible styles for accessibility */
+:focus-visible {
+  outline: 2px solid var(--color-link);
+  outline-offset: 2px;
+  border-radius: var(--border-radius-sm); /* Optional: match element's rounding */
+}
+/* Remove outline for non-keyboard focus if desired (use cautiously) */
+:focus:not(:focus-visible) {
+  outline: none;
 }
