@@ -1,56 +1,50 @@
-/**
- * ==========================================================================
- * Main JavaScript File
- *
- * Contains global scripts needed across the site, like the mobile menu toggle.
- * ==========================================================================
- */
+// assets/js/main.js
 
-document.addEventListener("DOMContentLoaded", function () {
-    console.log("Main JavaScript Initialized");
-  
-    // --- Mobile Menu Toggle ---
-    const mobileMenuButton = document.getElementById("mobile-menu-btn");
-    const navLinks = document.querySelector(".nav-links");
-  
-    if (mobileMenuButton && navLinks) {
-      mobileMenuButton.addEventListener("click", function () {
-        navLinks.classList.toggle("active"); // Toggles visibility of the nav links container
-        mobileMenuButton.classList.toggle("open"); // Toggles the button's appearance (e.g., hamburger to X)
-      });
-  
-      // Optional: Close mobile menu when a link inside it is clicked
-      const menuLinks = navLinks.querySelectorAll("a");
-      menuLinks.forEach(link => {
-        link.addEventListener("click", function () {
-          // Check if the mobile menu is active before closing
-          if (navLinks.classList.contains("active")) {
-            navLinks.classList.remove("active");
-            if (mobileMenuButton) {
-              mobileMenuButton.classList.remove("open");
-            }
-          }
-        });
-      });
-  
-      // Optional: Close mobile menu if user clicks outside of it
-      document.addEventListener('click', function(event) {
-        const isClickInsideNav = navLinks.contains(event.target);
-        const isClickOnButton = mobileMenuButton.contains(event.target);
-  
-        if (!isClickInsideNav && !isClickOnButton && navLinks.classList.contains('active')) {
-          navLinks.classList.remove("active");
-          if (mobileMenuButton) {
-             mobileMenuButton.classList.remove("open");
-          }
-        }
-      });
-  
-    } else {
-      console.warn("Mobile menu button or nav links element not found.");
+document.addEventListener('DOMContentLoaded', () => {
+    console.log('DOM fully loaded and parsed');
+
+    // Get current year for footer
+    const currentYearSpan = document.getElementById('current-year');
+    if (currentYearSpan) {
+        currentYearSpan.textContent = new Date().getFullYear();
     }
-  
-    // --- Add other global scripts here if needed in the future ---
-    // Example: Smooth scroll for anchor links, theme toggle, etc.
-  
-  }); // End DOMContentLoaded
+
+    // Mobile menu toggle functionality
+    const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+    const navLinks = document.querySelector('.nav-links');
+
+    if (mobileMenuBtn && navLinks) {
+        mobileMenuBtn.addEventListener('click', () => {
+            // Toggle active class on the button for animation
+            mobileMenuBtn.classList.toggle('active');
+            // Toggle active class on the nav links to show/hide
+            navLinks.classList.toggle('active');
+            // Update aria-expanded attribute for accessibility
+            const isExpanded = navLinks.classList.contains('active');
+            mobileMenuBtn.setAttribute('aria-expanded', isExpanded);
+        });
+
+        // Optional: Close menu when a link is clicked (useful for simple sites)
+        navLinks.querySelectorAll('a').forEach(link => {
+            link.addEventListener('click', () => {
+                if (navLinks.classList.contains('active')) {
+                    mobileMenuBtn.classList.remove('active');
+                    navLinks.classList.remove('active');
+                    mobileMenuBtn.setAttribute('aria-expanded', 'false');
+                }
+            });
+        });
+
+        // Optional: Close menu if user clicks outside of it
+        document.addEventListener('click', (event) => {
+            const isClickInsideNav = navLinks.contains(event.target);
+            const isClickOnButton = mobileMenuBtn.contains(event.target);
+
+            if (!isClickInsideNav && !isClickOnButton && navLinks.classList.contains('active')) {
+                 mobileMenuBtn.classList.remove('active');
+                 navLinks.classList.remove('active');
+                 mobileMenuBtn.setAttribute('aria-expanded', 'false');
+            }
+        });
+    }
+});

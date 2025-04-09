@@ -1,208 +1,58 @@
-/* ==========================================================================
-   Button Component Styles (buttons.css) - DARK THEME UPDATE
-   ========================================================================== */
+/* assets/css/components/buttons.css */
 
-/* Base Button Style */
 .btn {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: var(--space-2, 0.5rem);
-    padding: var(--space-2, 0.5rem) var(--space-4, 1rem); /* Adjusted padding */
-    border: var(--border-width, 1px) solid var(--color-border-primary); /* Default border */
-    border-radius: var(--border-radius-md, 6px);
-    font-family: var(--font-family-sans, sans-serif);
-    font-size: var(--font-size-sm, 0.875rem); /* Slightly smaller base size */
-    font-weight: var(--font-weight-medium, 500);
+    display: inline-block;
+    padding: 0.65rem 1.25rem;
+    font-family: var(--font-primary);
+    font-size: 0.95rem;
+    font-weight: 600;
     line-height: 1.5;
     text-align: center;
-    vertical-align: middle;
-    cursor: pointer;
     text-decoration: none;
     white-space: nowrap;
+    vertical-align: middle;
+    cursor: pointer;
     user-select: none;
-    transition: background-color var(--transition-fast, 150ms ease-in-out),
-                border-color var(--transition-fast, 150ms ease-in-out),
-                color var(--transition-fast, 150ms ease-in-out),
-                box-shadow var(--transition-fast, 150ms ease-in-out);
-    /* Default state for dark theme (like secondary) */
-    background-color: #21262d; /* GitHub dark secondary bg */
-    color: var(--color-text-primary); /* Light gray text */
-  }
-  
-  a.btn { text-decoration: none; }
-  
-  /* Focus State (Accessibility) */
-  .btn:focus {
-    outline: 2px solid var(--color-accent-secondary); /* Light blue outline */
-    outline-offset: 2px;
-    box-shadow: none; /* Remove other shadows on focus */
-  }
-  .btn:focus:not(:focus-visible) { outline: none; }
-  
-  /* Hover & Active States */
-  .btn:hover {
+    border: 1px solid transparent;
+    border-radius: var(--border-radius-md);
+    transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+
+.btn:hover {
     text-decoration: none;
-    background-color: var(--color-border-primary); /* Slightly lighter gray on hover */
-    border-color: #8b949e; /* GitHub dark secondary hover border */
-    color: var(--color-text-primary);
-    /* Remove transform for more standard button feel */
-    /* transform: translateY(-2px); */
-    /* box-shadow: 0 4px 8px var(--color-shadow-primary); */
-  }
-  
-  .btn:active {
-    background-color: #2a2f36; /* Slightly darker */
-    border-color: #8b949e;
-    /* transform: translateY(-1px); */
-    /* box-shadow: 0 2px 4px var(--color-shadow-primary); */
-  }
-  
-  /* Disabled State */
-  .btn:disabled,
-  .btn.disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
-    box-shadow: none;
-    transform: none;
-    background-color: var(--color-bg-secondary); /* Use secondary bg */
-    border-color: var(--color-border-primary);
-    color: var(--color-text-secondary);
-  }
-  
-  /* --- Button Variations --- */
-  
-  /* Primary Button (GREEN) */
-  .btn-primary {
-    background-color: var(--color-accent-primary); /* Green */
-    color: var(--color-text-inverse); /* White text */
-    border-color: var(--color-accent-primary);
-    box-shadow: 0 1px 0 rgba(27, 31, 35, 0.1);
-  }
-  .btn-primary:hover {
-    background-color: #2ea043; /* GitHub green hover */
-    border-color: #2ea043;
-    color: var(--color-text-inverse);
-  }
-  .btn-primary:active {
-     background-color: #2a8f4a; /* GitHub green active */
-     border-color: #2a8f4a;
-  }
-  .btn-primary:disabled, .btn-primary.disabled {
-    background-color: var(--color-accent-primary); /* Keep green but faded */
-    border-color: var(--color-accent-primary);
-    color: rgba(255, 255, 255, 0.7);
-    opacity: 0.6;
-  }
-  
-  
-  /* Secondary Button (Default dark theme button style) */
-  .btn-secondary {
-    /* Uses the base .btn styles */
-  }
-  .btn-secondary:disabled, .btn-secondary.disabled {
-     /* Uses base disabled styles */
-  }
-  
-  /* Outline Button (Green Outline) */
-  .btn-outline {
-    background-color: transparent;
-    color: var(--color-accent-primary); /* Green text */
-    border-color: var(--color-accent-primary); /* Green border */
-  }
-  .btn-outline:hover {
-    background-color: rgba(35, 134, 54, 0.15); /* Subtle green background */
-    border-color: var(--color-accent-primary);
-    color: var(--color-accent-primary);
-  }
-  .btn-outline:active {
-     background-color: rgba(35, 134, 54, 0.2);
-  }
-  .btn-outline:disabled, .btn-outline.disabled {
-    background-color: transparent;
-    border-color: var(--color-border-primary);
-    color: var(--color-text-secondary);
-    opacity: 0.5;
-  }
-  
-  /* Danger Button (Red) */
-  .btn-danger {
-    background-color: #da3633; /* GitHub dark danger bg */
-    color: var(--color-text-inverse);
-    border-color: #da3633;
-  }
-  .btn-danger:hover {
-    background-color: #f0413d; /* Lighter red hover */
-    border-color: #f0413d;
-    color: var(--color-text-inverse);
-  }
-  .btn-danger:active {
-     background-color: #c82a27; /* Darker red active */
-     border-color: #c82a27;
-  }
-  .btn-danger:disabled, .btn-danger.disabled {
-     background-color: #da3633;
-     border-color: #da3633;
-     color: rgba(255, 255, 255, 0.7);
-     opacity: 0.6;
-  }
-  
-  
-  /* Download Button Specific Style */
-  .btn-download {
-    /* Style like primary (green) */
-    background-color: var(--color-accent-primary);
-    color: var(--color-text-inverse);
-    border-color: var(--color-accent-primary);
-    position: relative;
-    overflow: hidden;
-  }
-  .btn-download:hover {
-    background-color: #2ea043;
-    border-color: #2ea043;
-    color: var(--color-text-inverse);
-  }
-  /* Optional sheen effect - keep if desired */
-  .btn-download::before {
-    content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 100%;
-    background: linear-gradient(120deg, transparent, rgba(255, 255, 255, 0.15), transparent);
-    transition: left 0.6s ease;
-  }
-  .btn-download:hover::before { left: 100%; }
-  
-  
-  /* Filter Button Specific Style */
-  .btn-filter {
-    /* Default uses base .btn style (dark gray) */
-    padding: var(--space-2, 0.5rem) var(--space-4, 1rem);
-    font-size: var(--font-size-sm, 0.875rem);
-  }
-  .btn-filter.active {
-    /* Active state uses green */
-    background-color: var(--color-accent-primary);
-    color: var(--color-text-inverse);
-    border-color: var(--color-accent-primary);
-  }
-  .btn-filter.active:hover { /* Keep hover consistent with active state */
-    background-color: #2ea043;
-    border-color: #2ea043;
-  }
-  
-  
-  /* Social Buttons (Background only) */
-  /* Base .btn provides text color, padding etc. */
-  .btn-social {
-    color: var(--color-text-inverse);
-    border-width: 0; /* No border for social */
-  }
-  .btn-social:hover {
-    color: var(--color-text-inverse);
-    opacity: 0.9; /* Subtle fade on hover */
-    border-width: 0; /* Ensure no border appears on hover */
-  }
-  .btn-linkedin { background-color: #0A66C2; } /* Updated LinkedIn blue */
-  .btn-linkedin:hover { background-color: #0A66C2; opacity: 0.9; }
-  .btn-scholar { background-color: #4285F4; }
-  .btn-scholar:hover { background-color: #4285F4; opacity: 0.9; }
-  .btn-github { background-color: #333; }
-  .btn-github:hover { background-color: #333; opacity: 0.9; }
+}
+
+/* Primary Button (Green) */
+.btn-primary {
+    color: #ffffff;
+    background-color: var(--color-accent);
+    border-color: var(--color-accent);
+}
+
+.btn-primary:hover {
+    color: #ffffff;
+    background-color: #238636; /* Slightly darker green */
+    border-color: #238636;
+}
+
+/* Secondary Button (Outline/Grey) */
+.btn-secondary {
+    color: var(--color-link);
+    background-color: var(--color-foreground);
+    border: 1px solid var(--color-border);
+}
+
+.btn-secondary:hover {
+    color: var(--color-link);
+    background-color: #21262d; /* Slightly lighter foreground */
+    border-color: #8b949e; /* Lighter border */
+}
+
+/* Add other button styles as needed (e.g., btn-danger, btn-link) */
+
+.btn i { /* Icon spacing */
+    margin-right: var(--spacing-sm);
+}
+.btn i.fa-download { /* Specific icon adjustments */
+    margin-right: var(--spacing-sm);
+}

@@ -1,511 +1,127 @@
-/* ==========================================================================
-   Index Page Specific Styles (pages/index.css)
-   ========================================================================== */
+/* assets/css/pages/index.css */
 
-/* CHUNK 1 START: Hero Section */
-
-/* Hero Section (#hero / .parallax-hero) */
-#hero, .parallax-hero { /* Target both potential selectors */
-    position: relative; /* Needed for scroll indicator positioning */
-    height: 100vh; /* Full viewport height */
-    min-height: 600px; /* Minimum height */
-    /* Dark overlay + background image + fixed attachment for simple parallax */
-    background: linear-gradient(rgba(0, 0, 0, 0.65), rgba(0, 0, 0, 0.65)),
-                url('../../images/hero-bg.jpg') center/cover no-repeat fixed;
-    color: var(--color-text-inverse); /* White text */
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-    overflow: hidden; /* Prevent potential overflows */
-  }
-  
-  .hero-content {
-    max-width: 850px; /* Adjust max width */
-    padding: 0 var(--space-5); /* 24px horizontal padding */
-    animation: heroFadeIn 1s ease-out forwards; /* Simple fade-in */
-    z-index: 2; /* Ensure content is above any background elements */
-  }
-  
-  @keyframes heroFadeIn {
-    from { opacity: 0; transform: translateY(20px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
-  
-  /* Heading within Hero */
-  .hero-content h1,
-  .hero-content .animated-text { /* Target specific class if used */
-    font-size: var(--font-size-3xl); /* 40px */
-    font-weight: var(--font-weight-bold);
-    line-height: 1.3;
-    margin-bottom: var(--space-4); /* 16px */
-    color: var(--color-text-inverse); /* Ensure white text */
-  }
-  
-  /* Subtitle/Paragraph within Hero */
-  .hero-content p {
-    font-size: var(--font-size-lg); /* 20px */
-    color: rgba(255, 255, 255, 0.9); /* Slightly transparent white */
-    margin-bottom: var(--space-6); /* 32px */
-    line-height: 1.6;
-  }
-  
-  /* Highlighted Text within Hero Heading */
-  .hero-content .highlight {
-    color: var(--color-accent-primary); /* Use theme's primary accent (blue) */
-    /* Optional: Remove background highlight from original */
-    /* background: none; */
-    /* Optional: Add subtle underline */
-    /* border-bottom: 2px solid var(--color-accent-primary); */
-    /* padding-bottom: 2px; */
-  }
-  
-  /* Container for Hero Buttons */
-  .hero-buttons {
-    display: flex;
-    justify-content: center;
-    flex-wrap: wrap; /* Allow wrapping on small screens */
-    gap: var(--space-4); /* 16px */
-  }
-  
-  /* Buttons rely on styles from assets/css/components/buttons.css */
-  /* Example usage: .btn, .btn-primary, .btn-secondary */
-  
-  
-  /* Scroll Down Indicator */
-  .scroll-indicator {
-    position: absolute;
-    bottom: var(--space-6); /* 32px from bottom */
-    left: 50%;
-    transform: translateX(-50%);
+.mosa-hero {
     display: flex;
     flex-direction: column;
     align-items: center;
-    font-size: var(--font-size-sm); /* 14px */
-    color: rgba(255, 255, 255, 0.7); /* Muted white */
-    z-index: 2;
-    animation: bounceIndicator 2s infinite ease-in-out;
-  }
-  
-  .scroll-indicator span {
-    margin-bottom: var(--space-2); /* 8px */
-  }
-  
-  .scroll-indicator i {
-    font-size: 1.2rem; /* Adjust icon size */
-  }
-  
-  @keyframes bounceIndicator {
-    0%, 20%, 50%, 80%, 100% {
-      transform: translate(-50%, 0);
-    }
-    40% {
-      transform: translate(-50%, -10px);
-    }
-    60% {
-      transform: translate(-50%, -5px);
-    }
-  }
-  
-  
-  /* Responsive Adjustments for Hero */
-  @media (max-width: 768px) {
-    .hero-content h1,
-    .hero-content .animated-text {
-      font-size: var(--font-size-2xl); /* 32px */
-    }
-    .hero-content p {
-      font-size: var(--font-size-md); /* 18px */
-    }
-  }
-  
-  @media (max-width: 576px) {
-    #hero, .parallax-hero {
-      min-height: 500px; /* Reduce min height */
-    }
-    .hero-content h1,
-    .hero-content .animated-text {
-      font-size: var(--font-size-xl); /* 24px */
-    }
-     .hero-content p {
-      font-size: var(--font-size-base); /* 16px */
-    }
-  }
-  
-  /* CHUNK 1 END */
-  /* --- Styles for other index page sections will be added below --- */
-  /* CHUNK 2 START: Current Focus Section */
-
-/* ==========================================================================
-   2. Current Focus Section (#current-focus)
-   ========================================================================== */
-
-#current-focus {
-    background-color: var(--color-bg-secondary); /* Light gray background */
-    /* Padding is handled by <main> tag styles in layout.css */
-    /* padding-top: var(--space-7); */
-    /* padding-bottom: var(--space-7); */
-  }
-  
-  /* Wrapper for the focus cards */
-  .focus-wrapper {
-    display: grid;
-    /* Create 3 columns, adjusting min width as needed */
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: var(--space-6); /* 32px gap */
-    margin-top: var(--space-6); /* Space below section title */
-  }
-  
-  /* Focus Card specifics */
-  /* Base .card styles are applied from components/cards.css */
-  .focus-card {
-    /* Add any overrides specific to focus cards if needed */
-  }
-  
-  /* Icon styling uses .card-icon from components/cards.css */
-  /* Ensure classes like .icon-research are applied in HTML */
-  
-  /* Progress Bar styling uses .progress-container, .progress-bar, .progress
-     from components/cards.css */
-  
-  /* Milestone Tracker Styling (within publication focus card) */
-  .milestone-tracker {
-    display: flex;
-    justify-content: space-between;
-    margin-top: var(--space-5); /* 24px */
-    padding-top: var(--space-4); /* 16px, space above line */
-    position: relative; /* For the connecting line */
-  }
-  
-  /* Connecting line */
-  .milestone-tracker::before {
-    content: '';
-    position: absolute;
-    top: calc(var(--space-4) + 10px); /* Position line vertically centered with dots */
-    left: 10%; /* Start/end padding */
-    width: 80%; /* Line width */
-    height: 2px;
-    background-color: var(--color-border-primary); /* Line color */
-    z-index: 1; /* Behind dots */
-  }
-  
-  .milestone {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    position: relative;
-    z-index: 2; /* Above line */
-    flex-basis: 20%; /* Distribute space */
     text-align: center;
-  }
-  
-  .milestone-dot {
-    width: 16px; /* Dot size */
-    height: 16px;
+    padding: var(--spacing-xxl) 0; /* Generous vertical padding */
+    min-height: calc(100vh - var(--header-height) - 100px); /* Try to fill viewport height minus header/footer approx */
+    justify-content: center;
+}
+
+.mosa-hero-content {
+    max-width: 700px; /* Limit content width */
+    margin: 0 auto;
+}
+
+.mosa-profile-pic {
+    width: 150px;
+    height: 150px;
     border-radius: 50%;
-    background-color: var(--color-border-primary); /* Default dot color */
-    margin-bottom: var(--space-2); /* 8px */
-    border: 3px solid var(--color-bg-primary); /* 'Cutout' effect */
-    box-shadow: 0 0 0 1px var(--color-border-secondary); /* Subtle ring */
-  }
-  
-  .milestone.completed .milestone-dot {
-    background-color: var(--color-accent-secondary); /* Green for completed */
-    box-shadow: 0 0 0 1px var(--color-accent-secondary);
-  }
-  
-  .milestone.in-progress .milestone-dot {
-    /* Use a gradient or different color for in-progress */
-    background-color: var(--color-accent-primary); /* Blue for in-progress */
-     box-shadow: 0 0 0 1px var(--color-accent-primary);
-    /* Example gradient: background: linear-gradient(90deg, var(--color-accent-secondary) 50%, var(--color-border-primary) 50%); */
-  }
-  
-  .milestone-label {
-    font-size: var(--font-size-xs); /* 12px */
-    color: var(--color-text-secondary);
-    line-height: 1.3;
-  }
-  
-  .milestone.completed .milestone-label {
+    object-fit: cover;
+    border: 4px solid var(--color-border);
+    margin-bottom: var(--spacing-lg);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+.mosa-name {
+    font-size: 2.75rem; /* Larger name */
+    font-weight: 700;
+    margin-bottom: var(--spacing-sm);
     color: var(--color-text-primary);
-    font-weight: var(--font-weight-medium);
-  }
-  
-  /* Books Progress Styling (within learning focus card) */
-  .books-progress {
-    margin-top: var(--space-5); /* 24px */
-  }
-  
-  .book-item {
-    margin-bottom: var(--space-3); /* 12px */
-    display: flex;
-    align-items: center;
-    gap: var(--space-3); /* 12px */
-  }
-  .book-item:last-child {
-    margin-bottom: 0;
-  }
-  
-  .book-title {
-    flex-basis: 100px; /* Fixed width for title */
-    flex-shrink: 0;
-    font-size: var(--font-size-sm); /* 14px */
+}
+
+.mosa-title {
+    font-size: 1.25rem;
+    font-weight: 400;
     color: var(--color-text-secondary);
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-  
-  /* Uses .progress-bar and .progress from components/cards.css */
-  .book-progress-bar {
-    flex-grow: 1; /* Takes remaining space */
-  }
-  
-  .book-percentage {
-    flex-basis: 40px; /* Fixed width for percentage */
-    flex-shrink: 0;
-    text-align: right;
-    font-size: var(--font-size-sm); /* 14px */
-    color: var(--color-text-secondary);
-    font-weight: var(--font-weight-medium);
-  }
-  
-  
-  /* Responsive adjustments for Focus Section */
-  @media (max-width: 576px) {
-    .focus-wrapper {
-      grid-template-columns: 1fr; /* Stack cards */
-      gap: var(--space-5); /* Adjust gap */
-    }
-     .milestone-label {
-        font-size: 0.65rem; /* Smaller labels on mobile */
-     }
-  }
-  
-  /* CHUNK 2 END */
-  /* --- Styles for Projects section etc. will be added below --- */
-  /* CHUNK 3 START: Projects Section */
-
-/* ==========================================================================
-   3. Projects Section (#projects)
-   ========================================================================== */
-
-#projects {
-    /* Padding handled by <main> */
-    /* Optional: Add background color if different from <main> */
-    /* background-color: var(--color-bg-primary); */
-    /* padding-top: var(--space-7); */
-    /* padding-bottom: var(--space-7); */
-  }
-  
-  /* Container for filter buttons */
-  .projects-filter {
-    display: flex;
-    justify-content: center; /* Center buttons */
-    flex-wrap: wrap; /* Allow wrapping on smaller screens */
-    gap: var(--space-3); /* 12px gap between buttons */
-    margin-top: var(--space-6); /* Space below section title */
-    margin-bottom: var(--space-6); /* Space above grid */
-  }
-  
-  /* Individual filter button styling is handled by .btn-filter in buttons.css */
-  
-  
-  /* Grid container for project cards */
-  .projects-grid {
-    display: grid;
-    /* Adjust minmax for desired card size, repeat auto-fit for responsiveness */
-    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-    gap: var(--space-6); /* 32px gap between cards */
-  }
-  
-  /* Project card styling uses .card from components/cards.css */
-  /* .project-card { */
-    /* Add specific overrides for project cards if needed */
-  /* } */
-  
-  /* Styling for elements specifically inside project cards */
-  /* Example: .project-card .card-tags, .project-card .card-progress */
-  /* Ensure these are styled correctly in components/cards.css or add overrides here */
-  
-  
-  /* Responsive adjustments for Projects Section */
-  @media (max-width: 576px) {
-    .projects-filter {
-      gap: var(--space-2); /* Reduce gap for smaller buttons */
-    }
-    .projects-grid {
-      grid-template-columns: 1fr; /* Stack cards on small screens */
-      gap: var(--space-5); /* Adjust gap */
-    }
-  }
-    /* --- Index Page Spacing Fixes --- */
-
-    /* Add margin above the "View All GitHub Projects" button container */
-    .projects-cta {
-        margin-top: var(--space-7); /* 48px - Increase space */
-    }
-  
-  /* CHUNK 3 END */
-  /* --- Styles for Latest Posts section etc. will be added below --- */
-
-  /* CHUNK 4 START: Latest Posts Section */
-
-/* ==========================================================================
-   4. Latest Posts Section (#latest-posts)
-   ========================================================================== */
-
-#latest-posts {
-    /* Optional: Add alternating background color */
-    background-color: var(--color-bg-secondary); /* Light gray background */
-    /* Padding handled by <main> */
-    /* padding-top: var(--space-7); */
-    /* padding-bottom: var(--space-7); */
-  }
-  
-  /* Grid container for post preview cards */
-  .posts-grid {
-    display: grid;
-    /* Adjust minmax for desired card size, repeat auto-fit for responsiveness */
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: var(--space-6); /* 32px gap between cards */
-    margin-top: var(--space-6); /* Space below section title */
-    margin-bottom: var(--space-7); /* Space above "View All" button */
-  }
-  
-  /* Post preview styling uses .card from components/cards.css */
-  /* Ensure the HTML structure uses <article class="card post-preview"> or similar */
-  /* .post-preview { */
-    /* Add specific overrides for post previews if needed */
-  /* } */
-  
-  /* Container for the "View All Posts" button */
-  .view-all-posts {
-    text-align: center; /* Center the button */
-  }
-  
-  /* Button styling uses .btn and .btn-outline from buttons.css */
-  
-  
-  /* Responsive adjustments for Latest Posts Section */
-  @media (max-width: 576px) {
-    .posts-grid {
-      grid-template-columns: 1fr; /* Stack cards on small screens */
-      gap: var(--space-5); /* Adjust gap */
-      margin-bottom: var(--space-6); /* Adjust spacing */
-    }
-  }
-  
-  /* CHUNK 4 END */
-  /* --- Styles for Quote section etc. will be added below --- */
-
-  /* CHUNK 5 START: Quote Section */
-
-/* ==========================================================================
-   5. Quote Section (#quote-section)
-   ========================================================================== */
-
-#quote-section {
-    /* Dark overlay + background image + fixed attachment for simple parallax */
-    background: linear-gradient(rgba(0, 0, 0, 0.75), rgba(0, 0, 0, 0.75)),
-                url('../images/quote-bg.jpg') center/cover no-repeat fixed; /* Adjust image path if needed */
-    color: var(--color-text-inverse); /* White text */
-    padding: var(--space-8) var(--space-5); /* 64px top/bottom, 24px left/right */
-    text-align: center;
-  }
-  
-  #quote-section blockquote {
-    max-width: 800px; /* Limit width for readability */
-    margin: 0 auto; /* Center the blockquote */
-    font-size: var(--font-size-xl); /* 24px */
-    font-style: italic;
-    line-height: 1.6; /* Adjust line height */
-    border-left: none; /* Remove default blockquote border from base.css if any */
-    padding-left: 0; /* Remove default blockquote padding */
-    margin-bottom: var(--space-5); /* 24px space below quote */
-  }
-  
-  #quote-section cite {
-    display: block; /* Ensure cite takes its own line */
-    font-size: var(--font-size-base); /* 16px */
-    font-style: normal; /* Override italic if needed */
-    color: rgba(255, 255, 255, 0.8); /* Slightly muted white */
-    margin-top: var(--space-4); /* 16px space above cite */
-  }
-  
-  /* Responsive Adjustments for Quote Section */
-  @media (max-width: 768px) {
-    #quote-section {
-       padding: var(--space-7) var(--space-4); /* Adjust padding */
-    }
-    #quote-section blockquote {
-       font-size: var(--font-size-lg); /* 20px */
-    }
-  }
-  
-  /* CHUNK 5 END */
-  /* --- Styles for Connect section etc. will be added below --- */
-  /* CHUNK 6 START: Connect Section */
-
-/* ==========================================================================
-   6. Connect Section (#connect)
-   ========================================================================== */
-
-#connect {
-    /* Padding handled by <main> */
-    /* Optional: Add background color */
-    /* background-color: var(--color-bg-primary); */
-    text-align: center; /* Center align all content */
-    /* padding-top: var(--space-7); */
-    /* padding-bottom: var(--space-7); */
-  }
-  
-  /* Description paragraph */
-  .connect-description {
-    max-width: 700px; /* Limit width */
+    margin-bottom: var(--spacing-xl);
+    max-width: 500px; /* Constrain title width */
     margin-left: auto;
     margin-right: auto;
-    margin-bottom: var(--space-6); /* 32px space below description */
-    color: var(--color-text-secondary);
-    font-size: var(--font-size-md); /* 18px */
-    line-height: 1.6;
-  }
-  
-  /* Container for connect buttons */
-  .connect-buttons {
+}
+
+.mosa-links {
     display: flex;
-    justify-content: center; /* Center buttons horizontally */
-    flex-wrap: wrap; /* Allow buttons to wrap */
-    gap: var(--space-4); /* 16px gap */
-    margin-top: var(--space-6); /* Space below section title */
-  }
-  
-  /* Button styling uses .btn and modifiers from components/buttons.css */
-  /* e.g., .btn-primary, .btn-linkedin, .btn-scholar, .btn-github */
-  
-  
-  /* Responsive Adjustments for Connect Section */
-  @media (max-width: 768px) {
-    .connect-description {
-       font-size: var(--font-size-base); /* 16px */
+    justify-content: center;
+    gap: var(--spacing-lg);
+    margin-bottom: var(--spacing-xl);
+    flex-wrap: wrap; /* Allow links to wrap on smaller screens */
+}
+
+.mosa-link-item {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    color: var(--color-text-secondary);
+    text-decoration: none;
+    font-size: 0.95rem;
+    transition: color 0.2s ease;
+}
+
+.mosa-link-item:hover {
+    color: var(--color-link);
+    text-decoration: none;
+}
+
+.mosa-link-item i {
+    font-size: 1.3rem; /* Icon size */
+    width: 20px; /* Ensure consistent icon spacing */
+    text-align: center;
+    color: var(--color-text-secondary); /* Icon color */
+    transition: color 0.2s ease;
+}
+.mosa-link-item:hover i {
+     color: var(--color-link);
+}
+.mosa-link-item .ai { /* Specific styling for Academicons if needed */
+    font-size: 1.4rem;
+}
+
+.mosa-divider {
+    width: 80px;
+    height: 2px;
+    background-color: var(--color-border);
+    margin: var(--spacing-xl) auto; /* Center the divider */
+}
+
+.mosa-quote {
+    font-family: var(--font-primary); /* Or use Lora if preferred for quotes */
+    font-style: italic;
+    color: var(--color-text-tertiary);
+    font-size: 1rem;
+    max-width: 600px;
+    margin: 0 auto;
+    line-height: 1.7;
+}
+
+.mosa-quote cite {
+    display: block;
+    text-align: right;
+    margin-top: var(--spacing-sm);
+    font-style: normal;
+    font-size: 0.9rem;
+    color: var(--color-text-tertiary);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .mosa-name {
+        font-size: 2.25rem;
     }
-  }
-  
-  @media (max-width: 576px) {
-    .connect-buttons {
-      /* Keep centered, wrapping will handle stacking */
-      gap: var(--space-3); /* Reduce gap */
+    .mosa-title {
+        font-size: 1.1rem;
     }
-    /* Optional: Make buttons full width on smallest screens */
-    /* .connect-buttons .btn {
-      width: 100%;
-      max-width: 300px;
-    } */
-  }
-  
-  /* CHUNK 6 END */
-  
-  /* ==========================================================================
-     End of Index Page Specific Styles (assets/css/pages/index.css)
-     ========================================================================== */
+    .mosa-profile-pic {
+        width: 120px;
+        height: 120px;
+    }
+    .mosa-links {
+        gap: var(--spacing-md);
+    }
+    .mosa-link-item span {
+         /* Optionally hide text labels on very small screens */
+        /* display: none; */
+    }
+}

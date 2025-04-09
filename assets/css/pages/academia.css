@@ -1,167 +1,418 @@
-/* ==========================================================================
-   Academia Page Specific Styles (pages/academia.css) - DARK THEME UPDATE
-   ========================================================================== */
+/* assets/css/pages/academia.css */
 
-/* --- Page Hero Styling --- */
-.page-hero {
-    /* Use secondary dark bg for hero */
-    background-color: var(--color-bg-secondary);
-    /* Example gradient if preferred:
-    background: linear-gradient(to right, var(--color-bg-secondary), var(--color-bg-primary)); */
-    color: var(--color-text-primary); /* Light text */
+.academia-header {
     text-align: center;
-    padding: var(--space-7, 3rem) var(--space-5, 1.5rem);
-    margin-bottom: var(--space-7, 3rem);
-    border-bottom: var(--border-width, 1px) solid var(--color-border-primary); /* Dark theme border */
-  }
-  .page-hero h1 {
-    font-size: var(--font-size-3xl, 2.5rem);
-    margin-bottom: var(--space-3, 0.75rem);
-    font-weight: var(--font-weight-bold, 700);
-    color: var(--color-text-primary); /* Ensure primary light text */
-  }
-  .page-hero .hero-subtitle {
-    font-size: var(--font-size-lg, 1.25rem);
-    color: var(--color-text-secondary); /* Muted light gray */
-    max-width: 750px;
-    margin: 0 auto;
-    line-height: 1.6;
-  }
-  
-  /* --- Main Content Area Layout --- */
-  #academia-content { /* Padding handled by main */ }
-  
-  .academia-grid {
-    display: grid;
-    grid-template-columns: 2fr 1fr; /* Keep 2:1 ratio */
-    gap: var(--space-7, 3rem);
-  }
-  
-  /* --- Main Content Area (.academia-main) --- */
-  .academia-main { /* Optional styles */ }
-  
-  .section-block {
-    background: var(--color-bg-secondary); /* Use secondary dark bg */
-    border-radius: var(--border-radius-md, 6px);
-    border: var(--border-width, 1px) solid var(--color-border-primary);
-    padding: var(--space-6, 2rem);
-    margin-bottom: var(--space-6, 2rem);
-    /* Minimal shadow */
-    box-shadow: 0 1px 3px rgba(0,0,0,0.2);
-  }
-  .section-block:last-child { margin-bottom: 0; }
-  
-  .section-block h2 {
-    font-size: var(--font-size-xl, 1.5rem);
-    color: var(--color-text-primary);
-    margin-bottom: var(--space-5, 1.5rem);
-    padding-bottom: var(--space-3, 0.75rem);
-    border-bottom: var(--border-width, 1px) solid var(--color-border-primary); /* Use theme border */
-  }
-  
-  /* Research Interests Area */
-  .research-areas {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: var(--space-5, 1.5rem);
-    margin-top: var(--space-5, 1.5rem);
-  }
-  .research-area {
-    padding: var(--space-5, 1.5rem);
-    background: var(--color-bg-primary); /* Darker background */
-    border-radius: var(--border-radius-md, 6px);
-    border-left: 4px solid var(--color-accent-primary); /* Green accent border */
-  }
-  .research-area h3 {
-    font-size: var(--font-size-md, 1.125rem);
-    margin-bottom: var(--space-3, 0.75rem);
-    color: var(--color-text-primary);
-    display: flex; align-items: center; gap: var(--space-3, 0.75rem);
-  }
-  .research-area h3 i {
-    color: var(--color-accent-primary); /* Green icon */
-    font-size: 1.1em; width: 24px; text-align: center;
-  }
-  .research-area p {
-    font-size: var(--font-size-sm, 0.875rem);
+    padding-bottom: var(--spacing-lg);
+    margin-bottom: var(--spacing-xl);
+    border-bottom: 1px solid var(--color-border);
+}
+.academia-header h1 {
+    font-size: 2.5rem;
+    margin-bottom: var(--spacing-sm);
+}
+.academia-header p {
+    font-size: 1.1rem;
     color: var(--color-text-secondary);
-    line-height: 1.6; margin-bottom: 0;
-  }
-  
-  /* Current Research Project Display */
-  .current-project { margin-bottom: var(--space-6, 2rem); }
-  .section-block > .current-project:last-child { margin-bottom: 0; }
-  .current-project h3 { font-size: var(--font-size-lg, 1.25rem); color: var(--color-text-primary); margin-bottom: var(--space-1, 0.25rem); }
-  .project-affiliation { font-style: italic; color: var(--color-text-secondary); margin-bottom: var(--space-1, 0.25rem); font-size: var(--font-size-sm, 0.875rem); }
-  .project-date { color: var(--color-text-secondary); font-size: var(--font-size-xs, 0.75rem); margin-bottom: var(--space-4, 1rem); }
-  .project-content { display: flex; gap: var(--space-6, 2rem); margin-top: var(--space-4, 1rem); }
-  .project-image { width: 200px; height: auto; object-fit: cover; border-radius: var(--border-radius-md, 6px); border: var(--border-width, 1px) solid var(--color-border-primary); flex-shrink: 0; }
-  .project-description { flex: 1; font-size: var(--font-size-base, 1rem); color: var(--color-text-secondary); }
-  .project-description p { margin-bottom: var(--space-3, 0.75rem); color: var(--color-text-secondary); }
-  .project-description ul { margin: var(--space-3, 0.75rem) 0 var(--space-4, 1rem) var(--space-5, 1.5rem); list-style: disc; color: var(--color-text-secondary); }
-  .project-description li { margin-bottom: var(--space-2, 0.5rem); }
-  .project-description strong { color: var(--color-text-primary); font-weight: var(--font-weight-medium, 500); }
-  
-  
-  /* Publications List */
-  .publications-list { /* Container */ }
-  .publication-item { margin-bottom: var(--space-5, 1.5rem); }
-  .publication-item:last-child { margin-bottom: 0; }
-  .publication-item h3 { font-size: var(--font-size-md, 1.125rem); color: var(--color-text-secondary); margin-bottom: var(--space-4, 1rem); padding-bottom: var(--space-2, 0.5rem); border-bottom: 1px dashed var(--color-border-primary); }
-  .publication { margin-bottom: var(--space-5, 1.5rem); padding-left: var(--space-4, 1rem); border-left: 3px solid var(--color-border-primary); transition: border-left-color var(--transition-fast, 150ms ease-in-out); }
-  .publication:last-child { margin-bottom: 0; }
-  .publication:hover { border-left-color: var(--color-accent-primary); } /* Green hover */
-  .publication-authors { margin-bottom: var(--space-1, 0.25rem); color: var(--color-text-secondary); font-size: var(--font-size-sm, 0.875rem); }
-  .publication-title { font-weight: var(--font-weight-semibold, 600); margin-bottom: var(--space-1, 0.25rem); font-size: var(--font-size-base, 1rem); line-height: 1.4; color: var(--color-text-primary); }
-  .publication-journal { font-style: italic; margin-bottom: var(--space-2, 0.5rem); color: var(--color-text-secondary); font-size: var(--font-size-sm, 0.875rem); }
-  .publication-links { display: flex; flex-wrap: wrap; gap: var(--space-4, 1rem); font-size: var(--font-size-sm, 0.875rem); margin-top: var(--space-2, 0.5rem); }
-  .publication-links a { display: inline-flex; align-items: center; gap: var(--space-1, 0.25rem); color: var(--color-link); font-weight: var(--font-weight-medium, 500); }
-  .publication-links a:hover { color: var(--color-link); text-decoration: underline; }
-  .publication-links a i { font-size: 0.85em; }
-  .publication-abstract-toggle { cursor: pointer; }
-  .publication-abstract { background: var(--color-bg-primary); padding: var(--space-4, 1rem); border-radius: var(--border-radius-md, 6px); margin-top: var(--space-3, 0.75rem); display: none; font-size: var(--font-size-sm, 0.875rem); color: var(--color-text-secondary); border: 1px solid var(--color-border-primary); }
-  .publication-abstract.show { display: block; }
-  
-  /* --- Sidebar Area (.academia-sidebar) --- */
-  .academia-sidebar { position: sticky; top: calc(var(--space-7, 3rem) + 70px); align-self: start; }
-  
-  .sidebar-block { background: var(--color-bg-secondary); border-radius: var(--border-radius-md, 6px); border: var(--border-width, 1px) solid var(--color-border-primary); padding: var(--space-5, 1.5rem); margin-bottom: var(--space-5, 1.5rem); box-shadow: 0 1px 3px rgba(0,0,0,0.2); }
-  .sidebar-block:last-child { margin-bottom: 0; }
-  .sidebar-block h3 { font-size: var(--font-size-md, 1.125rem); font-weight: var(--font-weight-semibold, 600); color: var(--color-text-primary); margin-bottom: var(--space-4, 1rem); padding-bottom: var(--space-2, 0.5rem); border-bottom: 1px solid var(--color-border-primary); }
-  
-  /* Profile Block */
-  .profile-block { text-align: center; }
-  .profile-block .profile-image { width: 120px; height: 120px; border-radius: 50%; object-fit: cover; margin: 0 auto var(--space-4, 1rem); border: 3px solid var(--color-bg-secondary); /* Match card bg */ box-shadow: 0 0 0 1px var(--color-border-primary), 0 3px 8px var(--color-shadow-primary); }
-  .profile-block h3 { border-bottom: none; margin-bottom: var(--space-1, 0.25rem); font-size: var(--font-size-lg, 1.25rem); }
-  .profile-block p { font-size: var(--font-size-base, 1rem); color: var(--color-text-secondary); margin-bottom: var(--space-4, 1rem); }
-  .profile-links { display: flex; flex-direction: column; gap: var(--space-3, 0.75rem); margin-top: var(--space-4, 1rem); }
-  .profile-links a { display: inline-flex; align-items: center; justify-content: center; gap: var(--space-2, 0.5rem); padding: var(--space-2, 0.5rem) var(--space-3, 0.75rem); border-radius: var(--border-radius-md, 6px); background: var(--color-bg-primary); /* Darker bg */ border: 1px solid var(--color-border-primary); color: var(--color-link); font-size: var(--font-size-sm, 0.875rem); font-weight: var(--font-weight-medium, 500); transition: background-color var(--transition-fast, 150ms ease-in-out), color var(--transition-fast, 150ms ease-in-out); text-decoration: none; }
-  .profile-links a:hover { background-color: var(--color-accent-primary); /* Green hover */ color: var(--color-text-inverse); border-color: var(--color-accent-primary); text-decoration: none; }
-  .profile-links a i { font-size: 1.1em; width: 16px; text-align: center; }
-  
-  /* Education & Experience Items (Sidebar Version) */
-  .sidebar-block .education-item, .sidebar-block .experience-item { margin-bottom: var(--space-4, 1rem); padding-bottom: var(--space-4, 1rem); border-bottom: 1px dashed var(--color-border-primary); }
-  .sidebar-block .education-item:last-child, .sidebar-block .experience-item:last-child { margin-bottom: 0; padding-bottom: 0; border-bottom: none; }
-  .sidebar-block .education-item h4, .sidebar-block .experience-item h4 { font-size: var(--font-size-base, 1rem); font-weight: var(--font-weight-medium, 500); margin-bottom: var(--space-1, 0.25rem); color: var(--color-text-primary); }
-  .sidebar-block .education-item p, .sidebar-block .experience-item p { font-size: var(--font-size-sm, 0.875rem); color: var(--color-text-secondary); margin-bottom: var(--space-1, 0.25rem); }
-  .sidebar-block .education-date, .sidebar-block .experience-date { font-size: var(--font-size-xs, 0.75rem); color: var(--color-text-secondary); margin-top: 0; }
-  
-  /* Learning Topics List */
-  .learning-topics { list-style: none; padding: 0; margin: 0; }
-  .learning-topics li { padding: var(--space-2, 0.5rem) 0 var(--space-2, 0.5rem) var(--space-4, 1rem); margin-bottom: var(--space-2, 0.5rem); border-bottom: 1px dashed var(--color-border-primary); position: relative; font-size: var(--font-size-sm, 0.875rem); color: var(--color-text-secondary); }
-  .learning-topics li:last-child { margin-bottom: 0; border-bottom: none; }
-  .learning-topics li::before { content: "▹"; position: absolute; left: 0; top: var(--space-2, 0.5rem); color: var(--color-accent-primary); font-size: 1em; line-height: inherit;} /* Green bullet */
-  
-  /* --- Responsive --- */
-  @media (max-width: 992px) {
-    .academia-grid { grid-template-columns: 1fr; gap: var(--space-6, 2rem); }
-    .academia-sidebar { position: static; margin-top: var(--space-7, 3rem); }
-  }
-  @media (max-width: 576px) {
-    .page-hero { padding: var(--space-6, 2rem) var(--space-4, 1rem); }
-    .page-hero h1 { font-size: var(--font-size-2xl, 2rem); }
-    .page-hero .hero-subtitle { font-size: var(--font-size-base, 1rem); }
-    .section-block { padding: var(--space-5, 1.5rem); }
-    .project-content { flex-direction: column; }
-    .project-image { width: 100%; max-width: 300px; margin-bottom: var(--space-4, 1rem); }
-  }
+    max-width: 700px;
+    margin: 0 auto;
+}
+
+/* Main layout grid */
+.academia-layout {
+    display: grid;
+    grid-template-columns: 1fr; /* Single column by default */
+    gap: var(--spacing-xl);
+}
+
+@media (min-width: 992px) { /* Apply two-column layout on larger screens */
+    .academia-layout {
+        grid-template-columns: 2fr 1fr; /* Main content takes 2/3, sidebar 1/3 */
+    }
+}
+
+/* Content Blocks */
+.section-block {
+    background-color: var(--color-foreground);
+    border: 1px solid var(--color-border);
+    border-radius: var(--border-radius-md);
+    margin-bottom: var(--spacing-lg);
+    overflow: hidden; /* Ensure content respects border */
+}
+.section-block h2 {
+    font-size: 1.5rem;
+    padding: var(--spacing-md) var(--spacing-lg);
+    border-bottom: 1px solid var(--color-border);
+    margin-bottom: 0; /* Remove default margin */
+    color: var(--color-text-primary);
+    background-color: rgba(0,0,0,0.1); /* Subtle header background */
+}
+.section-block-content {
+    padding: var(--spacing-lg);
+}
+.section-block-content p:last-child {
+    margin-bottom: 0;
+}
+
+/* Research Interests */
+.research-areas {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: var(--spacing-lg);
+    margin-top: var(--spacing-md); /* Space below section title */
+}
+.research-area {
+    /* background-color: var(--color-background); */ /* Slightly different bg */
+    /* border: 1px solid var(--color-border); */
+    /* border-radius: var(--border-radius-sm); */
+    /* padding: var(--spacing-md); */
+}
+.research-area h3 {
+    font-size: 1.1rem;
+    margin-bottom: var(--spacing-sm);
+    color: var(--color-text-primary);
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+}
+.research-area h3 i {
+    color: var(--color-accent); /* Color icons */
+    width: 20px;
+    text-align: center;
+}
+.research-area p {
+    font-size: 0.9rem;
+    color: var(--color-text-secondary);
+    margin-bottom: 0;
+}
+
+/* Current Research */
+.current-project {
+    margin-bottom: var(--spacing-lg);
+    padding-bottom: var(--spacing-lg);
+    border-bottom: 1px dashed var(--color-border); /* Separator */
+}
+.current-project:last-child {
+    margin-bottom: 0;
+    padding-bottom: 0;
+    border-bottom: none;
+}
+.current-project h3 {
+    font-size: 1.2rem;
+    margin-bottom: var(--spacing-xs);
+    color: var(--color-text-primary);
+}
+.project-affiliation, .project-date {
+    font-size: 0.9rem;
+    color: var(--color-text-tertiary);
+    margin-bottom: var(--spacing-sm);
+}
+.project-content {
+    display: flex;
+    gap: var(--spacing-lg);
+    margin-top: var(--spacing-md);
+}
+.project-image {
+    width: 150px;
+    height: auto;
+    max-height: 150px;
+    object-fit: cover;
+    border-radius: var(--border-radius-sm);
+    border: 1px solid var(--color-border);
+    align-self: flex-start; /* Align image to top */
+}
+.project-description {
+    flex: 1;
+}
+.project-description p, .project-description ul {
+    font-size: 0.95rem;
+    color: var(--color-text-secondary);
+    margin-bottom: var(--spacing-sm);
+}
+.project-description ul {
+    padding-left: var(--spacing-md);
+}
+
+@media (max-width: 576px) {
+    .project-content {
+        flex-direction: column;
+    }
+    .project-image {
+        width: 100%;
+        max-height: 200px;
+        margin-bottom: var(--spacing-md);
+    }
+}
+
+
+/* Publications */
+.publication-item {
+    margin-bottom: var(--spacing-lg);
+}
+.publication-item h3 { /* Journal/Conference heading */
+    font-size: 1.1rem;
+    color: var(--color-text-tertiary);
+    margin-bottom: var(--spacing-md);
+    border-bottom: 1px solid var(--color-border);
+    padding-bottom: var(--spacing-sm);
+}
+.publication {
+    margin-bottom: var(--spacing-lg);
+    padding-left: var(--spacing-sm);
+    border-left: 3px solid var(--color-border);
+}
+.publication:last-child {
+    margin-bottom: 0;
+}
+.publication-authors {
+    font-weight: 500;
+    color: var(--color-text-primary);
+}
+.publication-title {
+    font-style: italic;
+    color: var(--color-text-secondary);
+    margin: var(--spacing-xs) 0;
+}
+.publication-journal {
+    font-size: 0.9rem;
+    color: var(--color-text-secondary);
+    margin-bottom: var(--spacing-sm);
+}
+.publication-links {
+    display: flex;
+    gap: var(--spacing-md);
+    font-size: 0.9rem;
+}
+.publication-links a {
+    color: var(--color-link);
+    text-decoration: none;
+    cursor: pointer;
+}
+.publication-links a:hover {
+    text-decoration: underline;
+}
+.publication-links i {
+    margin-right: var(--spacing-xs);
+}
+.publication-abstract {
+    display: none; /* Hidden by default */
+    margin-top: var(--spacing-md);
+    padding: var(--spacing-md);
+    background-color: var(--color-background); /* Slightly darker bg for contrast */
+    border: 1px solid var(--color-border);
+    border-radius: var(--border-radius-sm);
+    font-size: 0.9rem;
+    color: var(--color-text-secondary);
+}
+.publication-abstract.active {
+    display: block;
+}
+.publication-abstract-toggle .fa-chevron-down,
+.publication-abstract-toggle .fa-chevron-up {
+    transition: transform 0.2s ease-out;
+}
+.publication-abstract-toggle.active .fa-chevron-down {
+    transform: rotate(180deg);
+}
+
+
+/* Sidebar */
+.academia-sidebar .sidebar-block {
+    background-color: var(--color-foreground);
+    border: 1px solid var(--color-border);
+    border-radius: var(--border-radius-md);
+    margin-bottom: var(--spacing-lg);
+    overflow: hidden;
+}
+.academia-sidebar .sidebar-block h3 {
+    font-size: 1.1rem;
+    padding: var(--spacing-sm) var(--spacing-md);
+    border-bottom: 1px solid var(--color-border);
+    margin-bottom: 0;
+    color: var(--color-text-primary);
+    background-color: rgba(0,0,0,0.1);
+}
+.sidebar-block-content {
+    padding: var(--spacing-md);
+}
+.sidebar-block-content p:last-child,
+.sidebar-block-content ul:last-child,
+.sidebar-block-content div:last-child {
+     margin-bottom: 0;
+}
+
+/* Sidebar Profile Block */
+.profile-block {
+    text-align: center;
+}
+.profile-image {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid var(--color-border);
+    margin: var(--spacing-sm) auto var(--spacing-sm);
+    display: block;
+}
+.profile-block h4 { /* Name */
+     font-size: 1.2rem;
+     margin-bottom: var(--spacing-xs);
+     color: var(--color-text-primary);
+}
+.profile-block .profile-title { /* Title */
+    font-size: 0.95rem;
+    color: var(--color-text-secondary);
+    margin-bottom: var(--spacing-md);
+}
+.profile-links {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-sm);
+    align-items: flex-start; /* Align text left */
+    text-align: left;
+    margin-bottom: var(--spacing-md);
+}
+.profile-links a {
+    color: var(--color-text-secondary);
+    text-decoration: none;
+    font-size: 0.9rem;
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+}
+.profile-links a:hover {
+    color: var(--color-link);
+}
+.profile-links a i {
+    width: 18px; /* Align icons */
+    text-align: center;
+    color: var(--color-text-tertiary);
+}
+.profile-links a .ai {
+    font-size: 1.1em;
+}
+.profile-links a:hover i {
+     color: var(--color-link);
+}
+.cv-download-buttons {
+    margin-top: var(--spacing-md);
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-sm);
+}
+.cv-download-buttons .btn {
+    width: 100%; /* Make buttons full width */
+    font-size: 0.9rem;
+}
+
+/* Sidebar Education/Experience */
+.education-item, .experience-item {
+    margin-bottom: var(--spacing-md);
+    padding-bottom: var(--spacing-md);
+    border-bottom: 1px dashed var(--color-border);
+}
+.education-item:last-child, .experience-item:last-child {
+    margin-bottom: 0;
+    padding-bottom: 0;
+    border-bottom: none;
+}
+.education-item h4, .experience-item h4 { /* Degree/Job Title */
+    font-size: 1rem;
+    font-weight: 500;
+    margin-bottom: var(--spacing-xs);
+    color: var(--color-text-primary);
+}
+.education-item p, .experience-item p {
+    font-size: 0.9rem;
+    color: var(--color-text-secondary);
+    margin-bottom: var(--spacing-xs);
+}
+.education-date, .experience-date {
+    font-size: 0.85rem;
+    color: var(--color-text-tertiary);
+}
+
+/* Sidebar Learning Topics */
+.learning-topics {
+    list-style: none;
+    padding-left: 0;
+}
+.learning-topics li {
+    font-size: 0.9rem;
+    color: var(--color-text-secondary);
+    padding-left: var(--spacing-md);
+    position: relative;
+    margin-bottom: var(--spacing-xs);
+}
+.learning-topics li::before {
+    content: "\f105"; /* Font Awesome chevron right */
+    font-family: "Font Awesome 6 Free";
+    font-weight: 900;
+    position: absolute;
+    left: 0;
+    color: var(--color-accent);
+}
+
+/* Simplified Contact Section */
+#contact-simplified {
+    background-color: var(--color-foreground);
+    border: 1px solid var(--color-border);
+    border-radius: var(--border-radius-md);
+    margin-top: var(--spacing-xl); /* Space above contact section */
+    padding: var(--spacing-lg);
+}
+
+#contact-simplified h2 {
+    text-align: center;
+    font-size: 1.75rem;
+    margin-bottom: var(--spacing-sm);
+    color: var(--color-text-primary);
+}
+#contact-simplified .contact-intro {
+    text-align: center;
+    color: var(--color-text-secondary);
+    max-width: 600px;
+    margin: 0 auto var(--spacing-xl) auto;
+}
+
+.contact-layout-simplified {
+    display: grid;
+    grid-template-columns: 1fr; /* Single column default */
+    gap: var(--spacing-xl);
+    max-width: 800px; /* Limit width */
+    margin: 0 auto; /* Center */
+}
+
+/* @media (min-width: 768px) {
+    .contact-layout-simplified {
+         grid-template-columns: 1fr 1fr; // Optional: two columns if needed
+    }
+} */
+
+.contact-form-simplified h3, .contact-links-simplified h3 {
+    font-size: 1.2rem;
+    margin-bottom: var(--spacing-md);
+    color: var(--color-text-primary);
+    text-align: center;
+}
+
+.contact-links-list {
+    display: flex;
+    justify-content: center;
+    gap: var(--spacing-lg);
+    margin-top: var(--spacing-md);
+}
+
+.contact-links-list a {
+    color: var(--color-text-secondary);
+    font-size: 1.8rem; /* Larger icons */
+    text-decoration: none;
+    transition: color 0.2s ease, transform 0.2s ease;
+}
+
+.contact-links-list a:hover {
+    color: var(--color-link);
+    transform: scale(1.1);
+}
+.contact-links-list a .ai {
+     font-size: 1.1em; /* Adjust academicons size */
+}

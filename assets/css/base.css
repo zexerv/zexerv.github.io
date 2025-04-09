@@ -1,83 +1,130 @@
-/**
- * ==========================================================================
- * Base CSS (base.css)
- *
- * Defines global styles, color palette (CSS variables),
- * and basic element styles for the entire website.
- * ==========================================================================
- */
+/* assets/css/base.css */
 
- :root {
-    /* --- Color Palette (GitHub-Inspired Dark) --- */
-    --color-bg-primary: #0d1117; /* Main background: dark */
-    --color-bg-secondary: #161b22; /* Secondary backgrounds: slightly lighter dark */
-    --color-text-primary: #c9d1d9; /* Primary text: light gray */
-    --color-text-secondary: #8b949e; /* Secondary text: muted light gray */
-    --color-accent-primary: #238636; /* Primary accent: green (GitHub green) */
-    --color-accent-secondary: #79c0ff; /* Secondary accent: light blue-ish for highlights */
-    --color-border-primary: #30363d; /* Primary border: dark gray */
-    --color-code-bg: #2b3137; /* Code block background: Darker */
-    --color-code-text: #f8f8f2; /* Code block text: Light */
-    --color-shadow-primary: rgba(0, 0, 0, 0.4); /* General shadow color */
-    --color-link: #58a6ff; /* link color */
-  
-    /* --- Typography --- */
-    --font-family-base: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
-    --font-size-base: 1rem; /* 16px */
-    --line-height-base: 1.5;
-  
-    /* --- Spacing & Layout --- */
-    --space-unit: 1rem; /* 16px */
-    --border-radius-base: 0.25rem; /* 4px */
-  }
-  
-  /* --- Base Element Styles --- */
-  body {
-    font-family: var(--font-family-base);
-    font-size: var(--font-size-base);
-    line-height: var(--line-height-base);
-    color: var(--color-text-primary);
-    background-color: var(--color-bg-primary); /* Dark Background */
+/* CSS Variables - GitHub Dark Theme Inspired */
+:root {
+    --font-primary: 'Roboto', sans-serif;
+    --font-mono: 'Roboto Mono', monospace;
+
+    /* Dark Theme Colors */
+    --color-background: #0d1117; /* Very dark grey/blue */
+    --color-foreground: #161b22; /* Dark grey */
+    --color-border: #30363d;     /* Grey border */
+    --color-text-primary: #c9d1d9; /* Light grey text */
+    --color-text-secondary: #8b949e; /* Medium grey text */
+    --color-text-tertiary: #586069;  /* Darker grey text (e.g., muted) */
+    --color-link: #58a6ff;        /* Blue links */
+    --color-link-hover: #79c0ff;   /* Lighter blue on hover */
+    --color-accent: #2ea043;      /* Green accent (buttons, highlights) */
+    --color-accent-hover: #3fb950; /* Lighter green on hover */
+    --color-danger: #f85149;       /* Red for warnings/errors */
+
+    /* Sizes & Spacing */
+    --spacing-xs: 0.25rem; /* 4px */
+    --spacing-sm: 0.5rem;  /* 8px */
+    --spacing-md: 1rem;    /* 16px */
+    --spacing-lg: 1.5rem;  /* 24px */
+    --spacing-xl: 2rem;    /* 32px */
+    --spacing-xxl: 3rem;   /* 48px */
+
+    --border-radius-sm: 3px;
+    --border-radius-md: 6px;
+    --border-radius-lg: 8px;
+
+    --header-height: 60px; /* Example header height */
+}
+
+/* Basic Reset & Box Sizing */
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
     margin: 0;
     padding: 0;
-  }
-  
-  h1,
-  h2,
-  h3,
-  h4,
-  h5,
-  h6 {
+}
+
+/* HTML & Body Setup */
+html {
+    font-size: 16px; /* Base font size */
+    scroll-behavior: smooth;
+    height: 100%;
+}
+
+body {
+    font-family: var(--font-primary);
+    line-height: 1.6;
     color: var(--color-text-primary);
-    margin-top: var(--space-unit);
-    margin-bottom: var(--space-unit);
-    font-weight: 600; /* Bold, but not too heavy */
-    line-height: 1.2;
-  }
-  
-  p {
-    margin-top: 0;
-    margin-bottom: var(--space-unit);
-  }
-  
-  a {
-      color: var(--color-link);
-      text-decoration: none;
-  }
-  
-  a:hover {
+    background-color: var(--color-background);
+    display: flex;
+    flex-direction: column;
+    min-height: 100%;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+/* Basic Typography */
+h1, h2, h3, h4, h5, h6 {
+    margin-bottom: var(--spacing-md);
+    line-height: 1.3;
+    font-weight: 600; /* Adjust as needed */
+    color: var(--color-text-primary);
+}
+
+h1 { font-size: 2.25rem; } /* 36px */
+h2 { font-size: 1.75rem; } /* 28px */
+h3 { font-size: 1.375rem; } /* 22px */
+h4 { font-size: 1.125rem; } /* 18px */
+
+p {
+    margin-bottom: var(--spacing-md);
+    color: var(--color-text-secondary);
+}
+
+a {
+    color: var(--color-link);
+    text-decoration: none;
+    transition: color 0.2s ease-in-out;
+}
+
+a:hover {
+    color: var(--color-link-hover);
     text-decoration: underline;
-  }
-  
-  hr {
-    border: 0;
-    border-top: 1px solid var(--color-border-primary);
-    margin: var(--space-unit) 0;
-  }
-  
-  ul,
-  ol {
-    margin-top: 0;
-    margin-bottom: var(--space-unit);
-    padding-left: 2rem;
-  }
+}
+
+ul, ol {
+    margin-bottom: var(--spacing-md);
+    padding-left: var(--spacing-lg);
+}
+
+li {
+    margin-bottom: var(--spacing-sm);
+}
+
+/* Code Styling */
+code, pre {
+    font-family: var(--font-mono);
+    font-size: 0.9em;
+    background-color: var(--color-foreground);
+    border: 1px solid var(--color-border);
+    border-radius: var(--border-radius-sm);
+}
+
+code { /* Inline code */
+    padding: 0.2em 0.4em;
+    color: var(--color-text-primary);
+}
+
+pre { /* Code blocks */
+    padding: var(--spacing-md);
+    overflow-x: auto; /* Enable horizontal scrolling for long lines */
+    color: var(--color-text-primary);
+    margin-bottom: var(--spacing-md);
+}
+
+/* Helper Classes (Optional) */
+.text-muted {
+    color: var(--color-text-tertiary) !important;
+}
+
+.text-center {
+    text-align: center;
+}

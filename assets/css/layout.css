@@ -1,105 +1,95 @@
-/* ==========================================================================
-   Global Layout Styles (layout.css) - UPDATED
-   ========================================================================== */
+/* assets/css/layout.css */
 
-/* --- Container --- */
-.container {
-    width: 100%;
-    max-width: var(--container-max-width, 1100px);
-    margin-left: auto;
-    margin-right: auto;
-    padding-left: var(--container-padding, 1.5rem);
-    padding-right: var(--container-padding, 1.5rem);
-  }
-  
-  /* --- Page Wrapper & Sticky Footer --- */
-  /* Relies on body { display: flex; flex-direction: column; min-height: 100vh; } in base.css */
-  .page-wrapper {
+.page-wrapper {
     display: flex;
     flex-direction: column;
-    min-height: 100vh;
-  }
-  
-  main {
-    flex-grow: 1; /* Allows main content to expand */
-  }
-  
-  /* --- Section Spacing --- */
-  /* Apply generous vertical padding to major content sections */
-  /* Use specific IDs or add a common class like .page-section to relevant <section> tags in HTML */
-  #hero ~ main section, /* Target sections following hero */
-  .contact-section,     /* Specific ID from contact page */
-  #academia-content,    /* Specific ID from academia page */
-  #about-content,       /* Specific ID from about page */
-  #blog                /* Specific ID from blog page */
-  /* Add other top-level section IDs/classes if needed */
-   {
-    padding-top: var(--space-8, 4rem); /* 64px - Increased padding */
-    padding-bottom: var(--space-8, 4rem); /* 64px - Increased padding */
-  }
-  
-  /* Add specific overrides for sections needing different spacing */
-  #quote-section { /* Quote section might want different padding */
-     padding-top: var(--space-8, 4rem);
-     padding-bottom: var(--space-8, 4rem);
-  }
-  
-  
-  /* --- Text Readability --- */
-  /* Apply max-width to common text containers within sections */
-  /* Use a class like .text-content-block or target specific elements */
-  .section-block p,
-  .about-section p,
-  .project-description,
-  .experience-description,
-  .connect-description,
-  #blog > .container > p,
-  .summary-section p
-  /* Add other relevant text block selectors */ {
-    max-width: 70ch; /* Limit line length to ~70 characters */
-    /* Center text block if container is wider - may depend on parent layout */
-    /* margin-left: auto; */
-    /* margin-right: auto; */
-  }
-  /* Ensure lists within these blocks also respect width if needed */
-  .section-block ul, .section-block ol,
-  .about-section ul, .about-section ol
-  /* etc. */ {
-     max-width: 70ch;
-  }
-  
-  
-  /* --- Grid Layout Helpers --- */
-  /* (Keep existing grid helpers or modify as needed) */
-  .grid {
-    display: grid;
-    gap: var(--space-5); /* Default gap */
-  }
-  .grid-cols-1 { grid-template-columns: 1fr; }
-  .grid-cols-2 { grid-template-columns: repeat(2, 1fr); }
-  .grid-cols-3 { grid-template-columns: repeat(3, 1fr); }
-  
-  @media (max-width: 768px) {
-    .grid-cols-3 { grid-template-columns: repeat(2, 1fr); }
-  
-    /* Reduce section padding slightly on medium screens */
-    #hero ~ main section, .contact-section, #academia-content, #about-content, #blog {
-       padding-top: var(--space-7, 3rem);
-       padding-bottom: var(--space-7, 3rem);
+    min-height: 100vh; /* Ensure footer sticks to bottom */
+}
+
+.container {
+    width: 90%;
+    max-width: 1100px; /* Adjust max-width as needed */
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: var(--spacing-md);
+    padding-right: var(--spacing-md);
+}
+
+/* Header Styles */
+.header {
+    background-color: var(--color-foreground); /* Slightly different from page bg */
+    border-bottom: 1px solid var(--color-border);
+    position: sticky; /* Make header stick */
+    top: 0;
+    z-index: 1000;
+    height: var(--header-height);
+    display: flex;
+    align-items: center;
+}
+
+/* Main Content Area */
+.main-content {
+    flex-grow: 1; /* Allow main content to take up available space */
+    padding-top: var(--spacing-xl);
+    padding-bottom: var(--spacing-xl);
+}
+
+/* Footer Styles */
+.footer {
+    background-color: var(--color-foreground);
+    border-top: 1px solid var(--color-border);
+    padding-top: var(--spacing-lg);
+    padding-bottom: var(--spacing-lg);
+    margin-top: auto; /* Push footer to bottom */
+    text-align: center;
+    color: var(--color-text-secondary);
+    font-size: 0.9rem;
+}
+
+.footer p {
+    margin-bottom: 0;
+}
+
+/* Basic Navbar Structure (to be fleshed out in navbar.css) */
+.navbar .container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 100%;
+}
+
+.logo {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--color-text-primary);
+    text-decoration: none;
+}
+.logo:hover {
+    text-decoration: none;
+    color: var(--color-text-primary); /* Keep logo color consistent */
+}
+
+.nav-links {
+    list-style: none;
+    display: flex;
+    gap: var(--spacing-lg);
+    padding-left: 0; /* Override default list padding */
+    margin-bottom: 0; /* Override default list margin */
+}
+
+.mobile-menu-btn { /* Basic styles, more in navbar.css */
+    display: none; /* Hidden by default */
+    background: none;
+    border: none;
+    color: var(--color-text-primary);
+    font-size: 1.5rem;
+    cursor: pointer;
+}
+
+/* Responsive adjustments for container/layout might go here or in dedicated files */
+@media (max-width: 768px) {
+    .container {
+        width: 95%;
     }
-  }
-  
-  @media (max-width: 576px) {
-    .grid-cols-2,
-    .grid-cols-3 { grid-template-columns: 1fr; }
-  
-    /* Reduce section padding further on small screens */
-     #hero ~ main section, .contact-section, #academia-content, #about-content, #blog {
-       padding-top: var(--space-6, 2rem);
-       padding-bottom: var(--space-6, 2rem);
-     }
-     /* Reduce text max-width slightly on mobile? Optional */
-     .section-block p, .about-section p, /* etc. */ {
-        /* max-width: 60ch; */
-     }
-  }
+    /* Show mobile menu button, hide desktop links etc. in navbar.css */
+}

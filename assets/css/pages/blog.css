@@ -1,47 +1,88 @@
-/* ==========================================================================
-   Blog List Page Specific Styles (pages/blog.css) - DARK THEME UPDATE
-   ========================================================================== */
+/* assets/css/pages/blog.css */
 
-/* Section container for the blog list */
-#blog {
-    /* Padding is handled by <main> tag styles in layout.css */
-    /* Background color inherited from body/main (dark) */
-  }
-  
-  /* Blog Page Header (Title and Intro Paragraph) */
-  #blog h1 {
+.blog-header {
     text-align: center;
-    font-size: var(--font-size-3xl, 2.5rem);
-    margin-bottom: var(--space-4, 1rem);
-    color: var(--color-text-primary); /* Primary light text */
-  }
-  
-  #blog > .container > p { /* Target the introductory paragraph directly */
-    text-align: center;
-    font-size: var(--font-size-md, 1.125rem);
-    color: var(--color-text-secondary); /* Muted light text */
-    max-width: 700px;
-    margin-left: auto;
-    margin-right: auto;
-    margin-bottom: var(--space-7, 3rem); /* Spacing below intro */
-  }
-  
-  /* Grid container for blog post previews */
-  /* Uses .posts-grid class, same as index page */
-  .posts-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: var(--space-6, 2rem);
-    margin-top: var(--space-6, 2rem); /* Spacing above grid if no intro */
-  }
-  
-  /* Individual blog post styling relies on .card from components/cards.css */
-  /* The .card class already has dark theme styles */
-  
-  
-  /* Responsive adjustments for Blog Page */
-  @media (max-width: 576px) {
-    #blog h1 { font-size: var(--font-size-2xl, 2rem); }
-    #blog > .container > p { font-size: var(--font-size-base, 1rem); margin-bottom: var(--space-6, 2rem); }
-    .posts-grid { grid-template-columns: 1fr; gap: var(--space-5, 1.5rem); }
-  }
+    margin-bottom: var(--spacing-xl);
+    padding-bottom: var(--spacing-md);
+    border-bottom: 1px solid var(--color-border);
+}
+
+.blog-header h1 {
+    font-size: 2.5rem;
+    margin-bottom: var(--spacing-sm);
+}
+
+.blog-header p {
+    font-size: 1.1rem;
+    color: var(--color-text-secondary);
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.blog-post-list {
+    list-style: none;
+    padding-left: 0;
+    max-width: 800px; /* Constrain width for readability */
+    margin: 0 auto; /* Center the list */
+}
+
+.blog-post-item {
+    padding: var(--spacing-lg) 0;
+    border-bottom: 1px solid var(--color-border);
+}
+.blog-post-item:first-child {
+     padding-top: 0; /* Remove top padding for the first item if header has border */
+}
+.blog-post-item:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+}
+
+.post-meta {
+    display: block;
+    font-size: 0.85rem;
+    color: var(--color-text-tertiary);
+    margin-bottom: var(--spacing-xs);
+}
+
+.post-title {
+    font-size: 1.5rem; /* Or 1.75rem */
+    margin-bottom: var(--spacing-sm);
+    color: var(--color-text-primary);
+}
+
+.post-title a {
+    color: inherit; /* Inherit color from h2 */
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+.post-title a:hover {
+    color: var(--color-link);
+    text-decoration: underline;
+}
+
+.post-excerpt {
+    color: var(--color-text-secondary);
+    font-size: 1rem;
+    line-height: 1.7;
+    margin-bottom: var(--spacing-md);
+}
+
+.read-more-link {
+    display: inline-block;
+    color: var(--color-link);
+    font-weight: 500;
+    text-decoration: none;
+    font-size: 0.95rem;
+}
+.read-more-link:hover {
+    color: var(--color-link-hover);
+    text-decoration: underline;
+}
+.read-more-link i {
+    margin-left: var(--spacing-xs);
+    transition: transform 0.2s ease-out;
+}
+.read-more-link:hover i {
+    transform: translateX(4px);
+}
