@@ -1,130 +1,210 @@
-/* assets/css/base.css */
+/* ==========================================================================
+   Base CSS (base.css) - Redesign: Dark GitHub Theme w/ Green Accent
+   ========================================================================== */
 
-/* CSS Variables - GitHub Dark Theme Inspired */
-:root {
-    --font-primary: 'Roboto', sans-serif;
-    --font-mono: 'Roboto Mono', monospace;
-
-    /* Dark Theme Colors */
-    --color-background: #0d1117; /* Very dark grey/blue */
-    --color-foreground: #161b22; /* Dark grey */
-    --color-border: #30363d;     /* Grey border */
-    --color-text-primary: #c9d1d9; /* Light grey text */
-    --color-text-secondary: #8b949e; /* Medium grey text */
-    --color-text-tertiary: #586069;  /* Darker grey text (e.g., muted) */
-    --color-link: #58a6ff;        /* Blue links */
-    --color-link-hover: #79c0ff;   /* Lighter blue on hover */
-    --color-accent: #2ea043;      /* Green accent (buttons, highlights) */
-    --color-accent-hover: #3fb950; /* Lighter green on hover */
-    --color-danger: #f85149;       /* Red for warnings/errors */
-
-    /* Sizes & Spacing */
-    --spacing-xs: 0.25rem; /* 4px */
-    --spacing-sm: 0.5rem;  /* 8px */
-    --spacing-md: 1rem;    /* 16px */
-    --spacing-lg: 1.5rem;  /* 24px */
-    --spacing-xl: 2rem;    /* 32px */
-    --spacing-xxl: 3rem;   /* 48px */
-
-    --border-radius-sm: 3px;
-    --border-radius-md: 6px;
-    --border-radius-lg: 8px;
-
-    --header-height: 60px; /* Example header height */
-}
-
-/* Basic Reset & Box Sizing */
+/* 1. CSS Reset (Simplified) */
 *,
 *::before,
 *::after {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  /* Ensure borders and padding are included in element's total width/height */
 }
 
-/* HTML & Body Setup */
 html {
-    font-size: 16px; /* Base font size */
-    scroll-behavior: smooth;
-    height: 100%;
+  font-size: 16px; /* Base font size (adjust if needed) */
+  scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
+/* Apply core font and background to body */
 body {
-    font-family: var(--font-primary);
-    line-height: 1.6;
-    color: var(--color-text-primary);
-    background-color: var(--color-background);
-    display: flex;
-    flex-direction: column;
-    min-height: 100%;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
+  font-family: var(--font-family-sans, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji");
+  font-size: var(--font-size-base, 1rem);
+  line-height: var(--line-height-base, 1.6);
+  color: var(--color-text-primary, #e6edf3); /* Default light text */
+  background-color: var(--color-canvas-default, #0d1117); /* Default dark background */
+  /* Sticky footer setup */
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
 }
 
-/* Basic Typography */
-h1, h2, h3, h4, h5, h6 {
-    margin-bottom: var(--spacing-md);
-    line-height: 1.3;
-    font-weight: 600; /* Adjust as needed */
-    color: var(--color-text-primary);
+img, picture, video, canvas, svg {
+  display: block;
+  max-width: 100%;
+  height: auto; /* Maintain aspect ratio */
 }
 
-h1 { font-size: 2.25rem; } /* 36px */
-h2 { font-size: 1.75rem; } /* 28px */
-h3 { font-size: 1.375rem; } /* 22px */
-h4 { font-size: 1.125rem; } /* 18px */
-
-p {
-    margin-bottom: var(--spacing-md);
-    color: var(--color-text-secondary);
+input, button, textarea, select {
+  font: inherit; /* Inherit font styles */
 }
 
 a {
-    color: var(--color-link);
-    text-decoration: none;
-    transition: color 0.2s ease-in-out;
+  text-decoration: none; /* Remove default underline */
+  color: var(--color-link, #58a6ff); /* Default link color */
+  transition: color var(--transition-fast, 100ms ease-in-out);
 }
-
 a:hover {
-    color: var(--color-link-hover);
-    text-decoration: underline;
+  text-decoration: underline;
+  /* color: var(--color-link-hover, var(--color-link)); */ /* Link hover color if needed */
 }
 
 ul, ol {
-    margin-bottom: var(--spacing-md);
-    padding-left: var(--spacing-lg);
+  list-style: none; /* Remove default list styles */
 }
 
-li {
-    margin-bottom: var(--spacing-sm);
+
+/* 2. CSS Variables (Dark GitHub-Inspired Palette w/ Green) */
+:root {
+  /* Core Colors */
+  --color-canvas-default: #0d1117;    /* Main background: deep dark */
+  --color-canvas-subtle: #161b22;     /* Secondary backgrounds: slightly lighter dark */
+  --color-text-primary: #e6edf3;      /* Primary text: Almost white */
+  --color-text-secondary: #7d8590;    /* Secondary text: Gray */
+  --color-border-default: #30363d;    /* Default border: Medium dark gray */
+  --color-border-muted: #21262d;      /* Muted border: Darker gray */
+
+  /* Accent Colors */
+  --color-accent-primary: #238636;    /* Primary Accent: GREEN */
+  --color-accent-primary-hover: #2ea043; /* Lighter Green hover */
+  --color-accent-primary-active: #2a8f4a; /* Darker Green active */
+  --color-link: #58a6ff;            /* Link color: Blue */
+  --color-danger: #f85149;           /* Danger color: Red */
+  --color-warning: #d29922;         /* Warning color: Yellow/Orange */
+  --color-text-inverse: #ffffff;     /* For text on accent backgrounds */
+
+  /* Syntax Highlighting (Placeholders) */
+  --color-syntax-comment: #8b949e;
+  --color-syntax-string: #a5d6ff;
+  --color-syntax-keyword: #ff7b72;
+  --color-syntax-constant: #79c0ff;
+  --color-syntax-bg: var(--color-canvas-subtle); /* Use subtle canvas bg */
+
+  /* Typography */
+  --font-family-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
+  --font-family-mono: SFMono-Regular, Consolas, "Liberation Mono", Menlo, Courier, monospace;
+  --font-size-xs: 0.75rem;    /* 12px */
+  --font-size-sm: 0.875rem;   /* 14px */
+  --font-size-base: 1rem;     /* 16px */
+  --font-size-md: 1.125rem;   /* 18px */
+  --font-size-lg: 1.25rem;    /* 20px */
+  --font-size-xl: 1.5rem;     /* 24px */
+  --font-size-2xl: 2rem;      /* 32px */
+  --font-size-3xl: 2.5rem;    /* 40px */
+  --font-weight-light: 300;
+  --font-weight-normal: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+  --line-height-base: 1.6;
+
+  /* Spacing (Adjust scale if needed) */
+  --space-1: 0.25rem;  /* 4px */
+  --space-2: 0.5rem;   /* 8px */
+  --space-3: 0.75rem;  /* 12px */
+  --space-4: 1rem;     /* 16px */
+  --space-5: 1.5rem;   /* 24px */
+  --space-6: 2rem;     /* 32px */
+  --space-7: 3rem;     /* 48px */
+  --space-8: 4rem;     /* 64px */
+
+  /* Borders */
+  --border-radius-sm: 3px;
+  --border-radius-md: 6px;
+  --border-radius-lg: 10px;
+  --border-radius-full: 9999px;
+  --border-width: 1px;
+
+  /* Transitions */
+  --transition-fast: 100ms ease-in-out;
+  --transition-base: 200ms ease-in-out;
+
+  /* Layout */
+  --container-max-width: 1100px; /* Max width for general content */
+  --container-padding: var(--space-5); /* 24px */
+  --content-max-width: 70ch; /* Max width for readable text blocks */
 }
 
-/* Code Styling */
-code, pre {
-    font-family: var(--font-mono);
-    font-size: 0.9em;
-    background-color: var(--color-foreground);
-    border: 1px solid var(--color-border);
-    border-radius: var(--border-radius-sm);
+
+/* 3. Base Element Styles (Using Variables) */
+h1, h2, h3, h4, h5, h6 {
+  font-weight: var(--font-weight-semibold);
+  line-height: 1.3;
+  margin-top: var(--space-5); /* Add consistent top margin */
+  margin-bottom: var(--space-4);
+  color: var(--color-text-primary);
+}
+h1 { font-size: var(--font-size-2xl); } /* Adjust sizes */
+h2 { font-size: var(--font-size-xl); }
+h3 { font-size: var(--font-size-lg); }
+h4 { font-size: var(--font-size-md); }
+
+p {
+  margin-bottom: var(--space-4);
+  color: var(--color-text-primary); /* Use primary light text for paragraphs */
+}
+/* Helper class for muted text */
+.text-secondary, .text-muted {
+  color: var(--color-text-secondary);
 }
 
-code { /* Inline code */
-    padding: 0.2em 0.4em;
-    color: var(--color-text-primary);
+strong, b { font-weight: var(--font-weight-semibold); color: inherit; }
+em, i { font-style: italic; }
+
+code {
+  font-family: var(--font-family-mono); font-size: 0.9em;
+  background-color: var(--color-border-muted);
+  padding: 0.15em 0.4em; margin: 0 0.1em;
+  border-radius: var(--border-radius-md);
+  color: var(--color-text-secondary);
 }
 
-pre { /* Code blocks */
-    padding: var(--spacing-md);
-    overflow-x: auto; /* Enable horizontal scrolling for long lines */
-    color: var(--color-text-primary);
-    margin-bottom: var(--spacing-md);
+pre {
+  font-family: var(--font-family-mono); font-size: var(--font-size-sm);
+  padding: var(--space-4); overflow: auto;
+  background-color: var(--color-canvas-subtle);
+  border-radius: var(--border-radius-md);
+  border: var(--border-width) solid var(--color-border-default);
+  line-height: 1.45; color: var(--color-text-primary);
+  margin-bottom: var(--space-4);
+}
+pre code { padding: 0; margin: 0; background-color: transparent; border: none; color: inherit; font-size: inherit; }
+
+blockquote {
+  margin: var(--space-5) 0; padding-left: var(--space-4);
+  border-left: 3px solid var(--color-border-default);
+  color: var(--color-text-secondary); font-size: inherit;
 }
 
-/* Helper Classes (Optional) */
-.text-muted {
-    color: var(--color-text-tertiary) !important;
+hr {
+  height: var(--border-width); background-color: var(--color-border-default);
+  margin: var(--space-6) 0; border: none;
 }
 
-.text-center {
-    text-align: center;
+/* Basic Table Styling */
+table {
+  width: 100%;
+  margin-bottom: var(--space-4);
+  border-collapse: collapse;
+  border-spacing: 0;
+  border: 1px solid var(--color-border-default);
 }
+th, td {
+  padding: var(--space-3);
+  text-align: left;
+  border-bottom: 1px solid var(--color-border-default);
+}
+th {
+  font-weight: var(--font-weight-semibold);
+  background-color: var(--color-canvas-subtle);
+}
+tbody tr:nth-child(even) {
+   background-color: rgba(22, 27, 34, 0.3); /* Very subtle striping */
+}
+
+/* Helper class for sticky footer */
+.page-wrapper { display: flex; flex-direction: column; min-height: 100vh; }
+main { flex-grow: 1; }
