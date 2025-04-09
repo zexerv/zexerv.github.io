@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Marrying Control Theory and RL in Robotics - Mo Saeidi</title> <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css"/>
+
+    <link rel="stylesheet" href="../assets/css/base.css" />
+    <link rel="stylesheet" href="../assets/css/layout.css" />
+    <link rel="stylesheet" href="../assets/css/components/navbar.css" />
+    <link rel="stylesheet" href="../assets/css/components/buttons.css" />
+    <link rel="stylesheet" href="../assets/css/components/footer.css" />
+    <link rel="stylesheet" href="../assets/css/pages/post.css" />
+
+</head>
+<body>
+    <div class="page-wrapper">
+        <header class="header">
+             <nav class="navbar">
+                <div class="container">
+                    <!-- <a href="../index.html" class="logo">MoSa</a>  -->
+                    <button id="mobile-menu-btn" class="mobile-menu-btn" aria-label="Toggle Menu" aria-expanded="false">
+                        <span class="bar"></span>
+                        <span class="bar"></span>
+                        <span class="bar"></span>
+                    </button>
+                    <ul class="nav-links">
+                        <li><a href="../index.html">MoSa</a></li>
+                         <li><a href="../index.html">Home</a></li> <li><a href="../projects.html">Projects</a></li>
+                        <li><a href="../blog.html">Blog</a></li>
+                        <li><a href="../academia.html">Academia</a></li>
+                    </ul>
+                </div>
+            </nav>
+        </header>
+
+        <main class="main-content">
+            <div class="container post-container">
+                 <article>
+                    <header class="post-header">
+                        <div class="post-meta">
+                            <time datetime="2025-04-09">April 9, 2025</time> </div>
+                        <h1 class="post-title">The Best of Both Worlds: Marrying Control Theory and Reinforcement Learning in Robotics</h1>
+                    </header>
+
+                    <section class="post-content">
+                        <p>We live in an exciting time for robotics. Deep Reinforcement Learning (RL) regularly produces stunning demonstrations – robots learning complex manipulation, acrobatic drones, agents mastering intricate games. It’s tempting to see this surge and wonder if the decades of rigorous development in classical and modern control theory are becoming obsolete. As someone whose journey started deep in the mathematics of mechanical systems and control (shoutout to KNTU labs!) and now dives into the world of learning-based robotics here at Polimi, my answer is a resounding <strong>no</strong>. In fact, I believe the most significant breakthroughs ahead lie precisely at the intersection of these two powerful paradigms.</p>
+
+                        <h2>The Enduring Strength of Control Theory</h2>
+                        <p>Let's be honest, there's an undeniable elegance and power to control theory. It gives us:</p>
+                        <ul>
+                            <li><strong>Guarantees:</strong> Concepts like Lyapunov stability aren't just theoretical niceties; they provide formal assurances that our robot won't spiral out of control – crucial for safety-critical applications. My own early work on constrained control systems hammered home the importance of designing controllers that respect physical limits and maintain stability under duress.</li>
+                            <li><strong>Robustness & Predictability:</strong> Control theory provides tools to analyze how systems behave under uncertainty and disturbances, allowing us to design for predictable performance bounds.</li>
+                            <li><strong>Model-Based Efficiency:</strong> When we have a reasonably accurate model of the system (even a simplified one), techniques like Model Predictive Control (MPC) or optimal control can achieve remarkable performance with high sample efficiency. We <em>know</em> the physics, so why not use them?</li>
+                            <li><strong>Interpretability:</strong> While not always simple, the structure of classical controllers often provides more insight into <em>why</em> a particular action is chosen compared to the often opaque decision-making of a deep neural network.</li>
+                        </ul>
+                        <p>Control theory provides a bedrock of mathematical rigor and analytical tools that ensure safety and reliability. But it often requires accurate models and can struggle with extreme complexity or unforeseen environmental changes.</p>
+
+                        <h2>The Adaptive Power (and Perils) of Reinforcement Learning</h2>
+                        <p>This is where RL shines. Its core strength lies in its ability to learn effective control policies <em>directly from interaction</em>, even without a perfect analytical model:</p>
+                        <ul>
+                            <li><strong>Model-Free Learning:</strong> RL agents can learn useful behaviors in complex environments where deriving accurate analytical models is intractable.</li>
+                            <li><strong>Handling Complexity:</strong> Deep RL, using neural networks, can handle high-dimensional state and action spaces encountered in modern robotics.</li>
+                            <li><strong>Adaptation:</strong> RL agents can potentially adapt their policies online as the environment or task changes.</li>
+                        </ul>
+                        <p>However, RL comes with its own set of well-known challenges:</p>
+                        <ul>
+                            <li><strong>Sample Inefficiency:</strong> Learning from scratch often requires millions of interactions, which is often infeasible or unsafe on physical hardware.</li>
+                            <li><strong>Safety during Exploration:</strong> How does an agent learn without breaking itself or its surroundings? This "exploration vs. exploitation" dilemma isn't just technical; it mirrors the philosophical challenge of stepping into the unknown – something I've thought about a lot myself. Ensuring safety while learning is paramount.</li>
+                            <li><strong>Lack of Guarantees:</strong> Proving the stability or robustness of a policy learned by a deep RL agent is notoriously difficult.</li>
+                            <li><strong>Sim-to-Real Gap:</strong> Policies learned in simulation often fail when transferred to the real world due to subtle physical differences.</li>
+                        </ul>
+
+                        <h2>Finding the Synergy: Hybrid Approaches</h2>
+                        <p>So, we have one paradigm offering rigor and guarantees but potentially limited by model accuracy and complexity, and another offering incredible adaptability but lacking guarantees and efficiency. The exciting frontier is combining them. This isn't about replacement; it's about fusion. We're starting to see many promising directions:</p>
+                        <ul>
+                            <li><strong>Control Priors for RL:</strong> Using insights from control theory (like stability constraints or known dynamics) to shape reward functions, constrain policy updates, or guide exploration in RL, making learning safer and more efficient.</li>
+                            <li><strong>Learning Residuals:</strong> Implementing a base controller using established techniques and using RL to learn a "residual" policy that compensates for unmodeled dynamics or task variations.</li>
+                            <li><strong>Hierarchical Control:</strong> Using RL for high-level decision-making (e.g., task planning, setting sub-goals) while relying on robust low-level controllers for execution.</li>
+                            <li><strong>Model-Based RL with Control-Aware Dynamics:</strong> Learning system dynamics in a way that is amenable to established control techniques like MPC. My own brief foray into HVAC control highlighted how learned models (like NNs) could potentially augment or replace traditional ODE models in MPC frameworks.</li>
+                            <li><strong>Programming by Demonstration (PbD):</strong> My current thesis work in the ARTO project sits right at this intersection. We interpret human demonstrations (learning intent) but need to translate that into smooth, safe, and optimized robot trajectories that respect kinematic constraints and avoid singularities (control & optimization). You need both learning and control perspectives to make it work effectively.</li>
+                        </ul>
+
+                        <h2>Towards a Unified Framework?</h2>
+                        <p>I once wondered if there might be a single "M-theory" for robot control – a universal framework governing all intelligent robotic systems. While that remains a distant dream, perhaps the path forward isn't a single unifying equation, but rather a <em>methodology</em> for intelligently integrating the strengths of different approaches. The future likely belongs to engineers and researchers who are bilingual – fluent in both the language of differential equations and stability proofs, and the language of gradients, rewards, and neural networks.</p>
+                        <p>The goal isn't just to build robots that <em>work</em>, but robots that are safe, reliable, adaptable, and perhaps even understandable. Marrying the proven techniques of control theory with the adaptive power of machine learning seems like the most promising path to get there. The exploration continues.</p>
+
+                    </section>
+                 </article>
+
+                 <a href="../blog.html" class="back-to-blog"><i class="fas fa-arrow-left"></i> Back to Blog List</a>
+
+            </div> </main>
+
+        <footer class="footer">
+            <div class="container">
+                <p>&copy; <span id="current-year"></span> Mo Saeidi. All rights reserved.</p>
+            </div>
+        </footer>
+    </div> <script src="../assets/js/main.js"></script>
+</body>
+</html>
