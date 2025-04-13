@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Optimal Path Planning for Building Scanning - Mo Saeidi</title>
-    <meta name="description" content="Detailed explanation of a project on finding optimal, collision-free paths for 360 laser scanning of buildings using a multi-stage heuristic approach including TSP and A*.">
+    <meta name="description" content="Detailed explanation of a project on finding optimal, collision-free paths for 360 laser scanning of buildings using a multi-stage heuristic approach including TSP and A*, with visualizations.">
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -19,7 +19,7 @@
     <link rel="stylesheet" href="../assets/css/components/footer.css" />
     <link rel="stylesheet" href="../assets/css/pages/post.css" />
 
-    </head>
+</head>
 <body>
     <div class="page-wrapper">
         <header class="header">
@@ -46,7 +46,7 @@
                     <header class="post-header">
                         <div class="post-meta">
                             <span class="post-category">Robotics & Path Planning</span>
-                            <time datetime="2025-04-13">April 13, 2025</time> </div>
+                             <time datetime="2025-04-13">April 13, 2025</time> </div>
                         <h1 class="post-title">Optimal Path Planning for Building Scanning with 360 Laser Scanner</h1>
                     </header>
 
@@ -81,105 +81,148 @@
                             Identifies feasible Initial Viewpoint Candidates (IVCs) for each building boundary segment.
                             <ol>
                                 <li><strong>Discretize Boundaries:</strong> Building exteriors are divided into small segments (<code>boundary_step</code>).</li>
-                                <li><strong>Calculate Normals:</strong> Outward-pointing normals are computed for each segment.</li>
+                                <li><strong>Calculate Normals:</strong> Outward-pointing normals are computed for each segment (see Figure 1).</li>
                                 <li><strong>Sample Feasibility Region:</strong> Potential viewpoints are sampled around each segment.</li>
-                                <li><strong>Check Feasibility:</strong> Each candidate is checked against range, angle, LoS (<code>is_los_clear</code>), and collision (<code>is_collision_free</code> with <code>safety_margin</code>) constraints.</li>
-                                <li><strong>Select IVC:</strong> One representative IVC is chosen per segment from feasible candidates (e.g., using <code>centroid</code> or <code>min_angle</code> method via <code>planning: ivc_selection_method</code>).</li>
+                                <li><strong>Check Feasibility:</strong> Each candidate is checked against range, angle, LoS (<code>is_los_clear</code>), and collision (<code>is_collision_free</code> with <code>safety_margin</code>) constraints. Figure 2 shows an example feasibility region.</li>
+                                <li><strong>Select IVC:</strong> One representative IVC is chosen per segment from feasible candidates (e.g., using <code>centroid</code> or <code>min_angle</code> method via <code>planning: ivc_selection_method</code>). The selected IVCs are shown in Figure 3.</li>
                             </ol>
-                            Outputs include <code>initial_viewpoints.csv</code> and processed data like segments and normals.
+                             Outputs include <code>initial_viewpoints.csv</code> and processed data like segments and normals.
                         </p>
+
+                        <figure class="post-figure">
+                             <img src="../assets/images/projects/building-scanner/01_environment_segments_normals.png" alt="Environment with discretized building segments and their normal vectors" class="post-image">
+                             <figcaption class="post-caption">
+                                 <strong>Figure 1:</strong> Input environment showing buildings (blue) and obstacles (gray), with building boundaries discretized into segments and their outward normal vectors (red arrows).
+                             </figcaption>
+                        </figure>
+
+                        <figure class="post-figure">
+                             <img src="../assets/images/projects/building-scanner/03_feasibility_region_example.png" alt="Example feasibility region for a single segment" class="post-image">
+                             <figcaption class="post-caption">
+                                 <strong>Figure 2:</strong> Example of a sampled feasibility region (green points) for a single boundary segment (red line). Points satisfy range, angle, LoS, and collision constraints.
+                             </figcaption>
+                        </figure>
+
+                        <figure class="post-figure">
+                             <img src="../assets/images/projects/building-scanner/02_environment_ivcs.png" alt="Environment showing selected Initial Viewpoint Candidates (IVCs)" class="post-image">
+                             <figcaption class="post-caption">
+                                 <strong>Figure 3:</strong> Selected Initial Viewpoint Candidates (IVCs, green dots) for each boundary segment where feasible points were found.
+                             </figcaption>
+                        </figure>
+
 
                         <h3>Step 2a: Global Path Ordering - Penalized TSP (<code>main_step2a_global_tsp.py</code>)</h3>
                         <p>
                             Determines the optimal sequence to visit the valid IVCs using a Traveling Salesperson Problem (TSP) formulation with custom penalties.
                             <ol>
                                 <li><strong>Load Valid IVCs:</strong> Filters IVCs found in Step 1.</li>
-                                <li><strong>Calculate Penalized Cost Matrix:</strong> Cost between IVC<sub>i</sub> and IVC<sub>j</sub> includes Euclidean distance plus penalties for:
-                                    <ul>
-                                        <li>Switching buildings (<code>penalty_switch_building</code>).</li>
-                                        <li>Visiting non-adjacent segments on the same building (<code>penalty_non_adjacent_segment</code>).</li>
-                                        <li>Direct line collision between IVCs (<code>penalty_line_collision</code>).</li>
-                                    </ul>
-                                </li>
-                                <li><strong>Solve TSP:</strong> Uses <code>python-tsp</code> (local search heuristic) to find the minimum penalized cost tour.</li>
+                                <li><strong>Calculate Penalized Cost Matrix:</strong> Cost between IVC<sub>i</sub> and IVC<sub>j</sub> includes Euclidean distance plus penalties for switching buildings, visiting non-adjacent segments, and direct line collision.</li>
+                                <li><strong>Solve TSP:</strong> Uses <code>python-tsp</code> (local search heuristic) to find the minimum penalized cost tour (Figure 4).</li>
                             </ol>
                             Output: <code>tsp_order.csv</code> defining the visit sequence.
                         </p>
 
+                        <figure class="post-figure">
+                            <img src="../assets/images/projects/building-scanner/04_global_tsp_path.png" alt="Path connecting IVCs based on penalized TSP solution" class="post-image">
+                            <figcaption class="post-caption">
+                                <strong>Figure 4:</strong> The sequence of visiting IVCs determined by the penalized TSP solver, shown as straight lines connecting the points. Note these lines may pass through obstacles.
+                            </figcaption>
+                        </figure>
+
                         <h3>Step 2b: IVC Position Refinement (<code>main_step2b_refinement.py</code>)</h3>
                         <p>
-                            Iteratively adjusts IVC coordinates (in TSP order) to potentially find locally optimal positions that reduce the overall penalized path cost.
+                            Iteratively adjusts IVC coordinates (in TSP order) to potentially find locally optimal positions that reduce the overall penalized path cost using a sliding window and dynamic programming (Figure 5).
                             <ol>
-                                <li><strong>Iterate & Slide Window:</strong> Moves a window along the TSP sequence for multiple iterations or until convergence.</li>
-                                <li><strong>Generate Neighbors:</strong> For each IVC in the window, generate and check the feasibility of neighboring candidate points.</li>
-                                <li><strong>Local Optimization (DP):</strong> Uses dynamic programming within the window to find the sequence of candidate points minimizing the penalized path cost through the window.</li>
-                                <li><strong>Update Center IVC:</strong> Updates the position of the central IVC in the window based on the DP result.</li>
+                                <li><strong>Iterate & Slide Window:</strong> Moves a window along the TSP sequence.</li>
+                                <li><strong>Generate Neighbors:</strong> Generates and checks feasible neighbor candidates around IVCs in the window.</li>
+                                <li><strong>Local Optimization (DP):</strong> Finds the minimum penalized cost path through candidate points within the window.</li>
+                                <li><strong>Update Center IVC:</strong> Updates the central IVC's position based on the DP result.</li>
                             </ol>
-                           Output: <code>refined_viewpoints.csv</code> with potentially adjusted IVC coordinates.
+                           Output: <code>refined_viewpoints.csv</code>.
                         </p>
 
-                        <h3>Step 2c: Viewpoint Pruning (Conceptual/Implemented)</h3>
+                         <figure class="post-figure">
+                             <img src="../assets/images/projects/building-scanner/07_refinement_comparison.png" alt="Comparison of viewpoints before and after refinement" class="post-image">
+                             <figcaption class="post-caption">
+                                 <strong>Figure 5:</strong> Comparison showing initial IVCs (green) and their positions after the refinement step (red), aiming for smoother transitions and lower penalized cost.
+                             </figcaption>
+                        </figure>
+
+                        <h3>Step 2c: Viewpoint Pruning (<code>main_step2c_prunning.py</code>)</h3>
                         <p>
-                            After refinement (or potentially integrated), this step aims to reduce redundancy. For each refined viewpoint, it checks if nearby segments (within a certain radius or visibility cone) can also be adequately scanned from this position, potentially allowing the removal of the IVCs originally generated for those nearby segments from the TSP tour. This further optimizes the path by reducing the number of required stops.
+                            After refinement, this step attempts to reduce redundancy. It checks if some refined viewpoints can cover multiple nearby segments adequately, allowing removal of unnecessary viewpoints from the tour, further shortening the path (Figure 6).
                         </p>
+                        <p>Output: <code>pruned_refined_viewpoints.csv</code>.</p>
 
+                        <figure class="post-figure">
+                             <img src="../assets/images/projects/building-scanner/08_pruning_comparison.png" alt="Comparison of viewpoints before and after pruning" class="post-image">
+                             <figcaption class="post-caption">
+                                 <strong>Figure 6:</strong> Comparison showing refined viewpoints (red) and the final set after pruning (blue), where redundant viewpoints have been removed.
+                             </figcaption>
+                        </figure>
 
                         <h3>Step 3: Collision-Free Path Generation - A* (<code>main_step3_astar_path.py</code>)</h3>
                         <p>
-                            Generates the final, low-level waypoint path connecting the refined IVCs in sequence, ensuring collision avoidance.
+                            Generates the final, low-level waypoint path connecting the *pruned refined* IVCs in sequence, ensuring collision avoidance using A* search on an occupancy grid.
                             <ol>
-                                <li><strong>Load Sequence & Refined IVCs:</strong> Gets the ordered viewpoints.</li>
-                                <li><strong>Create Occupancy Grid:</strong> Builds a grid map where cells occupied by buildings/obstacles (buffered by <code>safety_margin</code>) are marked as impassable.</li>
-                                <li><strong>Sequential A*:</strong> For each pair of consecutive refined IVCs (IVC<sub>i</sub> to IVC<sub>i+1</sub>):
-                                    <ul>
-                                        <li>Convert world coordinates to grid cells.</li>
-                                        <li>Handle cases where start/goal cells are occupied by finding the nearest free neighbor cell.</li>
-                                        <li>Run A* search (<code>astar_search</code>) on the grid.</li>
-                                        <li>Convert the A* cell path back to world coordinates.</li>
-                                    </ul>
-                                </li>
-                                <li><strong>Combine Paths:</strong> Concatenate the waypoints from each A* segment.</li>
+                                <li><strong>Load Sequence & Final IVCs:</strong> Gets the ordered, pruned, refined viewpoints.</li>
+                                <li><strong>Create Occupancy Grid:</strong> Builds a grid map where cells occupied by buildings/obstacles (buffered by <code>safety_margin</code>) are impassable (Figure 7).</li>
+                                <li><strong>Sequential A*:</strong> For each pair of consecutive IVCs, run A* search (<code>astar_search</code>) on the grid, handling occupied start/goal cells.</li>
+                                <li><strong>Combine Paths:</strong> Concatenate the waypoints from each A* segment to form the final path (Figure 8).</li>
                             </ol>
                             Output: <code>final_path.csv</code> containing the sequence of (x, y) waypoints.
                         </p>
 
+                         <figure class="post-figure">
+                             <img src="../assets/images/projects/building-scanner/05_occupancy_grid.png" alt="Occupancy grid representation of the environment" class="post-image">
+                             <figcaption class="post-caption">
+                                 <strong>Figure 7:</strong> The generated occupancy grid. White cells are free space, black cells represent buildings and obstacles expanded by the safety margin, impassable for A*.
+                             </figcaption>
+                        </figure>
+
+                        <figure class="post-figure">
+                             <img src="../assets/images/projects/building-scanner/06_final_astar_path.png" alt="Final collision-free path generated by A*" class="post-image">
+                             <figcaption class="post-caption">
+                                 <strong>Figure 8:</strong> The final, collision-free, closed-loop path (purple line) generated by connecting the pruned refined viewpoints using A* search on the occupancy grid.
+                             </figcaption>
+                        </figure>
+
                         <h2>4. Code Structure & Setup</h2>
                         <p>
-                            The project is organized into main scripts for each step (<code>main_step1.py</code>, <code>main_step2a_global_tsp.py</code>, etc.) and supporting modules in <code>src/</code> for loading data (<code>load_data.py</code>), geometry calculations (<code>geometry.py</code>), A* (<code>astar.py</code>), refinement logic (<code>refinement.py</code>), utilities, and visualization.
+                            The project is organized into main scripts for each step (<code>main_step1.py</code>, <code>main_step2a_global_tsp.py</code>, etc.) and supporting modules in <code>src/</code> for loading data, geometry, A*, refinement, pruning, utilities, and visualization. The tree structure shows the organization of configuration, data (raw, processed), main scripts, outputs (CSVs, visualizations), and source code.
                         </p>
                         <p>
-                            <strong>Setup:</strong> Requires Python and libraries listed in <code>requirements.txt</code> (NumPy, Pandas, Matplotlib, Shapely, SciPy, python-tsp, PyYAML, tqdm). Configuration is done via <code>config/simulation_params.yaml</code>. Input data goes into <code>data/raw/<environment_name>/</code>. The pipeline is run by executing the main scripts sequentially.
+                            <strong>Setup:</strong> Requires Python and libraries (NumPy, Pandas, Matplotlib, Shapely, SciPy, python-tsp, PyYAML, tqdm). Configuration is via <code>config/simulation_params.yaml</code>. Input data in <code>data/raw/</code>. Run main scripts sequentially.
                         </p>
 
                         <h2>5. Current Status, Limitations & Future Work</h2>
                         <p>
-                            The described pipeline (Steps 1, 2a, 2b, 3) is implemented. However, there are areas for improvement:
+                            The described pipeline is fully implemented. Key areas for future work include:
                         </p>
                         <ul>
-                            <li><strong>Refinement Tuning:</strong> Step 2b (Refinement) might converge quickly or oscillate; requires tuning of parameters or the heuristic itself.</li>
-                            <li><strong>A* Robustness:</strong> While handling occupied start/goal cells helps, A* can fail if regions are truly disconnected, especially with large safety margins.</li>
-                            <li><strong>Parameter Sensitivity:</strong> Results depend significantly on configuration parameters (safety margin, penalties, grid resolution).</li>
-                            <li><strong>TSP Optimality:</strong> The TSP solver is heuristic, not guaranteeing the absolute global optimum for the penalized cost.</li>
-                            <li><strong>Coverage Verification:</strong> Assumes visiting IVCs yields full coverage; a dedicated simulation/check could verify this on the final A* path.</li>
-                            <li><strong>Path Smoothing:</strong> The A* path is grid-based and jagged; smoothing (e.g., shortcutting, splines) is needed for realistic robot motion.</li>
-                            <li><strong>Visualization:</strong> Enhanced visualization, especially for the refinement process, would aid debugging.</li>
-                            <li><strong>Alternative Planners:</strong> Exploring RRT* or PRM instead of grid-based A* for Step 3 could be beneficial.</li>
+                            <li><strong>Refinement/Pruning Heuristics:</strong> Further tuning or alternative approaches for Steps 2b/2c.</li>
+                            <li><strong>A* Robustness:</strong> Improving handling of complex obstacle configurations or disconnected areas.</li>
+                            <li><strong>Parameter Tuning:</strong> Developing methods for easier tuning of penalties, margins, etc.</li>
+                            <li><strong>TSP Solver:</strong> Experimenting with more advanced (potentially slower) TSP solvers for better initial ordering.</li>
+                            <li><strong>Coverage Verification:</strong> Implementing a post-processing step to simulate scans from the final A* path and quantify coverage.</li>
+                            <li><strong>Path Smoothing:</strong> Adding path smoothing algorithms (e.g., B-splines, shortcutting) to the A* output for more realistic robot motion.</li>
+                            <li><strong>Alternative Planners:</strong> Exploring sampling-based planners like RRT* or PRM as potential replacements for grid-based A* in Step 3.</li>
                         </ul>
 
                         <div class="post-summary">
                             <h2>Key Takeaways</h2>
                             <ul class="summary-list">
-                                <li>Developed a comprehensive pipeline for robotic path planning specific to 360° building scanning.</li>
-                                <li>Combines geometric reasoning, constraint checking (LoS, range, angle), TSP optimization with custom penalties, and A* search.</li>
-                                <li>Includes heuristics for viewpoint refinement and potential pruning to improve efficiency.</li>
-                                <li>Implemented in Python using standard scientific and robotics-related libraries.</li>
-                                <li>Highlights challenges in real-world robotics path planning: balancing optimality, coverage, constraints, and computational feasibility.</li>
+                                <li>Developed a comprehensive multi-stage pipeline for robotic path planning specific to 360° building scanning.</li>
+                                <li>Integrates geometric reasoning, constraint checking, TSP optimization, viewpoint refinement/pruning heuristics, and A* grid search.</li>
+                                <li>Successfully generates collision-free, closed-loop paths aiming for coverage and efficiency.</li>
+                                <li>Provides visualizations for each major step, aiding understanding and debugging.</li>
+                                <li>Highlights trade-offs between optimality, computational cost, and heuristic performance in complex robotic tasks.</li>
                             </ul>
                         </div>
 
                         <h2>Conclusion</h2>
                         <p>
-                            This project provides a robust framework for generating scanning paths for mobile robots. While implemented and functional, ongoing work focuses on refining the heuristics (especially refinement and pruning), improving path quality (smoothing), rigorously verifying coverage, and enhancing robustness for complex environments. It serves as a strong foundation for automated data acquisition in applications like digital twin creation or building inspection.
+                            This project provides a robust and modular framework for generating scanning paths for mobile robots in environments with obstacles. The multi-stage approach allows tackling the complexity systematically, and the generated visualizations clearly illustrate the process. While refinements and extensions are possible, the current implementation successfully demonstrates a viable solution for automated 3D data acquisition planning.
                         </p>
                         <hr>
                         <p><em>Questions or thoughts on this project? Connect via the <a href="../academia.html#contact-simplified">contact form</a> or <a href="https://www.linkedin.com/in/mo-saeidi-21a00015a/" target="_blank">LinkedIn</a>.</em></p>
