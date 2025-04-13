@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Optimal Path Planning for Building Scanning - Mo Saeidi</title>
+    <meta name="description" content="Detailed explanation of a project on finding optimal, collision-free paths for 360 laser scanning of buildings using a multi-stage heuristic approach including TSP and A*.">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css"/>
+
+    <link rel="stylesheet" href="../assets/css/base.css" />
+    <link rel="stylesheet" href="../assets/css/layout.css" />
+    <link rel="stylesheet" href="../assets/css/components/navbar.css" />
+    <link rel="stylesheet" href="../assets/css/components/buttons.css" />
+    <link rel="stylesheet" href="../assets/css/components/footer.css" />
+    <link rel="stylesheet" href="../assets/css/pages/post.css" />
+
+    </head>
+<body>
+    <div class="page-wrapper">
+        <header class="header">
+            <nav class="navbar">
+                <div class="container">
+                    <button id="mobile-menu-btn" class="mobile-menu-btn" aria-label="Toggle Menu" aria-expanded="false">
+                        <span class="bar"></span>
+                        <span class="bar"></span>
+                        <span class="bar"></span>
+                    </button>
+                    <ul class="nav-links">
+                        <li><a href="../index.html">MoSa</a></li>
+                        <li><a href="../projects.html">Projects</a></li>
+                        <li><a href="../blog.html">Blog</a></li>
+                        <li><a href="../academia.html">Academia</a></li>
+                    </ul>
+                </div>
+            </nav>
+        </header>
+
+        <main class="main-content">
+            <div class="container post-container">
+                <article>
+                    <header class="post-header">
+                        <div class="post-meta">
+                            <span class="post-category">Robotics & Path Planning</span>
+                            <time datetime="2025-04-13">April 13, 2025</time> </div>
+                        <h1 class="post-title">Optimal Path Planning for Building Scanning with 360 Laser Scanner</h1>
+                    </header>
+
+                    <section class="post-content">
+                        <p>
+                            This project tackles the complex challenge of automating the scanning of building exteriors using a mobile robot equipped with a 360-degree laser scanner. The core goal is to generate an efficient, collision-free, closed-loop path that ensures comprehensive coverage while respecting the scanner's physical limitations and the environment's constraints.
+                        </p>
+
+                        <h2>1. Project Goal & Environment</h2>
+                        <p>
+                            The primary objective is to find an optimal path for a mobile platform to scan all exterior facets of designated buildings within a 2D environment. This environment contains the target buildings (polygons to be scanned), obstacles (polygons that impede movement and visibility but are not scanned), and free space. Input geometry is typically provided via CSV files (<code>buildings.csv</code>, <code>obstacles.csv</code>) defining polygon vertices in a counter-clockwise order for exteriors.
+                        </p>
+
+                        <h2>2. Scanner and Path Constraints</h2>
+                        <p>Several key constraints must be satisfied:</p>
+                        <ul>
+                            <li><strong>Scanning Angle:</strong> Viewpoints must view a surface segment within a maximum deviation angle (<code>max_angle_deviation</code>) relative to the segment's normal vector.</li>
+                            <li><strong>Scanning Range:</strong> Viewpoints must be within the scanner's operational minimum (<code>min_range</code>) and maximum (<code>max_range</code>) distance from the target surface.</li>
+                            <li><strong>Line-of-Sight (LoS):</strong> The path between the scanner viewpoint and the target segment must be clear of obstructions (buildings and obstacles).</li>
+                            <li><strong>Collision Avoidance:</strong> The robot's path must maintain a minimum <code>safety_margin</code> from all buildings and obstacles.</li>
+                            <li><strong>Path Type:</strong> The final path must be a single, continuous closed loop, starting and ending at the same point.</li>
+                            <li><strong>Optimality:</strong> The path should primarily minimize travel distance, but also incorporate penalties to encourage efficient scanning (e.g., minimizing building switches, preferring adjacent segment scans).</li>
+                        </ul>
+
+                        <h2>3. Methodology: A Multi-Stage Heuristic Approach</h2>
+                        <p>
+                            Due to the problem's complexity, a multi-stage heuristic approach was developed, breaking down the problem into manageable steps:
+                        </p>
+
+                        <h3>Step 1: Viewpoint Candidate Generation (<code>main_step1.py</code>)</h3>
+                        <p>
+                            Identifies feasible Initial Viewpoint Candidates (IVCs) for each building boundary segment.
+                            <ol>
+                                <li><strong>Discretize Boundaries:</strong> Building exteriors are divided into small segments (<code>boundary_step</code>).</li>
+                                <li><strong>Calculate Normals:</strong> Outward-pointing normals are computed for each segment.</li>
+                                <li><strong>Sample Feasibility Region:</strong> Potential viewpoints are sampled around each segment.</li>
+                                <li><strong>Check Feasibility:</strong> Each candidate is checked against range, angle, LoS (<code>is_los_clear</code>), and collision (<code>is_collision_free</code> with <code>safety_margin</code>) constraints.</li>
+                                <li><strong>Select IVC:</strong> One representative IVC is chosen per segment from feasible candidates (e.g., using <code>centroid</code> or <code>min_angle</code> method via <code>planning: ivc_selection_method</code>).</li>
+                            </ol>
+                            Outputs include <code>initial_viewpoints.csv</code> and processed data like segments and normals.
+                        </p>
+
+                        <h3>Step 2a: Global Path Ordering - Penalized TSP (<code>main_step2a_global_tsp.py</code>)</h3>
+                        <p>
+                            Determines the optimal sequence to visit the valid IVCs using a Traveling Salesperson Problem (TSP) formulation with custom penalties.
+                            <ol>
+                                <li><strong>Load Valid IVCs:</strong> Filters IVCs found in Step 1.</li>
+                                <li><strong>Calculate Penalized Cost Matrix:</strong> Cost between IVC<sub>i</sub> and IVC<sub>j</sub> includes Euclidean distance plus penalties for:
+                                    <ul>
+                                        <li>Switching buildings (<code>penalty_switch_building</code>).</li>
+                                        <li>Visiting non-adjacent segments on the same building (<code>penalty_non_adjacent_segment</code>).</li>
+                                        <li>Direct line collision between IVCs (<code>penalty_line_collision</code>).</li>
+                                    </ul>
+                                </li>
+                                <li><strong>Solve TSP:</strong> Uses <code>python-tsp</code> (local search heuristic) to find the minimum penalized cost tour.</li>
+                            </ol>
+                            Output: <code>tsp_order.csv</code> defining the visit sequence.
+                        </p>
+
+                        <h3>Step 2b: IVC Position Refinement (<code>main_step2b_refinement.py</code>)</h3>
+                        <p>
+                            Iteratively adjusts IVC coordinates (in TSP order) to potentially find locally optimal positions that reduce the overall penalized path cost.
+                            <ol>
+                                <li><strong>Iterate & Slide Window:</strong> Moves a window along the TSP sequence for multiple iterations or until convergence.</li>
+                                <li><strong>Generate Neighbors:</strong> For each IVC in the window, generate and check the feasibility of neighboring candidate points.</li>
+                                <li><strong>Local Optimization (DP):</strong> Uses dynamic programming within the window to find the sequence of candidate points minimizing the penalized path cost through the window.</li>
+                                <li><strong>Update Center IVC:</strong> Updates the position of the central IVC in the window based on the DP result.</li>
+                            </ol>
+                           Output: <code>refined_viewpoints.csv</code> with potentially adjusted IVC coordinates.
+                        </p>
+
+                        <h3>Step 2c: Viewpoint Pruning (Conceptual/Implemented)</h3>
+                        <p>
+                            After refinement (or potentially integrated), this step aims to reduce redundancy. For each refined viewpoint, it checks if nearby segments (within a certain radius or visibility cone) can also be adequately scanned from this position, potentially allowing the removal of the IVCs originally generated for those nearby segments from the TSP tour. This further optimizes the path by reducing the number of required stops.
+                        </p>
+
+
+                        <h3>Step 3: Collision-Free Path Generation - A* (<code>main_step3_astar_path.py</code>)</h3>
+                        <p>
+                            Generates the final, low-level waypoint path connecting the refined IVCs in sequence, ensuring collision avoidance.
+                            <ol>
+                                <li><strong>Load Sequence & Refined IVCs:</strong> Gets the ordered viewpoints.</li>
+                                <li><strong>Create Occupancy Grid:</strong> Builds a grid map where cells occupied by buildings/obstacles (buffered by <code>safety_margin</code>) are marked as impassable.</li>
+                                <li><strong>Sequential A*:</strong> For each pair of consecutive refined IVCs (IVC<sub>i</sub> to IVC<sub>i+1</sub>):
+                                    <ul>
+                                        <li>Convert world coordinates to grid cells.</li>
+                                        <li>Handle cases where start/goal cells are occupied by finding the nearest free neighbor cell.</li>
+                                        <li>Run A* search (<code>astar_search</code>) on the grid.</li>
+                                        <li>Convert the A* cell path back to world coordinates.</li>
+                                    </ul>
+                                </li>
+                                <li><strong>Combine Paths:</strong> Concatenate the waypoints from each A* segment.</li>
+                            </ol>
+                            Output: <code>final_path.csv</code> containing the sequence of (x, y) waypoints.
+                        </p>
+
+                        <h2>4. Code Structure & Setup</h2>
+                        <p>
+                            The project is organized into main scripts for each step (<code>main_step1.py</code>, <code>main_step2a_global_tsp.py</code>, etc.) and supporting modules in <code>src/</code> for loading data (<code>load_data.py</code>), geometry calculations (<code>geometry.py</code>), A* (<code>astar.py</code>), refinement logic (<code>refinement.py</code>), utilities, and visualization.
+                        </p>
+                        <p>
+                            <strong>Setup:</strong> Requires Python and libraries listed in <code>requirements.txt</code> (NumPy, Pandas, Matplotlib, Shapely, SciPy, python-tsp, PyYAML, tqdm). Configuration is done via <code>config/simulation_params.yaml</code>. Input data goes into <code>data/raw/<environment_name>/</code>. The pipeline is run by executing the main scripts sequentially.
+                        </p>
+
+                        <h2>5. Current Status, Limitations & Future Work</h2>
+                        <p>
+                            The described pipeline (Steps 1, 2a, 2b, 3) is implemented. However, there are areas for improvement:
+                        </p>
+                        <ul>
+                            <li><strong>Refinement Tuning:</strong> Step 2b (Refinement) might converge quickly or oscillate; requires tuning of parameters or the heuristic itself.</li>
+                            <li><strong>A* Robustness:</strong> While handling occupied start/goal cells helps, A* can fail if regions are truly disconnected, especially with large safety margins.</li>
+                            <li><strong>Parameter Sensitivity:</strong> Results depend significantly on configuration parameters (safety margin, penalties, grid resolution).</li>
+                            <li><strong>TSP Optimality:</strong> The TSP solver is heuristic, not guaranteeing the absolute global optimum for the penalized cost.</li>
+                            <li><strong>Coverage Verification:</strong> Assumes visiting IVCs yields full coverage; a dedicated simulation/check could verify this on the final A* path.</li>
+                            <li><strong>Path Smoothing:</strong> The A* path is grid-based and jagged; smoothing (e.g., shortcutting, splines) is needed for realistic robot motion.</li>
+                            <li><strong>Visualization:</strong> Enhanced visualization, especially for the refinement process, would aid debugging.</li>
+                            <li><strong>Alternative Planners:</strong> Exploring RRT* or PRM instead of grid-based A* for Step 3 could be beneficial.</li>
+                        </ul>
+
+                        <div class="post-summary">
+                            <h2>Key Takeaways</h2>
+                            <ul class="summary-list">
+                                <li>Developed a comprehensive pipeline for robotic path planning specific to 360° building scanning.</li>
+                                <li>Combines geometric reasoning, constraint checking (LoS, range, angle), TSP optimization with custom penalties, and A* search.</li>
+                                <li>Includes heuristics for viewpoint refinement and potential pruning to improve efficiency.</li>
+                                <li>Implemented in Python using standard scientific and robotics-related libraries.</li>
+                                <li>Highlights challenges in real-world robotics path planning: balancing optimality, coverage, constraints, and computational feasibility.</li>
+                            </ul>
+                        </div>
+
+                        <h2>Conclusion</h2>
+                        <p>
+                            This project provides a robust framework for generating scanning paths for mobile robots. While implemented and functional, ongoing work focuses on refining the heuristics (especially refinement and pruning), improving path quality (smoothing), rigorously verifying coverage, and enhancing robustness for complex environments. It serves as a strong foundation for automated data acquisition in applications like digital twin creation or building inspection.
+                        </p>
+                        <hr>
+                        <p><em>Questions or thoughts on this project? Connect via the <a href="../academia.html#contact-simplified">contact form</a> or <a href="https://www.linkedin.com/in/mo-saeidi-21a00015a/" target="_blank">LinkedIn</a>.</em></p>
+                    </section>
+                </article>
+
+                <a href="../blog.html" class="back-to-blog"><i class="fas fa-arrow-left"></i> Back to Blog List</a> </div> </main>
+
+        <footer class="footer">
+            <div class="container">
+                <p>&copy; <span id="current-year"></span> Mo Saeidi. All rights reserved.</p>
+            </div>
+        </footer>
+    </div> <script src="../assets/js/main.js"></script>
+</body>
+</html>
