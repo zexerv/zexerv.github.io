@@ -136,29 +136,39 @@
                     <header class="post-header">
                         <div class="post-meta">
                             <span class="post-category">Robotics & Visualization</span>
-                             <time datetime="2025-04-27">April 27, 2025</time> </div>
-                        <h1 class="post-title">Interactive UR5e Kinematics Visualization (FK/IK)</h1>
+                             <time datetime="2025-04-27">April 27, 2025</time>
+                        </div>
+                         <h1 class="post-title">Interactive UR5e Kinematics: Visualizing FK and All IK Solutions</h1>
                     </header>
-
+        
                     <section class="post-content">
                         <p>
-                            Understanding the relationship between a robot's joint angles and the position/orientation of its end-effector (Tool Center Point, TCP) is fundamental in robotics. This project provides an interactive web-based tool to visualize this relationship for the Universal Robots UR5e.
+                            Understanding the relationship between a robot's joint angles and the position/orientation of its end-effector (Tool Center Point, TCP) is fundamental in robotics. This project provides an interactive web-based tool to visualize this relationship for the Universal Robots UR5e, demonstrating both Forward and Inverse Kinematics concepts.
                         </p>
-
+        
                         <h2>1. Forward vs. Inverse Kinematics</h2>
                         <ul>
-                            <li><strong>Forward Kinematics (FK):</strong> Given a set of joint angles $q = [q_1, q_2, ..., q_6]$, calculate the resulting pose (position and orientation) of the TCP in the base frame, $T_{TCP}^{Base}$. This is generally straightforward using Denavit-Hartenberg (DH) parameters and matrix multiplication.</li>
-                            <li><strong>Inverse Kinematics (IK):</strong> Given a desired TCP pose $T_{TCP}^{Base}$, find the set(s) of joint angles $q$ that achieve this pose. This is often more complex and can have multiple solutions (or none). For a 6-DOF robot like the UR5e, there can be up to 8 distinct IK solutions for a reachable pose.</li>
+                            <li><strong>Forward Kinematics (FK):</strong> Given a set of joint angles $q = [q_1, q_2, ..., q_6]$, calculate the resulting pose (position and orientation) of the TCP in the base frame, $T_{TCP}^{Base}$.</li>
+                            <li><strong>Inverse Kinematics (IK):</strong> Given a desired TCP pose $T_{TCP}^{Base}$, find the set(s) of joint angles $q$ that achieve this pose. For a 6-DOF robot like the UR5e, there can be up to <strong>8 distinct IK solutions</strong> for a reachable pose (fewer near singularities).</li>
                         </ul>
-
-                        <h2>2. The Interactive Visualization</h2>
-                        <p>
-                            This interactive tool focuses on demonstrating <strong>Forward Kinematics</strong> visually. Use the sliders below to directly manipulate the six joint angles ($q_1$ to $q_6$) of the UR5e robot. The 3D view will update in real-time to show the corresponding robot configuration and the resulting TCP pose (position and orientation frame).
-                        </p>
-                        <p>
-                            The visualization is built using JavaScript and the <a href="https://threejs.org/" target="_blank" rel="noopener noreferrer">Three.js</a> library, rendering the robot model directly in your browser. The FK calculations are performed client-side based on the UR5e's DH parameters.
-                        </p>
-
+        
+                         <h2>2. The Interactive Visualization: FK -> Target -> All IK Solutions</h2>
+                         <p>
+                             This interactive tool demonstrates the interplay between FK and IK:
+                         </p>
+                         <ol>
+                             <li>Use the sliders below to set a specific configuration of UR5e joint angles ($q_{sliders}$).</li>
+                             <li>The tool calculates the resulting TCP pose ($T_{target}$) using <strong>Forward Kinematics</strong> based on your slider inputs. This target pose is shown as a prominent coordinate frame (X=Red, Y=Green, Z=Blue).</li>
+                             <li>Crucially, the tool then solves the <strong>Inverse Kinematics</strong> problem for this $T_{target}$ using an analytical solver implemented in JavaScript.</li>
+                             <li><strong>All valid IK solutions</strong> (sets of joint angles $q_{ik}$) that reach the *exact same* target TCP pose are calculated and visualized simultaneously.</li>
+                         </ol>
+                         <p>
+                             The robot configuration corresponding directly to your slider angles ($q_{sliders}$) is shown with solid lines. All other valid IK solutions ($q_{ik}$) that achieve the same $T_{target}$ are shown with fainter, different colored lines. This allows you to directly compare different postures (e.g., elbow up/down) that result in the same end-effector pose.
+                         </p>
+                         <p>
+                             The visualization uses JavaScript and <a href="https://threejs.org/" target="_blank" rel="noopener noreferrer">Three.js</a>, performing all calculations client-side. Links are rendered thinly for a clearer, more schematic view.
+                         </p>
+        
                         <div class="interactive-kinematics-container">
                             <div id="kinematics-canvas-container">
                                 <div id="loading-message">Loading 3D Visualization... <i class="fas fa-spinner fa-spin"></i></div>
@@ -170,65 +180,52 @@
                                 <div id="joint-sliders">
                                     </div>
                                 <div id="coordinates-display">
-                                     <h4>Resulting TCP Pose (FK):</h4>
+                                     <h4>Target TCP Pose (from FK):</h4>
                                      <pre id="tcp-pose-output">Calculating...</pre>
-                                </div>
+                                     <h4>IK Solutions Found: <span id="ik-solution-count">0</span></h4>
+                                     <pre id="ik-solutions-output" style="max-height: 150px; overflow-y: auto;">None</pre> </div>
                             </div>
                         </div>
-
+        
                         <h2>3. How It Works (Behind the Scenes)</h2>
                         <ol>
-                            <li><strong>DH Parameters:</strong> The standard Denavit-Hartenberg parameters for the UR5e define the geometry between consecutive joints.</li>
-                            <li><strong>FK Calculation (JavaScript):</strong> A JavaScript function calculates the transformation matrix from one joint frame to the next using the DH parameters and the current slider angle. By composing these matrices, the final transformation from the base to the TCP is found: $T_{TCP}^{Base} = T_1^0(q_1) \cdot T_2^1(q_2) \cdot ... \cdot T_6^5(q_6) \cdot T_{TCP}^{Flange}$.</li>
-                             <li><strong>Three.js Rendering:</strong> The 3D scene is created with Three.js. The robot links are represented as simple geometric shapes (cylinders) and joints as spheres. Their positions and orientations are updated based on the intermediate transformation matrices calculated during the FK process. The TCP frame (X=Red, Y=Green, Z=Blue) is also drawn at the calculated TCP position and orientation.</li>
-                             <li><strong>Interactivity:</strong> Event listeners on the sliders trigger the FK calculation and Three.js scene update whenever a joint angle is changed.</li>
+                             <li><strong>DH Parameters:</strong> Standard UR5e DH parameters define the robot's geometry.</li>
+                             <li><strong>FK Calculation (JS):</strong> Calculates $T_{target}$ from slider angles $q_{sliders}$.</li>
+                             <li><strong>IK Calculation (JS):</strong> A JavaScript port of the analytical Python solver finds all $q_{ik}$ for the calculated $T_{target}$. It handles multiple solution branches and numerical checks.</li>
+                             <li><strong>Three.js Rendering:</strong> Renders the target TCP frame. For each valid $q_{ik}$ solution, it calculates the corresponding intermediate joint positions via FK and draws the robot configuration using thin cylinders and spheres. Different styles distinguish the primary (slider) configuration from other IK solutions.</li>
+                             <li><strong>Interactivity:</strong> Slider changes trigger the FK -> IK -> Render cycle.</li>
                          </ol>
-
-                        <h2>4. Exploring Inverse Kinematics</h2>
+        
+                         <h2>5. Implementation Details & Source Code</h2>
                         <p>
-                             While this interactive tool directly visualizes FK, the underlying Python code (upon which this demo is inspired) also includes an analytical IK solver. When you set the sliders, the resulting TCP pose is calculated via FK. The IK problem would be: given that calculated pose, what are *all* the possible sets of joint angles (including the one you set with the sliders) that result in the *same* TCP pose?
-                         </p>
-                         <p>
-                             Visualizing all IK solutions simultaneously can be complex. The Python version plots all found solutions, often revealing different arm configurations (e.g., elbow up vs. elbow down) that achieve the identical TCP target. Due to the complexity of porting the analytical IK solver to JavaScript reliably, this web version focuses on the FK visualization aspect.
-                         </p>
-
-                        <h2>5. Implementation Details & Source Code</h2>
-                        <p>
-                            This visualization uses:
+                            This visualization uses: HTML, CSS, JavaScript, and <a href="https://threejs.org/" target="_blank" rel="noopener noreferrer">Three.js</a>.
                         </p>
                         <ul>
-                            <li>HTML for structure and sliders.</li>
-                            <li>CSS for styling (reusing the site's theme).</li>
-                            <li>JavaScript for interactivity and calculations.</li>
-                            <li><a href="https://threejs.org/" target="_blank" rel="noopener noreferrer">Three.js</a> for 3D rendering in WebGL.</li>
-                            <li>The FK logic is a JavaScript adaptation of the provided Python `forward_kinematics` function using the UR5e DH parameters.</li>
-                         </ul>
-                         <p>
-                            The original Python implementation uses Matplotlib with sliders for a similar desktop-based visualization, including plotting multiple IK solutions found by the `ur5e_ik_solver.py` script. If you're interested in that version, you can find the source code snippets in the original request context.
-                         </p>
-
-
+                            <li>The FK logic is a JavaScript adaptation of the Python `forward_kinematics`.</li>
+                             <li>The IK logic is a direct JavaScript port of the analytical `inverse_kinematics` from `ur5e_ik_solver.py`, capable of finding multiple solutions.</li>
+                        </ul>
+                        <p>
+                            The original Python implementation uses Matplotlib and includes the same core logic. This web version aims to replicate that functionality directly in the browser.
+                        </p>
+        
                         <div class="post-summary">
                             <h2>Key Takeaways</h2>
                             <ul class="summary-list">
-                                <li>Interactive web-based visualization of UR5e Forward Kinematics.</li>
-                                <li>Uses HTML sliders, JavaScript, and Three.js for client-side rendering.</li>
-                                <li>Allows users to manipulate joint angles and instantly see the robot's configuration and TCP pose.</li>
-                                <li>Demonstrates the concept of FK visually.</li>
-                                <li>Explains the related concept of Inverse Kinematics and multiple solutions.</li>
-                                <li>Highlights the process of adapting a Python/Matplotlib concept to web technologies.</li>
+                                <li>Interactive web visualization demonstrating UR5e FK and IK.</li>
+                                <li>Set joints via sliders (FK) to define a target TCP pose.</li>
+                                <li>Visualizes <strong>all</strong> analytical IK solutions reaching that target pose simultaneously.</li>
+                                <li>Highlights different robot configurations (e.g., elbow up/down) for the same TCP pose.</li>
+                                <li>Uses Three.js for client-side rendering with a schematic style (thin links).</li>
+                                <li>Demonstrates porting complex robotics algorithms (analytical IK) from Python to JavaScript.</li>
                             </ul>
                         </div>
-
+        
                         <h2>Conclusion</h2>
                         <p>
-                            This tool provides an intuitive way to explore how a UR5e robot's joint angles dictate its end-effector pose. While focusing on the FK aspect for interactivity, it serves as a foundation for understanding the more complex IK problem crucial for robot control and path planning.
+                            This tool provides an intuitive way to explore both how joint angles dictate the end-effector pose (FK) and how a single target pose can be achieved by multiple joint configurations (IK). Visualizing all solutions simultaneously is key to understanding the kinematic redundancy and choices available in robot programming and control.
                         </p>
-                        <hr>
-                        <p><em>Questions or thoughts on this project? Connect via the <a href="../academia.html#contact-simplified">contact form</a> or <a href="https://www.linkedin.com/in/mo-saeidi-21a00015a/" target="_blank">LinkedIn</a>.</em></p>
-                    </section>
+                        </section>
                 </article>
-
                  <a href="../blog.html" class="back-to-blog"><i class="fas fa-arrow-left"></i> Back to Blog List</a>
             </div>
         </main>

@@ -36,105 +36,96 @@
                 </div>
             </nav>
         </header>
+
         <main class="main-content">
-            <div class="container post-container">
-                <article>
-                    <header class="post-header">
-                        <div class="post-meta">
-                            <span class="post-category">Robotics & Visualization</span>
-                             <time datetime="2025-04-27">April 27, 2025</time>
-                        </div>
-                         <h1 class="post-title">Interactive UR5e Kinematics: Visualizing FK and All IK Solutions</h1>
-                    </header>
-        
-                    <section class="post-content">
-                        <p>
-                            Understanding the relationship between a robot's joint angles and the position/orientation of its end-effector (Tool Center Point, TCP) is fundamental in robotics. This project provides an interactive web-based tool to visualize this relationship for the Universal Robots UR5e, demonstrating both Forward and Inverse Kinematics concepts.
+            <div class="container">
+                <header class="blog-header">
+                    <h1>Insights &amp; Explorations</h1>
+                    <p>Thoughts on robotics, control systems, machine learning, and the journey of discovery.</p>
+                </header>
+                <ul class="blog-post-list">
+                    <li class="blog-post-item">
+                        <span class="post-meta">April 27, 2025</span> <h2 class="post-title">
+                            <a href="blog/interactive-kinematics.html">Interactive UR5e Kinematics Visualization (FK/IK)</a>
+                        </h2>
+                        <p class="post-excerpt">
+                            Explore the relationship between UR5e joint angles and TCP pose with this interactive 3D visualization. Use sliders to control the joints and see the Forward Kinematics calculation in real-time using Three.js.
                         </p>
-        
-                        <h2>1. Forward vs. Inverse Kinematics</h2>
-                        <ul>
-                            <li><strong>Forward Kinematics (FK):</strong> Given a set of joint angles $q = [q_1, q_2, ..., q_6]$, calculate the resulting pose (position and orientation) of the TCP in the base frame, $T_{TCP}^{Base}$.</li>
-                            <li><strong>Inverse Kinematics (IK):</strong> Given a desired TCP pose $T_{TCP}^{Base}$, find the set(s) of joint angles $q$ that achieve this pose. For a 6-DOF robot like the UR5e, there can be up to <strong>8 distinct IK solutions</strong> for a reachable pose (fewer near singularities).</li>
-                        </ul>
-        
-                         <h2>2. The Interactive Visualization: FK -> Target -> All IK Solutions</h2>
-                         <p>
-                             This interactive tool demonstrates the interplay between FK and IK:
+                        <a href="blog/interactive-kinematics.html" class="read-more-link">Read More &raquo;</a>
+                    </li>
+                    <li class="blog-post-item">
+                        <span class="post-meta">April 15, 2025</span>
+                        <h2 class="post-title">
+                            <a href="blog/robotic-interface-calibration.html">Robotic Calibration of Device Interfaces via Probing and Statistical Analysis</a>
+                        </h2>
+                        <p class="post-excerpt">
+                            Calibrating device interface poses (buttons, switches) using UR5e probing, gripper state segmentation, ArUco referencing, and statistical analysis. Includes 3D visualization of results and uncertainties.
+                        </p>
+                        <a href="blog/robotic-interface-calibration.html" class="read-more-link">Read More &raquo;</a>
+                    </li>
+                    <li class="blog-post-item">
+                            <span class="post-meta">April 13, 2025</span> <h2 class="post-title">
+                                <a href="blog/building-scanning-path-planning.html">Optimal Path Planning for Building Scanning with 360 Laser Scanner</a>
+                            </h2>
+                            <p class="post-excerpt">
+                                A deep dive into a project focused on generating optimal, collision-free paths for a mobile robot with a 360° scanner to map building exteriors using a multi-stage heuristic approach involving viewpoint generation, penalized TSP, and A* search.
+                            </p>
+                            <a href="blog/building-scanning-path-planning.html" class="read-more-link">Read More &raquo;</a>
+                    </li>
+                    <li class="blog-post-item">
+                        <span class="post-meta">April 10, 2025</span> <h2 class="post-title">
+                            <a href="blog/programming-by-demonstration.html">Teaching Robots Like We Teach People: A Deep Dive into Programming by Demonstration</a>
+                        </h2>
+                        <p class="post-excerpt">
+                            We humans possess an incredible, almost effortless ability to learn by watching. From a child mimicking a parent's wave to an apprentice observing a master craftsman, learning through demonstration is fundamental... Yet, programming robots has often felt like the antithesis...
+                        </p>
+                        <a href="blog/programming-by-demonstration.html" class="read-more-link">Read More &raquo;</a>
+                    </li>
+                     <li class="blog-post-item">
+                         <span class="post-meta">April 9, 2025</span> <h2 class="post-title">
+                             <a href="blog/control-rl-synergy.html">The Best of Both Worlds: Marrying Control Theory and Reinforcement Learning in Robotics</a>
+                         </h2>
+                         <p class="post-excerpt">
+                             We live in an exciting time for robotics. Deep Reinforcement Learning (RL) regularly produces stunning demonstrations... Does this make classical control theory obsolete? As someone whose journey started deep in the mathematics of mechanical systems...
                          </p>
-                         <ol>
-                             <li>Use the sliders below to set a specific configuration of UR5e joint angles ($q_{sliders}$).</li>
-                             <li>The tool calculates the resulting TCP pose ($T_{target}$) using <strong>Forward Kinematics</strong> based on your slider inputs. This target pose is shown as a prominent coordinate frame (X=Red, Y=Green, Z=Blue).</li>
-                             <li>Crucially, the tool then solves the <strong>Inverse Kinematics</strong> problem for this $T_{target}$ using an analytical solver implemented in JavaScript.</li>
-                             <li><strong>All valid IK solutions</strong> (sets of joint angles $q_{ik}$) that reach the *exact same* target TCP pose are calculated and visualized simultaneously.</li>
-                         </ol>
-                         <p>
-                             The robot configuration corresponding directly to your slider angles ($q_{sliders}$) is shown with solid lines. All other valid IK solutions ($q_{ik}$) that achieve the same $T_{target}$ are shown with fainter, different colored lines. This allows you to directly compare different postures (e.g., elbow up/down) that result in the same end-effector pose.
-                         </p>
-                         <p>
-                             The visualization uses JavaScript and <a href="https://threejs.org/" target="_blank" rel="noopener noreferrer">Three.js</a>, performing all calculations client-side. Links are rendered thinly for a clearer, more schematic view.
-                         </p>
-        
-                        <div class="interactive-kinematics-container">
-                            <div id="kinematics-canvas-container">
-                                <div id="loading-message">Loading 3D Visualization... <i class="fas fa-spinner fa-spin"></i></div>
-                                <div id="error-message" style="display: none;">Error loading visualization.</div>
-                                <canvas id="kinematics-canvas"></canvas>
-                            </div>
-                            <div id="sliders-container">
-                                <h3>Control Joint Angles (Radians)</h3>
-                                <div id="joint-sliders">
-                                    </div>
-                                <div id="coordinates-display">
-                                     <h4>Target TCP Pose (from FK):</h4>
-                                     <pre id="tcp-pose-output">Calculating...</pre>
-                                     <h4>IK Solutions Found: <span id="ik-solution-count">0</span></h4>
-                                     <pre id="ik-solutions-output" style="max-height: 150px; overflow-y: auto;">None</pre> </div>
-                            </div>
-                        </div>
-        
-                        <h2>3. How It Works (Behind the Scenes)</h2>
-                        <ol>
-                             <li><strong>DH Parameters:</strong> Standard UR5e DH parameters define the robot's geometry.</li>
-                             <li><strong>FK Calculation (JS):</strong> Calculates $T_{target}$ from slider angles $q_{sliders}$.</li>
-                             <li><strong>IK Calculation (JS):</strong> A JavaScript port of the analytical Python solver finds all $q_{ik}$ for the calculated $T_{target}$. It handles multiple solution branches and numerical checks.</li>
-                             <li><strong>Three.js Rendering:</strong> Renders the target TCP frame. For each valid $q_{ik}$ solution, it calculates the corresponding intermediate joint positions via FK and draws the robot configuration using thin cylinders and spheres. Different styles distinguish the primary (slider) configuration from other IK solutions.</li>
-                             <li><strong>Interactivity:</strong> Slider changes trigger the FK -> IK -> Render cycle.</li>
-                         </ol>
-        
-                         <h2>5. Implementation Details & Source Code</h2>
-                        <p>
-                            This visualization uses: HTML, CSS, JavaScript, and <a href="https://threejs.org/" target="_blank" rel="noopener noreferrer">Three.js</a>.
+                         <a href="blog/control-rl-synergy.html" class="read-more-link">Read More &raquo;</a>
+                     </li>
+                     <li class="blog-post-item">
+                        <span class="post-meta">February 25, 2025</span>
+                        <h2 class="post-title">
+                            <a href="blog/bellman-q-value.html">The Bellman Optimal Q-Value Function</a>
+                        </h2>
+                        <p class="post-excerpt">
+                            Reinforcement learning (RL) has revolutionized our approach to building intelligent systems that can learn from experience. At the core of many RL algorithms lies a powerful concept: the Bellman equation...
                         </p>
-                        <ul>
-                            <li>The FK logic is a JavaScript adaptation of the Python `forward_kinematics`.</li>
-                             <li>The IK logic is a direct JavaScript port of the analytical `inverse_kinematics` from `ur5e_ik_solver.py`, capable of finding multiple solutions.</li>
-                        </ul>
-                        <p>
-                            The original Python implementation uses Matplotlib and includes the same core logic. This web version aims to replicate that functionality directly in the browser.
+                         <a href="blog/bellman-q-value.html" class="read-more-link">Read More &raquo;</a>
+                    </li>
+
+                    <li class="blog-post-item">
+                        <span class="post-meta">February 8, 2025</span>
+                        <h2 class="post-title">
+                            <a href="blog/learning-matters.html">Why Learning Every Day Matters</a>
+                        </h2>
+                        <p class="post-excerpt">
+                           As engineers and researchers, we operate in fields where knowledge evolves at a breathtaking pace. Continuous learning isn't just beneficial—it's essential for survival and growth...
                         </p>
-        
-                        <div class="post-summary">
-                            <h2>Key Takeaways</h2>
-                            <ul class="summary-list">
-                                <li>Interactive web visualization demonstrating UR5e FK and IK.</li>
-                                <li>Set joints via sliders (FK) to define a target TCP pose.</li>
-                                <li>Visualizes <strong>all</strong> analytical IK solutions reaching that target pose simultaneously.</li>
-                                <li>Highlights different robot configurations (e.g., elbow up/down) for the same TCP pose.</li>
-                                <li>Uses Three.js for client-side rendering with a schematic style (thin links).</li>
-                                <li>Demonstrates porting complex robotics algorithms (analytical IK) from Python to JavaScript.</li>
-                            </ul>
-                        </div>
-        
-                        <h2>Conclusion</h2>
-                        <p>
-                            This tool provides an intuitive way to explore both how joint angles dictate the end-effector pose (FK) and how a single target pose can be achieved by multiple joint configurations (IK). Visualizing all solutions simultaneously is key to understanding the kinematic redundancy and choices available in robot programming and control.
+                         <a href="blog/learning-matters.html" class="read-more-link">Read More &raquo;</a>
+                    </li>
+
+                    <li class="blog-post-item">
+                        <span class="post-meta">February 2, 2025</span>
+                        <h2 class="post-title">
+                            <a href="blog/journey-begins.html">The Journey Begins</a>
+                        </h2>
+                        <p class="post-excerpt">
+                            Welcome to my corner of the digital world! I'm Mo Saeidi, a robotics and control engineer passionate about the intersection of mathematics, machine learning, and mechanical systems...
                         </p>
-                        </section>
-                </article>
-                 <a href="../blog.html" class="back-to-blog"><i class="fas fa-arrow-left"></i> Back to Blog List</a>
-            </div>
-        </main>
+                         <a href="blog/journey-begins.html" class="read-more-link">Read More &raquo;</a>
+                    </li>
+
+                </ul>
+
+            </div> </main>
 
         <footer class="footer">
             <div class="container">
