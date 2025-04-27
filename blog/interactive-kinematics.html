@@ -17,7 +17,12 @@
     <link rel="stylesheet" href="../assets/css/components/navbar.css" />
     <link rel="stylesheet" href="../assets/css/components/buttons.css" />
     <link rel="stylesheet" href="../assets/css/components/footer.css" />
+    <link rel="stylesheet" href="../assets/css/pages/post.css" />
+
+
     <style>
+        /* Keep styles for elements NOT covered by your base/component CSS */
+
         /* Basic styling for three.js canvas */
         #robot-canvas {
             display: block; /* Prevent extra space below canvas */
@@ -41,7 +46,7 @@
             white-space: nowrap;
             color: #cbd5e0; /* Lighter text */
         }
-        /* Tailwind input range styles */
+        /* Tailwind input range styles (can be customized further) */
         input[type="range"].slider {
              -webkit-appearance: none; /* Override default look */
              appearance: none;
@@ -71,7 +76,6 @@
              border: none; /* Remove border in Firefox */
         }
 
-
         .slider-value {
             font-family: 'Roboto Mono', monospace;
             font-size: 0.8rem; /* Smaller value */
@@ -85,19 +89,14 @@
         .page-wrapper { flex: 1 0 auto; }
         .footer { flex-shrink: 0; }
 
-        /* Base overrides to match theme */
+        /* Base overrides if needed (Tailwind might conflict/override base.css) */
         body {
              background-color: var(--background-color, #1a202c); /* Use CSS var from base.css or default */
              color: var(--text-color, #e2e8f0);
         }
-         /* Match container padding from layout.css */
-        .container {
-             max-width: 1200px;
-             margin-left: auto;
-             margin-right: auto;
-             padding-left: var(--container-padding, 1rem); /* Use var or default */
-             padding-right: var(--container-padding, 1rem);
-        }
+         /* Use container class from layout.css */
+        /* .container defined in layout.css */
+
         /* Style for info text */
         .info-text {
             font-family: 'Roboto Mono', monospace;
@@ -128,43 +127,53 @@
             text-align: center;
             margin-bottom: 0.25rem;
         }
+        /* Explicitly style the post-container if needed, or rely on post.css */
+        /* .post-container { ... } */
+
+        /* Back to blog link styling (if not covered by components/buttons.css) */
+        .back-to-blog {
+            display: inline-block;
+            margin-top: 2rem;
+            color: var(--link-color, #63b3ed); /* Use theme color */
+            text-decoration: none;
+        }
+        .back-to-blog:hover {
+            text-decoration: underline;
+        }
+        .back-to-blog i { /* Style icon if using Font Awesome */
+            margin-right: 0.5em;
+        }
+
 
     </style>
 </head>
-<body class="bg-gray-900 text-gray-200">
-    <div class="page-wrapper">
-        <header class="header sticky top-0 z-50 shadow-md"> <nav class="navbar bg-gray-800"> <div class="container"> <button id="mobile-menu-btn" class="mobile-menu-btn md:hidden" aria-label="Toggle Menu" aria-expanded="false">
+<body> <div class="page-wrapper">
+        <header class="header">
+            <nav class="navbar">
+                <div class="container">
+                    <button id="mobile-menu-btn" class="mobile-menu-btn" aria-label="Toggle Menu" aria-expanded="false">
                         <span class="bar"></span>
                         <span class="bar"></span>
                         <span class="bar"></span>
                     </button>
-                    <ul class="nav-links hidden md:flex"> <li><a href="../index.html">MoSa</a></li>
+                    <ul class="nav-links">
+                        <li><a href="../index.html">MoSa</a></li>
                         <li><a href="../projects.html">Projects</a></li>
                         <li><a href="../blog.html" class="active">Blog</a></li> <li><a href="../academia.html">Academia</a></li>
                     </ul>
-                    <div id="mobile-nav-links" class="mobile-nav hidden md:hidden">
-                        <ul class="flex flex-col items-center space-y-4 py-4">
-                            <li><a href="../index.html" class="hover:text-blue-400">MoSa</a></li>
-                            <li><a href="../projects.html" class="hover:text-blue-400">Projects</a></li>
-                            <li><a href="../blog.html" class="text-blue-400 font-semibold">Blog</a></li>
-                            <li><a href="../academia.html" class="hover:text-blue-400">Academia</a></li>
-                        </ul>
-                     </div>
-                </div>
+                    </div>
             </nav>
         </header>
 
-        <main class="main-content py-8">
-            <div class="container mx-auto"> <article>
-                    <header class="post-header mb-6 text-center md:text-left"> <div class="post-meta mb-2">
-                            <span class="post-category text-blue-400 font-semibold">Robotics & Visualization</span>
-                            <time datetime="2025-04-27" class="ml-4 text-gray-500">April 27, 2025</time> </div>
-                        <h1 class="post-title text-3xl md:text-4xl font-bold text-gray-100">Interactive UR5e Kinematics Explorer</h1>
-                    </header>
+        <main class="main-content">
+            <div class="container post-container">
+                <article>
+                    <header class="post-header"> <div class="post-meta"> <span class="post-category">Robotics & Visualization</span> <time datetime="2025-04-27">April 27, 2025</time>
+                        </div>
+                        <h1 class="post-title">Interactive UR5e Kinematics Explorer</h1> </header>
 
                     <section class="post-content">
-                        <p class="mb-4 text-gray-400">
-                            This interactive tool demonstrates the forward and inverse kinematics (FK/IK) of a UR5e robot arm.
+                        <p> This interactive tool demonstrates the forward and inverse kinematics (FK/IK) of a UR5e robot arm.
                             Adjust the sliders below to change the robot's joint angles. The 3D view will update to show the resulting configuration (red arm) and its end-effector (TCP) pose (large coordinate frame).
                             The tool then calculates all possible inverse kinematics solutions that reach the same TCP pose, displaying them as semi-transparent blue arms. The charts below track the history of each joint's IK solutions over time.
                         </p>
@@ -228,26 +237,24 @@
                         </div>
 
 
-                        <hr class="my-8 border-gray-700">
-
-                        <h2 class="text-2xl font-semibold mb-4 text-gray-100">How it Works</h2>
-                        <p class="mb-4 text-gray-400">
+                        <hr class="my-8 border-gray-700"> <h2 class="text-2xl font-semibold mb-4 text-gray-100">How it Works</h2>
+                        <p>
                             <strong>Forward Kinematics (FK):</strong> Given a set of joint angles (controlled by the sliders), FK calculates the precise 3D position and orientation of the robot's end-effector (Tool Center Point or TCP). The red robot arm and the large coordinate frame represent the FK result for the slider values.
                         </p>
-                        <p class="mb-4 text-gray-400">
+                        <p>
                             <strong>Inverse Kinematics (IK):</strong> Given a desired TCP pose (position and orientation), IK calculates the necessary joint angles to achieve that pose. For a 6-axis robot like the UR5e, there can be multiple valid joint configurations (up to 8 for non-singular poses) that result in the same TCP pose. This tool calculates these solutions based on the pose derived from the sliders (the FK result) and visualizes them as the transparent blue arms.
                         </p>
-                         <p class="mb-4 text-gray-400">
+                         <p>
                             <strong>Trajectory Plots:</strong> The charts show the history of the calculated IK solutions for each joint over the last 50 updates. Each colored line represents one of the potential solution "branches" (up to 8). Gaps appear when a specific solution branch is not found for the current robot configuration. This helps visualize how the different possible joint configurations change as the robot's target TCP moves.
                         </p>
-                        <p class="text-gray-400">
-                            The calculations are based on the Denavit-Hartenberg (DH) parameters of the UR5e and an analytical IK solver adapted from the Python code provided. Visualization is done using <a href="https://threejs.org/" target="_blank" rel="noopener noreferrer" class="text-blue-400 hover:underline">three.js</a> and plotting uses <a href="https://www.chartjs.org/" target="_blank" rel="noopener noreferrer" class="text-blue-400 hover:underline">Chart.js</a>.
+                        <p>
+                            The calculations are based on the Denavit-Hartenberg (DH) parameters of the UR5e and an analytical IK solver adapted from the Python code provided. Visualization is done using <a href="https://threejs.org/" target="_blank" rel="noopener noreferrer">three.js</a> and plotting uses <a href="https://www.chartjs.org/" target="_blank" rel="noopener noreferrer">Chart.js</a>.
                         </p>
 
                     </section>
                 </article>
 
-                <a href="../blog.html" class="inline-block mt-8 text-blue-400 hover:underline">
+                 <a href="../blog.html" class="back-to-blog">
                     &larr; Back to Blog List
                 </a>
             </div>
