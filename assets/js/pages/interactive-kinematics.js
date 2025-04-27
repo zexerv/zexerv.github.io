@@ -250,27 +250,28 @@ function inverseKinematics(T_desired_TCP) {
                 });
 
                  // --- Verification (Basic FK check) ---
-                 try {
-                     const { T0_TCP: T_check } = forwardKinematics(sol_angles_normalized);
-                     if (T_check) {
-                        // Check position distance
-                        const pos_check = new THREE.Vector3().setFromMatrixPosition(T_check);
-                        const pos_target = new THREE.Vector3().setFromMatrixPosition(T_desired_TCP);
-                        const posDiff = pos_check.distanceTo(pos_target);
+                //  try {
+                //      const { T0_TCP: T_check } = forwardKinematics(sol_angles_normalized);
+                //      if (T_check) {
+                //         // Check position distance
+                //         const pos_check = new THREE.Vector3().setFromMatrixPosition(T_check);
+                //         const pos_target = new THREE.Vector3().setFromMatrixPosition(T_desired_TCP);
+                //         const posDiff = pos_check.distanceTo(pos_target);
 
-                        // Check orientation (angle between Z axes - simpler than full quaternion diff)
-                        const z_check = new THREE.Vector3(T_check.elements[8], T_check.elements[9], T_check.elements[10]).normalize();
-                        const z_target = new THREE.Vector3(T_desired_TCP.elements[8], T_desired_TCP.elements[9], T_desired_TCP.elements[10]).normalize();
-                        const angleDiff = z_check.angleTo(z_target); // Radians
+                //         // Check orientation (angle between Z axes - simpler than full quaternion diff)
+                //         const z_check = new THREE.Vector3(T_check.elements[8], T_check.elements[9], T_check.elements[10]).normalize();
+                //         const z_target = new THREE.Vector3(T_desired_TCP.elements[8], T_desired_TCP.elements[9], T_desired_TCP.elements[10]).normalize();
+                //         const angleDiff = z_check.angleTo(z_target); // Radians
 
-                        if (posDiff < tol_compare * 100 && angleDiff < tol_compare * 100) { // Looser tolerance for web demo
-                             solutions.push(sol_angles_normalized);
-                        } else {
-                             // console.log(`IK Solution failed verification: P ${posDiff.toFixed(5)}, A ${angleDiff.toFixed(5)}`, sol_angles_normalized.map(a => a.toFixed(2)));
-                        }
-                     }
-                 } catch (e) { /* FK failed */ }
-
+                //         if (posDiff < tol_compare * 100 && angleDiff < tol_compare * 100) { // Looser tolerance for web demo
+                //              solutions.push(sol_angles_normalized);
+                //         } else {
+                //              // console.log(`IK Solution failed verification: P ${posDiff.toFixed(5)}, A ${angleDiff.toFixed(5)}`, sol_angles_normalized.map(a => a.toFixed(2)));
+                //         }
+                //      }
+                //  } catch (e) { /* FK failed */ }
+                // --- Add Solution (Verification Removed for Debugging) ---
+                solutions.push(sol_angles_normalized);
             } // t3 loop
         } // t5 loop
     } // t1 loop
