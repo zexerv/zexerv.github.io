@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Interactive UR5e Kinematics Visualization - Mo Saeidi</title>
-    <meta name="description" content="Explore UR5e forward kinematics interactively. Adjust joint angles using sliders and see the robot configuration and end-effector pose update in real-time 3D.">
+    <title>Interactive UR5e FK/IK Visualization - Mo Saeidi</title>
+    <meta name="description" content="Explore UR5e kinematics interactively. Adjust joint angles via sliders (Forward Kinematics) and see the robot configuration update. The visualization also calculates and displays all corresponding Inverse Kinematics solutions for the resulting end-effector pose.">
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -33,12 +33,16 @@
         #kinematics-visualization {
             flex: 2; /* Takes more space */
             min-width: 300px; /* Minimum width for the canvas */
-            min-height: 400px; /* Minimum height */
-            background-color: #2d3748; /* Darker background for contrast */
+            min-height: 450px; /* Increased height */
+            background-color: #1a202c; /* Darker background for contrast */
             border-radius: var(--border-radius);
             position: relative; /* Needed for potential overlays */
             overflow: hidden; /* Clip content */
+            cursor: grab; /* Indicate interactivity */
         }
+         #kinematics-visualization:active {
+             cursor: grabbing;
+         }
          #kinematics-visualization canvas {
              display: block; /* Remove extra space below canvas */
              width: 100% !important;
@@ -75,6 +79,8 @@
              border-radius: 4px;
              font-family: 'Roboto Mono', monospace;
              font-size: 0.8rem;
+             min-width: 3em; /* Ensure space for value */
+             text-align: right;
          }
 
 
@@ -122,7 +128,7 @@
             border: none; /* Remove default border */
         }
 
-        .pose-display {
+        .info-display { /* Renamed from pose-display */
              margin-top: 1rem;
              padding: 0.8rem;
              background-color: var(--background-code);
@@ -133,10 +139,14 @@
              color: var(--text-muted);
              white-space: pre-wrap; /* Allow wrapping */
              word-break: break-all; /* Break long strings */
+             max-height: 200px; /* Limit height */
+             overflow-y: auto; /* Add scroll if needed */
         }
-         .pose-display strong {
+         .info-display strong {
              color: var(--text-primary);
              font-weight: 500;
+             display: block; /* Make title take full line */
+             margin-bottom: 0.5em;
          }
 
 
@@ -147,6 +157,9 @@
             }
              #kinematics-visualization {
                  min-height: 350px; /* Adjust height */
+             }
+             .info-display {
+                 max-height: 150px; /* Adjust height on smaller screens */
              }
         }
     </style>
@@ -179,27 +192,28 @@
                             <span class="post-category">Robotics & Visualization</span>
                             <time datetime="2025-04-27">April 27, 2025</time>
                         </div>
-                        <h1 class="post-title">Interactive UR5e Kinematics Visualization</h1>
+                        <h1 class="post-title">Interactive UR5e Forward & Inverse Kinematics Visualization</h1>
                     </header>
 
                     <section class="post-content">
                         <p>
-                            Understanding robot kinematics – the relationship between joint angles and the position/orientation of the end-effector (TCP) – is fundamental in robotics. This interactive visualization demonstrates the Forward Kinematics (FK) of a UR5e robot arm in real-time 3D.
+                            Understanding robot kinematics – the relationship between joint angles and the end-effector (TCP) pose – is fundamental in robotics. This interactive visualization demonstrates both Forward Kinematics (FK) and Inverse Kinematics (IK) for a UR5e robot arm in real-time 3D.
                         </p>
 
                         <h2>Forward Kinematics (FK)</h2>
                         <p>
-                            Forward Kinematics calculates the final position and orientation of the robot's TCP given the angles of each of its joints. We use the Denavit-Hartenberg (DH) parameters specific to the UR5e to construct transformation matrices for each joint. Multiplying these matrices together gives the overall transformation from the robot's base to its TCP.
+                            Forward Kinematics calculates the final position and orientation of the robot's TCP given the angles of each of its joints. We use the Denavit-Hartenberg (DH) parameters specific to the UR5e.
                         </p>
                         <p>
-                            <strong>Try it yourself!</strong> Use the sliders below to adjust the angle (in radians) for each of the UR5e's six joints (q1 to q6). Observe how the robot's configuration changes in the 3D view and how the calculated TCP pose updates.
+                            <strong>Try it yourself!</strong> Use the sliders below to adjust the angle (in radians) for each of the UR5e's six joints (q1 to q6). The <strong>solid red robot</strong> shows the configuration resulting directly from these slider values (FK). The calculated TCP pose is displayed.
                         </p>
 
                         <div class="interactive-kinematics-container">
                             <div id="kinematics-visualization">
-                                </div>
+                                <div id="loading-indicator" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: white; font-family: 'Roboto', sans-serif; display: none;">Calculating...</div>
+                            </div>
                             <div class="controls-panel">
-                                <h3>Joint Angles (radians)</h3>
+                                <h3>Control Joints (FK)</h3>
                                 <div class="slider-container">
                                     <label for="q1">Joint 1 (q1): <span class="value-display" id="q1-value">0.00</span></label>
                                     <input type="range" id="q1" name="q1" min="-3.14159" max="3.14159" step="0.01" value="0">
@@ -224,26 +238,26 @@
                                     <label for="q6">Joint 6 (q6): <span class="value-display" id="q6-value">0.00</span></label>
                                     <input type="range" id="q6" name="q6" min="-3.14159" max="3.14159" step="0.01" value="0">
                                 </div>
-                                <div class="pose-display" id="tcp-pose-display">
-                                    <strong>Calculated TCP Pose (T0_TCP):</strong>
-                                    [Loading...]
+                                <div class="info-display" id="info-display">
+                                    <strong id="info-title">Target TCP Pose & IK Solutions:</strong>
+                                    <span id="info-content">[Move sliders to calculate]</span>
                                 </div>
                             </div>
                         </div>
                         <h2>Inverse Kinematics (IK)</h2>
                         <p>
-                            Inverse Kinematics is the opposite problem: given a desired TCP pose (position and orientation), what are the joint angles required to achieve it? For a 6-DOF robot like the UR5e, there can be multiple valid joint configurations (often up to 8) that result in the same TCP pose. This is because of the robot's redundant nature for certain tasks.
+                            Inverse Kinematics is the opposite problem: given a desired TCP pose, what joint angles are required to achieve it? For a 6-DOF robot like the UR5e, there can be multiple valid joint configurations (often up to 8) that result in the same TCP pose.
                         </p>
                         <p>
-                            While this visualization focuses on FK, the calculated TCP pose shown above represents a <em>target</em> pose that could potentially be reached by several different sets of joint angles found through IK. The Python code this visualization is based on includes an analytical IK solver that finds these multiple solutions. Implementing a robust analytical IK solver directly in JavaScript is significantly more complex, but the principle remains important: a single target pose doesn't necessarily map back to a unique robot configuration.
+                            This visualization calculates the TCP pose resulting from the slider values (the FK target pose). It then uses an analytical IK solver (ported from the original Python code) to find <em>all</em> possible joint configurations that achieve this target pose. These IK solutions are displayed as <strong>dashed, semi-transparent blue robots</strong> overlaid on the main FK robot. Observe how different joint configurations can lead to the exact same end-effector position and orientation. The number of valid IK solutions found is also shown.
                         </p>
 
                         <h2>Implementation Details</h2>
                         <p>
-                            This interactive visualization uses <a href="https://threejs.org/" target="_blank" rel="noopener noreferrer">Three.js</a> for the 3D rendering. The forward kinematics logic, adapted from the provided Python script (<code>ur5e_ik_solver.py</code>), is implemented in JavaScript (<code>interactive-kinematics.js</code>). The robot model is built using simple geometric primitives (cylinders and spheres) transformed according to the calculated FK matrices. The sliders allow direct manipulation of the joint angles, triggering recalculations and scene updates.
+                            This interactive visualization uses <a href="https://threejs.org/" target="_blank" rel="noopener noreferrer">Three.js</a> for the 3D rendering. Both the forward and inverse kinematics logic, adapted from the provided Python script (<code>ur5e_ik_solver.py</code>), are implemented in JavaScript (<code>interactive-kinematics.js</code>). The robot models are built using simple geometric primitives. The sliders allow direct manipulation of the joint angles for the primary FK calculation, which then triggers the IK calculation and updates the scene with all solutions.
                         </p>
                         <p>
-                            The DH parameters and TCP offset used match the standard UR5e configuration.
+                            Numerical tolerances are used in the IK solver to handle potential singularities and floating-point inaccuracies. The DH parameters and TCP offset match the standard UR5e configuration.
                         </p>
 
                         <hr>
