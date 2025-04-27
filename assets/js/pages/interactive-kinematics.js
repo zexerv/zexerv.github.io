@@ -355,7 +355,7 @@ const loadingIndicator = document.getElementById('loading-indicator');
 // --- Charting Setup ---
 const jointCharts = []; // Array to hold Chart instances
 const jointHistory = []; // Array to hold history data for each joint's solutions
-const MAX_HISTORY = 50; // Number of steps to show in charts
+const MAX_HISTORY = 300; // Number of steps to show in charts
 let updateCounter = 0; // Counter for chart x-axis
 
 // Vibrant colors for up to 8 solutions
