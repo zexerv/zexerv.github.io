@@ -28,6 +28,7 @@ const tol_compare = 1e-6;
 const tol_geom = 1e-6;
 const PRIMARY_LINK_COLOR = 0xeeeeee;
 const PRIMARY_JOINT_COLOR = 0xffffff;
+const JOINT_COLORS = [0xff0000, 0x00ff00, 0x0000ff, 0xffff00, 0xff00ff, 0x00ffff];
 const IK_LINK_COLOR = 0xaaaaaa;
 const IK_JOINT_COLOR = 0x888888;
 const TARGET_TCP_COLOR = 0xff8800;
