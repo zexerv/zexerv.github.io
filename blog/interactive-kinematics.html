@@ -3,24 +3,30 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Interactive Robot Kinematics - Mo Saeidi</title>
-    <meta name="description" content="Explore UR5e robot forward kinematics interactively in your browser. Adjust joint angles and see the robot move.">
+    <title>Interactive Robot Kinematics Visualization - Mo Saeidi</title>
+    <meta name="description" content="An interactive 3D visualization of robot kinematics, featuring forward and inverse kinematics calculations for a UR5e robot arm.">
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css"/>
 
     <link rel="stylesheet" href="../assets/css/base.css" />
     <link rel="stylesheet" href="../assets/css/layout.css" />
     <link rel="stylesheet" href="../assets/css/components/navbar.css" />
     <link rel="stylesheet" href="../assets/css/components/buttons.css" />
     <link rel="stylesheet" href="../assets/css/components/footer.css" />
-    <link rel="stylesheet" href="../assets/css/pages/interactive-kinematics.css" />
     <link rel="stylesheet" href="../assets/css/pages/post.css" />
-
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js" integrity="sha512-dLxUelApnYxpLt6K2iomGngnQ43cJf/ZaRTTAXhSqKGoMXkyPzAOUrQChiMCWRgWq4dRMNXDuhGMXGzKceKsQw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
-
+    
+    <!-- Additional CSS for the interactive visualization -->
+    <link rel="stylesheet" href="../assets/css/pages/interactive-kinematics.css" />
+    
+    <!-- Include Three.js for 3D visualization -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/dat-gui/0.7.7/dat.gui.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/9.5.0/math.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/controls/OrbitControls.min.js"></script>
 </head>
 <body>
     <div class="page-wrapper">
@@ -47,70 +53,152 @@
                 <article>
                     <header class="post-header">
                         <div class="post-meta">
-                            <span class="post-category">Robotics & Simulation</span>
-                            <time datetime="2025-04-27">April 27, 2025</time>
+                            <span class="post-category">Robotics & Kinematics</span>
+                            <time datetime="2025-04-25">April 25, 2025</time>
                         </div>
-                        <h1 class="post-title">Interactive UR5e Forward Kinematics</h1>
+                        <h1 class="post-title">Interactive Robot Kinematics Visualization</h1>
                     </header>
 
                     <section class="post-content">
                         <p>
-                            This interactive visualization demonstrates the forward kinematics (FK) of a UR5e robot arm. Forward kinematics calculates the position and orientation of the robot's end-effector (or Tool Center Point - TCP) based on the angles of its joints.
+                            Understanding robot kinematics is essential for robot control, motion planning, and manipulation tasks. This interactive visualization demonstrates both forward and inverse kinematics for a UR5e robot arm, allowing you to manipulate joint angles and observe the resulting end-effector pose.
                         </p>
+
+                        <h2>Interactive UR5e Kinematics</h2>
                         <p>
-                            Use the sliders below to adjust the angle of each of the six joints (J1 to J6) in radians. Observe how the robot's configuration changes in the 3D view. You can drag the 3D view to rotate the camera and use the scroll wheel to zoom.
+                            Use the sliders below to adjust the joint angles. The visualization shows the resulting robot configuration and TCP (Tool Center Point) pose. The inverse kinematics solutions for the current TCP pose are also calculated and displayed.
                         </p>
 
-                        <div class="interactive-kinematics-container">
-                            <div id="kinematics-canvas-container">
-                                </div>
-
+                        <div class="kinematics-container">
+                            <div class="kinematics-visualization" id="robot-visualization"></div>
+                            
                             <div class="kinematics-controls">
-                                <h2>Joint Controls</h2>
-                                <div class="sliders-grid">
+                                <div class="sliders-container">
                                     <div class="slider-group">
-                                        <label for="joint1">J1 (<span id="j1-value">0.00</span> rad)</label>
-                                        <input type="range" id="joint1" name="joint1" min="-3.14159" max="3.14159" value="0" step="0.01" class="joint-slider">
+                                        <label for="joint1">Joint 1 (rad):</label>
+                                        <input type="range" id="joint1" min="-3.14159" max="3.14159" step="0.01" value="0">
+                                        <span class="slider-value" id="joint1-value">0.00</span>
                                     </div>
                                     <div class="slider-group">
-                                        <label for="joint2">J2 (<span id="j2-value">-1.57</span> rad)</label>
-                                        <input type="range" id="joint2" name="joint2" min="-3.14159" max="3.14159" value="-1.5708" step="0.01" class="joint-slider">
+                                        <label for="joint2">Joint 2 (rad):</label>
+                                        <input type="range" id="joint2" min="-3.14159" max="3.14159" step="0.01" value="-1.57">
+                                        <span class="slider-value" id="joint2-value">-1.57</span>
                                     </div>
                                     <div class="slider-group">
-                                        <label for="joint3">J3 (<span id="j3-value">1.57</span> rad)</label>
-                                        <input type="range" id="joint3" name="joint3" min="-3.14159" max="3.14159" value="1.5708" step="0.01" class="joint-slider">
+                                        <label for="joint3">Joint 3 (rad):</label>
+                                        <input type="range" id="joint3" min="-3.14159" max="3.14159" step="0.01" value="1.57">
+                                        <span class="slider-value" id="joint3-value">1.57</span>
                                     </div>
                                     <div class="slider-group">
-                                        <label for="joint4">J4 (<span id="j4-value">-1.57</span> rad)</label>
-                                        <input type="range" id="joint4" name="joint4" min="-3.14159" max="3.14159" value="-1.5708" step="0.01" class="joint-slider">
+                                        <label for="joint4">Joint 4 (rad):</label>
+                                        <input type="range" id="joint4" min="-3.14159" max="3.14159" step="0.01" value="-1.57">
+                                        <span class="slider-value" id="joint4-value">-1.57</span>
                                     </div>
                                     <div class="slider-group">
-                                        <label for="joint5">J5 (<span id="j5-value">-1.57</span> rad)</label>
-                                        <input type="range" id="joint5" name="joint5" min="-3.14159" max="3.14159" value="-1.5708" step="0.01" class="joint-slider">
+                                        <label for="joint5">Joint 5 (rad):</label>
+                                        <input type="range" id="joint5" min="-3.14159" max="3.14159" step="0.01" value="-1.57">
+                                        <span class="slider-value" id="joint5-value">-1.57</span>
                                     </div>
                                     <div class="slider-group">
-                                        <label for="joint6">J6 (<span id="j6-value">0.00</span> rad)</label>
-                                        <input type="range" id="joint6" name="joint6" min="-3.14159" max="3.14159" value="0" step="0.01" class="joint-slider">
+                                        <label for="joint6">Joint 6 (rad):</label>
+                                        <input type="range" id="joint6" min="-3.14159" max="3.14159" step="0.01" value="0">
+                                        <span class="slider-value" id="joint6-value">0.00</span>
                                     </div>
                                 </div>
-                                <button id="reset-view-btn" class="btn btn-secondary">Reset View</button>
-                                <button id="reset-pose-btn" class="btn btn-secondary">Reset Pose</button>
+                                
+                                <div class="info-panel">
+                                    <div class="tcp-pose">
+                                        <h3>TCP Pose</h3>
+                                        <div class="pose-matrix" id="tcp-pose-matrix">
+                                            <div class="matrix-row">
+                                                <span>1.00</span>
+                                                <span>0.00</span>
+                                                <span>0.00</span>
+                                                <span>0.00</span>
+                                            </div>
+                                            <div class="matrix-row">
+                                                <span>0.00</span>
+                                                <span>1.00</span>
+                                                <span>0.00</span>
+                                                <span>0.00</span>
+                                            </div>
+                                            <div class="matrix-row">
+                                                <span>0.00</span>
+                                                <span>0.00</span>
+                                                <span>1.00</span>
+                                                <span>0.00</span>
+                                            </div>
+                                            <div class="matrix-row">
+                                                <span>0.00</span>
+                                                <span>0.00</span>
+                                                <span>0.00</span>
+                                                <span>1.00</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="ik-solutions">
+                                        <h3>IK Solutions</h3>
+                                        <div id="ik-solutions-count">Found 0 solutions</div>
+                                        <div id="ik-solutions-list" class="solutions-list"></div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
 
-                        <h2>How it Works</h2>
+                        <h2>How It Works</h2>
                         <p>
-                            The visualization uses the <a href="https://en.wikipedia.org/wiki/Denavit%E2%80%93Hartenberg_parameters" target="_blank" rel="noopener noreferrer">Denavit-Hartenberg (DH) parameters</a> specific to the UR5e robot. For each joint angle you set with the sliders, the corresponding transformation matrix is calculated. These matrices are multiplied sequentially to find the final pose of the tool flange. An additional transformation is applied to represent the Tool Center Point (TCP) offset.
+                            This visualization implements:
                         </p>
+                        <ul>
+                            <li><strong>Forward Kinematics (FK):</strong> Calculates the end-effector (TCP) pose from joint angles using the Denavit-Hartenberg parameters of the UR5e robot.</li>
+                            <li><strong>Inverse Kinematics (IK):</strong> Determines joint configurations that achieve a desired TCP pose. Due to the robot's kinematic structure, multiple solutions often exist for a single pose.</li>
+                            <li><strong>3D Visualization:</strong> Renders the robot arm, joint configurations, and coordinate frames using Three.js.</li>
+                        </ul>
+
+                        <h2>UR5e DH Parameters</h2>
                         <p>
-                            This process is implemented in JavaScript using the <a href="https://threejs.org/" target="_blank" rel="noopener noreferrer">three.js</a> library for 3D rendering. The robot links are represented by simple geometric shapes (cylinders and spheres) for clarity.
+                            The Denavit-Hartenberg parameters used for this UR5e model are:
                         </p>
+                        <div class="code-container">
+                            <pre><code>DH_PARAMS_UR5E = [
+    {'a': 0.0,    'alpha': π/2,  'd': 0.1625, 'theta_offset': 0.0},
+    {'a': -0.425, 'alpha': 0.0,  'd': 0.0,    'theta_offset': 0.0},
+    {'a': -0.3922,'alpha': 0.0,  'd': 0.0,    'theta_offset': 0.0},
+    {'a': 0.0,    'alpha': π/2,  'd': 0.1333, 'theta_offset': 0.0},
+    {'a': 0.0,    'alpha': -π/2, 'd': 0.0997, 'theta_offset': 0.0},
+    {'a': 0.0,    'alpha': 0.0,  'd': 0.0996, 'theta_offset': 0.0}
+]</code></pre>
+                        </div>
+
+                        <div class="post-summary">
+                            <h2>Key Features</h2>
+                            <ul class="summary-list">
+                                <li>Interactive joint angle sliders with real-time updates</li>
+                                <li>3D visualization with camera controls (rotate, zoom, pan)</li>
+                                <li>Forward kinematics calculation with matrix display</li>
+                                <li>Multiple inverse kinematics solutions</li>
+                                <li>Coordinate frame visualization for the TCP</li>
+                            </ul>
+                        </div>
+
+                        <h2>Applications in Robotics</h2>
                         <p>
-                            While this shows forward kinematics (calculating TCP pose from joint angles), the inverse problem (inverse kinematics or IK - calculating joint angles for a desired TCP pose) is more complex and often yields multiple solutions, as seen in the original Python example's output. This interactive tool focuses on visualizing the FK mapping.
+                            Understanding kinematics is fundamental to:
+                        </p>
+                        <ul>
+                            <li>Motion planning and trajectory generation</li>
+                            <li>Robot control and manipulation</li>
+                            <li>Workspace analysis and singularity detection</li>
+                            <li>Robot calibration and error assessment</li>
+                        </ul>
+
+                        <p>
+                            This interactive tool provides an intuitive way to explore these concepts and gain hands-on experience with robot kinematics.
                         </p>
 
                         <hr>
-                        <p><em>Explore the code and concepts behind robot kinematics! Connect via the <a href="../academia.html#contact-simplified">contact form</a> or <a href="https://www.linkedin.com/in/mo-saeidi-21a00015a/" target="_blank">LinkedIn</a>.</em></p>
+                        <p><em>Questions or thoughts on this project? Connect via the <a href="../academia.html#contact-simplified">contact form</a> or <a href="https://www.linkedin.com/in/mo-saeidi-21a00015a/" target="_blank">LinkedIn</a>.</em></p>
                     </section>
                 </article>
 
@@ -124,7 +212,6 @@
             </div>
         </footer>
     </div>
-
     <script src="../assets/js/main.js"></script>
     <script src="../assets/js/pages/interactive-kinematics.js"></script>
 </body>
