@@ -8,7 +8,7 @@ const DH_PARAMS_UR5E = [
     { a: -0.3922,alpha: 0.0,         d: 0.0,    theta_offset: 0.0 },
     { a: 0.0,    alpha: Math.PI / 2, d: 0.1333, theta_offset: 0.0 },
     { a: 0.0,    alpha: -Math.PI / 2,d: 0.0997, theta_offset: 0.0 },
-    { a: 0.0,    alpha: 0.0,         d: 0.0996, theta_offset: 0.0 } // Corrected d6 based on Python code
+    { a: 0.0,    alpha: 0.0,         d: 0.0996, theta_offset: 0.0 }
 ];
 
 const TCP_Z_OFFSET = 0.1565; // Example TCP offset, adjust if needed
@@ -25,24 +25,20 @@ const a3 = DH_PARAMS_UR5E[2].a; // Signed: -0.3922
 const d4 = DH_PARAMS_UR5E[3].d;
 const d5 = DH_PARAMS_UR5E[4].d;
 const d6 = DH_PARAMS_UR5E[5].d;
-const len_a2 = Math.abs(a2); // Keep for magnitude checks if needed
-const len_a3 = Math.abs(a3); // Keep for magnitude checks if needed
+const len_a2 = Math.abs(a2); // Absolute value for specific calculations matching Python source
+const len_a3 = Math.abs(a3); // Absolute value for specific calculations matching Python source
 
 
 // Tolerances (from Python)
 const tol_zero = 1e-9;
 const tol_singularity = 1e-7;
-const tol_compare = 1e-5; // Slightly looser for JS floating point is okay
+const tol_compare = 1e-5; // Verification tolerance
 const tol_geom = 1e-6;
 
 // --- Utility Functions ---
 
 /**
  * Clamps a value between a minimum and maximum.
- * @param {number} value The value to clamp.
- * @param {number} min The minimum allowed value.
- * @param {number} max The maximum allowed value.
- * @returns {number} The clamped value.
  */
 function clamp(value, min, max) {
     return Math.max(min, Math.min(value, max));
@@ -50,11 +46,8 @@ function clamp(value, min, max) {
 
 /**
  * Normalizes an angle to the range [-PI, PI].
- * @param {number} angle Angle in radians.
- * @returns {number} Normalized angle in radians.
  */
 function normalizeAngle(angle) {
-    // More robust normalization
     angle = angle % (2 * Math.PI);
     if (angle > Math.PI) {
         angle -= 2 * Math.PI;
@@ -67,11 +60,6 @@ function normalizeAngle(angle) {
 
 /**
  * Creates a Denavit-Hartenberg transformation matrix.
- * @param {number} a Link length.
- * @param {number} alpha Link twist.
- * @param {number} d Link offset.
- * @param {number} theta Joint angle.
- * @returns {THREE.Matrix4} The transformation matrix.
  */
 function dhMatrix(a, alpha, d, theta) {
     const cos_t = Math.cos(theta);
@@ -93,10 +81,6 @@ function dhMatrix(a, alpha, d, theta) {
 
 /**
  * Calculates Forward Kinematics for the UR5e.
- * @param {number[]} jointAngles Array of 6 joint angles in radians.
- * @param {object[]} dhParams DH parameters array.
- * @param {THREE.Matrix4} HFlangeTcp Transformation from flange to TCP.
- * @returns {{ points: THREE.Vector3[], T0_TCP: THREE.Matrix4, T0_Flange: THREE.Matrix4 } | null} Object containing joint positions, TCP pose, and Flange pose, or null on error.
  */
 function forwardKinematics(jointAngles, dhParams = DH_PARAMS_UR5E, HFlangeTcp = H_FLANGE_TCP) {
     // Input validation
@@ -108,7 +92,6 @@ function forwardKinematics(jointAngles, dhParams = DH_PARAMS_UR5E, HFlangeTcp = 
          console.error(`FK Error: jointAngles contains NaN values:`, jointAngles);
          return null;
     }
-
 
     const transforms = [new THREE.Matrix4()]; // Base frame (identity)
     const points = [new THREE.Vector3(0, 0, 0)]; // Base origin
@@ -145,7 +128,7 @@ function forwardKinematics(jointAngles, dhParams = DH_PARAMS_UR5E, HFlangeTcp = 
 
 /**
  * Calculates Inverse Kinematics for the UR5e.
- * Adapted from the provided Python analytical solver. VERSION 2 - Corrected based on Python logic.
+ * VERSION 3 - Aligning t5 and t3 calculations strictly with provided Python source.
  * @param {THREE.Matrix4} T_desired_TCP The desired TCP pose matrix relative to the base.
  * @param {object[]} dhParams DH parameters array.
  * @param {THREE.Matrix4} invHFlangeTcp Inverse transformation from TCP to flange.
@@ -155,108 +138,112 @@ function inverseKinematics(T_desired_TCP, dhParams = DH_PARAMS_UR5E, invHFlangeT
     const solutions = [];
     const T_flange = new THREE.Matrix4().multiplyMatrices(T_desired_TCP, invHFlangeTcp);
 
-    // Extract position and rotation from the desired Flange pose
-    const P60 = new THREE.Vector3().setFromMatrixPosition(T_flange); // Position of wrist 3 (flange) origin
-    const R06 = new THREE.Matrix3().setFromMatrix4(T_flange);       // Rotation matrix from base to flange
+    const P60 = new THREE.Vector3().setFromMatrixPosition(T_flange);
+    const R06 = new THREE.Matrix3().setFromMatrix4(T_flange);
 
     const pxd = P60.x;
     const pyd = P60.y;
     const pzd = P60.z;
 
-    // Desired rotation matrix elements
     const r11d = R06.elements[0]; const r12d = R06.elements[3]; const r13d = R06.elements[6];
     const r21d = R06.elements[1]; const r22d = R06.elements[4]; const r23d = R06.elements[7];
     const r31d = R06.elements[2]; const r32d = R06.elements[5]; const r33d = R06.elements[8];
 
-    // --- Calculate Theta 1 ---
-    // Position of wrist 2 center (P50)
-    const P50 = new THREE.Vector3(
-        pxd - d6 * r13d,
-        pyd - d6 * r23d,
-        pzd - d6 * r33d
-    );
-    const P50x = P50.x;
-    const P50y = P50.y;
-    const P50z = P50.z; // Needed later
+    // --- Theta 1 ---
+    const P50 = new THREE.Vector3(pxd - d6 * r13d, pyd - d6 * r23d, pzd - d6 * r33d);
+    const P50x = P50.x; // Python 'B'
+    const P50y = P50.y; // Python 'A'
+    const P50z = P50.z;
 
-    // Check reachability for theta1 (projection onto XY plane)
+    // console.log(`--- IK Start ---`);
+    // console.log(`P60: [${pxd.toFixed(4)}, ${pyd.toFixed(4)}, ${pzd.toFixed(4)}]`);
+    // console.log(`P50: [${P50x.toFixed(4)}, ${P50y.toFixed(4)}, ${P50z.toFixed(4)}]`);
+
     const dist_sq_xy = P50x * P50x + P50y * P50y;
     const sqrt_arg_t1_sq = dist_sq_xy - d4 * d4;
 
     if (sqrt_arg_t1_sq < -tol_geom) {
-        // console.debug("IK Debug: Out of reach for theta1.", sqrt_arg_t1_sq);
+        // console.log(`IK Fail: t1 out of reach (sqrt_arg_t1_sq = ${sqrt_arg_t1_sq.toFixed(6)})`);
         return [];
     }
     const sqrt_arg_t1 = Math.max(0, sqrt_arg_t1_sq);
     const sqrt_val_t1 = Math.sqrt(sqrt_arg_t1);
 
-    // Check singularity for theta1 (P50 projection close to origin)
-    // Python code check: if abs(B) < tol_singularity and abs(A) < tol_singularity: return []
-    // A = P50y, B = P50x
     if (Math.abs(P50x) < tol_singularity && Math.abs(P50y) < tol_singularity) {
-       // console.debug("IK Debug: Singularity detected for theta1 (P50x and P50y near zero).");
-       return [];
+        // console.log(`IK Fail: t1 singularity (P50x, P50y near zero)`);
+        return [];
     }
 
-    // Calculate theta1 based on Python logic: atan2(B, -A) +/- atan2(sqrt, d4)
-    // B = P50x, A = P50y
-    const term1_t1 = Math.atan2(P50x, -P50y); // Note the order and sign: atan2(y, x) -> atan2(P50x, -P50y)
-    const term2_t1 = Math.atan2(sqrt_val_t1, d4); // Note the order: atan2(y, x) -> atan2(sqrt, d4)
+    const term1_t1 = Math.atan2(P50x, -P50y); // Matches Python atan2(B, -A)
+    const term2_t1 = Math.atan2(sqrt_val_t1, d4); // Matches Python atan2(sqrt, d4)
 
     const theta1_sol = [
-        normalizeAngle(term1_t1 + term2_t1), // Solution 1
-        normalizeAngle(term1_t1 - term2_t1)  // Solution 2
+        normalizeAngle(term1_t1 + term2_t1),
+        normalizeAngle(term1_t1 - term2_t1)
     ];
+    // console.log(`t1 sols (rad): [${theta1_sol[0].toFixed(4)}, ${theta1_sol[1].toFixed(4)}]`);
 
-    // --- Iterate through Theta 1 solutions ---
+    // --- Iterate Theta 1 ---
     for (let t1_idx = 0; t1_idx < theta1_sol.length; t1_idx++) {
         const t1 = theta1_sol[t1_idx];
         const s1 = Math.sin(t1);
         const c1 = Math.cos(t1);
+        // console.log(`\nProcessing t1_idx=${t1_idx}, t1=${t1.toFixed(4)}`);
 
-        // --- Calculate Theta 5 ---
-        // M depends on the Z-axis of the desired flange orientation projected onto the XY plane after rotating by -t1
-        const M_val = r13d * c1 + r23d * s1; // Corrected based on common derivations (Check sign if issues persist)
+        // --- Theta 5 (Strictly following Python source logic) ---
+        // Python M_val = s1 * r13d - c1 * r23d
+        const M_val = s1 * r13d - c1 * r23d; // This is M in Python source for t5 calc
         const M = clamp(M_val, -1.0, 1.0);
 
-        const sqrt_arg_t5_sq = 1.0 - M * M;
-        if (sqrt_arg_t5_sq < -tol_geom) {
-             // console.debug(`IK Debug (t1_idx ${t1_idx}): Invalid state for theta5 calculation (sqrt_arg < 0). M=${M}`);
-             continue;
+        // Python D = c1 * r22d - s1 * r12d
+        // Python E = s1 * r11d - c1 * r21d
+        const D_py = c1 * r22d - s1 * r12d;
+        const E_py = s1 * r11d - c1 * r21d;
+
+        const sqrt_arg_ED_sq = E_py * E_py + D_py * D_py;
+        // Python source check: if abs(M**2 + sqrt_arg_ED - 1.0) > tol_compare: continue
+        // This seems like a verification step in Python, let's check it
+        if (Math.abs(M * M + sqrt_arg_ED_sq - 1.0) > tol_compare) {
+             // console.log(`IK Fail: t1_idx=${t1_idx}: M/D/E consistency check failed (M^2 + D^2 + E^2 != 1). Diff=${Math.abs(M*M + sqrt_arg_ED_sq - 1.0).toExponential(3)}`);
+             continue; // Skip this t1 if orientation matrix is inconsistent
         }
-        const sqrt_arg_t5 = Math.max(0, sqrt_arg_t5_sq);
-        const sqrt_val_t5 = Math.sqrt(sqrt_arg_t5); // This is |sin(t5)|
 
+        const sqrt_arg_ED = Math.max(0, sqrt_arg_ED_sq);
+        const sqrt_val_ED = Math.sqrt(sqrt_arg_ED); // This is |sin(t5)| in Python's logic
+
+        // Python source check: if abs(sqrt_val_ED) < tol_singularity and abs(M) < tol_singularity: continue
+        if (sqrt_val_ED < tol_singularity && Math.abs(M) < tol_singularity) {
+            // console.log(`IK Fail: t1_idx=${t1_idx}: t5 singularity (M and sqrt_val_ED near zero)`);
+            continue;
+        }
+
+        // Python source: t5_sol = [math.atan2(sqrt_val_ED, M), math.atan2(-sqrt_val_ED, M)]
         const t5_sol = [
-            normalizeAngle(Math.atan2(sqrt_val_t5, M)),  // Elbow down type
-            normalizeAngle(Math.atan2(-sqrt_val_t5, M)) // Elbow up type
+            normalizeAngle(Math.atan2(sqrt_val_ED, M)),  // atan2( |sin(t5)|, cos(t5) )
+            normalizeAngle(Math.atan2(-sqrt_val_ED, M)) // atan2( -|sin(t5)|, cos(t5) )
         ];
+        // console.log(` t5 sols (rad): [${t5_sol[0].toFixed(4)}, ${t5_sol[1].toFixed(4)}] (M=${M.toFixed(4)}, sqrt_ED=${sqrt_val_ED.toFixed(4)})`);
 
-        // --- Iterate through Theta 5 solutions ---
+        // --- Iterate Theta 5 ---
         for (let t5_idx = 0; t5_idx < t5_sol.length; t5_idx++) {
             const t5 = t5_sol[t5_idx];
-            const s5 = Math.sin(t5);
-            const c5 = Math.cos(t5);
+            const s5 = Math.sin(t5); // Need sine for t6 logic
+            const c5 = Math.cos(t5); // Need cosine for KC/KS
+            // console.log(`  Processing t5_idx=${t5_idx}, t5=${t5.toFixed(4)}`);
 
-            let t6 = 0.0; // Default t6
-
+            // --- Theta 6 ---
+            let t6 = 0.0;
             const is_singular_s5 = Math.abs(s5) < tol_singularity;
 
             if (is_singular_s5) {
-                // console.debug(`IK Debug (t1_idx ${t1_idx}, t5_idx ${t5_idx}): Wrist singularity detected (t5 near 0 or PI). Setting t6=0.`);
-                t6 = 0.0; // At singularity, t6 is arbitrary, set to 0
+                // console.log(`   t6 singularity (s5=${s5.toExponential(3)}), setting t6=0`);
+                t6 = 0.0;
             } else {
-                // Calculate Theta 6 based on Python logic
-                // Python D = c1 * r22d - s1 * r12d
-                // Python E = s1 * r11d - c1 * r21d
-                const D_py = c1 * r22d - s1 * r12d;
-                const E_py = s1 * r11d - c1 * r21d; // Corrected E calculation
-
+                // Use D_py, E_py calculated earlier
                 if (Math.abs(D_py) < tol_singularity && Math.abs(E_py) < tol_singularity) {
-                     // console.debug(`IK Debug (t1_idx ${t1_idx}, t5_idx ${t5_idx}): D and E near zero in t6 calculation.`);
-                     continue;
+                    // console.log(`   IK Fail: t5_idx=${t5_idx}: D_py and E_py near zero in t6 calculation.`);
+                    continue;
                 }
-
                 // Python logic: if s5 > 0: t6 = atan2(D, E) else: t6 = atan2(-D, -E)
                 if (s5 > 0) {
                     t6 = normalizeAngle(Math.atan2(D_py, E_py));
@@ -264,98 +251,96 @@ function inverseKinematics(T_desired_TCP, dhParams = DH_PARAMS_UR5E, invHFlangeT
                     t6 = normalizeAngle(Math.atan2(-D_py, -E_py));
                 }
             }
+            // console.log(`   t6 (rad): ${t6.toFixed(4)} (D_py=${D_py.toFixed(4)}, E_py=${E_py.toFixed(4)}, s5=${s5.toFixed(4)})`);
 
-            // --- Calculate Theta 3 ---
+            // --- Theta 3 (Strictly following Python source logic) ---
             const s6 = Math.sin(t6);
             const c6 = Math.cos(t6);
 
-            // Calculate t234 (sum angle) - This part seems consistent in many derivations
-            const atan_y_234 = -s5 * (r13d * c1 + r23d * s1); // Component related to base Z = -s5 * M
-            const atan_x_234 = r33d;                          // Component related to desired Z
-
+            // t234 calculation seems standard
+            const atan_y_234 = -s5 * (r13d * c1 + r23d * s1); // = -s5 * (Standard M from other derivations)
+            const atan_x_234 = r33d;
             if (Math.abs(atan_y_234) < tol_singularity && Math.abs(atan_x_234) < tol_singularity) {
-                // console.debug(`IK Debug (t1_idx ${t1_idx}, t5_idx ${t5_idx}): atan_y/x_234 near zero.`);
+                // console.log(`   IK Fail: t5_idx=${t5_idx}: atan_y/x_234 near zero for t234 calc.`);
                 continue;
             }
             const t234 = Math.atan2(atan_y_234, atan_x_234);
             const s234 = Math.sin(t234);
             const c234 = Math.cos(t234);
+            // console.log(`   t234 (rad): ${t234.toFixed(4)}`);
 
-            // Calculate KC and KS based on Python source logic (using P60/pxd, pyd, pzd)
-            // Python KC = c1*pxd + s1*pyd - s234*d5 + c234*s5*d6
-            // Python KS = pzd - d1 + c234*d5 + s234*s5*d6
-            const KC = c1 * pxd + s1 * pyd - s234 * d5 + c234 * s5 * d6; // Corrected KC
-            const KS = pzd - d1 + c234 * d5 + s234 * s5 * d6; // Corrected KS
+            // KC/KS using Python source formulas
+            const KC = c1 * pxd + s1 * pyd - s234 * d5 + c234 * s5 * d6;
+            const KS = pzd - d1 + c234 * d5 + s234 * s5 * d6;
+            // console.log(`   KC=${KC.toFixed(4)}, KS=${KS.toFixed(4)}`);
 
             const dist_sq_13 = KC * KC + KS * KS;
-            const denom_t3 = 2 * a2 * a3; // Use SIGNED a2, a3 here for Law of Cosines application
-
+            // Denominator and Numerator using len_a2, len_a3 as per Python source
+            const denom_t3 = 2 * len_a2 * len_a3;
             if (Math.abs(denom_t3) < tol_zero) {
-                // console.debug(`IK Debug (t1_idx ${t1_idx}, t5_idx ${t5_idx}): Denominator for t3 is zero.`);
+                // console.log(`   IK Fail: t5_idx=${t5_idx}: Denominator for t3 is zero.`);
                 continue;
             }
+            const cos_t3_arg = (dist_sq_13 - len_a2 * len_a2 - len_a3 * len_a3) / denom_t3;
+            // console.log(`   cos_t3_arg: ${cos_t3_arg.toFixed(6)} (dist_sq=${dist_sq_13.toFixed(4)}, len_a2^2=${(len_a2*len_a2).toFixed(4)}, len_a3^2=${(len_a3*len_a3).toFixed(4)}, denom=${denom_t3.toFixed(4)})`);
 
-            // Law of Cosines: dist_sq_13 = a2^2 + a3^2 - 2*a2*a3*cos(PI - t3)
-            // Since a2, a3 are negative lengths in DH, let's use lengths and adjust angle
-            // dist_sq_13 = len_a2^2 + len_a3^2 + 2*len_a2*len_a3*cos(t3) -> Matches Python form if a2,a3 lengths used there
-            // Let's stick to the Python formula structure directly:
-            const cos_t3_arg = (dist_sq_13 - a2 * a2 - a3 * a3) / denom_t3; // Using signed a2, a3
 
             if (Math.abs(cos_t3_arg) > 1.0 + tol_geom) {
-                // console.debug(`IK Debug (t1..t3 idx ${t1_idx},${t5_idx},?): Elbow out of reach |cos(t3)| > 1. Arg: ${cos_t3_arg}`);
+                // console.log(`   IK Fail: t5_idx=${t5_idx}: Elbow out of reach |cos(t3)| > 1. Arg: ${cos_t3_arg.toFixed(6)}`);
                 continue;
             }
             const cos_t3 = clamp(cos_t3_arg, -1.0, 1.0);
 
             const sqrt_arg_t3_sq = 1.0 - cos_t3 * cos_t3;
              if (sqrt_arg_t3_sq < -tol_geom) {
-                 // console.debug(`IK Debug (t1..t3 idx ${t1_idx},${t5_idx},?): Invalid state for theta3 calculation (sqrt_arg < 0). cos_t3=${cos_t3}`);
+                 // console.log(`   IK Fail: t5_idx=${t5_idx}: Invalid state for theta3 calculation (sqrt_arg < 0). cos_t3=${cos_t3.toFixed(6)}`);
                  continue;
              }
             const sqrt_arg_t3 = Math.max(0, sqrt_arg_t3_sq);
-            const sqrt_val_t3 = Math.sqrt(sqrt_arg_t3); // This is |sin(t3)|
+            const sqrt_val_t3 = Math.sqrt(sqrt_arg_t3); // |sin(t3)|
 
             const t3_sol = [
                 normalizeAngle(Math.atan2(sqrt_val_t3, cos_t3)),
                 normalizeAngle(Math.atan2(-sqrt_val_t3, cos_t3))
             ];
+            // console.log(`    t3 sols (rad): [${t3_sol[0].toFixed(4)}, ${t3_sol[1].toFixed(4)}]`);
 
-            // --- Iterate through Theta 3 solutions ---
+            // --- Iterate Theta 3 ---
             for (let t3_idx = 0; t3_idx < t3_sol.length; t3_idx++) {
                 const t3 = t3_sol[t3_idx];
                 const s3 = Math.sin(t3);
-                const c3 = cos_t3;
+                const c3 = cos_t3; // Use the calculated cosine
+                // console.log(`     Processing t3_idx=${t3_idx}, t3=${t3.toFixed(4)}`);
 
-                // --- Calculate Theta 2 ---
-                // Python term1_t2 = math.atan2(KS, KC)
-                // Python term2_y_t2 = a3 * s3
-                // Python term2_x_t2 = a2 + a3 * c3 (USE SIGNED a2, a3)
+                // --- Theta 2 ---
                 const term1_t2_y = KS;
                 const term1_t2_x = KC;
-
                  if (Math.abs(term1_t2_y) < tol_singularity && Math.abs(term1_t2_x) < tol_singularity) {
-                    // console.debug(`IK Debug (t1..t3 idx ${t1_idx},${t5_idx},${t3_idx}): KS and KC near zero in t2 calculation.`);
+                    // console.log(`     IK Fail: t3_idx=${t3_idx}: KS and KC near zero in t2 calculation.`);
                     continue;
                  }
                 const term1_t2 = Math.atan2(term1_t2_y, term1_t2_x);
 
-                const term2_t2_y = a3 * s3; // Use SIGNED a3
-                const term2_t2_x = a2 + a3 * c3; // Use SIGNED a2, a3
-
+                // Use SIGNED a2, a3 as per Python source
+                const term2_t2_y = a3 * s3;
+                const term2_t2_x = a2 + a3 * c3;
                  if (Math.abs(term2_t2_y) < tol_singularity && Math.abs(term2_t2_x) < tol_singularity) {
-                    // console.debug(`IK Debug (t1..t3 idx ${t1_idx},${t5_idx},${t3_idx}): term2 y/x near zero in t2 calculation.`);
+                    // console.log(`     IK Fail: t3_idx=${t3_idx}: term2 y/x near zero in t2 calculation.`);
                     continue;
                  }
                 const term2_t2 = Math.atan2(term2_t2_y, term2_t2_x);
 
                 const t2 = normalizeAngle(term1_t2 - term2_t2);
+                // console.log(`     t2 (rad): ${t2.toFixed(4)} (term1=${term1_t2.toFixed(4)}, term2=${term2_t2.toFixed(4)})`);
 
-                // --- Calculate Theta 4 ---
+                // --- Theta 4 ---
                 const t4 = normalizeAngle(t234 - t2 - t3);
+                // console.log(`     t4 (rad): ${t4.toFixed(4)}`);
 
                 // --- Store Solution ---
                 const sol_angles_raw = [t1, t2, t3, t4, t5, t6];
                 const sol_angles_normalized = sol_angles_raw.map(normalizeAngle);
+                // console.log(`     Solution Candidate (rad): [${sol_angles_normalized.map(a => a.toFixed(3)).join(', ')}]`);
 
                 // --- Verification ---
                 const fkCheck = forwardKinematics(sol_angles_normalized, dhParams, H_FLANGE_TCP);
@@ -367,36 +352,36 @@ function inverseKinematics(T_desired_TCP, dhParams = DH_PARAMS_UR5E, invHFlangeT
                     }
                     const avgDiff = diff / 16;
 
-                    if (avgDiff < tol_compare) { // Check average element difference
+                    if (avgDiff < tol_compare) {
+                         // console.log(`     SUCCESS: Solution verified. Avg Diff: ${avgDiff.toExponential(3)}`);
                          solutions.push([sol_angles_normalized, t1_idx, t5_idx, t3_idx]);
                     } else {
-                        // console.warn(`IK Verify Fail (t1..t3 idx ${t1_idx},${t5_idx},${t3_idx}): FK mismatch. Avg Diff: ${avgDiff.toExponential(3)} > Tol: ${tol_compare.toExponential(3)}`);
-                        // console.log(" Target Matrix:", T_desired_TCP.elements.map(n=>n.toFixed(3)));
-                        // console.log(" Actual Matrix:", T_check_TCP.elements.map(n=>n.toFixed(3)));
-                        // console.log(" Failed Angles (rad):", sol_angles_normalized.map(a => a.toFixed(3)));
+                         // console.warn(`     VERIFY FAIL: FK mismatch. Avg Diff: ${avgDiff.toExponential(3)} > Tol: ${tol_compare.toExponential(3)}`);
+                         // console.log("      Target Matrix:", T_desired_TCP.elements.map(n=>n.toFixed(3)));
+                         // console.log("      Actual Matrix:", T_check_TCP.elements.map(n=>n.toFixed(3)));
+                         // console.log("      Failed Angles (rad):", sol_angles_normalized.map(a => a.toFixed(3)));
                     }
                 } else {
-                     console.error(`IK Verify Error: FK failed for solution candidate [${sol_angles_normalized.map(a=>a.toFixed(3))}].`);
+                     console.error(`     VERIFY ERROR: FK failed for solution candidate [${sol_angles_normalized.map(a=>a.toFixed(3))}].`);
                 }
 
             } // end t3 loop
         } // end t5 loop
     } // end t1 loop
 
-    // Remove duplicate solutions (can happen near singularities or due to angle normalization)
+    // Remove duplicate solutions
     const uniqueSolutions = [];
     const seenSolutions = new Set();
     for (const sol of solutions) {
-        // Create a key based on angles rounded to ~4-5 decimal places to account for float variations
         const key = sol[0].map(a => a.toFixed(5)).join(',');
         if (!seenSolutions.has(key)) {
             uniqueSolutions.push(sol);
             seenSolutions.add(key);
         } else {
-            // console.debug("IK Debug: Duplicate solution removed:", key);
+            // console.log("IK Debug: Duplicate solution removed:", key);
         }
     }
-
+    // console.log(`--- IK End: Found ${uniqueSolutions.length} unique solutions ---`);
     return uniqueSolutions;
 }
 
@@ -524,9 +509,6 @@ const tcpGeometry = new THREE.SphereGeometry(jointRadius * 1.2, 16, 16);
 /**
  * Creates and adds a robot arm visualization to the scene.
  * Uses shared geometries and materials for efficiency.
- * @param {THREE.Vector3[]} points Array of joint positions (including base and TCP).
- * @param {THREE.Matrix4} T0_TCP The TCP pose matrix.
- * @param {string} type 'fk' or 'ik' to determine materials.
  */
 function drawRobot(points, T0_TCP, type = 'ik') {
     if (!points || points.length < 8) { // Expect Base + 6 Joints + TCP = 8 points
@@ -536,74 +518,49 @@ function drawRobot(points, T0_TCP, type = 'ik') {
 
     const group = new THREE.Group();
     const currentLinkMat = (type === 'fk') ? fkLinkMaterial : ikLinkMaterial;
-    // Use solid red for FK joints, transparent blue for IK joints
     const currentJointMat = (type === 'fk') ? fkJointMaterial : ikJointMaterial;
 
-    // Draw Links (as scaled cylinders)
+    // Draw Links
     for (let i = 0; i < points.length - 1; i++) {
         const startPoint = points[i];
         const endPoint = points[i + 1];
         const distance = startPoint.distanceTo(endPoint);
 
-        if (distance < 1e-4) continue; // Skip zero-length links
+        if (distance < 1e-4) continue;
 
         const linkCylinder = new THREE.Mesh(linkGeometry, currentLinkMat);
-
-        // Position cylinder halfway between points
-        linkCylinder.position.copy(startPoint).lerp(endPoint, 0.5); // More robust positioning
-
-        // Scale cylinder to the correct length
+        linkCylinder.position.copy(startPoint).lerp(endPoint, 0.5);
         linkCylinder.scale.y = distance;
-
-        // Make cylinder point from startPoint to endPoint
         linkCylinder.lookAt(endPoint);
-        linkCylinder.rotateX(Math.PI / 2); // Correct cylinder orientation after lookAt
-
+        linkCylinder.rotateX(Math.PI / 2);
         group.add(linkCylinder);
     }
 
-    // Draw Joints (as spheres) - Skip base (point 0)
-    for (let i = 1; i < points.length -1; i++) { // Exclude base and TCP point for generic joints
+    // Draw Joints
+    for (let i = 1; i < points.length -1; i++) {
          const jointSphere = new THREE.Mesh(jointGeometry, currentJointMat);
          jointSphere.position.copy(points[i]);
          group.add(jointSphere);
     }
 
-    // Draw TCP (as a slightly larger sphere)
+    // Draw TCP Sphere
     const tcpSphere = new THREE.Mesh(tcpGeometry, tcpMaterial);
-    tcpSphere.position.copy(points[points.length - 1]); // Last point is TCP
+    tcpSphere.position.copy(points[points.length - 1]);
     group.add(tcpSphere);
 
-    // Draw TCP Frame (small axes helper attached to TCP)
+    // Draw TCP Frame
     const tcpFrame = new THREE.AxesHelper(0.08);
-    // Apply pose directly to the helper
-    tcpFrame.matrixAutoUpdate = false; // Important for performance
+    tcpFrame.matrixAutoUpdate = false;
     tcpFrame.matrix.copy(T0_TCP);
-    // Adjust position slightly if needed, or rely on T0_TCP containing the correct position
-    // tcpFrame.position.copy(points[points.length - 1]);
-    // const tcpRotation = new THREE.Quaternion().setFromRotationMatrix(T0_TCP);
-    // tcpFrame.setRotationFromQuaternion(tcpRotation);
     group.add(tcpFrame);
 
-
-    robotGroup.add(group); // Add this robot configuration to the main group
+    robotGroup.add(group);
 }
 
 /** Clear all previously drawn robot arms */
 function clearRobots() {
-    // Remove all children from the group
     while (robotGroup.children.length > 0) {
-        const child = robotGroup.children[0];
-        // Optional: Dispose geometry/material if they are unique per robot instance
-        // if (child instanceof THREE.Group) { // If each robot is a group
-        //     child.traverse(obj => {
-        //         if (obj instanceof THREE.Mesh) {
-        //             obj.geometry?.dispose();
-        //             // Don't dispose shared materials
-        //         }
-        //     });
-        // }
-        robotGroup.remove(child);
+        robotGroup.remove(robotGroup.children[0]);
     }
 }
 
@@ -668,18 +625,14 @@ function updateVisualization() {
 
     if (fkResult) {
         T_Target_TCP = fkResult.T0_TCP;
-        // Draw the FK robot configuration (red)
         drawRobot(fkResult.points, T_Target_TCP, 'fk');
-        // Update and show the target frame helper
-        targetFrameHelper.matrixAutoUpdate = false; // Use matrix directly
+        targetFrameHelper.matrixAutoUpdate = false;
         targetFrameHelper.matrix.copy(T_Target_TCP);
-        // targetFrameHelper.position.setFromMatrixPosition(T_Target_TCP);
-        // targetFrameHelper.setRotationFromMatrix(T_Target_TCP);
         targetFrameHelper.visible = true;
         fkSuccess = true;
     } else {
         console.error("FK failed for current slider angles:", sliderJointAngles.map(a=>(a*180/Math.PI).toFixed(1)));
-        targetFrameHelper.visible = false; // Hide target if FK fails
+        targetFrameHelper.visible = false;
     }
 
     // 2. Inverse Kinematics for the Target Pose
@@ -688,20 +641,20 @@ function updateVisualization() {
     if (fkSuccess && T_Target_TCP) {
         const startTime = performance.now();
         try {
+             // console.log("--- Calling IK ---");
              ikSolutions = inverseKinematics(T_Target_TCP);
+             // console.log(`--- IK Returned ${ikSolutions.length} solutions ---`);
         } catch (e) {
             console.error("Error during Inverse Kinematics:", e);
-            ikSolutions = []; // Ensure it's an array on error
+            ikSolutions = [];
         }
         const endTime = performance.now();
         ikTime = endTime - startTime;
 
-        // Draw IK solutions (blue, transparent)
+        // Draw IK solutions
         if (ikSolutions && ikSolutions.length > 0) {
             for (const solution of ikSolutions) {
                 const ikAngles = solution[0];
-                // Avoid re-drawing the exact FK configuration if it's found by IK
-                // Check with tolerance due to floating point
                 const isFkConfig = ikAngles.every((angle, i) => Math.abs(normalizeAngle(angle - sliderJointAngles[i])) < tol_compare);
 
                 if (!isFkConfig) {
@@ -714,10 +667,7 @@ function updateVisualization() {
                 }
             }
         }
-    } else {
-         // console.log("Skipping IK calculation because FK failed.");
     }
-
 
     // 3. Update Info Display
     updateInfoDisplay(sliderJointAngles, T_Target_TCP, ikSolutions, ikTime);
@@ -726,10 +676,6 @@ function updateVisualization() {
 
 /**
  * Updates the text display with current angles, FK pose, and IK info.
- * @param {number[]} currentAngles The current slider joint angles.
- * @param {THREE.Matrix4 | null} tcpPose The calculated TCP pose from FK.
- * @param {Array} ikSolutions Array of IK solution angles.
- * @param {number} ikTime Time taken for IK calculation in ms.
  */
 function updateInfoDisplay(currentAngles, tcpPose, ikSolutions, ikTime) {
     let info = `Current Angles (deg): [${currentAngles.map(a => (a * 180 / Math.PI).toFixed(1)).join(', ')}]\n`;
@@ -742,13 +688,6 @@ function updateInfoDisplay(currentAngles, tcpPose, ikSolutions, ikTime) {
         info += `-------\n`;
         info += `IK Solutions Found: ${ikSolutions.length}\n`;
         info += `IK Calculation Time: ${ikTime.toFixed(1)} ms`;
-        // Optional: List IK solution angles for debugging
-        // if (ikSolutions.length > 0) {
-        //     info += "\nIK Angles (deg):";
-        //     ikSolutions.forEach((sol, idx) => {
-        //         info += `\n  Sol ${idx + 1}: [${sol[0].map(a => (a * 180 / Math.PI).toFixed(1)).join(', ')}]`;
-        //     });
-        // }
     } else {
         info += `FK Calculation Failed.\n`;
         info += `-------\n`;
@@ -769,9 +708,9 @@ document.addEventListener('DOMContentLoaded', () => {
     } catch (error) {
         console.error("Initialization failed:", error);
         infoDisplay.textContent = `Error initializing visualization: ${error.message}`;
-        if (loadingIndicator) { // Check if element exists
+        if (loadingIndicator) {
              loadingIndicator.textContent = "Error";
-             loadingIndicator.style.display = 'flex'; // Keep showing error
+             loadingIndicator.style.display = 'flex';
         }
     }
 });
