@@ -3,167 +3,21 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Interactive UR5e FK/IK Visualization - Mo Saeidi</title>
-    <meta name="description" content="Explore UR5e kinematics interactively. Adjust joint angles via sliders (Forward Kinematics) and see the robot configuration update. The visualization also calculates and displays all corresponding Inverse Kinematics solutions for the resulting end-effector pose.">
+    <title>Interactive UR5e Kinematics Visualization - Mo Saeidi</title>
+    <meta name="description" content="An interactive 3D visualization of UR5e Forward and Inverse Kinematics. Adjust joint angles and see the resulting pose and all possible IK solutions.">
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet">
 
-    <link rel="stylesheet" href="../assets/css/base.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css"/>
+    <script src="https://kit.fontawesome.com/YOUR_KIT_ID.js" crossorigin="anonymous"></script> <link rel="stylesheet" href="../assets/css/base.css" />
     <link rel="stylesheet" href="../assets/css/layout.css" />
     <link rel="stylesheet" href="../assets/css/components/navbar.css" />
     <link rel="stylesheet" href="../assets/css/components/buttons.css" />
     <link rel="stylesheet" href="../assets/css/components/footer.css" />
     <link rel="stylesheet" href="../assets/css/pages/post.css" />
-
-    <style>
-        .interactive-kinematics-container {
-            display: flex;
-            flex-wrap: wrap; /* Allow wrapping on smaller screens */
-            gap: 2rem;
-            margin-top: 2rem;
-            margin-bottom: 2rem;
-            background-color: var(--background-alt); /* Match theme */
-            padding: 1.5rem;
-            border-radius: var(--border-radius);
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        }
-
-        #kinematics-visualization {
-            flex: 2; /* Takes more space */
-            min-width: 300px; /* Minimum width for the canvas */
-            min-height: 450px; /* Increased height */
-            background-color: #1a202c; /* Darker background for contrast */
-            border-radius: var(--border-radius);
-            position: relative; /* Needed for potential overlays */
-            overflow: hidden; /* Clip content */
-            cursor: grab; /* Indicate interactivity */
-        }
-         #kinematics-visualization:active {
-             cursor: grabbing;
-         }
-         #kinematics-visualization canvas {
-             display: block; /* Remove extra space below canvas */
-             width: 100% !important;
-             height: 100% !important;
-         }
-
-
-        .controls-panel {
-            flex: 1; /* Takes less space */
-            min-width: 250px; /* Minimum width for controls */
-            display: flex;
-            flex-direction: column;
-            gap: 0.8rem;
-        }
-
-        .slider-container {
-            display: flex;
-            flex-direction: column;
-            gap: 0.2rem;
-        }
-
-        .slider-container label {
-            font-size: 0.85rem;
-            color: var(--text-muted);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-         .slider-container label .value-display {
-             font-weight: 500;
-             color: var(--text-primary);
-             background-color: var(--background-code);
-             padding: 0.1rem 0.4rem;
-             border-radius: 4px;
-             font-family: 'Roboto Mono', monospace;
-             font-size: 0.8rem;
-             min-width: 3em; /* Ensure space for value */
-             text-align: right;
-         }
-
-
-        .slider-container input[type="range"] {
-            width: 100%;
-            cursor: pointer;
-            accent-color: var(--primary-color); /* Style slider thumb/track */
-        }
-
-        /* Style range sliders for better theme consistency */
-        input[type="range"] {
-            -webkit-appearance: none; /* Override default look */
-            appearance: none;
-            width: 100%;
-            height: 8px; /* Track height */
-            background: var(--background-alt-2); /* Track background */
-            border-radius: 5px;
-            outline: none;
-            opacity: 0.9;
-            transition: opacity .2s;
-        }
-
-        input[type="range"]:hover {
-            opacity: 1;
-        }
-
-        /* Thumb styles - Webkit */
-        input[type="range"]::-webkit-slider-thumb {
-            -webkit-appearance: none;
-            appearance: none;
-            width: 18px; /* Thumb width */
-            height: 18px; /* Thumb height */
-            background: var(--primary-color); /* Thumb color */
-            border-radius: 50%;
-            cursor: pointer;
-        }
-
-        /* Thumb styles - Firefox */
-        input[type="range"]::-moz-range-thumb {
-            width: 18px;
-            height: 18px;
-            background: var(--primary-color);
-            border-radius: 50%;
-            cursor: pointer;
-            border: none; /* Remove default border */
-        }
-
-        .info-display { /* Renamed from pose-display */
-             margin-top: 1rem;
-             padding: 0.8rem;
-             background-color: var(--background-code);
-             border-radius: var(--border-radius);
-             font-family: 'Roboto Mono', monospace;
-             font-size: 0.8rem;
-             line-height: 1.4;
-             color: var(--text-muted);
-             white-space: pre-wrap; /* Allow wrapping */
-             word-break: break-all; /* Break long strings */
-             max-height: 200px; /* Limit height */
-             overflow-y: auto; /* Add scroll if needed */
-        }
-         .info-display strong {
-             color: var(--text-primary);
-             font-weight: 500;
-             display: block; /* Make title take full line */
-             margin-bottom: 0.5em;
-         }
-
-
-        /* Responsive adjustments */
-        @media (max-width: 768px) {
-            .interactive-kinematics-container {
-                flex-direction: column; /* Stack elements vertically */
-            }
-             #kinematics-visualization {
-                 min-height: 350px; /* Adjust height */
-             }
-             .info-display {
-                 max-height: 150px; /* Adjust height on smaller screens */
-             }
-        }
-    </style>
-</head>
+    <link rel="stylesheet" href="../assets/css/pages/interactive-kinematics.css" /> </head>
 <body>
     <div class="page-wrapper">
         <header class="header">
@@ -190,82 +44,75 @@
                     <header class="post-header">
                         <div class="post-meta">
                             <span class="post-category">Robotics & Visualization</span>
-                            <time datetime="2025-04-27">April 27, 2025</time>
-                        </div>
-                        <h1 class="post-title">Interactive UR5e Forward & Inverse Kinematics Visualization</h1>
+                             <time datetime="2025-04-27">April 27, 2025</time> </div>
+                        <h1 class="post-title">Interactive UR5e Forward & Inverse Kinematics</h1>
                     </header>
 
                     <section class="post-content">
                         <p>
-                            Understanding robot kinematics – the relationship between joint angles and the end-effector (TCP) pose – is fundamental in robotics. This interactive visualization demonstrates both Forward Kinematics (FK) and Inverse Kinematics (IK) for a UR5e robot arm in real-time 3D.
+                            Understanding the relationship between a robot's joint angles and its end-effector position/orientation is fundamental in robotics. This interactive tool demonstrates Forward Kinematics (FK) and Inverse Kinematics (IK) for the Universal Robots UR5e arm.
                         </p>
 
-                        <h2>Forward Kinematics (FK)</h2>
+                        <h2>How it Works</h2>
+                        <ul>
+                            <li><strong>Forward Kinematics (FK):</strong> Given a set of joint angles $q = (q_1, q_2, q_3, q_4, q_5, q_6)$, FK calculates the resulting pose (position and orientation) of the robot's Tool Center Point (TCP). Use the sliders below to manipulate the joint angles (in radians). The <strong>solid red robot arm</strong> shows the configuration resulting from your chosen angles. The larger coordinate frame indicates the calculated TCP pose.</li>
+                            <li><strong>Inverse Kinematics (IK):</strong> Given a desired TCP pose $T_{desired}$, IK calculates the set(s) of joint angles $q$ that can achieve that pose. For a 6-DOF arm like the UR5e, there can be multiple solutions (typically up to 8). This tool takes the TCP pose calculated from the FK (based on your slider inputs) and feeds it into the IK solver. The <strong>dashed, colored robot arms</strong> represent all the valid IK solutions found for that target TCP pose.</li>
+                        </ul>
+
+                        <h2>Interact!</h2>
                         <p>
-                            Forward Kinematics calculates the final position and orientation of the robot's TCP given the angles of each of its joints. We use the Denavit-Hartenberg (DH) parameters specific to the UR5e.
-                        </p>
-                        <p>
-                            <strong>Try it yourself!</strong> Use the sliders below to adjust the angle (in radians) for each of the UR5e's six joints (q1 to q6). The <strong>solid red robot</strong> shows the configuration resulting directly from these slider values (FK). The calculated TCP pose is displayed.
+                            Adjust the sliders for each joint ($J_1$ to $J_6$) to see how the robot moves (FK). Observe how the different possible IK solutions (dashed lines) change as the target TCP pose moves. Note that some configurations might be unreachable or singular, resulting in fewer or no IK solutions.
                         </p>
 
                         <div class="interactive-kinematics-container">
-                            <div id="kinematics-visualization">
-                                <div id="loading-indicator" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: white; font-family: 'Roboto', sans-serif; display: none;">Calculating...</div>
+                            <div id="robot-canvas-container">
+                                <canvas id="robot-canvas"></canvas>
+                                <div id="loading-indicator" style="display: none; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: white; font-size: 1.2em;">Loading...</div>
                             </div>
-                            <div class="controls-panel">
-                                <h3>Control Joints (FK)</h3>
-                                <div class="slider-container">
-                                    <label for="q1">Joint 1 (q1): <span class="value-display" id="q1-value">0.00</span></label>
-                                    <input type="range" id="q1" name="q1" min="-3.14159" max="3.14159" step="0.01" value="0">
+                            <div id="controls-container">
+                                <div class="slider-group">
+                                    <label for="joint1-slider">J1 (<span id="joint1-value">0.00</span> rad)</label>
+                                    <input type="range" id="joint1-slider" min="-3.14159" max="3.14159" step="0.01" value="0">
                                 </div>
-                                <div class="slider-container">
-                                    <label for="q2">Joint 2 (q2): <span class="value-display" id="q2-value">-1.57</span></label>
-                                    <input type="range" id="q2" name="q2" min="-3.14159" max="3.14159" step="0.01" value="-1.5708">
+                                <div class="slider-group">
+                                    <label for="joint2-slider">J2 (<span id="joint2-value">-1.57</span> rad)</label>
+                                    <input type="range" id="joint2-slider" min="-3.14159" max="3.14159" step="0.01" value="-1.5708">
                                 </div>
-                                <div class="slider-container">
-                                    <label for="q3">Joint 3 (q3): <span class="value-display" id="q3-value">1.57</span></label>
-                                    <input type="range" id="q3" name="q3" min="-3.14159" max="3.14159" step="0.01" value="1.5708">
+                                <div class="slider-group">
+                                    <label for="joint3-slider">J3 (<span id="joint3-value">1.57</span> rad)</label>
+                                    <input type="range" id="joint3-slider" min="-3.14159" max="3.14159" step="0.01" value="1.5708">
                                 </div>
-                                <div class="slider-container">
-                                    <label for="q4">Joint 4 (q4): <span class="value-display" id="q4-value">-1.57</span></label>
-                                    <input type="range" id="q4" name="q4" min="-3.14159" max="3.14159" step="0.01" value="-1.5708">
+                                <div class="slider-group">
+                                    <label for="joint4-slider">J4 (<span id="joint4-value">-1.57</span> rad)</label>
+                                    <input type="range" id="joint4-slider" min="-3.14159" max="3.14159" step="0.01" value="-1.5708">
                                 </div>
-                                <div class="slider-container">
-                                    <label for="q5">Joint 5 (q5): <span class="value-display" id="q5-value">-1.57</span></label>
-                                    <input type="range" id="q5" name="q5" min="-3.14159" max="3.14159" step="0.01" value="-1.5708">
+                                <div class="slider-group">
+                                    <label for="joint5-slider">J5 (<span id="joint5-value">-1.57</span> rad)</label>
+                                    <input type="range" id="joint5-slider" min="-3.14159" max="3.14159" step="0.01" value="-1.5708">
                                 </div>
-                                <div class="slider-container">
-                                    <label for="q6">Joint 6 (q6): <span class="value-display" id="q6-value">0.00</span></label>
-                                    <input type="range" id="q6" name="q6" min="-3.14159" max="3.14159" step="0.01" value="0">
+                                <div class="slider-group">
+                                    <label for="joint6-slider">J6 (<span id="joint6-value">0.00</span> rad)</label>
+                                    <input type="range" id="joint6-slider" min="-3.14159" max="3.14159" step="0.01" value="0">
                                 </div>
-                                <div class="info-display" id="info-display">
-                                    <strong id="info-title">Target TCP Pose & IK Solutions:</strong>
-                                    <span id="info-content">[Move sliders to calculate]</span>
-                                </div>
+                                <div id="ik-status">IK Solutions Found: -</div>
                             </div>
                         </div>
-                        <h2>Inverse Kinematics (IK)</h2>
-                        <p>
-                            Inverse Kinematics is the opposite problem: given a desired TCP pose, what joint angles are required to achieve it? For a 6-DOF robot like the UR5e, there can be multiple valid joint configurations (often up to 8) that result in the same TCP pose.
-                        </p>
-                        <p>
-                            This visualization calculates the TCP pose resulting from the slider values (the FK target pose). It then uses an analytical IK solver (ported from the original Python code) to find <em>all</em> possible joint configurations that achieve this target pose. These IK solutions are displayed as <strong>dashed, semi-transparent blue robots</strong> overlaid on the main FK robot. Observe how different joint configurations can lead to the exact same end-effector position and orientation. The number of valid IK solutions found is also shown.
-                        </p>
 
                         <h2>Implementation Details</h2>
                         <p>
-                            This interactive visualization uses <a href="https://threejs.org/" target="_blank" rel="noopener noreferrer">Three.js</a> for the 3D rendering. Both the forward and inverse kinematics logic, adapted from the provided Python script (<code>ur5e_ik_solver.py</code>), are implemented in JavaScript (<code>interactive-kinematics.js</code>). The robot models are built using simple geometric primitives. The sliders allow direct manipulation of the joint angles for the primary FK calculation, which then triggers the IK calculation and updates the scene with all solutions.
+                            The visualization uses <a href="https://threejs.org/" target="_blank" rel="noopener noreferrer">Three.js</a> for 3D rendering. The core FK and IK calculations are based on the standard Denavit-Hartenberg (DH) parameters for the UR5e and a geometric IK solution approach, translated from Python to JavaScript.
                         </p>
                         <p>
-                            Numerical tolerances are used in the IK solver to handle potential singularities and floating-point inaccuracies. The DH parameters and TCP offset match the standard UR5e configuration.
+                            The IK solver attempts to find all possible joint configurations that reach the target TCP pose derived from the FK sliders. Due to numerical precision and potential singularities, the number of solutions found might vary.
                         </p>
 
                         <hr>
-                        <p><em>Explore the code, experiment with the sliders, and feel free to connect via the <a href="../academia.html#contact-simplified">contact form</a> or <a href="https://www.linkedin.com/in/mo-saeidi-21a00015a/" target="_blank">LinkedIn</a> with any questions.</em></p>
+                        <p><em>Explore the code, experiment with the sliders, and gain a better intuition for robot kinematics! Questions or thoughts? Connect via the <a href="../academia.html#contact-simplified">contact form</a> or <a href="https://www.linkedin.com/in/mo-saeidi-21a00015a/" target="_blank">LinkedIn</a>.</em></p>
+
                     </section>
                 </article>
 
-                <a href="../blog.html" class="back-to-blog"><i class="fas fa-arrow-left" aria-hidden="true"></i> Back to Blog List</a>
+                <a href="../blog.html" class="back-to-blog"><i class="fas fa-arrow-left"></i> Back to Blog List</a>
             </div>
         </main>
 
@@ -276,11 +123,8 @@
         </footer>
     </div>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+    <script src="../assets/js/libs/three.min.js"></script> <script src="../assets/js/libs/OrbitControls.js"></script> <script src="../assets/js/ur5e-kinematics-solver.js"></script>
 
-
-    <script src="../assets/js/main.js"></script>
-    <script type="module" src="../assets/js/pages/interactive-kinematics.js"></script>
+    <script type="module" src="../assets/js/pages/interactive-kinematics.js"></script> <script src="../assets/js/main.js"></script>
 </body>
 </html>

@@ -1,0 +1,114 @@
+/* Styles specific to the interactive kinematics page */
+
+.interactive-kinematics-container {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    margin-top: 20px;
+    margin-bottom: 30px;
+    border: 1px solid var(--border-color); /* Use existing theme variable */
+    border-radius: 6px; /* Match theme */
+    padding: 15px;
+    background-color: var(--color-canvas-subtle); /* Slightly different background */
+}
+
+#robot-canvas-container {
+    position: relative; /* Needed for absolute positioning of loading indicator */
+    width: 100%;
+    height: 500px; /* Adjust height as needed */
+    background-color: var(--color-canvas-default); /* Background for the canvas area */
+    border-radius: 4px;
+    overflow: hidden; /* Clip canvas if it overflows */
+}
+
+#robot-canvas {
+    display: block; /* Remove extra space below canvas */
+    width: 100%;
+    height: 100%;
+}
+
+#controls-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); /* Responsive grid */
+    gap: 15px;
+    padding-top: 10px;
+}
+
+.slider-group {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.slider-group label {
+    font-size: 0.9em;
+    color: var(--color-fg-muted); /* Use theme variable */
+    font-family: 'Roboto Mono', monospace;
+}
+
+.slider-group input[type="range"] {
+    width: 100%;
+    cursor: pointer;
+    accent-color: var(--color-accent-fg); /* Style the slider thumb/track */
+}
+
+/* Style the range input track (example for WebKit browsers) */
+.slider-group input[type=range]::-webkit-slider-runnable-track {
+    width: 100%;
+    height: 5px;
+    cursor: pointer;
+    background: var(--color-neutral-muted);
+    border-radius: 3px;
+    border: 0.2px solid var(--color-border-default);
+}
+
+/* Style the range input thumb (example for WebKit browsers) */
+.slider-group input[type=range]::-webkit-slider-thumb {
+    height: 15px;
+    width: 15px;
+    border-radius: 50%;
+    background: var(--color-accent-fg);
+    cursor: pointer;
+    -webkit-appearance: none; /* Override default look */
+    margin-top: -5px; /* Adjust thumb position vertically */
+}
+
+/* Add styles for Firefox if needed */
+.slider-group input[type=range]::-moz-range-track {
+    /* Firefox track styles */
+     background: var(--color-neutral-muted);
+     height: 5px;
+     border-radius: 3px;
+}
+.slider-group input[type=range]::-moz-range-thumb {
+     /* Firefox thumb styles */
+     height: 15px;
+     width: 15px;
+     border-radius: 50%;
+     background: var(--color-accent-fg);
+     border: none; /* Remove default border */
+}
+
+
+#ik-status {
+    grid-column: 1 / -1; /* Span full width */
+    text-align: center;
+    font-size: 0.95em;
+    color: var(--color-fg-default);
+    background-color: var(--color-neutral-subtle);
+    padding: 8px;
+    border-radius: 4px;
+    margin-top: 10px;
+    font-family: 'Roboto Mono', monospace;
+}
+
+
+/* Adjust layout for smaller screens if needed */
+@media (max-width: 600px) {
+    #robot-canvas-container {
+        height: 400px; /* Smaller height on mobile */
+    }
+    #controls-container {
+       grid-template-columns: 1fr; /* Stack controls on small screens */
+    }
+}
