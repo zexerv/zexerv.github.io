@@ -128,7 +128,7 @@ function forwardKinematics(jointAngles, dhParams = DH_PARAMS_UR5E, HFlangeTcp = 
 
 /**
  * Calculates Inverse Kinematics for the UR5e.
- * VERSION 3 - Aligning t5 and t3 calculations strictly with provided Python source.
+ * VERSION 4 - Correcting t234 calculation to strictly match provided Python source.
  * @param {THREE.Matrix4} T_desired_TCP The desired TCP pose matrix relative to the base.
  * @param {object[]} dhParams DH parameters array.
  * @param {THREE.Matrix4} invHFlangeTcp Inverse transformation from TCP to flange.
@@ -158,6 +158,8 @@ function inverseKinematics(T_desired_TCP, dhParams = DH_PARAMS_UR5E, invHFlangeT
     // console.log(`--- IK Start ---`);
     // console.log(`P60: [${pxd.toFixed(4)}, ${pyd.toFixed(4)}, ${pzd.toFixed(4)}]`);
     // console.log(`P50: [${P50x.toFixed(4)}, ${P50y.toFixed(4)}, ${P50z.toFixed(4)}]`);
+    // console.log(`R06:\n[${r11d.toFixed(4)}, ${r12d.toFixed(4)}, ${r13d.toFixed(4)}]\n[${r21d.toFixed(4)}, ${r22d.toFixed(4)}, ${r23d.toFixed(4)}]\n[${r31d.toFixed(4)}, ${r32d.toFixed(4)}, ${r33d.toFixed(4)}]`);
+
 
     const dist_sq_xy = P50x * P50x + P50y * P50y;
     const sqrt_arg_t1_sq = dist_sq_xy - d4 * d4;
@@ -191,44 +193,35 @@ function inverseKinematics(T_desired_TCP, dhParams = DH_PARAMS_UR5E, invHFlangeT
         // console.log(`\nProcessing t1_idx=${t1_idx}, t1=${t1.toFixed(4)}`);
 
         // --- Theta 5 (Strictly following Python source logic) ---
-        // Python M_val = s1 * r13d - c1 * r23d
-        const M_val = s1 * r13d - c1 * r23d; // This is M in Python source for t5 calc
+        const M_val = s1 * r13d - c1 * r23d; // M used for t5 calc
         const M = clamp(M_val, -1.0, 1.0);
-
-        // Python D = c1 * r22d - s1 * r12d
-        // Python E = s1 * r11d - c1 * r21d
-        const D_py = c1 * r22d - s1 * r12d;
-        const E_py = s1 * r11d - c1 * r21d;
+        const D_py = c1 * r22d - s1 * r12d; // D used for t6 and t5 calc
+        const E_py = s1 * r11d - c1 * r21d; // E used for t6 and t5 calc
 
         const sqrt_arg_ED_sq = E_py * E_py + D_py * D_py;
-        // Python source check: if abs(M**2 + sqrt_arg_ED - 1.0) > tol_compare: continue
-        // This seems like a verification step in Python, let's check it
         if (Math.abs(M * M + sqrt_arg_ED_sq - 1.0) > tol_compare) {
-             // console.log(`IK Fail: t1_idx=${t1_idx}: M/D/E consistency check failed (M^2 + D^2 + E^2 != 1). Diff=${Math.abs(M*M + sqrt_arg_ED_sq - 1.0).toExponential(3)}`);
-             continue; // Skip this t1 if orientation matrix is inconsistent
+             // console.log(`IK Fail: t1_idx=${t1_idx}: M/D/E consistency check failed. Diff=${Math.abs(M*M + sqrt_arg_ED_sq - 1.0).toExponential(3)}`);
+             continue;
         }
-
         const sqrt_arg_ED = Math.max(0, sqrt_arg_ED_sq);
-        const sqrt_val_ED = Math.sqrt(sqrt_arg_ED); // This is |sin(t5)| in Python's logic
+        const sqrt_val_ED = Math.sqrt(sqrt_arg_ED); // |sin(t5)| in Python's logic
 
-        // Python source check: if abs(sqrt_val_ED) < tol_singularity and abs(M) < tol_singularity: continue
         if (sqrt_val_ED < tol_singularity && Math.abs(M) < tol_singularity) {
             // console.log(`IK Fail: t1_idx=${t1_idx}: t5 singularity (M and sqrt_val_ED near zero)`);
             continue;
         }
 
-        // Python source: t5_sol = [math.atan2(sqrt_val_ED, M), math.atan2(-sqrt_val_ED, M)]
         const t5_sol = [
-            normalizeAngle(Math.atan2(sqrt_val_ED, M)),  // atan2( |sin(t5)|, cos(t5) )
-            normalizeAngle(Math.atan2(-sqrt_val_ED, M)) // atan2( -|sin(t5)|, cos(t5) )
+            normalizeAngle(Math.atan2(sqrt_val_ED, M)),
+            normalizeAngle(Math.atan2(-sqrt_val_ED, M))
         ];
         // console.log(` t5 sols (rad): [${t5_sol[0].toFixed(4)}, ${t5_sol[1].toFixed(4)}] (M=${M.toFixed(4)}, sqrt_ED=${sqrt_val_ED.toFixed(4)})`);
 
         // --- Iterate Theta 5 ---
         for (let t5_idx = 0; t5_idx < t5_sol.length; t5_idx++) {
             const t5 = t5_sol[t5_idx];
-            const s5 = Math.sin(t5); // Need sine for t6 logic
-            const c5 = Math.cos(t5); // Need cosine for KC/KS
+            const s5 = Math.sin(t5);
+            const c5 = Math.cos(t5);
             // console.log(`  Processing t5_idx=${t5_idx}, t5=${t5.toFixed(4)}`);
 
             // --- Theta 6 ---
@@ -239,12 +232,10 @@ function inverseKinematics(T_desired_TCP, dhParams = DH_PARAMS_UR5E, invHFlangeT
                 // console.log(`   t6 singularity (s5=${s5.toExponential(3)}), setting t6=0`);
                 t6 = 0.0;
             } else {
-                // Use D_py, E_py calculated earlier
                 if (Math.abs(D_py) < tol_singularity && Math.abs(E_py) < tol_singularity) {
                     // console.log(`   IK Fail: t5_idx=${t5_idx}: D_py and E_py near zero in t6 calculation.`);
                     continue;
                 }
-                // Python logic: if s5 > 0: t6 = atan2(D, E) else: t6 = atan2(-D, -E)
                 if (s5 > 0) {
                     t6 = normalizeAngle(Math.atan2(D_py, E_py));
                 } else {
@@ -253,29 +244,36 @@ function inverseKinematics(T_desired_TCP, dhParams = DH_PARAMS_UR5E, invHFlangeT
             }
             // console.log(`   t6 (rad): ${t6.toFixed(4)} (D_py=${D_py.toFixed(4)}, E_py=${E_py.toFixed(4)}, s5=${s5.toFixed(4)})`);
 
-            // --- Theta 3 (Strictly following Python source logic) ---
+            // --- Theta 2, 3, 4 ---
             const s6 = Math.sin(t6);
             const c6 = Math.cos(t6);
 
-            // t234 calculation seems standard
-            const atan_y_234 = -s5 * (r13d * c1 + r23d * s1); // = -s5 * (Standard M from other derivations)
-            const atan_x_234 = r33d;
-            if (Math.abs(atan_y_234) < tol_singularity && Math.abs(atan_x_234) < tol_singularity) {
-                // console.log(`   IK Fail: t5_idx=${t5_idx}: atan_y/x_234 near zero for t234 calc.`);
-                continue;
+            // --- t234 Calculation (VERSION 4 - Matching Python Source) ---
+            // Python: F = c5 * c6
+            // Python: C_val = c1 * r11d + s1 * r21d
+            // Python: atan_y_234 = r31d * F - s6 * C_val
+            // Python: atan_x_234 = F * C_val + s6 * r31d
+            const F = c5 * c6;
+            const C_val = c1 * r11d + s1 * r21d;
+            const atan_y_234_py = r31d * F - s6 * C_val;
+            const atan_x_234_py = F * C_val + s6 * r31d;
+
+            if (Math.abs(atan_y_234_py) < tol_singularity && Math.abs(atan_x_234_py) < tol_singularity) {
+                 // console.log(`   IK Fail: t5_idx=${t5_idx}: atan_y/x_234_py near zero for t234 calc.`);
+                 continue;
             }
-            const t234 = Math.atan2(atan_y_234, atan_x_234);
+            const t234 = Math.atan2(atan_y_234_py, atan_x_234_py);
             const s234 = Math.sin(t234);
             const c234 = Math.cos(t234);
-            // console.log(`   t234 (rad): ${t234.toFixed(4)}`);
+            // console.log(`   t234 (rad): ${t234.toFixed(4)} (F=${F.toFixed(4)}, C_val=${C_val.toFixed(4)}, atan_y=${atan_y_234_py.toFixed(4)}, atan_x=${atan_x_234_py.toFixed(4)})`);
 
-            // KC/KS using Python source formulas
+
+            // --- Theta 3 (Using KC/KS and len_a2/len_a3 matching Python source) ---
             const KC = c1 * pxd + s1 * pyd - s234 * d5 + c234 * s5 * d6;
             const KS = pzd - d1 + c234 * d5 + s234 * s5 * d6;
             // console.log(`   KC=${KC.toFixed(4)}, KS=${KS.toFixed(4)}`);
 
             const dist_sq_13 = KC * KC + KS * KS;
-            // Denominator and Numerator using len_a2, len_a3 as per Python source
             const denom_t3 = 2 * len_a2 * len_a3;
             if (Math.abs(denom_t3) < tol_zero) {
                 // console.log(`   IK Fail: t5_idx=${t5_idx}: Denominator for t3 is zero.`);
@@ -283,7 +281,6 @@ function inverseKinematics(T_desired_TCP, dhParams = DH_PARAMS_UR5E, invHFlangeT
             }
             const cos_t3_arg = (dist_sq_13 - len_a2 * len_a2 - len_a3 * len_a3) / denom_t3;
             // console.log(`   cos_t3_arg: ${cos_t3_arg.toFixed(6)} (dist_sq=${dist_sq_13.toFixed(4)}, len_a2^2=${(len_a2*len_a2).toFixed(4)}, len_a3^2=${(len_a3*len_a3).toFixed(4)}, denom=${denom_t3.toFixed(4)})`);
-
 
             if (Math.abs(cos_t3_arg) > 1.0 + tol_geom) {
                 // console.log(`   IK Fail: t5_idx=${t5_idx}: Elbow out of reach |cos(t3)| > 1. Arg: ${cos_t3_arg.toFixed(6)}`);
@@ -309,10 +306,10 @@ function inverseKinematics(T_desired_TCP, dhParams = DH_PARAMS_UR5E, invHFlangeT
             for (let t3_idx = 0; t3_idx < t3_sol.length; t3_idx++) {
                 const t3 = t3_sol[t3_idx];
                 const s3 = Math.sin(t3);
-                const c3 = cos_t3; // Use the calculated cosine
+                const c3 = cos_t3;
                 // console.log(`     Processing t3_idx=${t3_idx}, t3=${t3.toFixed(4)}`);
 
-                // --- Theta 2 ---
+                // --- Theta 2 (Using signed a2/a3 matching Python source) ---
                 const term1_t2_y = KS;
                 const term1_t2_x = KC;
                  if (Math.abs(term1_t2_y) < tol_singularity && Math.abs(term1_t2_x) < tol_singularity) {
@@ -321,9 +318,8 @@ function inverseKinematics(T_desired_TCP, dhParams = DH_PARAMS_UR5E, invHFlangeT
                  }
                 const term1_t2 = Math.atan2(term1_t2_y, term1_t2_x);
 
-                // Use SIGNED a2, a3 as per Python source
-                const term2_t2_y = a3 * s3;
-                const term2_t2_x = a2 + a3 * c3;
+                const term2_t2_y = a3 * s3; // SIGNED a3
+                const term2_t2_x = a2 + a3 * c3; // SIGNED a2, a3
                  if (Math.abs(term2_t2_y) < tol_singularity && Math.abs(term2_t2_x) < tol_singularity) {
                     // console.log(`     IK Fail: t3_idx=${t3_idx}: term2 y/x near zero in t2 calculation.`);
                     continue;
