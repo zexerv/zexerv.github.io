@@ -424,7 +424,7 @@ function initCharts() {
             }
         },
         elements: {
-            point: { radius: 2 }, // Smaller points
+            point: { radius: 0 }, // Smaller points
             line: { borderWidth: 1.5 } // Thinner lines
         },
         animation: false, // Disable animation for performance
