@@ -18,6 +18,8 @@
     <link rel="stylesheet" href="../assets/css/components/footer.css" />
     <link rel="stylesheet" href="../assets/css/pages/post.css" />
     <style>
+
+
         .interactive-kinematics-container {
             display: flex;
             flex-wrap: wrap;
@@ -48,7 +50,11 @@
             box-shadow: var(--shadow-elevation-medium);
         }
         .slider-group {
-            margin-bottom: 10px;
+            display: flex;         /* Use flexbox for layout */
+            align-items: center;   /* Vertically align items */
+            gap: 5px;            /* Adjust spacing between label, slider, value */
+            flex-wrap: nowrap;     /* Prevent wrapping to next line */
+            margin-bottom: 8px;  /* Keep/adjust vertical spacing between groups */
         }
         .slider-group label {
             display: block;
@@ -57,11 +63,16 @@
             color: var(--text-color-secondary);
         }
         .slider-group input[type="range"] {
+            flex-grow: 1;          /* Allow slider to fill available space */
+            min-width: 50px;       /* Prevent slider becoming too small */
             width: calc(100% - 60px); /* Adjust width to fit value display */
             margin-right: 10px;
             vertical-align: middle;
         }
          .slider-group .value-display {
+            flex-shrink: 0;        /* Prevent the value display from shrinking */
+            min-width: 50px;       /* Ensure enough space for '-X.XX' */
+            text-align: right;     /* Keep text aligned right */
             display: inline-block;
             min-width: 45px; /* Ensure space for value */
             text-align: right;
