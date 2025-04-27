@@ -1,5 +1,6 @@
 import * as THREE from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+// Chart.js is loaded globally via CDN, but we can reference it via window.Chart
 
 // --- UR5e Constants ---
 const DH_PARAMS_UR5E = [
@@ -155,24 +156,24 @@ function inverseKinematics(T_desired_TCP, dhParams = DH_PARAMS_UR5E, invHFlangeT
     const P50y = P50.y; // Python 'A'
     const P50z = P50.z;
 
-    // console.log(`--- IK Start ---`);
-    // console.log(`P60: [${pxd.toFixed(4)}, ${pyd.toFixed(4)}, ${pzd.toFixed(4)}]`);
-    // console.log(`P50: [${P50x.toFixed(4)}, ${P50y.toFixed(4)}, ${P50z.toFixed(4)}]`);
-    // console.log(`R06:\n[${r11d.toFixed(4)}, ${r12d.toFixed(4)}, ${r13d.toFixed(4)}]\n[${r21d.toFixed(4)}, ${r22d.toFixed(4)}, ${r23d.toFixed(4)}]\n[${r31d.toFixed(4)}, ${r32d.toFixed(4)}, ${r33d.toFixed(4)}]`);
+    // console.log(`--- IK Start ---`); // DEBUG
+    // console.log(`P60: [${pxd.toFixed(4)}, ${pyd.toFixed(4)}, ${pzd.toFixed(4)}]`); // DEBUG
+    // console.log(`P50: [${P50x.toFixed(4)}, ${P50y.toFixed(4)}, ${P50z.toFixed(4)}]`); // DEBUG
+    // console.log(`R06:\n[${r11d.toFixed(4)}, ${r12d.toFixed(4)}, ${r13d.toFixed(4)}]\n[${r21d.toFixed(4)}, ${r22d.toFixed(4)}, ${r23d.toFixed(4)}]\n[${r31d.toFixed(4)}, ${r32d.toFixed(4)}, ${r33d.toFixed(4)}]`); // DEBUG
 
 
     const dist_sq_xy = P50x * P50x + P50y * P50y;
     const sqrt_arg_t1_sq = dist_sq_xy - d4 * d4;
 
     if (sqrt_arg_t1_sq < -tol_geom) {
-        // console.log(`IK Fail: t1 out of reach (sqrt_arg_t1_sq = ${sqrt_arg_t1_sq.toFixed(6)})`);
+        // console.log(`IK Fail: t1 out of reach (sqrt_arg_t1_sq = ${sqrt_arg_t1_sq.toFixed(6)})`); // DEBUG
         return [];
     }
     const sqrt_arg_t1 = Math.max(0, sqrt_arg_t1_sq);
     const sqrt_val_t1 = Math.sqrt(sqrt_arg_t1);
 
     if (Math.abs(P50x) < tol_singularity && Math.abs(P50y) < tol_singularity) {
-        // console.log(`IK Fail: t1 singularity (P50x, P50y near zero)`);
+        // console.log(`IK Fail: t1 singularity (P50x, P50y near zero)`); // DEBUG
         return [];
     }
 
@@ -183,14 +184,14 @@ function inverseKinematics(T_desired_TCP, dhParams = DH_PARAMS_UR5E, invHFlangeT
         normalizeAngle(term1_t1 + term2_t1),
         normalizeAngle(term1_t1 - term2_t1)
     ];
-    // console.log(`t1 sols (rad): [${theta1_sol[0].toFixed(4)}, ${theta1_sol[1].toFixed(4)}]`);
+    // console.log(`t1 sols (rad): [${theta1_sol[0].toFixed(4)}, ${theta1_sol[1].toFixed(4)}]`); // DEBUG
 
     // --- Iterate Theta 1 ---
     for (let t1_idx = 0; t1_idx < theta1_sol.length; t1_idx++) {
         const t1 = theta1_sol[t1_idx];
         const s1 = Math.sin(t1);
         const c1 = Math.cos(t1);
-        // console.log(`\nProcessing t1_idx=${t1_idx}, t1=${t1.toFixed(4)}`);
+        // console.log(`\nProcessing t1_idx=${t1_idx}, t1=${t1.toFixed(4)}`); // DEBUG
 
         // --- Theta 5 (Strictly following Python source logic) ---
         const M_val = s1 * r13d - c1 * r23d; // M used for t5 calc
@@ -200,14 +201,14 @@ function inverseKinematics(T_desired_TCP, dhParams = DH_PARAMS_UR5E, invHFlangeT
 
         const sqrt_arg_ED_sq = E_py * E_py + D_py * D_py;
         if (Math.abs(M * M + sqrt_arg_ED_sq - 1.0) > tol_compare) {
-             // console.log(`IK Fail: t1_idx=${t1_idx}: M/D/E consistency check failed. Diff=${Math.abs(M*M + sqrt_arg_ED_sq - 1.0).toExponential(3)}`);
+             // console.log(`IK Fail: t1_idx=${t1_idx}: M/D/E consistency check failed. Diff=${Math.abs(M*M + sqrt_arg_ED_sq - 1.0).toExponential(3)}`); // DEBUG
              continue;
         }
         const sqrt_arg_ED = Math.max(0, sqrt_arg_ED_sq);
         const sqrt_val_ED = Math.sqrt(sqrt_arg_ED); // |sin(t5)| in Python's logic
 
         if (sqrt_val_ED < tol_singularity && Math.abs(M) < tol_singularity) {
-            // console.log(`IK Fail: t1_idx=${t1_idx}: t5 singularity (M and sqrt_val_ED near zero)`);
+            // console.log(`IK Fail: t1_idx=${t1_idx}: t5 singularity (M and sqrt_val_ED near zero)`); // DEBUG
             continue;
         }
 
@@ -215,25 +216,25 @@ function inverseKinematics(T_desired_TCP, dhParams = DH_PARAMS_UR5E, invHFlangeT
             normalizeAngle(Math.atan2(sqrt_val_ED, M)),
             normalizeAngle(Math.atan2(-sqrt_val_ED, M))
         ];
-        // console.log(` t5 sols (rad): [${t5_sol[0].toFixed(4)}, ${t5_sol[1].toFixed(4)}] (M=${M.toFixed(4)}, sqrt_ED=${sqrt_val_ED.toFixed(4)})`);
+        // console.log(` t5 sols (rad): [${t5_sol[0].toFixed(4)}, ${t5_sol[1].toFixed(4)}] (M=${M.toFixed(4)}, sqrt_ED=${sqrt_val_ED.toFixed(4)})`); // DEBUG
 
         // --- Iterate Theta 5 ---
         for (let t5_idx = 0; t5_idx < t5_sol.length; t5_idx++) {
             const t5 = t5_sol[t5_idx];
             const s5 = Math.sin(t5);
             const c5 = Math.cos(t5);
-            // console.log(`  Processing t5_idx=${t5_idx}, t5=${t5.toFixed(4)}`);
+            // console.log(`  Processing t5_idx=${t5_idx}, t5=${t5.toFixed(4)}`); // DEBUG
 
             // --- Theta 6 ---
             let t6 = 0.0;
             const is_singular_s5 = Math.abs(s5) < tol_singularity;
 
             if (is_singular_s5) {
-                // console.log(`   t6 singularity (s5=${s5.toExponential(3)}), setting t6=0`);
+                // console.log(`   t6 singularity (s5=${s5.toExponential(3)}), setting t6=0`); // DEBUG
                 t6 = 0.0;
             } else {
                 if (Math.abs(D_py) < tol_singularity && Math.abs(E_py) < tol_singularity) {
-                    // console.log(`   IK Fail: t5_idx=${t5_idx}: D_py and E_py near zero in t6 calculation.`);
+                    // console.log(`   IK Fail: t5_idx=${t5_idx}: D_py and E_py near zero in t6 calculation.`); // DEBUG
                     continue;
                 }
                 if (s5 > 0) {
@@ -242,55 +243,51 @@ function inverseKinematics(T_desired_TCP, dhParams = DH_PARAMS_UR5E, invHFlangeT
                     t6 = normalizeAngle(Math.atan2(-D_py, -E_py));
                 }
             }
-            // console.log(`   t6 (rad): ${t6.toFixed(4)} (D_py=${D_py.toFixed(4)}, E_py=${E_py.toFixed(4)}, s5=${s5.toFixed(4)})`);
+            // console.log(`   t6 (rad): ${t6.toFixed(4)} (D_py=${D_py.toFixed(4)}, E_py=${E_py.toFixed(4)}, s5=${s5.toFixed(4)})`); // DEBUG
 
             // --- Theta 2, 3, 4 ---
             const s6 = Math.sin(t6);
             const c6 = Math.cos(t6);
 
             // --- t234 Calculation (VERSION 4 - Matching Python Source) ---
-            // Python: F = c5 * c6
-            // Python: C_val = c1 * r11d + s1 * r21d
-            // Python: atan_y_234 = r31d * F - s6 * C_val
-            // Python: atan_x_234 = F * C_val + s6 * r31d
             const F = c5 * c6;
             const C_val = c1 * r11d + s1 * r21d;
             const atan_y_234_py = r31d * F - s6 * C_val;
             const atan_x_234_py = F * C_val + s6 * r31d;
 
             if (Math.abs(atan_y_234_py) < tol_singularity && Math.abs(atan_x_234_py) < tol_singularity) {
-                 // console.log(`   IK Fail: t5_idx=${t5_idx}: atan_y/x_234_py near zero for t234 calc.`);
+                 // console.log(`   IK Fail: t5_idx=${t5_idx}: atan_y/x_234_py near zero for t234 calc.`); // DEBUG
                  continue;
             }
             const t234 = Math.atan2(atan_y_234_py, atan_x_234_py);
             const s234 = Math.sin(t234);
             const c234 = Math.cos(t234);
-            // console.log(`   t234 (rad): ${t234.toFixed(4)} (F=${F.toFixed(4)}, C_val=${C_val.toFixed(4)}, atan_y=${atan_y_234_py.toFixed(4)}, atan_x=${atan_x_234_py.toFixed(4)})`);
+            // console.log(`   t234 (rad): ${t234.toFixed(4)} (F=${F.toFixed(4)}, C_val=${C_val.toFixed(4)}, atan_y=${atan_y_234_py.toFixed(4)}, atan_x=${atan_x_234_py.toFixed(4)})`); // DEBUG
 
 
             // --- Theta 3 (Using KC/KS and len_a2/len_a3 matching Python source) ---
             const KC = c1 * pxd + s1 * pyd - s234 * d5 + c234 * s5 * d6;
             const KS = pzd - d1 + c234 * d5 + s234 * s5 * d6;
-            // console.log(`   KC=${KC.toFixed(4)}, KS=${KS.toFixed(4)}`);
+            // console.log(`   KC=${KC.toFixed(4)}, KS=${KS.toFixed(4)}`); // DEBUG
 
             const dist_sq_13 = KC * KC + KS * KS;
             const denom_t3 = 2 * len_a2 * len_a3;
             if (Math.abs(denom_t3) < tol_zero) {
-                // console.log(`   IK Fail: t5_idx=${t5_idx}: Denominator for t3 is zero.`);
+                // console.log(`   IK Fail: t5_idx=${t5_idx}: Denominator for t3 is zero.`); // DEBUG
                 continue;
             }
             const cos_t3_arg = (dist_sq_13 - len_a2 * len_a2 - len_a3 * len_a3) / denom_t3;
-            // console.log(`   cos_t3_arg: ${cos_t3_arg.toFixed(6)} (dist_sq=${dist_sq_13.toFixed(4)}, len_a2^2=${(len_a2*len_a2).toFixed(4)}, len_a3^2=${(len_a3*len_a3).toFixed(4)}, denom=${denom_t3.toFixed(4)})`);
+            // console.log(`   cos_t3_arg: ${cos_t3_arg.toFixed(6)} (dist_sq=${dist_sq_13.toFixed(4)}, len_a2^2=${(len_a2*len_a2).toFixed(4)}, len_a3^2=${(len_a3*len_a3).toFixed(4)}, denom=${denom_t3.toFixed(4)})`); // DEBUG
 
             if (Math.abs(cos_t3_arg) > 1.0 + tol_geom) {
-                // console.log(`   IK Fail: t5_idx=${t5_idx}: Elbow out of reach |cos(t3)| > 1. Arg: ${cos_t3_arg.toFixed(6)}`);
+                // console.log(`   IK Fail: t5_idx=${t5_idx}: Elbow out of reach |cos(t3)| > 1. Arg: ${cos_t3_arg.toFixed(6)}`); // DEBUG
                 continue;
             }
             const cos_t3 = clamp(cos_t3_arg, -1.0, 1.0);
 
             const sqrt_arg_t3_sq = 1.0 - cos_t3 * cos_t3;
              if (sqrt_arg_t3_sq < -tol_geom) {
-                 // console.log(`   IK Fail: t5_idx=${t5_idx}: Invalid state for theta3 calculation (sqrt_arg < 0). cos_t3=${cos_t3.toFixed(6)}`);
+                 // console.log(`   IK Fail: t5_idx=${t5_idx}: Invalid state for theta3 calculation (sqrt_arg < 0). cos_t3=${cos_t3.toFixed(6)}`); // DEBUG
                  continue;
              }
             const sqrt_arg_t3 = Math.max(0, sqrt_arg_t3_sq);
@@ -300,20 +297,20 @@ function inverseKinematics(T_desired_TCP, dhParams = DH_PARAMS_UR5E, invHFlangeT
                 normalizeAngle(Math.atan2(sqrt_val_t3, cos_t3)),
                 normalizeAngle(Math.atan2(-sqrt_val_t3, cos_t3))
             ];
-            // console.log(`    t3 sols (rad): [${t3_sol[0].toFixed(4)}, ${t3_sol[1].toFixed(4)}]`);
+            // console.log(`    t3 sols (rad): [${t3_sol[0].toFixed(4)}, ${t3_sol[1].toFixed(4)}]`); // DEBUG
 
             // --- Iterate Theta 3 ---
             for (let t3_idx = 0; t3_idx < t3_sol.length; t3_idx++) {
                 const t3 = t3_sol[t3_idx];
                 const s3 = Math.sin(t3);
                 const c3 = cos_t3;
-                // console.log(`     Processing t3_idx=${t3_idx}, t3=${t3.toFixed(4)}`);
+                // console.log(`     Processing t3_idx=${t3_idx}, t3=${t3.toFixed(4)}`); // DEBUG
 
                 // --- Theta 2 (Using signed a2/a3 matching Python source) ---
                 const term1_t2_y = KS;
                 const term1_t2_x = KC;
                  if (Math.abs(term1_t2_y) < tol_singularity && Math.abs(term1_t2_x) < tol_singularity) {
-                    // console.log(`     IK Fail: t3_idx=${t3_idx}: KS and KC near zero in t2 calculation.`);
+                    // console.log(`     IK Fail: t3_idx=${t3_idx}: KS and KC near zero in t2 calculation.`); // DEBUG
                     continue;
                  }
                 const term1_t2 = Math.atan2(term1_t2_y, term1_t2_x);
@@ -321,22 +318,22 @@ function inverseKinematics(T_desired_TCP, dhParams = DH_PARAMS_UR5E, invHFlangeT
                 const term2_t2_y = a3 * s3; // SIGNED a3
                 const term2_t2_x = a2 + a3 * c3; // SIGNED a2, a3
                  if (Math.abs(term2_t2_y) < tol_singularity && Math.abs(term2_t2_x) < tol_singularity) {
-                    // console.log(`     IK Fail: t3_idx=${t3_idx}: term2 y/x near zero in t2 calculation.`);
+                    // console.log(`     IK Fail: t3_idx=${t3_idx}: term2 y/x near zero in t2 calculation.`); // DEBUG
                     continue;
                  }
                 const term2_t2 = Math.atan2(term2_t2_y, term2_t2_x);
 
                 const t2 = normalizeAngle(term1_t2 - term2_t2);
-                // console.log(`     t2 (rad): ${t2.toFixed(4)} (term1=${term1_t2.toFixed(4)}, term2=${term2_t2.toFixed(4)})`);
+                // console.log(`     t2 (rad): ${t2.toFixed(4)} (term1=${term1_t2.toFixed(4)}, term2=${term2_t2.toFixed(4)})`); // DEBUG
 
                 // --- Theta 4 ---
                 const t4 = normalizeAngle(t234 - t2 - t3);
-                // console.log(`     t4 (rad): ${t4.toFixed(4)}`);
+                // console.log(`     t4 (rad): ${t4.toFixed(4)}`); // DEBUG
 
                 // --- Store Solution ---
                 const sol_angles_raw = [t1, t2, t3, t4, t5, t6];
                 const sol_angles_normalized = sol_angles_raw.map(normalizeAngle);
-                // console.log(`     Solution Candidate (rad): [${sol_angles_normalized.map(a => a.toFixed(3)).join(', ')}]`);
+                // console.log(`     Solution Candidate (rad): [${sol_angles_normalized.map(a => a.toFixed(3)).join(', ')}]`); // DEBUG
 
                 // --- Verification ---
                 const fkCheck = forwardKinematics(sol_angles_normalized, dhParams, H_FLANGE_TCP);
@@ -349,13 +346,13 @@ function inverseKinematics(T_desired_TCP, dhParams = DH_PARAMS_UR5E, invHFlangeT
                     const avgDiff = diff / 16;
 
                     if (avgDiff < tol_compare) {
-                         // console.log(`     SUCCESS: Solution verified. Avg Diff: ${avgDiff.toExponential(3)}`);
+                         // console.log(`     SUCCESS: Solution verified. Avg Diff: ${avgDiff.toExponential(3)}`); // DEBUG
                          solutions.push([sol_angles_normalized, t1_idx, t5_idx, t3_idx]);
                     } else {
-                         // console.warn(`     VERIFY FAIL: FK mismatch. Avg Diff: ${avgDiff.toExponential(3)} > Tol: ${tol_compare.toExponential(3)}`);
-                         // console.log("      Target Matrix:", T_desired_TCP.elements.map(n=>n.toFixed(3)));
-                         // console.log("      Actual Matrix:", T_check_TCP.elements.map(n=>n.toFixed(3)));
-                         // console.log("      Failed Angles (rad):", sol_angles_normalized.map(a => a.toFixed(3)));
+                         // console.warn(`     VERIFY FAIL: FK mismatch. Avg Diff: ${avgDiff.toExponential(3)} > Tol: ${tol_compare.toExponential(3)}`); // DEBUG
+                         // console.log("      Target Matrix:", T_desired_TCP.elements.map(n=>n.toFixed(3))); // DEBUG
+                         // console.log("      Actual Matrix:", T_check_TCP.elements.map(n=>n.toFixed(3))); // DEBUG
+                         // console.log("      Failed Angles (rad):", sol_angles_normalized.map(a => a.toFixed(3))); // DEBUG
                     }
                 } else {
                      console.error(`     VERIFY ERROR: FK failed for solution candidate [${sol_angles_normalized.map(a=>a.toFixed(3))}].`);
@@ -374,10 +371,10 @@ function inverseKinematics(T_desired_TCP, dhParams = DH_PARAMS_UR5E, invHFlangeT
             uniqueSolutions.push(sol);
             seenSolutions.add(key);
         } else {
-            // console.log("IK Debug: Duplicate solution removed:", key);
+            // console.log("IK Debug: Duplicate solution removed:", key); // DEBUG
         }
     }
-    // console.log(`--- IK End: Found ${uniqueSolutions.length} unique solutions ---`);
+    // console.log(`--- IK End: Found ${uniqueSolutions.length} unique solutions ---`); // DEBUG
     return uniqueSolutions;
 }
 
@@ -395,6 +392,94 @@ const canvasContainer = document.getElementById('canvas-container');
 const slidersContainer = document.getElementById('sliders-container');
 const infoDisplay = document.getElementById('info-display');
 const loadingIndicator = document.getElementById('loading-indicator');
+
+// --- Charting Setup ---
+const jointCharts = []; // Array to hold Chart instances
+const jointHistory = []; // Array to hold history data for each joint's solutions
+const MAX_HISTORY = 50; // Number of steps to show in charts
+let updateCounter = 0; // Counter for chart x-axis
+
+// Vibrant colors for up to 8 solutions
+const chartColors = [
+    '#FF6384', // Pink
+    '#36A2EB', // Blue
+    '#FFCE56', // Yellow
+    '#4BC0C0', // Teal
+    '#9966FF', // Purple
+    '#FF9F40', // Orange
+    '#8BC34A', // Light Green
+    '#F44336'  // Red
+];
+
+/** Initialize Chart.js charts */
+function initCharts() {
+    const chartOptions = {
+        // responsive: true, // Handled by container
+        maintainAspectRatio: false,
+        scales: {
+            x: {
+                type: 'linear',
+                title: { display: true, text: 'Update Step', color: '#a0aec0' },
+                ticks: { color: '#a0aec0', maxTicksLimit: 5 },
+                grid: { color: '#4a5568' }
+            },
+            y: {
+                title: { display: false }, // Title set in HTML
+                min: -Math.PI,
+                max: Math.PI,
+                ticks: {
+                    color: '#a0aec0',
+                    callback: function(value) { // Format ticks as multiples of PI/2
+                        if (Math.abs(value - Math.PI) < 0.01) return 'π';
+                        if (Math.abs(value + Math.PI) < 0.01) return '-π';
+                        if (Math.abs(value - Math.PI/2) < 0.01) return 'π/2';
+                        if (Math.abs(value + Math.PI/2) < 0.01) return '-π/2';
+                        if (Math.abs(value) < 0.01) return '0';
+                        return value.toFixed(1); // Fallback for other values
+                    }
+                },
+                grid: { color: '#4a5568' }
+            }
+        },
+        plugins: {
+            legend: { display: false }, // Hide legend for simplicity
+            tooltip: { enabled: false } // Disable tooltips for performance
+        },
+        elements: {
+            point: { radius: 2 }, // Smaller points
+            line: { borderWidth: 1.5 } // Thinner lines
+        },
+        animation: false, // Disable animation for performance
+        parsing: false, // Data is already in {x, y} format
+        normalized: true, // Optimization hint
+        spanGaps: false // Show gaps for NaN values
+    };
+
+    for (let i = 0; i < 6; i++) {
+        const ctx = document.getElementById(`chart-joint-${i + 1}`).getContext('2d');
+        const datasets = [];
+        jointHistory[i] = []; // Initialize history for this joint
+
+        for (let j = 0; j < 8; j++) { // Create 8 datasets per chart (max solutions)
+            datasets.push({
+                label: `Sol ${j + 1}`,
+                data: [],
+                borderColor: chartColors[j % chartColors.length],
+                backgroundColor: chartColors[j % chartColors.length],
+                showLine: true, // Connect points with lines
+                tension: 0.1 // Slight curve to lines
+            });
+            jointHistory[i][j] = []; // Initialize history for this solution branch
+        }
+
+        jointCharts[i] = new Chart(ctx, {
+            type: 'line',
+            data: { datasets: datasets },
+            options: chartOptions
+        });
+    }
+    console.log("Charts initialized.");
+}
 
 /** Initialize the 3D scene, camera, renderer, and controls */
 function initThreeJS() {
@@ -465,6 +550,10 @@ function onWindowResize() {
     camera.aspect = containerWidth / containerHeight;
     camera.updateProjectionMatrix();
     renderer.setSize(containerWidth, containerHeight);
+
+    // Note: Chart.js charts within flex/grid might need explicit resize handling if container size changes drastically.
+    // However, basic resizing often works okay. If issues arise, might need:
+    // jointCharts.forEach(chart => chart.resize());
 }
 
 /** Animation loop */
@@ -578,7 +667,7 @@ function createSliders() {
         const slider = document.createElement('input');
         slider.type = 'range';
         slider.id = `joint${i}-slider`;
-        slider.className = 'slider';
+        slider.className = 'slider'; // Apply slider class for styling
         slider.min = -Math.PI.toFixed(3);
         slider.max = Math.PI.toFixed(3);
         slider.step = (Math.PI / 180).toFixed(3); // 1 degree steps
@@ -637,9 +726,7 @@ function updateVisualization() {
     if (fkSuccess && T_Target_TCP) {
         const startTime = performance.now();
         try {
-             // console.log("--- Calling IK ---");
              ikSolutions = inverseKinematics(T_Target_TCP);
-             // console.log(`--- IK Returned ${ikSolutions.length} solutions ---`);
         } catch (e) {
             console.error("Error during Inverse Kinematics:", e);
             ikSolutions = [];
@@ -665,10 +752,45 @@ function updateVisualization() {
         }
     }
 
-    // 3. Update Info Display
+    // 3. Update Charts
+    updateCharts(ikSolutions);
+
+    // 4. Update Info Display
     updateInfoDisplay(sliderJointAngles, T_Target_TCP, ikSolutions, ikTime);
 
 }
+
+/**
+ * Updates the trajectory charts with the latest IK solutions.
+ * @param {Array} ikSolutions Array of IK solution angles.
+ */
+function updateCharts(ikSolutions) {
+    updateCounter++; // Increment step counter
+
+    for (let j = 0; j < 6; j++) { // Iterate through joints
+        for (let i = 0; i < 8; i++) { // Iterate through potential solution branches
+            let angleValue = NaN; // Default to NaN (gap)
+            if (i < ikSolutions.length) {
+                // We have a solution for this branch index
+                angleValue = ikSolutions[i][0][j]; // Get angle for joint j from solution i
+            }
+
+            // Add data point {x: step, y: angle} to the history for this joint/branch
+            jointHistory[j][i].push({ x: updateCounter, y: angleValue });
+
+            // Limit history length
+            if (jointHistory[j][i].length > MAX_HISTORY) {
+                jointHistory[j][i].shift(); // Remove oldest point
+            }
+
+            // Update the chart dataset directly
+            jointCharts[j].data.datasets[i].data = jointHistory[j][i];
+        }
+        // Update the chart after processing all datasets for this joint
+        jointCharts[j].update();
+    }
+}
+
 
 /**
  * Updates the text display with current angles, FK pose, and IK info.
@@ -699,6 +821,7 @@ document.addEventListener('DOMContentLoaded', () => {
     try {
         initThreeJS();
         createSliders();
+        initCharts(); // Initialize charts after DOM is ready
         updateVisualization(); // Initial draw
         console.log("Interactive Kinematics Initialized.");
     } catch (error) {
