@@ -1,23 +1,19 @@
 import * as THREE from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
-// import { GUI } from 'three/addons/libs/lil-gui.module.min.js'; // Optional: for debugging
 
 // --- Configuration & Constants ---
+// ... (Keep all constants and DH parameters the same as before) ...
 const DH_PARAMS_UR5E = [
     { a: 0.0,    alpha: Math.PI / 2, d: 0.1625, theta_offset: 0.0 },
     { a: -0.425, alpha: 0.0,         d: 0.0,    theta_offset: 0.0 },
     { a: -0.3922,alpha: 0.0,         d: 0.0,    theta_offset: 0.0 },
     { a: 0.0,    alpha: Math.PI / 2, d: 0.1333, theta_offset: 0.0 },
     { a: 0.0,    alpha: -Math.PI/ 2, d: 0.0997, theta_offset: 0.0 },
-    { a: 0.0,    alpha: 0.0,         d: 0.0996, theta_offset: 0.0 } // Corrected d6 from Python code
+    { a: 0.0,    alpha: 0.0,         d: 0.0996, theta_offset: 0.0 }
 ];
-
-const TCP_Z_OFFSET = 0.1565; // As defined in Python solver
-
+const TCP_Z_OFFSET = 0.1565;
 const H_FLANGE_TCP = new THREE.Matrix4().makeTranslation(0, 0, TCP_Z_OFFSET);
 const INV_H_FLANGE_TCP = new THREE.Matrix4().makeTranslation(0, 0, -TCP_Z_OFFSET);
-
-// Constants derived from DH parameters (as in Python)
 const d1 = DH_PARAMS_UR5E[0].d;
 const a2 = DH_PARAMS_UR5E[1].a;
 const a3 = DH_PARAMS_UR5E[2].a;
@@ -26,47 +22,38 @@ const d5 = DH_PARAMS_UR5E[4].d;
 const d6 = DH_PARAMS_UR5E[5].d;
 const len_a2 = Math.abs(a2);
 const len_a3 = Math.abs(a3);
-
-// Tolerances (ported from Python)
 const tol_zero = 1e-9;
 const tol_singularity = 1e-7;
 const tol_compare = 1e-6;
 const tol_geom = 1e-6;
-
-// Visualization Constants
-const JOINT_COLORS = [0xff0000, 0x00ff00, 0x0000ff, 0xffff00, 0xff00ff, 0x00ffff];
-const PRIMARY_LINK_COLOR = 0xeeeeee; // Brighter for slider config
+const PRIMARY_LINK_COLOR = 0xeeeeee;
 const PRIMARY_JOINT_COLOR = 0xffffff;
 const IK_LINK_COLOR = 0xaaaaaa;
 const IK_JOINT_COLOR = 0x888888;
-const TARGET_TCP_COLOR = 0xff8800; // Color for the target frame visualization
+const TARGET_TCP_COLOR = 0xff8800;
 const AXIS_LENGTH = 0.05;
 const JOINT_RADIUS = 0.03;
-const LINK_RADIUS = 0.015; // *** Made thinner ***
-const IK_SOLUTION_OPACITY = 0.4; // Opacity for non-primary solutions
-
+const LINK_RADIUS = 0.015; // Thinner links
+const IK_SOLUTION_OPACITY = 0.4;
 const initialJointAngles = [0.0, -Math.PI / 2, Math.PI / 2, -Math.PI / 2, -Math.PI / 2, 0.0];
 
-// --- DOM Elements ---
-const canvasContainer = document.getElementById('kinematics-canvas-container');
-const canvas = document.getElementById('kinematics-canvas');
-const slidersContainer = document.getElementById('joint-sliders');
-const tcpPoseOutput = document.getElementById('tcp-pose-output');
-const ikSolutionCount = document.getElementById('ik-solution-count'); // Added
-const ikSolutionsOutput = document.getElementById('ik-solutions-output'); // Added
-const loadingMessage = document.getElementById('loading-message');
-const errorMessage = document.getElementById('error-message');
 
-// --- Global Three.js Variables ---
+// --- Global Variables ---
+// (Declare them here, assign inside init or DOMContentLoaded)
 let scene, camera, renderer, controls;
-let robotInstancesGroup; // Group to hold ALL robot configuration instances
-let targetTCPGroup; // Group for the target TCP frame visualization
-let jointSliders = [];
-let valueDisplays = [];
-let ikSolutionMaterials = []; // Store materials for IK solutions
+let robotInstancesGroup, targetTCPGroup;
+let jointSliders = [], valueDisplays = [];
+let canvasContainer, canvas, slidersContainer, tcpPoseOutput, ikSolutionCount, ikSolutionsOutput, loadingMessage, errorMessage; // Declare DOM element vars
 
 // --- Helper Functions ---
-
+// ... dhMatrix ...
+// ... forwardKinematics ...
+// ... inverseKinematics ...
+// ... areAnglesClose ...
+// ... createRobotVisualizationInstance ...
+// ... formatMatrix ...
+// ... generateDistinctColors ...
+// (Keep ALL the helper functions from the previous version exactly the same)
 // DH Matrix function (Unchanged)
 function dhMatrix(a, alpha, d, theta) {
     const cos_t = Math.cos(theta);
@@ -130,11 +117,6 @@ function inverseKinematics(T_desired_TCP) {
     const pzd = P60.z;
 
     // Target Flange Orientation elements (using THREE.js column-major format)
-    // r = [ R11, R21, R31, 0,
-    //       R12, R22, R32, 0,
-    //       R13, R23, R33, 0,
-    //       Tx,  Ty,  Tz,  1 ]
-    // We need R06 (standard notation) which is the transpose in math context
     const r11d = r[0], r21d = r[1], r31d = r[2];
     const r12d = r[4], r22d = r[5], r32d = r[6];
     const r13d = r[8], r23d = r[9], r33d = r[10];
@@ -149,38 +131,36 @@ function inverseKinematics(T_desired_TCP) {
     const dist_sq_xy = B * B + A * A;
 
     if (dist_sq_xy < d4 * d4 - tol_geom) { /* console.log("IK T1: Below d4 range"); */ return []; }
-    if (Math.abs(B) < tol_singularity && Math.abs(A) < tol_singularity) { /* console.log("IK T1: Singularity at base"); */ return []; } // Avoid atan2(0,0)
+    if (Math.abs(B) < tol_singularity && Math.abs(A) < tol_singularity) { /* console.log("IK T1: Singularity at base"); */ return []; }
 
-    const sqrt_arg_t1 = dist_sq_xy - d4 * d4; // Should be >= 0 if check above passed
-    const sqrt_val_t1 = Math.sqrt(Math.max(0, sqrt_arg_t1)); // Ensure non-negative
+    const sqrt_arg_t1 = dist_sq_xy - d4 * d4;
+    const sqrt_val_t1 = Math.sqrt(Math.max(0, sqrt_arg_t1));
 
-    const term1_t1 = Math.atan2(A, B); // Note: atan2(y, x) convention
-    const term2_t1 = Math.atan2(sqrt_val_t1, d4); // Corrected order based on common UR IK derivations
+    const term1_t1 = Math.atan2(A, B);
+    const term2_t1 = Math.atan2(sqrt_val_t1, d4);
 
     const theta1_sol = [
-        term1_t1 - term2_t1, // Shoulder Right configuration
-        term1_t1 + term2_t1 + Math.PI // Shoulder Left configuration (needs PI adjustment often)
+        term1_t1 - term2_t1,
+        term1_t1 + term2_t1 + Math.PI // Adjusted from python version based on common UR IK forms
     ];
+
 
     for (let t1_idx = 0; t1_idx < theta1_sol.length; t1_idx++) {
         const t1 = theta1_sol[t1_idx];
         const s1 = Math.sin(t1), c1 = Math.cos(t1);
 
         // --- Theta 5 ---
-        // M_val depends on target Z-axis projection onto plane perp to Z0 and through X1
         const M_val = (r13d * s1 - r23d * c1);
-        const M = Math.max(-1.0, Math.min(1.0, M_val)); // Clip to [-1, 1] for acos
+        const M = Math.max(-1.0, Math.min(1.0, M_val));
 
-        // Check if M is close to +/- 1 (singularity) - Python used atan2 approach
         let t5_options = [];
-        if (Math.abs(Math.abs(M) - 1.0) < tol_singularity) { // Wrist singularity
-            // console.warn("IK T5: Near wrist singularity (M ~ +/-1)");
-            t5_options.push(M > 0 ? 0 : Math.PI); // t5 is 0 or pi
+        if (Math.abs(Math.abs(M) - 1.0) < tol_singularity) {
+            t5_options.push(M > 0 ? 0 : Math.PI);
         } else {
             const sqrt_M_term = Math.sqrt(1 - M * M);
             t5_options = [
-                Math.atan2(sqrt_M_term, M),  // Elbow down
-                Math.atan2(-sqrt_M_term, M) // Elbow up
+                Math.atan2(sqrt_M_term, M),
+                Math.atan2(-sqrt_M_term, M)
             ];
         }
 
@@ -190,19 +170,23 @@ function inverseKinematics(T_desired_TCP) {
 
             // --- Theta 6 ---
             let t6 = 0.0;
-            if (Math.abs(s5) < tol_singularity) { // If t5 is 0 or pi (singularity)
-                // console.warn("IK T6: Wrist singular (s5 ~ 0), setting t6=0");
-                t6 = 0.0; // t6 is arbitrary, set to 0
+            if (Math.abs(s5) < tol_singularity) {
+                t6 = 0.0;
             } else {
-                 // Calculate based on target X/Y axes projection
-                 const D_t6 = (r12d * s1 - r22d * c1); // Projection of Y-axis
-                 const E_t6 = (r11d * s1 - r21d * c1); // Projection of X-axis
-                 t6 = Math.atan2(-D_t6 / s5, E_t6 / s5); // atan2(-Y_proj, X_proj) / sin(t5)
+                 const D_t6 = (r12d * s1 - r22d * c1);
+                 const E_t6 = (r11d * s1 - r21d * c1);
+                 // Avoid atan2(0,0) for t6 as well
+                 if (Math.abs(D_t6) < tol_singularity && Math.abs(E_t6) < tol_singularity && Math.abs(s5) > tol_singularity) {
+                      // This case implies alignment where multiple t6 could work, often arises with t5=pi/2
+                      //console.warn("IK T6: Singularity atan2(0,0) case, setting t6=0");
+                      t6 = 0.0; // Set specific value, though technically depends on previous joints
+                 } else {
+                    t6 = Math.atan2(-D_t6 / s5, E_t6 / s5);
+                 }
             }
             const s6 = Math.sin(t6), c6 = Math.cos(t6);
 
             // --- Theta 3 ---
-            // Calculate P4 relative to base frame using T1 and T5/T6 transforms
             const T65 = dhMatrix(DH_PARAMS_UR5E[5].a, DH_PARAMS_UR5E[5].alpha, DH_PARAMS_UR5E[5].d, t6);
             const T54 = dhMatrix(DH_PARAMS_UR5E[4].a, DH_PARAMS_UR5E[4].alpha, DH_PARAMS_UR5E[4].d, t5);
             const T10 = dhMatrix(DH_PARAMS_UR5E[0].a, DH_PARAMS_UR5E[0].alpha, DH_PARAMS_UR5E[0].d, t1);
@@ -211,109 +195,86 @@ function inverseKinematics(T_desired_TCP) {
             const T04 = new THREE.Matrix4().multiplyMatrices(T_flange, T46_inv);
             const T14 = new THREE.Matrix4().multiplyMatrices(new THREE.Matrix4().copy(T10).invert(), T04);
 
-            const P41 = new THREE.Vector3().setFromMatrixPosition(T14); // P4 relative to frame 1
+            const P41 = new THREE.Vector3().setFromMatrixPosition(T14);
             const P41x = P41.x;
             const P41y = P41.y;
 
             const dist_sq_14 = P41x * P41x + P41y * P41y;
             const cos_t3_arg_num = dist_sq_14 - a2 * a2 - a3 * a3;
-            const cos_t3_arg_den = 2 * a2 * a3; // a2, a3 are negative
+            const cos_t3_arg_den = 2 * a2 * a3;
 
-            if (Math.abs(cos_t3_arg_den) < tol_zero) { /* console.log("IK T3: Denom zero"); */ continue; }
-
+            if (Math.abs(cos_t3_arg_den) < tol_zero) { continue; }
             const cos_t3_arg = cos_t3_arg_num / cos_t3_arg_den;
-
-            if (Math.abs(cos_t3_arg) > 1.0 + tol_geom) { /* console.log("IK T3: Out of range"); */ continue; }
-            const cos_t3 = Math.max(-1.0, Math.min(1.0, cos_t3_arg)); // Clip
+            if (Math.abs(cos_t3_arg) > 1.0 + tol_geom) { continue; }
+            const cos_t3 = Math.max(-1.0, Math.min(1.0, cos_t3_arg));
 
             const sqrt_arg_t3 = 1.0 - cos_t3 * cos_t3;
             const sqrt_val_t3 = Math.sqrt(Math.max(0, sqrt_arg_t3));
 
             const t3_sol = [
-                Math.atan2(sqrt_val_t3, cos_t3),  // Positive sine
-                Math.atan2(-sqrt_val_t3, cos_t3) // Negative sine
+                Math.atan2(sqrt_val_t3, cos_t3),
+                Math.atan2(-sqrt_val_t3, cos_t3)
             ];
+
 
             for (let t3_idx = 0; t3_idx < t3_sol.length; t3_idx++) {
                 const t3 = t3_sol[t3_idx];
-                const s3 = Math.sin(t3), c3 = Math.cos(t3);
+                const s3 = Math.sin(t3), c3 = cos_t3; // Use the clipped cos_t3
 
                 // --- Theta 2 ---
-                const term2_den_t2 = a2 * a2 + a3 * a3 + 2 * a2 * a3 * c3; // (dist P41)^2
-                if (Math.abs(term2_den_t2) < tol_zero) { /* console.log("IK T2: Denom zero"); */ continue; }
-
-                const term1_t2 = Math.atan2(-P41y, -P41x); // atan2(-y, -x) relative to frame 1
                 const term2_num_t2 = a3 * s3;
-                const term2_den_t2_sqrt = Math.sqrt(term2_den_t2);
-                const term2_t2 = Math.atan2(term2_num_t2, a2 + a3 * c3); // atan2(y_comp, x_comp) in linkage
+                const term2_den_t2 = a2 + a3 * c3; // Denominator for atan2 term
+
+                const term1_t2 = Math.atan2(-P41y, -P41x);
+                const term2_t2 = Math.atan2(term2_num_t2, term2_den_t2);
 
                 const t2 = term1_t2 - term2_t2;
 
                 // --- Theta 4 ---
-                const R14 = new THREE.Matrix4().extractRotation(T14);
-                const r14 = R14.elements;
-                 // R14 = [ R11, R21, R31, 0, R12, R22, R32, 0, R13, R23, R33, 0, ... ]
-                 // We need atan2 of rotation elements relative to frame 1
-                 // T14 = T12 * T23 * T34 -> R14 = R12 * R23 * R34
-                 // Need R34 which relates to t4. Can use T14 elements.
-                 // Z-axis of frame 4 in frame 1 coordinates (r14[2], r14[6], r14[10])
-                 // X-axis of frame 4 in frame 1 coordinates (r14[0], r14[4], r14[8])
-                 // atan2(Z4_y1, Z4_x1) relates to t2+t3+t4
-                 // atan2(X4_y1, X4_x1) also involves t2+t3+t4
-
-                 // Simpler: Use R04 and R01 to find R14, then extract angles
                 const T21 = dhMatrix(DH_PARAMS_UR5E[1].a, DH_PARAMS_UR5E[1].alpha, DH_PARAMS_UR5E[1].d, t2);
                 const T32 = dhMatrix(DH_PARAMS_UR5E[2].a, DH_PARAMS_UR5E[2].alpha, DH_PARAMS_UR5E[2].d, t3);
                 const T03 = new THREE.Matrix4().multiplyMatrices(T10, T21).multiply(T32);
                 const T34 = new THREE.Matrix4().multiplyMatrices(new THREE.Matrix4().copy(T03).invert(), T04);
 
-                // Extract t4 from T34 (which should be a rotation around Z3 followed by DH transform for link 4)
-                // T34 elements: [ c4, -s4*ca4, s4*sa4, a4*c4]
-                //               [ s4,  c4*ca4,-c4*sa4, a4*s4]
-                //               [ 0,     sa4,    ca4,    d4]
-                // For UR5e: alpha4 = pi/2 -> ca4=0, sa4=1
-                // T34 elements: [ c4,    0,   s4,    0]
-                //               [ s4,    0,  -c4,    0]
-                //               [ 0,     1,    0,   d4]
-                // Need to extract t4 from rotation part R34
                 const R34 = new THREE.Matrix4().extractRotation(T34);
                 const r34 = R34.elements;
-                const t4 = Math.atan2(r34[1], r34[0]); // atan2(R21, R11)
+                const t4 = Math.atan2(r34[1], r34[0]);
 
                 // --- Assemble Solution ---
                 const sol_angles_raw = [t1, t2, t3, t4, t5, t6];
-
-                // Normalize angles to [-pi, pi]
                 const sol_angles_normalized = sol_angles_raw.map(a => {
                     let wrapped = (a + Math.PI) % (2 * Math.PI);
-                    if (wrapped < 0) wrapped += 2 * Math.PI; // Ensure positive before offset
+                    if (wrapped < 0) wrapped += 2 * Math.PI;
                     return wrapped - Math.PI;
                 });
 
-                 // --- Verification (Optional but recommended) ---
-                 /*
+                 // --- Verification (Basic FK check) ---
                  try {
                      const { T0_TCP: T_check } = forwardKinematics(sol_angles_normalized);
-                     let diff = new THREE.Matrix4().copy(T_check).invert().multiply(T_desired_TCP);
-                     let posDiff = new THREE.Vector3().setFromMatrixPosition(diff).length();
-                     // More robust orientation check needed (e.g., angle from identity rotation)
-                     if (posDiff < tol_compare * 10) { // Loose check
-                          solutions.push(sol_angles_normalized);
-                     } else {
-                          // console.log("IK Solution failed verification", posDiff);
+                     if (T_check) {
+                        // Check position distance
+                        const pos_check = new THREE.Vector3().setFromMatrixPosition(T_check);
+                        const pos_target = new THREE.Vector3().setFromMatrixPosition(T_desired_TCP);
+                        const posDiff = pos_check.distanceTo(pos_target);
+
+                        // Check orientation (angle between Z axes - simpler than full quaternion diff)
+                        const z_check = new THREE.Vector3(T_check.elements[8], T_check.elements[9], T_check.elements[10]).normalize();
+                        const z_target = new THREE.Vector3(T_desired_TCP.elements[8], T_desired_TCP.elements[9], T_desired_TCP.elements[10]).normalize();
+                        const angleDiff = z_check.angleTo(z_target); // Radians
+
+                        if (posDiff < tol_compare * 100 && angleDiff < tol_compare * 100) { // Looser tolerance for web demo
+                             solutions.push(sol_angles_normalized);
+                        } else {
+                             // console.log(`IK Solution failed verification: P ${posDiff.toFixed(5)}, A ${angleDiff.toFixed(5)}`, sol_angles_normalized.map(a => a.toFixed(2)));
+                        }
                      }
-                 } catch (e) {
-                     // console.log("FK Verification failed", e);
-                 }
-                 */
-                 // For now, trust the math and add the solution
-                 solutions.push(sol_angles_normalized);
+                 } catch (e) { /* FK failed */ }
 
             } // t3 loop
         } // t5 loop
     } // t1 loop
 
-    // Filter duplicates (can happen due to numerical precision)
+    // Filter duplicates
     const unique_solutions = [];
     for (const sol of solutions) {
         let is_unique = true;
@@ -331,29 +292,28 @@ function inverseKinematics(T_desired_TCP) {
     return unique_solutions;
 }
 
-
-// --- Visualization Update ---
-
 // Helper to compare joint angle arrays
 function areAnglesClose(angles1, angles2, tolerance = 1e-4) {
-    if (angles1.length !== angles2.length) return false;
+    if (!angles1 || !angles2 || angles1.length !== angles2.length) return false;
     for (let i = 0; i < angles1.length; i++) {
         let diff = angles1[i] - angles2[i];
-        // Handle angle wrapping (-pi vs pi)
-        diff = (diff + Math.PI) % (2 * Math.PI) - Math.PI;
-        if (Math.abs(diff) > tolerance) {
+        diff = (diff + Math.PI) % (2 * Math.PI); // Wrap difference to [0, 2pi)
+         if (diff < 0) diff += 2 * Math.PI;
+         diff = Math.min(diff, 2 * Math.PI - diff); // Use smaller angle difference
+        if (diff > tolerance) {
             return false;
         }
     }
     return true;
 }
 
+
 // Function to create ONE instance of the robot visualization
 function createRobotVisualizationInstance(jointAngles, isPrimary) {
     const group = new THREE.Group();
-    const { points, T0_TCP } = forwardKinematics(jointAngles); // Need points for drawing
+    const { points, T0_TCP } = forwardKinematics(jointAngles);
 
-    if (!points || points.length < 8) return null; // Need base, 6 joints, TCP
+    if (!points || points.length < 8) return null;
 
     const opacity = isPrimary ? 1.0 : IK_SOLUTION_OPACITY;
     const transparent = !isPrimary;
@@ -361,36 +321,24 @@ function createRobotVisualizationInstance(jointAngles, isPrimary) {
     const jointColor = isPrimary ? PRIMARY_JOINT_COLOR : IK_JOINT_COLOR;
 
     const linkMaterial = new THREE.MeshStandardMaterial({
-        color: linkColor,
-        roughness: 0.6,
-        metalness: 0.1,
-        opacity: opacity,
-        transparent: transparent,
-        depthWrite: isPrimary // Allow non-primary to be seen through primary
+        color: linkColor, roughness: 0.6, metalness: 0.1,
+        opacity: opacity, transparent: transparent, depthWrite: isPrimary
     });
     const jointMaterial = new THREE.MeshStandardMaterial({
-         color: jointColor,
-         roughness: 0.5,
-         metalness: 0.2,
-         opacity: opacity,
-         transparent: transparent,
-         depthWrite: isPrimary
+         color: jointColor, roughness: 0.5, metalness: 0.2,
+         opacity: opacity, transparent: transparent, depthWrite: isPrimary
     });
      const jointGeometry = new THREE.SphereGeometry(JOINT_RADIUS, 12, 8);
-     const linkGeometry = new THREE.CylinderGeometry(LINK_RADIUS, LINK_RADIUS, 1, 6); // Length=1 initially
+     const linkGeometry = new THREE.CylinderGeometry(LINK_RADIUS, LINK_RADIUS, 1, 6);
 
-     // Base visual (optional static part, not strictly needed per instance)
-     // const baseMesh = new THREE.Mesh(new THREE.SphereGeometry(JOINT_RADIUS * 1.5, 16, 12), new THREE.MeshStandardMaterial({color: 0x555555}));
-     // group.add(baseMesh);
-
-     // Draw joints J1-J6
      for (let i = 0; i < 6; i++) {
-         const jointMesh = new THREE.Mesh(jointGeometry, jointMaterial);
-         jointMesh.position.copy(points[i + 1]); // points[0]=base, points[1]=J1,...
+         const jointMesh = new THREE.Mesh(jointGeometry, jointMaterial.clone()); // Clone material for potential color changes
+         jointMesh.material.color.setHex(JOINT_COLORS[i]); // Use standard joint colors maybe?
+         if(!isPrimary) jointMesh.material.color = new THREE.Color(IK_JOINT_COLOR); // Or override for IK
+         jointMesh.position.copy(points[i + 1]);
          group.add(jointMesh);
      }
 
-     // Draw links Base-J1 to J5-J6
      for (let i = 0; i < 6; i++) {
          const startPoint = points[i];
          const endPoint = points[i + 1];
@@ -409,11 +357,10 @@ function createRobotVisualizationInstance(jointAngles, isPrimary) {
          }
      }
 
-     // Add TCP frame for this instance (optional, maybe only for primary?)
+     // Add TCP frame only for the primary configuration for clarity
      if (isPrimary && T0_TCP) {
-         const tcpFrame = new THREE.AxesHelper(AXIS_LENGTH * 1.5); // Slightly larger axes
-         const pos = new THREE.Vector3();
-         const quat = new THREE.Quaternion();
+         const tcpFrame = new THREE.AxesHelper(AXIS_LENGTH * 1.5);
+         const pos = new THREE.Vector3(); const quat = new THREE.Quaternion();
          T0_TCP.decompose(pos, quat, new THREE.Vector3());
          tcpFrame.position.copy(pos);
          tcpFrame.setRotationFromQuaternion(quat);
@@ -426,31 +373,34 @@ function createRobotVisualizationInstance(jointAngles, isPrimary) {
 
 // --- Main Update Function ---
 function updateVisualization() {
-    const sliderAngles = jointSliders.map(slider => parseFloat(slider.value));
+    // Ensure DOM elements are available before proceeding
+    if (!tcpPoseOutput || !ikSolutionCount || !ikSolutionsOutput || !robotInstancesGroup || !targetTCPGroup) {
+        console.error("DOM elements not ready for updateVisualization");
+        return;
+    }
 
-    // Update slider value displays
+    const sliderAngles = jointSliders.map(slider => parseFloat(slider.value));
     sliderAngles.forEach((val, i) => {
         if (valueDisplays[i]) valueDisplays[i].textContent = val.toFixed(2);
     });
 
-    // 1. Calculate Target FK Pose from sliders
+    // 1. Calculate Target FK Pose
     const { T0_TCP: T_target_TCP } = forwardKinematics(sliderAngles);
 
     if (!T_target_TCP) {
         tcpPoseOutput.textContent = "Error in FK calculation.";
         ikSolutionCount.textContent = "N/A";
         ikSolutionsOutput.textContent = "N/A";
-        robotInstancesGroup.clear(); // Clear previous drawings
+        robotInstancesGroup.clear();
+        targetTCPGroup.clear();
         return;
     }
 
-    // Display Target TCP Pose
+    // Display Target TCP Pose & Frame
     tcpPoseOutput.textContent = formatMatrix(T_target_TCP);
-    // Update target TCP visualization frame
     targetTCPGroup.clear();
-    const targetFrame = new THREE.AxesHelper(AXIS_LENGTH * 2.5); // Make target frame prominent
-    const pos = new THREE.Vector3();
-    const quat = new THREE.Quaternion();
+    const targetFrame = new THREE.AxesHelper(AXIS_LENGTH * 2.5);
+    const pos = new THREE.Vector3(); const quat = new THREE.Quaternion();
     T_target_TCP.decompose(pos, quat, new THREE.Vector3());
     targetFrame.position.copy(pos);
     targetFrame.setRotationFromQuaternion(quat);
@@ -462,11 +412,9 @@ function updateVisualization() {
     targetTCPGroup.add(targetMarker);
 
 
-    // 2. Calculate ALL IK Solutions for the Target Pose
+    // 2. Calculate ALL IK Solutions
     const ikSolutions = inverseKinematics(T_target_TCP);
     ikSolutionCount.textContent = ikSolutions.length;
-
-    // Display IK solutions text
     if (ikSolutions.length > 0) {
         ikSolutionsOutput.textContent = ikSolutions.map((sol, idx) =>
             `Sol ${idx + 1}: [${sol.map(a => a.toFixed(2)).join(', ')}]`
@@ -475,56 +423,58 @@ function updateVisualization() {
         ikSolutionsOutput.textContent = "No solutions found (or near singularity).";
     }
 
-
     // 3. Visualize all Solutions
-    robotInstancesGroup.clear(); // Clear previous robot drawings
-
+    robotInstancesGroup.clear();
     let primaryFoundAmongSolutions = false;
-    // Use a colormap for IK solutions
-    const colors = generateDistinctColors(ikSolutions.length);
 
-
-    ikSolutions.forEach((ikAngles, index) => {
+    ikSolutions.forEach((ikAngles) => {
         const isPrimary = areAnglesClose(sliderAngles, ikAngles);
         if (isPrimary) primaryFoundAmongSolutions = true;
-
         const robotInstance = createRobotVisualizationInstance(ikAngles, isPrimary);
-        if (robotInstance) {
-             // Apply distinct colors to non-primary solutions if needed (or use transparency)
-             if (!isPrimary) {
-                robotInstance.traverse((child) => {
-                    if (child.isMesh && child.material) {
-                       // Optionally apply colormap color here, or just rely on opacity
-                       // Example: child.material.color.setHex(colors[index % colors.length]);
-                       child.material.needsUpdate = true;
-                    }
-                });
-            }
-            robotInstancesGroup.add(robotInstance);
-        }
+        if (robotInstance) robotInstancesGroup.add(robotInstance);
     });
 
-    // If the slider configuration itself wasn't found by IK (e.g., due to tolerance issues or if it's invalid),
-    // still draw it clearly as the reference.
-    if (!primaryFoundAmongSolutions) {
-        // console.warn("Slider configuration not found among IK solutions, drawing separately.");
-        const primaryInstance = createRobotVisualizationInstance(sliderAngles, true);
-        if (primaryInstance) {
-            robotInstancesGroup.add(primaryInstance);
-        }
+    if (!primaryFoundAmongSolutions && ikSolutions.length < 8) { // Draw slider config if it wasn't in IK results (max 8 solutions)
+         // console.warn("Slider configuration not found among IK solutions, drawing separately.");
+         const primaryInstance = createRobotVisualizationInstance(sliderAngles, true);
+         if (primaryInstance) robotInstancesGroup.add(primaryInstance);
+    } else if (!primaryFoundAmongSolutions && ikSolutions.length >= 8) {
+        // console.warn("Slider config not among IK solutions, but max solutions already shown.");
+        // Optionally add text indicating the slider config is not shown or is invalid/unreachable by IK
     }
 }
 
 
 // --- Initialization ---
 function init() {
+    // Assign global DOM element variables here
+    canvasContainer = document.getElementById('kinematics-canvas-container');
+    canvas = document.getElementById('kinematics-canvas');
+    slidersContainer = document.getElementById('joint-sliders');
+    tcpPoseOutput = document.getElementById('tcp-pose-output');
+    ikSolutionCount = document.getElementById('ik-solution-count');
+    ikSolutionsOutput = document.getElementById('ik-solutions-output');
+    loadingMessage = document.getElementById('loading-message');
+    errorMessage = document.getElementById('error-message');
+
+    // ** Add checks here **
+    if (!canvasContainer || !canvas || !slidersContainer || !tcpPoseOutput || !ikSolutionCount || !ikSolutionsOutput || !loadingMessage || !errorMessage) {
+         console.error("DOM Initialization Error: One or more required elements not found.");
+         if(loadingMessage) loadingMessage.style.display = 'none';
+         if(errorMessage) {
+            errorMessage.textContent = "Initialization Error: HTML structure mismatch.";
+            errorMessage.style.display = 'block';
+         }
+        return; // Stop initialization if elements are missing
+    }
+
     try {
         scene = new THREE.Scene();
         scene.background = new THREE.Color(0x282c34);
 
         const aspect = canvasContainer.clientWidth / canvasContainer.clientHeight;
         camera = new THREE.PerspectiveCamera(60, aspect, 0.1, 100);
-        camera.position.set(0.8, 1.0, 1.2); // Adjusted starting position slightly
+        camera.position.set(0.8, 1.0, 1.2);
         camera.lookAt(0, 0, 0.3);
 
         renderer = new THREE.WebGLRenderer({ canvas: canvas, antialias: true });
@@ -532,9 +482,9 @@ function init() {
         renderer.setPixelRatio(window.devicePixelRatio);
         THREE.ColorManagement.enabled = true;
 
-        const ambientLight = new THREE.AmbientLight(0xffffff, 0.7); // Slightly brighter ambient
+        const ambientLight = new THREE.AmbientLight(0xffffff, 0.7);
         scene.add(ambientLight);
-        const directionalLight = new THREE.DirectionalLight(0xffffff, 0.9); // Slightly brighter directional
+        const directionalLight = new THREE.DirectionalLight(0xffffff, 0.9);
         directionalLight.position.set(5, 10, 7.5);
         scene.add(directionalLight);
 
@@ -543,24 +493,13 @@ function init() {
         controls.dampingFactor = 0.1;
         controls.target.set(0, 0, 0.3);
 
-        // Group for all robot meshes
         robotInstancesGroup = new THREE.Group();
         scene.add(robotInstancesGroup);
-
-        // Group for the target TCP frame marker
         targetTCPGroup = new THREE.Group();
         scene.add(targetTCPGroup);
 
-
-        const axesHelper = new THREE.AxesHelper(0.3); // Base frame
+        const axesHelper = new THREE.AxesHelper(0.3);
         scene.add(axesHelper);
-
-        // *** Remove Ground Plane ***
-        // const planeGeometry = new THREE.PlaneGeometry(2, 2);
-        // const planeMaterial = new THREE.MeshStandardMaterial({ color: 0x444444, side: THREE.DoubleSide });
-        // const plane = new THREE.Mesh(planeGeometry, planeMaterial);
-        // plane.rotation.x = -Math.PI / 2;
-        // scene.add(plane); // REMOVED
 
         createSliders();
         updateVisualization(); // Initial calculation and draw
@@ -576,59 +515,61 @@ function init() {
     }
 }
 
-function createSliders() { /* ... Unchanged from previous version ... */
-    slidersContainer.innerHTML = ''; // Clear any previous sliders
+function createSliders() {
+     // Ensure slidersContainer exists before manipulating
+     if (!slidersContainer) {
+          console.error("Cannot create sliders: slidersContainer not found.");
+          return;
+     }
+    slidersContainer.innerHTML = ''; // Clear previous sliders
     jointSliders = [];
     valueDisplays = [];
 
     for (let i = 0; i < 6; i++) {
         const group = document.createElement('div');
         group.className = 'slider-group';
-
         const label = document.createElement('label');
         label.htmlFor = `joint${i + 1}-slider`;
         label.textContent = `Joint ${i + 1}:`;
-
         const slider = document.createElement('input');
         slider.type = 'range';
         slider.id = `joint${i + 1}-slider`;
-        slider.min = -Math.PI.toFixed(3); // Approx -3.142
-        slider.max = Math.PI.toFixed(3); // Approx 3.142
-        slider.step = (Math.PI / 180).toFixed(4); // ~1 degree steps
+        slider.min = -Math.PI.toFixed(3);
+        slider.max = Math.PI.toFixed(3);
+        slider.step = (Math.PI / 180).toFixed(4);
         slider.value = initialJointAngles[i].toFixed(3);
-
         const valueDisplay = document.createElement('span');
         valueDisplay.className = 'value-display';
-        valueDisplay.textContent = parseFloat(slider.value).toFixed(2); // Initial display
-
+        valueDisplay.textContent = parseFloat(slider.value).toFixed(2);
         group.appendChild(label);
         group.appendChild(slider);
         group.appendChild(valueDisplay);
         slidersContainer.appendChild(group);
-
         jointSliders.push(slider);
         valueDisplays.push(valueDisplay);
-
-        // Add event listener
-        slider.addEventListener('input', updateVisualization); // Call main update function
+        slider.addEventListener('input', updateVisualization);
     }
 }
 
 
 // --- Animation Loop ---
-function animate() { /* ... Unchanged ... */
-    requestAnimationFrame(animate);
-    controls.update();
-    renderer.render(scene, camera);
+function animate() {
+     // Ensure renderer and scene exist before animating
+     if (!renderer || !scene || !camera) return;
+     requestAnimationFrame(animate);
+     if (controls) controls.update(); // Check if controls exist
+     renderer.render(scene, camera);
 }
 
 // --- Resize Handling ---
-function onWindowResize() { /* ... Unchanged ... */
-    const width = canvasContainer.clientWidth;
-    const height = canvasContainer.clientHeight;
-    camera.aspect = width / height;
-    camera.updateProjectionMatrix();
-    renderer.setSize(width, height);
+function onWindowResize() {
+     // Ensure necessary components exist
+     if (!canvasContainer || !camera || !renderer) return;
+     const width = canvasContainer.clientWidth;
+     const height = canvasContainer.clientHeight;
+     camera.aspect = width / height;
+     camera.updateProjectionMatrix();
+     renderer.setSize(width, height);
 }
 
 // --- Utility Functions ---
@@ -640,20 +581,22 @@ function formatMatrix(matrix) { /* ... Unchanged ... */
     }
     return str.trim();
 }
-
-// Simple distinct color generator (Hue-based)
-function generateDistinctColors(count) {
+function generateDistinctColors(count) { /* ... Unchanged ... */
     const colors = [];
-    const saturation = 0.6; // Lower saturation for fainter colors
+    const saturation = 0.6;
     const lightness = 0.5;
     for (let i = 0; i < count; i++) {
-        const hue = (i * (360 / Math.max(1, count))) % 360 / 360; // Distribute hues
+        const hue = (i * (360 / Math.max(1, count))) % 360 / 360;
         colors.push(new THREE.Color().setHSL(hue, saturation, lightness).getHex());
     }
     return colors;
 }
 
+// --- Start Execution Safely ---
+if (document.readyState === 'loading') {  // Loading hasn't finished yet
+    document.addEventListener('DOMContentLoaded', init);
+} else {  // `DOMContentLoaded` has already fired
+    init();
+}
 
-// --- Start ---
 window.addEventListener('resize', onWindowResize);
-init();
