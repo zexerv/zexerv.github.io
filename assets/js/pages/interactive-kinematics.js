@@ -1,409 +1,393 @@
-// Import necessary Three.js components. Ensure these files are in the correct path.
-import * as THREE from '../libs/three.min.js';
-import { OrbitControls } from '../libs/OrbitControls.js';
+// Ensure the DOM is fully loaded before running the script
+document.addEventListener('DOMContentLoaded', () => {
 
-// --- Pre-computation Checks ---
-// Check if Three.js library is loaded correctly.
-if (typeof THREE === 'undefined') {
-    throw new Error("FATAL ERROR: THREE is not defined. Ensure three.min.js is loaded correctly before this script.");
-}
-// Check if OrbitControls is loaded correctly.
-if (typeof OrbitControls === 'undefined') {
-    throw new Error("FATAL ERROR: OrbitControls is not defined. Ensure OrbitControls.js is loaded correctly before this script and that this script has type='module'.");
-}
-// Check if the custom kinematics solver is loaded.
-if (typeof UR5eKinematics === 'undefined') {
-    throw new Error("FATAL ERROR: UR5eKinematics solver script not loaded before interactive-kinematics.js");
-}
+    // --- Constants and Configuration ---
+    const DH_PARAMS_UR5E = [
+        // DH parameters for UR5e (a, alpha, d, theta_offset)
+        // Note: three.js uses Y-up by default, ROS/robotics often use Z-up.
+        // We'll stick to standard DH conventions and adjust visualization accordingly.
+        { a: 0.0,     alpha: Math.PI / 2, d: 0.1625, offset: 0.0 }, // Base to Joint 1
+        { a: -0.425,  alpha: 0.0,         d: 0.0,    offset: 0.0 }, // Joint 1 to Joint 2
+        { a: -0.3922, alpha: 0.0,         d: 0.0,    offset: 0.0 }, // Joint 2 to Joint 3
+        { a: 0.0,     alpha: Math.PI / 2, d: 0.1333, offset: 0.0 }, // Joint 3 to Joint 4
+        { a: 0.0,     alpha: -Math.PI / 2,d: 0.0997, offset: 0.0 }, // Joint 4 to Joint 5
+        { a: 0.0,     alpha: 0.0,         d: 0.0996, offset: 0.0 }  // Joint 5 to Joint 6 (Flange)
+    ];
 
-// --- DOM Element Checks ---
-// Retrieve essential DOM elements for the visualization and controls.
-const canvasContainer = document.getElementById('robot-canvas-container');
-const canvas = document.getElementById('robot-canvas');
-const loadingIndicator = document.getElementById('loading-indicator');
-const ikStatusElement = document.getElementById('ik-status');
+    // Tool Center Point (TCP) offset from the flange (Joint 6)
+    // Assuming TCP is offset only along the Z-axis of the flange frame
+    const TCP_Z_OFFSET = 0.1565; // Example offset, adjust if needed
+    const H_FLANGE_TCP = new THREE.Matrix4().makeTranslation(0, 0, TCP_Z_OFFSET);
 
-// Verify that all required HTML elements are present.
-if (!canvasContainer || !canvas || !loadingIndicator || !ikStatusElement) {
-    throw new Error("FATAL ERROR: Required HTML elements (canvas container, canvas, loading indicator, or IK status) not found. Check IDs in interactive-kinematics.html.");
-}
+    // Initial joint angles (matches the HTML slider defaults)
+    const initialJointAngles = [
+        0.0, -Math.PI / 2, Math.PI / 2, -Math.PI / 2, -Math.PI / 2, 0.0
+    ];
 
-// Show loading indicator while setting up.
-loadingIndicator.style.display = 'block';
+    // Colors for robot parts
+    const BASE_COLOR = 0x666666; // Dark grey
+    const LINK_COLOR = 0xAAAAAA; // Light grey
+    const JOINT_COLOR = 0x0077CC; // Blue
+    const TCP_COLOR = 0xFF0000;   // Red
 
-// --- Scene Setup Variables ---
-let scene, camera, renderer, controls;
-let robotGroupFK, ikSolutionGroups = []; // Groups to hold robot parts for FK and IK.
-let targetTCPFrame; // Visual representation of the target TCP frame.
-
-// --- Colors and Materials Definitions ---
-// Define colors for FK and IK solutions for visual distinction.
-const fkColor = 0xff0000; // Red for the primary FK robot.
-const ikColorPalette = [0x00ffff, 0x00ff00, 0xff00ff, 0xffff00, 0x0000ff, 0xffa500, 0x800080, 0x4682b4]; // Palette for IK solutions.
-// Define geometry parameters.
-const jointRadius = 0.02;
-const linkRadius = 0.015;
-
-// Define materials for different robot parts.
-const fkMaterialSolid = new THREE.MeshLambertMaterial({ color: fkColor }); // Solid material for FK links (currently unused, using lines).
-const fkLineMaterialSolid = new THREE.LineBasicMaterial({ color: fkColor, linewidth: 3 }); // Solid line for FK robot links.
-
-// Dashed line materials for IK solutions, cycling through the palette.
-const ikMaterialsDashed = ikColorPalette.map(color =>
-    new THREE.LineDashedMaterial({
-        color: color,
-        linewidth: 1.5, // Note: linewidth > 1 might not be supported on all systems/drivers.
-        scale: 1,       // Controls the pattern repetition.
-        dashSize: 0.03, // Length of dashes.
-        gapSize: 0.02,  // Length of gaps.
-    })
-);
-// Material for robot joints.
-const jointMaterial = new THREE.MeshLambertMaterial({ color: 0xaaaaaa }); // Grey joints.
-// Material for the robot base.
-const baseMaterial = new THREE.MeshLambertMaterial({ color: 0x555555 }); // Dark grey base.
-
-// --- Robot Geometry Creation ---
-// Reusable geometry for joints (spheres).
-const jointGeometry = new THREE.SphereGeometry(jointRadius, 16, 12);
-// Geometry for the robot base (cylinder).
-const baseGeometry = new THREE.CylinderGeometry(0.07, 0.07, 0.1, 32);
-const baseMesh = new THREE.Mesh(baseGeometry, baseMaterial);
-baseMesh.position.set(0, 0.05, 0); // Position the base slightly above the origin.
-baseMesh.rotation.x = -Math.PI / 2; // Orient the cylinder upright if needed (depends on geometry definition).
-
-
-/**
- * Creates a cylinder mesh representing a robot link between two points.
- * @param {THREE.Vector3} p1 - Start point of the link.
- * @param {THREE.Vector3} p2 - End point of the link.
- * @param {THREE.Material} material - The material for the link mesh.
- * @returns {THREE.Mesh | null} The link mesh or null if points are coincident.
- */
-function createLinkMesh(p1, p2, material) {
-    // Calculate the vector representing the link.
-    const vector = new THREE.Vector3().subVectors(p2, p1);
-    const length = vector.length();
-    // Avoid creating zero-length cylinders.
-    if (length < 1e-6) return null;
-
-    // Create cylinder geometry.
-    const geometry = new THREE.CylinderGeometry(linkRadius, linkRadius, length, 12);
-    const mesh = new THREE.Mesh(geometry, material);
-
-    // Position the cylinder halfway between the points.
-    mesh.position.copy(p1).addScaledVector(vector, 0.5);
-    // Orient the cylinder along the vector direction (aligns cylinder's Y-axis).
-    mesh.quaternion.setFromUnitVectors(new THREE.Vector3(0, 1, 0), vector.normalize());
-
-    return mesh;
-}
-
-/**
- * Creates line segments connecting a series of points.
- * @param {number[][]} pointsArray - Array of points, where each point is [x, y, z].
- * @param {THREE.LineBasicMaterial | THREE.LineDashedMaterial} material - The material for the line.
- * @returns {THREE.Line} The created line object.
- */
-function createLineSegments(pointsArray, material) {
-    // Convert array of arrays to array of Vector3.
-    const points = pointsArray.map(p => new THREE.Vector3(p[0], p[1], p[2]));
-    // Create geometry from points.
-    const geometry = new THREE.BufferGeometry().setFromPoints(points);
-    // Create the line object.
-    const line = new THREE.Line(geometry, material);
-    // Required for dashed lines to render correctly.
-    if (material instanceof THREE.LineDashedMaterial) {
-        line.computeLineDistances();
+    // --- three.js Scene Setup ---
+    const container = document.getElementById('kinematics-canvas-container');
+    if (!container) {
+        console.error("Canvas container not found!");
+        return;
     }
-    return line;
-}
 
-/**
- * Creates a visual representation of a coordinate frame (X, Y, Z axes).
- * @param {number} [size=0.1] - The length of the axis arrows.
- * @returns {THREE.Group} A group containing the axis arrows.
- */
-function createTargetFrame(size = 0.1) {
-    const frameGroup = new THREE.Group();
-    const origin = new THREE.Vector3(0, 0, 0);
-    // Define axis vectors.
-    const x = new THREE.Vector3(1, 0, 0);
-    const y = new THREE.Vector3(0, 1, 0);
-    const z = new THREE.Vector3(0, 0, 1);
+    let scene, camera, renderer, controls;
+    let robotBase, jointMeshes = [], linkMeshes = [], tcpMesh;
+    let jointFrames = []; // To store THREE.Object3D representing each joint frame
 
-    // Create arrows for each axis with distinct colors.
-    frameGroup.add(new THREE.ArrowHelper(x, origin, size, 0xff0000, size * 0.2, size * 0.1)); // Red X
-    frameGroup.add(new THREE.ArrowHelper(y, origin, size, 0x00ff00, size * 0.2, size * 0.1)); // Green Y
-    frameGroup.add(new THREE.ArrowHelper(z, origin, size, 0x0000ff, size * 0.2, size * 0.1)); // Blue Z
+    // --- Kinematics Functions (Ported from Python) ---
 
-    // Initially hide the frame.
-    frameGroup.visible = false;
-    return frameGroup;
-}
+    /**
+     * Calculates the Denavit-Hartenberg transformation matrix.
+     * @param {number} a - Link length
+     * @param {number} alpha - Link twist
+     * @param {number} d - Link offset
+     * @param {number} theta - Joint angle
+     * @returns {THREE.Matrix4} Transformation matrix
+     */
+    function dhMatrix(a, alpha, d, theta) {
+        const cos_t = Math.cos(theta);
+        const sin_t = Math.sin(theta);
+        const cos_a = Math.cos(alpha);
+        const sin_a = Math.sin(alpha);
 
-
-// --- Initialization Function ---
-/**
- * Initializes the Three.js scene, camera, renderer, controls, and initial robot state.
- */
-function init() {
-    try {
-        // Scene: Container for all 3D objects.
-        scene = new THREE.Scene();
-        scene.background = new THREE.Color(0x282c34); // Dark background.
-
-        // Camera: Defines the viewpoint.
-        const aspect = canvasContainer.clientWidth / canvasContainer.clientHeight;
-        camera = new THREE.PerspectiveCamera(50, aspect, 0.1, 100); // fov, aspect, near, far
-        camera.position.set(1, 1, 1.5); // Set initial camera position.
-        camera.lookAt(0, 0.4, 0); // Point camera towards the robot base area.
-
-        // Renderer: Draws the scene onto the canvas.
-        renderer = new THREE.WebGLRenderer({ canvas: canvas, antialias: true });
-        renderer.setSize(canvasContainer.clientWidth, canvasContainer.clientHeight);
-        renderer.setPixelRatio(window.devicePixelRatio); // Adjust for high-DPI screens.
-
-        // Lighting: Illuminate the scene.
-        const ambientLight = new THREE.AmbientLight(0xffffff, 0.6); // Soft ambient light.
-        scene.add(ambientLight);
-        const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8); // Brighter directional light.
-        directionalLight.position.set(5, 10, 7); // Position the light source.
-        scene.add(directionalLight);
-
-        // Controls: Allow user interaction (orbit, zoom, pan).
-        controls = new OrbitControls(camera, renderer.domElement);
-        controls.target.set(0, 0.4, 0); // Set the point around which the camera orbits.
-        controls.enableDamping = true; // Add smooth camera movement inertia.
-        controls.dampingFactor = 0.1;
-        controls.update(); // Apply initial target setting.
-
-        // Robot Group (FK): Group to hold the main robot visualization.
-        robotGroupFK = new THREE.Group();
-        scene.add(robotGroupFK);
-        // Add the static base mesh to the scene.
-        scene.add(baseMesh);
-
-        // Target TCP Frame: Visual indicator for the FK-derived TCP pose.
-        targetTCPFrame = createTargetFrame(0.15); // Create a larger frame for visibility.
-        scene.add(targetTCPFrame);
-
-        // Perform the initial visualization update based on default slider values.
-        updateVisualization();
-
-        // Add event listener for window resize to keep the visualization responsive.
-        window.addEventListener('resize', onWindowResize);
-
-        // Hide loading indicator now that setup is complete.
-        loadingIndicator.style.display = 'none';
-        // Start the animation loop.
-        animate();
-
-    } catch (error) {
-        // Catch any errors during initialization and report them.
-        console.error("Error during Three.js initialization:", error);
-        loadingIndicator.textContent = "Error initializing visualization. Check console.";
-        loadingIndicator.style.color = "red";
-        loadingIndicator.style.display = 'block';
+        const matrix = new THREE.Matrix4();
+        matrix.set(
+            cos_t, -sin_t * cos_a,  sin_t * sin_a, a * cos_t,
+            sin_t,  cos_t * cos_a, -cos_t * sin_a, a * sin_t,
+                0,          sin_a,          cos_a,         d,
+                0,              0,              0,         1
+        );
+        return matrix;
     }
-}
 
-// --- Update Logic ---
-let lastFKResult = null; // Store the last FK result to feed into IK.
-
-/**
- * Updates the robot visualization based on current slider values.
- * Performs FK, updates the main robot display, performs IK, and displays solutions.
- */
-function updateVisualization() {
-    // 1. Get current joint angles from sliders
-    const jointAngles = [];
-    let slidersFound = true;
-    for (let i = 1; i <= 6; i++) {
-        const slider = document.getElementById(`joint${i}-slider`);
-        const valueSpan = document.getElementById(`joint${i}-value`);
-        if (slider && valueSpan) {
-            const angle = parseFloat(slider.value);
-            jointAngles.push(angle);
-            // Update the text display next to the slider.
-            valueSpan.textContent = angle.toFixed(2);
-        } else {
-            console.error(`Slider or value span for joint ${i} not found! Cannot update.`);
-            slidersFound = false;
-            break; // Stop processing if a slider is missing.
+    /**
+     * Calculates the forward kinematics for the given joint angles.
+     * @param {number[]} jointAngles - Array of 6 joint angles in radians.
+     * @returns {{transforms: THREE.Matrix4[], T0_TCP: THREE.Matrix4}} Object containing transforms of each frame and the final TCP transform.
+     */
+    function forwardKinematics(jointAngles) {
+        if (jointAngles.length !== DH_PARAMS_UR5E.length) {
+            throw new Error(`Angle count mismatch: Expected ${DH_PARAMS_UR5E.length}, got ${jointAngles.length}`);
         }
-    }
-    // Abort if sliders weren't found.
-    if (!slidersFound) return;
 
-    // 2. Perform Forward Kinematics
-    try {
-        lastFKResult = UR5eKinematics.forwardKinematics(jointAngles);
-    } catch (error) {
-        console.error("Error during Forward Kinematics calculation:", error);
-        lastFKResult = null; // Ensure FK result is null on error.
-    }
+        const transforms = [new THREE.Matrix4()]; // Start with identity matrix for base frame T0_0
+        let T_prev = transforms[0].clone();
 
+        for (let i = 0; i < DH_PARAMS_UR5E.length; i++) {
+            const p = DH_PARAMS_UR5E[i];
+            const theta = jointAngles[i] + p.offset;
+            const T_i_minus_1_to_i = dhMatrix(p.a, p.alpha, p.d, theta);
 
-    // --- Clear Previous Visualizations ---
-    // Clear previous FK robot parts (lines, joints).
-    while (robotGroupFK.children.length > 0) {
-        const child = robotGroupFK.children[0];
-        robotGroupFK.remove(child);
-        // Dispose geometry and material if necessary to free memory (optional but good practice).
-        if (child.geometry) child.geometry.dispose();
-        if (child.material) child.material.dispose();
-    }
-    // Clear previous IK solution groups.
-    ikSolutionGroups.forEach(group => {
-        while (group.children.length > 0) {
-            const child = group.children[0];
-            group.remove(child);
-            if (child.geometry) child.geometry.dispose();
-            if (child.material) child.material.dispose();
+            // Calculate T0_i = T0_{i-1} * T_{i-1}_i
+            const T_curr = new THREE.Matrix4().multiplyMatrices(T_prev, T_i_minus_1_to_i);
+            transforms.push(T_curr);
+            T_prev = T_curr; // Update for next iteration
         }
-        scene.remove(group); // Remove the group itself from the scene.
-    });
-    ikSolutionGroups = []; // Reset the array.
-    // Reset status text and hide target frame initially.
-    ikStatusElement.textContent = "Calculating...";
-    targetTCPFrame.visible = false;
 
-    // --- Draw New Visualizations ---
-    // Proceed only if FK was successful.
-    if (lastFKResult && lastFKResult.points && lastFKResult.T0_TCP) {
-        // Draw FK Robot (Solid Red Lines + Grey Joints)
+        const T0_flange = transforms[transforms.length - 1]; // Last calculated transform is T0_6 (flange)
+        const T0_TCP = new THREE.Matrix4().multiplyMatrices(T0_flange, H_FLANGE_TCP);
+
+        return { transforms, T0_TCP };
+    }
+
+    // --- Robot Visualization Functions ---
+
+    /**
+     * Creates the visual representation of the robot base.
+     */
+    function createRobotBase() {
+        const baseGeometry = new THREE.CylinderGeometry(0.1, 0.1, 0.05, 32);
+        const baseMaterial = new THREE.MeshStandardMaterial({ color: BASE_COLOR });
+        robotBase = new THREE.Mesh(baseGeometry, baseMaterial);
+        robotBase.position.y = 0.025; // Position base slightly above the grid
+        robotBase.castShadow = true;
+        robotBase.receiveShadow = true;
+        scene.add(robotBase);
+
+        // Create the first frame (base frame)
+        const baseFrame = new THREE.Object3D();
+        scene.add(baseFrame);
+        jointFrames.push(baseFrame);
+    }
+
+    /**
+     * Creates the visual representation of the robot joints and links.
+     */
+    function createRobotGeometry() {
+        jointMeshes = [];
+        linkMeshes = [];
+        jointFrames = [jointFrames[0]]; // Keep the base frame
+
+        const jointGeometry = new THREE.SphereGeometry(0.04, 16, 16); // Smaller joints
+        const jointMaterial = new THREE.MeshStandardMaterial({ color: JOINT_COLOR, metalness: 0.3, roughness: 0.6 });
+
+        const linkMaterial = new THREE.MeshStandardMaterial({ color: LINK_COLOR, metalness: 0.5, roughness: 0.5 });
+
+        let parentFrame = jointFrames[0]; // Start with the base frame
+
+        for (let i = 0; i < DH_PARAMS_UR5E.length; i++) {
+            // Create a frame (Object3D) for this joint, positioned relative to the previous one
+            const frame = new THREE.Object3D();
+            parentFrame.add(frame); // Add to the previous frame
+            jointFrames.push(frame);
+
+            // Create joint mesh (sphere) - positioned at the origin of its frame
+            const jointMesh = new THREE.Mesh(jointGeometry, jointMaterial);
+            jointMesh.castShadow = true;
+            frame.add(jointMesh); // Add joint sphere to its frame
+            jointMeshes.push(jointMesh);
+
+            // Create link mesh (cylinder) connecting previous joint to this one
+            // This requires calculating the position of the current joint relative to the previous one
+            // For simplicity, we'll update link positions/rotations in the update function
+            // Here, just create basic cylinders that we'll transform later
+            const linkGeometry = new THREE.CylinderGeometry(0.03, 0.03, 1, 16); // Placeholder length 1
+            const linkMesh = new THREE.Mesh(linkGeometry, linkMaterial);
+            linkMesh.castShadow = true;
+            linkMesh.receiveShadow = true;
+            // Add link relative to the *previous* joint's frame initially
+            jointFrames[i].add(linkMesh); // Add to the frame of the joint *before* this link
+            linkMeshes.push(linkMesh);
+
+            parentFrame = frame; // Update parent for the next iteration
+        }
+
+        // Create TCP mesh
+        const tcpGeometry = new THREE.SphereGeometry(0.02, 16, 16);
+        const tcpMaterial = new THREE.MeshStandardMaterial({ color: TCP_COLOR, emissive: TCP_COLOR, emissiveIntensity: 0.5 });
+        tcpMesh = new THREE.Mesh(tcpGeometry, tcpMaterial);
+        tcpMesh.castShadow = true;
+        // Add TCP mesh relative to the last joint frame (flange) initially
+        jointFrames[jointFrames.length - 1].add(tcpMesh);
+
+        // Add coordinate axes helper to the TCP for orientation
+        const tcpAxesHelper = new THREE.AxesHelper(0.05);
+        tcpMesh.add(tcpAxesHelper); // Add axes relative to the TCP sphere
+
+        // Initial update to position everything correctly
+        updateRobotPose(initialJointAngles);
+    }
+
+    /**
+     * Updates the robot's visual pose based on joint angles.
+     * @param {number[]} jointAngles - Array of 6 joint angles.
+     */
+    function updateRobotPose(jointAngles) {
         try {
-            // Create and add the line segments for the FK robot arm.
-            const fkLine = createLineSegments(lastFKResult.points, fkLineMaterialSolid);
-            robotGroupFK.add(fkLine);
+            const { transforms, T0_TCP } = forwardKinematics(jointAngles);
 
-            // Add spheres to represent joints (excluding base and TCP).
-            lastFKResult.points.forEach((point, index) => {
-                if (index > 0 && index < lastFKResult.points.length - 1) {
-                    const jointMesh = new THREE.Mesh(jointGeometry, jointMaterial);
-                    jointMesh.position.fromArray(point); // Set position from array [x, y, z].
-                    robotGroupFK.add(jointMesh);
+            // Update positions and orientations of each joint frame (Object3D)
+            for (let i = 0; i < jointFrames.length; i++) { // transforms has N+1 elements (T0_0 to T0_N)
+                // Apply the calculated absolute transform T0_i to the corresponding frame
+                jointFrames[i].matrix.copy(transforms[i]);
+                // Tell three.js to update the frame's world matrix based on this local matrix
+                // Since we are setting the absolute matrix relative to the scene origin,
+                // we need to ensure matrixAutoUpdate is false for these frames OR
+                // decompose the matrix into position, quaternion, scale.
+                jointFrames[i].matrix.decompose(jointFrames[i].position, jointFrames[i].quaternion, jointFrames[i].scale);
+                jointFrames[i].matrixWorldNeedsUpdate = true; // Important
+            }
+
+            // Update link meshes (position and orientation between joints)
+            for (let i = 0; i < linkMeshes.length; i++) {
+                const startPoint = new THREE.Vector3();
+                const endPoint = new THREE.Vector3();
+
+                // Get world positions of the start and end joints for this link
+                jointFrames[i].getWorldPosition(startPoint); // Link i connects frame i
+                jointFrames[i + 1].getWorldPosition(endPoint); // to frame i+1
+
+                const linkVector = new THREE.Vector3().subVectors(endPoint, startPoint);
+                const linkLength = linkVector.length();
+                const linkMidpoint = new THREE.Vector3().addVectors(startPoint, endPoint).multiplyScalar(0.5);
+
+                const linkMesh = linkMeshes[i];
+                linkMesh.scale.set(1, linkLength, 1); // Scale cylinder height
+                linkMesh.position.copy(linkMidpoint); // Position at midpoint
+
+                // Align cylinder along the linkVector (aligns cylinder's Y-axis)
+                linkMesh.quaternion.setFromUnitVectors(new THREE.Vector3(0, 1, 0), linkVector.normalize());
+
+                // Since link meshes are parented to joint frames, their transforms are relative.
+                // It's often easier to manage them directly in world space or reparent them to the scene.
+                // Let's reparent them to the scene for simpler world space manipulation.
+                scene.add(linkMesh); // Add to scene directly
+                linkMesh.matrixWorldNeedsUpdate = true;
+            }
+
+
+            // Update TCP mesh position based on T0_TCP
+            // The TCP mesh is parented to the last joint frame (flange),
+            // so we only need to set its local transform relative to the flange (H_FLANGE_TCP)
+            tcpMesh.matrix.copy(H_FLANGE_TCP);
+            tcpMesh.matrix.decompose(tcpMesh.position, tcpMesh.quaternion, tcpMesh.scale);
+            tcpMesh.matrixWorldNeedsUpdate = true;
+
+
+        } catch (error) {
+            console.error("Error updating robot pose:", error);
+        }
+    }
+
+
+    // --- Initialization ---
+    function init() {
+        // Scene
+        scene = new THREE.Scene();
+        scene.background = new THREE.Color(0x282c34); // Dark background matching theme
+
+        // Camera
+        const aspect = container.clientWidth / container.clientHeight;
+        camera = new THREE.PerspectiveCamera(50, aspect, 0.1, 100);
+        camera.position.set(1, 1, 1.5); // Initial camera position
+        camera.lookAt(0, 0.4, 0); // Look towards the robot base area
+
+        // Renderer
+        renderer = new THREE.WebGLRenderer({ antialias: true });
+        renderer.setSize(container.clientWidth, container.clientHeight);
+        renderer.setPixelRatio(window.devicePixelRatio);
+        renderer.shadowMap.enabled = true; // Enable shadows
+        renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+        container.appendChild(renderer.domElement);
+
+        // Lighting
+        const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
+        scene.add(ambientLight);
+
+        const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8);
+        directionalLight.position.set(5, 10, 7.5);
+        directionalLight.castShadow = true;
+        // Configure shadow properties
+        directionalLight.shadow.mapSize.width = 1024;
+        directionalLight.shadow.mapSize.height = 1024;
+        directionalLight.shadow.camera.near = 0.5;
+        directionalLight.shadow.camera.far = 50;
+        directionalLight.shadow.camera.left = -5;
+        directionalLight.shadow.camera.right = 5;
+        directionalLight.shadow.camera.top = 5;
+        directionalLight.shadow.camera.bottom = -5;
+        scene.add(directionalLight);
+        // const lightHelper = new THREE.DirectionalLightHelper(directionalLight, 1);
+        // scene.add(lightHelper);
+        // const shadowHelper = new THREE.CameraHelper(directionalLight.shadow.camera);
+        // scene.add(shadowHelper);
+
+
+        // Grid Helper
+        const gridHelper = new THREE.GridHelper(2, 20, 0x888888, 0x444444); // Size, divisions, color lines, color center
+        scene.add(gridHelper);
+
+        // Axes Helper (World Origin)
+        const axesHelper = new THREE.AxesHelper(0.5); // Length of axes
+        scene.add(axesHelper);
+
+        // Orbit Controls
+        if (typeof THREE.OrbitControls !== 'undefined') {
+            controls = new THREE.OrbitControls(camera, renderer.domElement);
+            controls.target.set(0, 0.4, 0); // Set control target slightly above base
+            controls.enableDamping = true; // Smooth camera movement
+            controls.dampingFactor = 0.1;
+            controls.screenSpacePanning = false; // Keep panning relative to ground plane
+            controls.minDistance = 0.5;
+            controls.maxDistance = 10;
+            controls.maxPolarAngle = Math.PI / 1.9; // Prevent looking from below the grid
+            controls.update();
+        } else {
+            console.warn("OrbitControls not found. Camera interaction will be limited.");
+        }
+
+
+        // Create Robot
+        createRobotBase();
+        createRobotGeometry(); // Creates joints, links, TCP
+
+        // Handle Window Resize
+        window.addEventListener('resize', onWindowResize, false);
+
+        // Start Animation Loop
+        animate();
+    }
+
+    // --- Animation Loop ---
+    function animate() {
+        requestAnimationFrame(animate);
+        if (controls && controls.enabled) {
+            controls.update(); // Required if enableDamping is true
+        }
+        renderer.render(scene, camera);
+    }
+
+    // --- Event Handlers ---
+    function onWindowResize() {
+        if (!container || !renderer || !camera) return;
+        camera.aspect = container.clientWidth / container.clientHeight;
+        camera.updateProjectionMatrix();
+        renderer.setSize(container.clientWidth, container.clientHeight);
+    }
+
+    // Slider and Button Event Listeners
+    const sliders = document.querySelectorAll('.joint-slider');
+    const valueSpans = {};
+    const initialSliderValues = {}; // Store initial values for reset
+
+    sliders.forEach((slider, index) => {
+        const jointIndex = index + 1;
+        const spanId = `j${jointIndex}-value`;
+        valueSpans[jointIndex] = document.getElementById(spanId);
+        initialSliderValues[jointIndex] = parseFloat(slider.value); // Store initial value
+
+        // Initial display update
+        if (valueSpans[jointIndex]) {
+            valueSpans[jointIndex].textContent = parseFloat(slider.value).toFixed(2);
+        }
+
+        // Add input event listener
+        slider.addEventListener('input', () => {
+            const currentJointAngles = Array.from(sliders).map(s => parseFloat(s.value));
+            if (valueSpans[jointIndex]) {
+                valueSpans[jointIndex].textContent = parseFloat(slider.value).toFixed(2);
+            }
+            updateRobotPose(currentJointAngles);
+        });
+    });
+
+    // Reset View Button
+    const resetViewBtn = document.getElementById('reset-view-btn');
+    if (resetViewBtn && controls) {
+        resetViewBtn.addEventListener('click', () => {
+            controls.reset(); // Resets camera to saved state
+            // Or manually set position/target if needed:
+            // camera.position.set(1, 1, 1.5);
+            // controls.target.set(0, 0.4, 0);
+            controls.update();
+        });
+    }
+
+    // Reset Pose Button
+    const resetPoseBtn = document.getElementById('reset-pose-btn');
+    if (resetPoseBtn) {
+        resetPoseBtn.addEventListener('click', () => {
+            sliders.forEach((slider, index) => {
+                const jointIndex = index + 1;
+                slider.value = initialSliderValues[jointIndex]; // Reset slider value
+                if (valueSpans[jointIndex]) { // Update display
+                    valueSpans[jointIndex].textContent = parseFloat(slider.value).toFixed(2);
                 }
             });
-
-            // Update and show Target TCP Frame based on FK result matrix.
-            const T0_TCP_Matrix = new THREE.Matrix4();
-            // Set the Three.js Matrix4 from the 2D array returned by FK.
-            T0_TCP_Matrix.set(
-                lastFKResult.T0_TCP[0][0], lastFKResult.T0_TCP[0][1], lastFKResult.T0_TCP[0][2], lastFKResult.T0_TCP[0][3],
-                lastFKResult.T0_TCP[1][0], lastFKResult.T0_TCP[1][1], lastFKResult.T0_TCP[1][2], lastFKResult.T0_TCP[1][3],
-                lastFKResult.T0_TCP[2][0], lastFKResult.T0_TCP[2][1], lastFKResult.T0_TCP[2][2], lastFKResult.T0_TCP[2][3],
-                lastFKResult.T0_TCP[3][0], lastFKResult.T0_TCP[3][1], lastFKResult.T0_TCP[3][2], lastFKResult.T0_TCP[3][3]
-            );
-            // Apply the position and rotation from the matrix to the target frame object.
-            targetTCPFrame.position.setFromMatrixPosition(T0_TCP_Matrix);
-            targetTCPFrame.rotation.setFromRotationMatrix(T0_TCP_Matrix);
-            targetTCPFrame.visible = true; // Make the frame visible.
-
-        } catch (error) {
-            console.error("Error drawing FK robot:", error);
-            // Optionally clear the partially drawn FK robot here.
-        }
-
-
-        // 3. Perform Inverse Kinematics using the FK result pose.
-        let ikSolutions = [];
-        try {
-            ikSolutions = UR5eKinematics.inverseKinematics(lastFKResult.T0_TCP);
-            ikStatusElement.textContent = `IK Solutions Found: ${ikSolutions.length}`;
-        } catch (error) {
-            console.error("Error during Inverse Kinematics calculation:", error);
-            ikStatusElement.textContent = "IK Error";
-            ikSolutions = []; // Ensure solutions array is empty on error.
-        }
-
-        // 4. Visualize IK Solutions (Dashed Lines)
-        ikSolutions.forEach((ikAngles, solIndex) => {
-            try {
-                // Perform FK check for the IK solution to get its points.
-                const ikFkResult = UR5eKinematics.forwardKinematics(ikAngles);
-                if (ikFkResult && ikFkResult.points) {
-                    // Check if this IK solution is numerically very close to the current FK slider configuration.
-                    let diffSumSq = 0;
-                    for (let j = 0; j < 6; ++j) {
-                        // Normalize angle difference to handle wrapping around +/- PI
-                        let angleDiff = ikAngles[j] - jointAngles[j];
-                        angleDiff = Math.atan2(Math.sin(angleDiff), Math.cos(angleDiff));
-                        diffSumSq += angleDiff * angleDiff;
-                    }
-
-                    // Only draw the IK solution if it's significantly different from the FK pose shown in red.
-                    // This avoids clutter by not drawing an identical pose on top.
-                    const angleDifferenceThreshold = 0.01; // Radians threshold (approx 0.5 degrees)
-                    if (Math.sqrt(diffSumSq) > angleDifferenceThreshold) {
-                        const ikGroup = new THREE.Group(); // Group for this specific IK solution.
-                        // Select material from the palette, cycling if more solutions than colors.
-                        const materialIndex = solIndex % ikMaterialsDashed.length;
-                        const ikLine = createLineSegments(ikFkResult.points, ikMaterialsDashed[materialIndex]);
-
-                        // Add the dashed line representing the IK solution arm.
-                        ikGroup.add(ikLine);
-                        // Add the group to the main scene.
-                        scene.add(ikGroup);
-                        // Keep track of the group so it can be cleared later.
-                        ikSolutionGroups.push(ikGroup);
-                    }
-                } else {
-                    // Log if FK check failed for a specific IK solution.
-                    console.warn(`FK check failed for IK solution index ${solIndex}. Angles:`, ikAngles.map(a => a.toFixed(3)));
-                }
-            } catch (error) {
-                console.error(`Error processing/drawing IK solution ${solIndex}:`, error);
-            }
+            // Trigger pose update with initial angles
+            updateRobotPose(initialJointAngles);
         });
-
-    } else {
-        // Handle case where initial FK failed.
-        console.error("Forward Kinematics failed for the current slider angles. Cannot perform IK or draw robot.");
-        ikStatusElement.textContent = "FK Failed";
-        targetTCPFrame.visible = false; // Ensure target frame is hidden.
     }
-}
 
-// --- Event Listeners ---
-// Attach the update function to the 'input' event of each slider.
-// 'input' fires continuously as the slider moves.
-for (let i = 1; i <= 6; i++) {
-    const slider = document.getElementById(`joint${i}-slider`);
-    if (slider) {
-        slider.addEventListener('input', updateVisualization);
-    }
-}
 
-/**
- * Handles window resize events to adjust camera aspect ratio and renderer size.
- */
-function onWindowResize() {
-    const width = canvasContainer.clientWidth;
-    const height = canvasContainer.clientHeight;
+    // --- Start Everything ---
+    init();
 
-    // Update camera aspect ratio.
-    camera.aspect = width / height;
-    camera.updateProjectionMatrix();
-
-    // Update renderer size.
-    renderer.setSize(width, height);
-}
-
-// --- Animation Loop ---
-/**
- * The main animation loop function called repeatedly via requestAnimationFrame.
- */
-function animate() {
-    // Schedule the next frame.
-    requestAnimationFrame(animate);
-    // Update orbit controls (needed for damping).
-    controls.update();
-    // Render the scene from the camera's perspective.
-    renderer.render(scene, camera);
-}
-
-// --- Start ---
-// Initialize the visualization.
-init();
+}); // End DOMContentLoaded
