@@ -336,7 +336,7 @@ const resampleTrajectoryByX = (rawTraj) => {
     const resampled = [];
     const startX = Math.ceil(sortedTraj[0].x);
     const endX = Math.floor(sortedTraj[sortedTraj.length - 1].x);
-    if (startX > endX) return [];
+    if (startX >= endX) return [];
     
     let rawIndex = 0;
     for (let x = startX; x <= endX; x++) {
@@ -398,7 +398,7 @@ function align(trajectories) {
     if (trajectories.length <= 1) return { aligned: trajectories, costMatrices: [] };
     const refIndex = trajectories.map(t => t.length).indexOf(Math.max(...trajectories.map(t => t.length)));
     const refTraj = trajectories[refIndex];
-    if (!refTraj) return { aligned: [], costMatrices: [] };
+    if (!refTraj || refTraj.length === 0) return { aligned: [], costMatrices: [] };
 
     const aligned = [refTraj];
     const costMatrices = [];
@@ -410,17 +410,16 @@ function align(trajectories) {
         const costMatrix = dtw(refTraj, trajToAlign);
         costMatrices.push(costMatrix);
         const path = backtrackDtw(costMatrix);
-        if(path.length === 0) continue;
-        
-        const refToTrajMap = new Map();
-        path.forEach(([ref_i, traj_i]) => { refToTrajMap.set(ref_i, traj_i); });
-        const warpedTraj = [];
-        let lastKnownTrajIndex = 0;
+        if (path.length === 0) continue;
+
+        const warpedTraj = new Array(refTraj.length);
+        let pathIndex = 0;
         for (let ref_i = 0; ref_i < refTraj.length; ref_i++) {
-            if (refToTrajMap.has(ref_i)) {
-                lastKnownTrajIndex = refToTrajMap.get(ref_i);
+            while (pathIndex + 1 < path.length && path[pathIndex + 1][0] <= ref_i) {
+                pathIndex++;
             }
-            warpedTraj.push(trajToAlign[lastKnownTrajIndex]);
+            const mappedTrajIndex = path[pathIndex][1];
+            warpedTraj[ref_i] = trajToAlign[mappedTrajIndex];
         }
         aligned.push(warpedTraj);
     }
@@ -429,7 +428,7 @@ function align(trajectories) {
 
 
 const calculateTube = (trajs) => {
-    if (trajs.length === 0 || trajs.some(t => t.length ===0) || trajs[0].length === 0) return {tubeMin: [], tubeMax: []};
+    if (trajs.length === 0 || trajs.some(t => !t || t.length === 0) || trajs[0].length === 0) return {tubeMin: [], tubeMax: []};
     const n = trajs[0].length;
     const tMin = Array.from({length:n},()=>({x:Infinity,y:Infinity}));
     const tMax = Array.from({length:n},()=>({x:-Infinity,y:-Infinity}));
