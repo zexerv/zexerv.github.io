@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Interactive Trajectory Segmentation - Mo Saeidi</title>
+    <meta name="description" content="An interactive demonstration of trajectory segmentation using SEGDP and FastSEGDP (PELT) algorithms. Draw trajectories and see them segmented in real-time.">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="../assets/css/base.css" />
+    <link rel="stylesheet" href="../assets/css/layout.css" />
+    <link rel="stylesheet" href="../assets/css/components/navbar.css" />
+    <link rel="stylesheet" href="../assets/css/components/buttons.css" />
+    <link rel="stylesheet" href="../assets/css/components/footer.css" />
+    <link rel="stylesheet" href="../assets/css/pages/post.css" />
+    <link rel="stylesheet" href="../assets/css/pages/interactive-segmentation.css" />
+</head>
+<body>
+    <div class="page-wrapper">
+        <header class="header">
+            <nav class="navbar">
+                <div class="container">
+                    <button id="mobile-menu-btn" class="mobile-menu-btn" aria-label="Toggle Menu" aria-expanded="false">
+                        <span class="bar"></span>
+                        <span class="bar"></span>
+                        <span class="bar"></span>
+                    </button>
+                    <ul class="nav-links">
+                        <li><a href="../index.html">MoSa</a></li>
+                        <li><a href="../projects.html" class="active">Projects</a></li>
+                        <li><a href="../blog.html">Blog</a></li>
+                        <li><a href="../academia.html">Academia</a></li>
+                    </ul>
+                </div>
+            </nav>
+        </header>
+
+        <main class="main-content">
+            <div class="container post-container">
+                <article>
+                    <header class="post-header">
+                        <div class="post-meta">
+                            <span class="post-category">Robotics & Machine Learning</span>
+                            <time datetime="2025-06-12">June 12, 2025</time>
+                        </div>
+                        <h1 class="post-title">Interactive Trajectory Segmentation</h1>
+                    </header>
+
+                    <section class="post-content">
+                        <p>
+                            This tool demonstrates trajectory segmentation algorithms in your browser. Use your mouse or finger to draw one or more paths on the canvas. The tool will then apply two algorithms to approximate your drawings with a series of straight lines:
+                        </p>
+                        <ul>
+                            <li><strong>SEGDP (Slow):</strong> A precise Dynamic Programming method that finds the optimal segmentation.</li>
+                            <li><strong>FastSEGDP (PELT):</strong> A much faster, pruned search algorithm that provides a near-optimal solution suitable for real-time applications.</li>
+                        </ul>
+                        <p>
+                           If you draw multiple trajectories, they are first aligned using a simplified Dynamic Time Warping (DTW) before a "tube" is created for segmentation.
+                        </p>
+
+                        <div class="flex flex-col lg:flex-row gap-6 mb-8 mt-6">
+
+                            <div class="lg:w-1/3 space-y-4">
+                                <div>
+                                    <h2 class="text-xl font-semibold mb-3 text-gray-100">Controls</h2>
+                                    <div class="controls-container space-y-2">
+                                        <button id="run-segmentation-btn" class="btn btn-primary w-full">Run Segmentation</button>
+                                        <button id="clear-canvas-btn" class="btn btn-secondary w-full">Clear Canvas</button>
+                                    </div>
+                                    <div class="mt-4">
+                                         <label for="downsample-slider" class="block text-sm font-medium text-gray-300">Downsample Factor: <span id="downsample-value">10</span></label>
+                                         <input type="range" id="downsample-slider" min="1" max="50" value="10" class="w-full h-2 bg-gray-600 rounded-lg appearance-none cursor-pointer">
+                                    </div>
+                                </div>
+                                <div>
+                                    <h2 class="text-xl font-semibold mb-2 mt-4 text-gray-100">Algorithm Info</h2>
+                                    <div id="info-display" class="info-text">
+                                        Draw a trajectory on the canvas and click "Run Segmentation".
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="lg:w-2/3">
+                                <h2 class="text-xl font-semibold mb-3 text-gray-100">Drawing Canvas</h2>
+                                <div id="canvas-container" class="relative">
+                                    <canvas id="segmentation-canvas"></canvas>
+                                </div>
+                                <p class="text-sm text-gray-500 mt-2">Click and drag to draw a trajectory. A new trajectory starts on each new mouse down event.</p>
+                            </div>
+                        </div>
+
+                        <hr class="my-8 border-gray-700">
+                        <h2 class="text-2xl font-semibold mb-4 text-gray-100">How it Works</h2>
+                        <p>
+                            <strong>1. Drawing & Downsampling:</strong> The tool captures the path you draw as a series of (x, y) coordinates. To make the calculations faster, this raw data is first downsampled. A higher downsample factor means fewer points are used, leading to quicker but potentially less precise segmentation.
+                        </p>
+                        <p>
+                            <strong>2. Alignment (DTW):</strong> If you draw multiple trajectories, they won't have the same length or timing. Dynamic Time Warping (DTW) is used to stretch and compress the trajectories in time so they align. This allows us to create a "tube" that encloses all the demonstrations.
+                        </p>
+                        <p>
+                           <strong>3. Segmentation:</strong> The core of the demo. The goal is to find a set of "changepoints" that divide the trajectory (or tube) into segments. Each segment can then be accurately represented by a simple straight line (or a trapezoid for a tube).
+                           <ul>
+                                <li>The <strong>SEGDP</strong> algorithm uses dynamic programming to test every possible segmentation and is guaranteed to find the best one, but it is computationally expensive ($O(N^2 \cdot M)$ where N is length and M is segments).</li>
+                                <li>The <strong>FastSEGDP (PELT)</strong> algorithm (Pruned Exact Linear Time) intelligently prunes branches of the search that cannot possibly contain the optimal solution. This makes it significantly faster ($O(N)$) while still finding an exact, optimal result.</li>
+                           </ul>
+                        </p>
+                    </section>
+                </article>
+
+                <a href="../projects.html" class="back-to-blog">
+                    &larr; Back to Projects
+                </a>
+            </div>
+        </main>
+
+        <footer class="footer">
+            <div class="container">
+                <p>&copy; <span id="current-year"></span> Mo Saeidi. All rights reserved.</p>
+            </div>
+        </footer>
+    </div>
+
+    <script src="../assets/js/main.js"></script>
+    <script type="module" src="../assets/js/pages/interactive-segmentation.js"></script>
+
+</body>
+</html>
