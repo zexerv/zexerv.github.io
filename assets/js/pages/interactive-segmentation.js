@@ -24,12 +24,14 @@ document.addEventListener('DOMContentLoaded', () => {
     // --- Global State ---
     let isDrawing = false;
     let rawTrajectories = [];
+    let resampledTrajectories = []; // NEW: To hold time-correct data
     let alignedTrajectories = [];
     let tube = { tubeMin: null, tubeMax: null };
 
     // --- Core Action Handlers ---
     const handleClear = () => {
         rawTrajectories = [];
+        resampledTrajectories = [];
         alignedTrajectories = [];
         tube = { tubeMin: null, tubeMax: null };
         clearCanvas(ctx);
@@ -43,12 +45,20 @@ document.addEventListener('DOMContentLoaded', () => {
             infoDisplay.textContent = "Please draw at least one trajectory.";
             return;
         }
-        infoDisplay.textContent = "Aligning...";
+        infoDisplay.textContent = "Resampling & Aligning...";
         segmentBtn.disabled = true;
 
         setTimeout(() => {
+            // NEW: Resample trajectories by X-axis to make time consistent
+            resampledTrajectories = rawTrajectories.map(t => resampleTrajectoryByX(t)).filter(t => t.length > 1);
+            
+            if (resampledTrajectories.length === 0) {
+                infoDisplay.textContent = "Could not process drawing. Please draw a wider trajectory.";
+                return;
+            }
+
             const factor = parseInt(downsampleSlider.value, 10);
-            const downsampled = rawTrajectories.map(t => downsample(t, factor));
+            const downsampled = resampledTrajectories.map(t => downsample(t, factor));
             const { aligned, costMatrices } = align(downsampled);
             
             alignedTrajectories = aligned;
@@ -89,7 +99,14 @@ document.addEventListener('DOMContentLoaded', () => {
     // --- Drawing & Visualization ---
     const drawState = (segmentations = {}) => {
         clearCanvas(ctx);
-        drawTrajectories(ctx, rawTrajectories, '#475569', 1.5);
+        // Always show the raw drawing underneath
+        drawTrajectories(ctx, rawTrajectories, '#334155', 1.0); // Darker, muted color
+        
+        // If resampled/aligned data exists, draw it more prominently
+        if (resampledTrajectories.length > 0) {
+             drawTrajectories(ctx, resampledTrajectories, '#475569', 1.5);
+        }
+        
         if (alignedTrajectories.length > 0 && tube.tubeMin) {
             drawTube(ctx, tube.tubeMin, tube.tubeMax);
         }
@@ -109,6 +126,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const setupEventListeners = () => {
         const startDrawing = (e) => {
             isDrawing = true;
+            // Clear previous results when new drawing starts
+            resampledTrajectories = [];
             alignedTrajectories = [];
             tube = { tubeMin: null, tubeMax: null };
             segmentBtn.disabled = true;
@@ -178,7 +197,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 const clearCanvas = (ctx) => {
     if (ctx && ctx.canvas) {
-        ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+        ctx.clearRect(0, 0, ctx.canvas.width / (window.devicePixelRatio||1), ctx.canvas.height / (window.devicePixelRatio||1));
     }
 };
 
@@ -315,6 +334,39 @@ const downsample = (traj, factor) => {
     return downsampled;
 };
 
+// NEW: Resamples a trajectory to have one Y for each integer X.
+const resampleTrajectoryByX = (rawTraj) => {
+    if (rawTraj.length < 2) return [];
+    // Ensure trajectory is sorted by X
+    const sortedTraj = [...rawTraj].sort((a,b) => a.x - b.x);
+    const resampled = [];
+    const startX = Math.ceil(sortedTraj[0].x);
+    const endX = Math.floor(sortedTraj[sortedTraj.length - 1].x);
+    
+    let rawIndex = 0;
+    for (let x = startX; x <= endX; x++) {
+        while(rawIndex + 1 < sortedTraj.length && sortedTraj[rawIndex+1].x < x) {
+            rawIndex++;
+        }
+        const p1 = sortedTraj[rawIndex];
+        const p2 = sortedTraj[rawIndex + 1];
+
+        if (!p1 || !p2) continue;
+
+        const x1 = p1.x, y1 = p1.y;
+        const x2 = p2.x, y2 = p2.y;
+
+        if (x2 - x1 === 0) { // Vertical line segment
+            if(x === x1) resampled.push({ x, y: y1 });
+        } else {
+            const t = (x - x1) / (x2 - x1);
+            const y = y1 + t * (y2 - y1);
+            resampled.push({ x, y });
+        }
+    }
+    return resampled;
+}
+
 const dtw = (refSeq, trajSeq) => {
     const n = refSeq.length; const m = trajSeq.length;
     if (n === 0 || m === 0) return [[]];
@@ -393,11 +445,11 @@ const normalizeTube = (tube) => {
 const getSegmentCostSEGDP = (start,end,tMin,tMax) => {
     const len=end-start+1; if(len<=1)return 0; let cost=0;
     for(const dim of ['x','y']){
-        const min_s=(tMin[end][dim]-tMin[start][dim])/(len-1);
-        const max_s=(tMax[end][dim]-tMax[start][dim])/(len-1);
+        const min_s= tMin[end] && tMin[start] ? (tMin[end][dim]-tMin[start][dim])/(len-1) : 0;
+        const max_s= tMax[end] && tMax[start] ? (tMax[end][dim]-tMax[start][dim])/(len-1) : 0;
         for(let i=0;i<len;i++){
-            cost+=Math.pow(tMin[start+i][dim]-(tMin[start][dim]+min_s*i),2);
-            cost+=Math.pow(tMax[start+i][dim]-(tMax[start][dim]+max_s*i),2);
+            if(tMin[start+i]) cost+=Math.pow(tMin[start+i][dim]-(tMin[start][dim]+min_s*i),2);
+            if(tMax[start+i]) cost+=Math.pow(tMax[start+i][dim]-(tMax[start][dim]+max_s*i),2);
         }
     }
     return cost;
@@ -474,5 +526,5 @@ function runFastSEGDP(tubeMin, tubeMax, lambda) {
         current_t = P[current_t];
     }
     changepoints.push(0);
-    return changepoints.sort((a,b) => a-b).filter((v,i,a) => a.indexOf(v)===i);
+    return changepoints.sort((a,b)=>a-b).filter((v,i,a)=>a.indexOf(v)===i);
 }
