@@ -375,47 +375,47 @@ function drawTube(tubeMin, tubeMax) {
     ctx.closePath();
     ctx.fill();
 }
+// REPLACE the existing drawSegmentation function with this one.
 
 function drawSegmentation(changepoints, tubeMin, tubeMax, color1, color2, isFast) {
     ctx.lineWidth = 2.5;
 
     for(let i=0; i < changepoints.length - 1; i++) {
-        const start = changepoints[i];
+        let start = changepoints[i];
         let end = changepoints[i+1];
         if(isFast) end -= 1; // PELT gives start of next, DP gives end of current
+        if (end < 0) end = 0;
         if (end <= start) continue;
 
         if (isFast) {
-            // OLS fit for FastSEGDP visualization
-            const segMinX = tubeMin.slice(start, end + 1).map(p=>p.x);
-            const segMinY = tubeMin.slice(start, end + 1).map(p=>p.y);
-            const fitMinX = linearFit(segMinX);
-            const fitMinY = linearFit(segMinY);
+            // --- OLS fit for FastSEGDP visualization ---
+            const pointsMin = tubeMin.slice(start, end + 1);
+            const pointsMax = tubeMax.slice(start, end + 1);
 
-            const segMaxX = tubeMax.slice(start, end + 1).map(p=>p.x);
-            const segMaxY = tubeMax.slice(start, end + 1).map(p=>p.y);
-            const fitMaxX = linearFit(segMaxX);
-            const fitMaxY = linearFit(segMaxY);
+            // Fit Y over X for visualization
+            const fitYoverX_min = linearFitXY(pointsMin);
+            const fitYoverX_max = linearFitXY(pointsMax);
 
-            const startX_min = tubeMin[start].x;
-            const startX_max = tubeMax[start].x;
-            const endX_min = tubeMin[end].x;
-            const endX_max = tubeMax[end].x;
+            // Get the actual start and end x-coordinates for drawing the line
+            const startX = tubeMin[start].x;
+            const endX = tubeMin[end].x;
 
+            // Draw the fitted line for the MIN boundary
             ctx.strokeStyle = color1;
             ctx.beginPath();
-            ctx.moveTo(fitMinX.intercept + startX_min, fitMinY.intercept + tubeMin[start].y);
-            ctx.lineTo(fitMinX.slope * (segMinX.length-1) + fitMinX.intercept + startX_min, fitMinY.slope * (segMinY.length-1) + fitMinY.intercept + tubeMin[start].y);
+            ctx.moveTo(startX, fitYoverX_min.slope * startX + fitYoverX_min.intercept);
+            ctx.lineTo(endX, fitYoverX_min.slope * endX + fitYoverX_min.intercept);
             ctx.stroke();
 
+            // Draw the fitted line for the MAX boundary
             ctx.strokeStyle = color2;
             ctx.beginPath();
-            ctx.moveTo(fitMaxX.intercept + startX_max, fitMaxY.intercept + tubeMax[start].y);
-            ctx.lineTo(fitMaxX.slope * (segMaxX.length-1) + fitMaxX.intercept + startX_max, fitMaxY.slope * (segMaxY.length-1) + fitMaxY.intercept + tubeMax[start].y);
+            ctx.moveTo(startX, fitYoverX_max.slope * startX + fitYoverX_max.intercept);
+            ctx.lineTo(endX, fitYoverX_max.slope * endX + fitYoverX_max.intercept);
             ctx.stroke();
 
         } else {
-             // Trapezoid for SEGDP visualization
+             // --- Trapezoid for SEGDP visualization ---
             ctx.strokeStyle = color1;
             ctx.beginPath();
             ctx.moveTo(tubeMin[start].x, tubeMin[start].y);
@@ -431,6 +431,21 @@ function drawSegmentation(changepoints, tubeMin, tubeMax, color1, color2, isFast
     }
 }
 
+// ADD this new helper function right below the linearFit function.
+function linearFitXY(points) {
+    const n = points.length;
+    if (n < 2) return { slope: 0, intercept: points[0]?.y || 0 };
+    let sum_x = 0, sum_y = 0, sum_xy = 0, sum_xx = 0;
+    for (const p of points) {
+        sum_x += p.x;
+        sum_y += p.y;
+        sum_xy += p.x * p.y;
+        sum_xx += p.x * p.x;
+    }
+    const slope = (n * sum_xy - sum_x * sum_y) / (n * sum_xx - sum_x * sum_x);
+    const intercept = (sum_y - slope * sum_x) / n;
+    return { slope, intercept };
+}
 function drawChangepoints(changepoints, color) {
     ctx.strokeStyle = color;
     ctx.lineWidth = 1.5;
