@@ -104,18 +104,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // In assets/js/pages/interactive-segmentation.js
 
-    // ADD THIS NEW HELPER FUNCTION
-    // It converts a linear slider position (0-100) to a logarithmic scale
-    const getLogValue = (position, minVal, maxVal) => {
-        // position is 0-100, minVal/maxVal are the desired output range (e.g., 0.01 to 100)
-        if (position == 0) return minVal;
-        const minLog = Math.log(minVal);
-        const maxLog = Math.log(maxVal);
-        const scale = (maxLog - minLog) / 100;
-        return Math.exp(minLog + scale * position);
-    };
-
-
     // REPLACE the existing handleSegment function
     const handleSegment = () => {
         if (alignedTrajectories.length === 0) {
@@ -144,8 +132,69 @@ document.addEventListener('DOMContentLoaded', () => {
             infoDisplay.textContent = `SEGDP: ${segdp_cps.length - 1} segments (${segdpTime.toFixed(1)} ms)\nFastSEGDP: ${fastsegdp_cps.length - 1} segments (${peltTime.toFixed(1)} ms)`;
         }, 50);
     };
+    // In assets/js/pages/interactive-segmentation.js, REPLACE this function
 
+    const drawCostMatrices = (ctx, matrices) => {
+        clearCanvas(ctx);
+        if (!matrices || matrices.length === 0) return;
+        
+        const canvasWidth = ctx.canvas.getBoundingClientRect().width;
+        const canvasHeight = ctx.canvas.getBoundingClientRect().height;
+        const totalMatrices = matrices.length;
+        const matrixHeight = canvasHeight / totalMatrices;
 
+        matrices.forEach((matrix, index) => {
+            if (!matrix || matrix.length === 0) return;
+            
+            const n = matrix.length;
+            const m = matrix[0].length;
+            const w = canvasWidth / m;
+            const h = matrixHeight / n;
+            const yOffset = index * matrixHeight;
+            const maxCost = matrix[n-1][m-1];
+            if (maxCost === 0) return;
+
+            for (let i = 0; i < n; i++) {
+                for (let j = 0; j < m; j++) {
+                    const value = matrix[i][j] / maxCost;
+                    const colorVal = Math.floor((1 - value) * 200) + 55;
+                    ctx.fillStyle = `rgb(${colorVal}, ${colorVal}, ${colorVal})`;
+                    // This flips the y-axis to draw from bottom-left
+                    const yPos = yOffset + (matrixHeight - (i + 1) * h);
+                    ctx.fillRect(j * w, yPos, w, h);
+                }
+            }
+        });
+    };
+    // In assets/js/pages/interactive-segmentation.js:
+
+    // REPLACE this function
+    const getLogValue = (position, minVal, maxVal) => {
+        if (position == 0) return minVal;
+        if (position == 100) return maxVal;
+        const minLog = Math.log(minVal);
+        const maxLog = Math.log(maxVal);
+        const scale = (maxLog - minLog) / 100;
+        return Math.exp(minLog + scale * position);
+    };
+
+    // Inside setupEventListeners(), REPLACE the slider listener setup
+    downsampleSlider.addEventListener('input', () => {
+        downsampleValueSpan.textContent = downsampleSlider.value;
+    });
+    lambdaSegdpSlider.addEventListener('input', () => {
+        const logValue = getLogValue(parseFloat(lambdaSegdpSlider.value), 0.01, 100);
+        lambdaSegdpValueSpan.textContent = logValue.toFixed(4);
+    });
+    lambdaPeltSlider.addEventListener('input', () => {
+        const logValue = getLogValue(parseFloat(lambdaPeltSlider.value), 0.01, 100);
+        lambdaPeltValueSpan.textContent = logValue.toFixed(4);
+    });
+
+    // And REPLACE the initial text setting at the very end of the script
+    downsampleValueSpan.textContent = downsampleSlider.value;
+    lambdaSegdpValueSpan.textContent = getLogValue(parseFloat(lambdaSegdpSlider.value), 0.01, 100).toFixed(4);
+    lambdaPeltValueSpan.textContent = getLogValue(parseFloat(lambdaPeltSlider.value), 0.01, 100).toFixed(4);
     // REPLACE the existing Slider Listeners inside the setupEventListeners function
     // Old listeners:
     // downsampleSlider.addEventListener('input', ...);
@@ -208,7 +257,58 @@ document.addEventListener('DOMContentLoaded', () => {
             drawCostMatrices(dtwCtx, costMatrices);
         }, 50);
     };
+    // In assets/js/pages/interactive-segmentation.js, REPLACE this function
 
+    function runFastSEGDP(tubeMin, tubeMax, lambda) {
+        const N = tubeMin.length; if (N === 0) return [];
+        
+        const costCache = {};
+        const getCost = (start, end) => {
+            const key = `${start}-${end}`;
+            if (key in costCache) return costCache[key];
+            return costCache[key] = getSegmentCostPELT(start, end, tubeMin, tubeMax);
+        };
+
+        const F = Array(N + 1).fill(Infinity);
+        const P = Array(N + 1).fill(0);
+        F[0] = -lambda;
+        let R = [0];
+
+        for (let t = 1; t <= N; t++) {
+            let minCostForT = Infinity;
+            let bestTauForT = 0;
+
+            // Find the best preceding changepoint for endpoint t
+            for (const tau of R) {
+                const cost = F[tau] + getCost(tau, t - 1) + lambda;
+                if (cost < minCostForT) {
+                    minCostForT = cost;
+                    bestTauForT = tau;
+                }
+            }
+            F[t] = minCostForT;
+            P[t] = bestTauForT;
+
+            // The crucial PELT pruning step
+            const R_new = [];
+            for (const tau of R) {
+                if (F[tau] + getCost(tau, t - 1) <= F[t]) {
+                    R_new.push(tau);
+                }
+            }
+            R_new.push(t);
+            R = R_new;
+        }
+
+        const changepoints = [];
+        let current_t = N;
+        while (current_t > 0) {
+            changepoints.push(current_t);
+            current_t = P[current_t];
+        }
+        changepoints.push(0);
+        return changepoints.sort((a,b) => a-b).filter((v,i,a) => a.indexOf(v)===i);
+    }
     // REPLACE the existing drawState function
     const drawState = (segmentations = {}) => {
         clearCanvas(ctx);
