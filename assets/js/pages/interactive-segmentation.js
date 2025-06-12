@@ -183,32 +183,69 @@ function getSegmentCostSEGDP(start, end, tubeMin, tubeMax) {
     }
     return cost;
 }
+// REPLACE the old runSEGDP function with this corrected one.
 
 function runSEGDP(tubeMin, tubeMax, lambda) {
     const N = tubeMin.length;
-    const MAX_SEGMENTS = Math.min(N, 30);
-    const costs = Array.from({length: N}, () => Array(N).fill(0));
-    for (let i = 0; i < N; i++) for (let j = i; j < N; j++) costs[i][j] = getSegmentCostSEGDP(i, j, tubeMin, tubeMax);
+    if (N === 0) return [];
+    const MAX_SEGMENTS = Math.min(N, 30); // Keep a reasonable limit
+
+    // Use a cache instead of pre-computing all costs to avoid freezing
+    const costCache = {};
+    const getCost = (start, end) => {
+        const key = `${start}-${end}`;
+        if (key in costCache) return costCache[key];
+        const cost = getSegmentCostSEGDP(start, end, tubeMin, tubeMax);
+        costCache[key] = cost;
+        return cost;
+    };
 
     const dp = Array.from({length: N}, () => Array(MAX_SEGMENTS + 1).fill(Infinity));
     const bp = Array.from({length: N}, () => Array(MAX_SEGMENTS + 1).fill(-1));
 
-    for (let t = 0; t < N; t++) { dp[t][1] = costs[0][t]; bp[t][1] = 0; }
-    for (let m = 2; m <= MAX_SEGMENTS; m++) for (let t = 0; t < N; t++) for (let j = 0; j < t; j++) {
-        const currentCost = dp[j][m-1] + costs[j+1][t];
-        if (currentCost < dp[t][m]) { dp[t][m] = currentCost; bp[t][m] = j + 1; }
+    // Initialization for 1 segment
+    for (let t = 0; t < N; t++) {
+        dp[t][1] = getCost(0, t);
+        bp[t][1] = 0;
     }
-    let bestNumSegments = 1, minTotalCost = Infinity;
-    for (let m = 1; m <= MAX_SEGMENTS; m++) {
-        const totalCost = dp[N-1][m] + lambda * m;
-        if (totalCost < minTotalCost) { minTotalCost = totalCost; bestNumSegments = m; }
+
+    // Main DP loop
+    for (let m = 2; m <= MAX_SEGMENTS; m++) {
+        for (let t = 0; t < N; t++) {
+            for (let j = 0; j < t; j++) {
+                // Fetch cost from cache or compute it
+                const currentCost = dp[j][m-1] + getCost(j + 1, t);
+                if (currentCost < dp[t][m]) {
+                    dp[t][m] = currentCost;
+                    bp[t][m] = j + 1;
+                }
+            }
+        }
     }
+
+    // Find optimal number of segments using lambda
+    let bestNumSegments = 1;
+    let minTotalCost = dp[N-1][1] + lambda;
+    for (let m = 2; m <= MAX_SEGMENTS; m++) {
+        const totalCost = dp[N-1][m] + (lambda * m);
+        if (totalCost < minTotalCost) {
+            minTotalCost = totalCost;
+            bestNumSegments = m;
+        }
+    }
+
+    // Backtrack to find changepoints
     const changepoints = [N];
-    let t = N - 1, m = bestNumSegments;
-    while (m > 0) {
-        let startOfSeg = bp[t][m]; if (startOfSeg === -1) break;
-        changepoints.push(startOfSeg); t = startOfSeg - 1; m--;
+    let current_t = N - 1;
+    let current_m = bestNumSegments;
+    while (current_m > 0 && current_t >= 0) {
+        let startOfSeg = bp[current_t][current_m];
+        if (startOfSeg === -1) break;
+        changepoints.push(startOfSeg);
+        current_t = startOfSeg - 1;
+        current_m--;
     }
+    
     return changepoints.sort((a,b) => a-b).filter((v,i,a) => a.indexOf(v)===i);
 }
 
