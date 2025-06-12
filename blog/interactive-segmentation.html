@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Interactive Trajectory Segmentation - Mo Saeidi</title>
-    <meta name="description" content="An interactive demonstration of trajectory segmentation using SEGDP and FastSEGDP (PELT) algorithms. Draw trajectories and see them segmented in real-time.">
+    <meta name="description" content="An interactive demonstration of trajectory segmentation using SEGDP and FastSEGDP (PELT) algorithms. Draw trajectories, align with DTW, and segment in real-time.">
 
     <script src="https://cdn.tailwindcss.com"></script>
 
@@ -52,16 +52,13 @@
                     </header>
 
                     <section class="post-content">
-                        <p>
-                            This tool demonstrates trajectory segmentation algorithms in your browser. Use your mouse or finger to draw one or more paths on the canvas. The tool will then apply two algorithms to approximate your drawings with a series of straight lines:
+                         <p>
+                            This tool demonstrates trajectory segmentation in two stages. First, draw one or more paths and click <strong>Align Trajectories</strong> to see them aligned using Dynamic Time Warping (DTW). Then, click <strong>Run Segmentation</strong> to approximate the resulting "tube" using two algorithms:
                         </p>
                         <ul>
                             <li><strong>SEGDP (Slow):</strong> A precise Dynamic Programming method that finds the optimal segmentation.</li>
-                            <li><strong>FastSEGDP (PELT):</strong> A much faster, pruned search algorithm that provides a near-optimal solution suitable for real-time applications.</li>
+                            <li><strong>FastSEGDP (PELT):</strong> A much faster, pruned search algorithm that provides a near-optimal solution.</li>
                         </ul>
-                        <p>
-                           If you draw multiple trajectories, they are first aligned using a simplified Dynamic Time Warping (DTW) before a "tube" is created for segmentation.
-                        </p>
 
                         <div class="flex flex-col lg:flex-row gap-6 mb-8 mt-6">
 
@@ -69,18 +66,25 @@
                                 <div>
                                     <h2 class="text-xl font-semibold mb-3 text-gray-100">Controls</h2>
                                     <div class="controls-container space-y-2">
-                                        <button id="run-segmentation-btn" class="btn btn-primary w-full">Run Segmentation</button>
-                                        <button id="clear-canvas-btn" class="btn btn-secondary w-full">Clear Canvas</button>
+                                        <button id="align-btn" class="btn btn-primary w-full">1. Align Trajectories (DTW)</button>
+                                        <button id="segment-btn" class="btn btn-secondary w-full" disabled>2. Run Segmentation</button>
+                                        <button id="clear-canvas-btn" class="btn btn-danger w-full mt-4">Clear All</button>
                                     </div>
-                                    <div class="mt-4">
+                                    <div class="mt-4 space-y-3">
                                          <label for="downsample-slider" class="block text-sm font-medium text-gray-300">Downsample Factor: <span id="downsample-value">10</span></label>
                                          <input type="range" id="downsample-slider" min="1" max="50" value="10" class="w-full h-2 bg-gray-600 rounded-lg appearance-none cursor-pointer">
+
+                                         <label for="lambda-segdp-slider" class="block text-sm font-medium text-gray-300">SEGDP &lambda; (Cost): <span id="lambda-segdp-value">1000</span></label>
+                                         <input type="range" id="lambda-segdp-slider" min="100" max="100000" value="1000" step="100" class="w-full h-2 bg-gray-600 rounded-lg appearance-none cursor-pointer">
+
+                                         <label for="lambda-pelt-slider" class="block text-sm font-medium text-gray-300">FastSEGDP &lambda; (Cost): <span id="lambda-pelt-value">1000K</span></label>
+                                         <input type="range" id="lambda-pelt-slider" min="100000" max="10000000" value="1000000" step="100000" class="w-full h-2 bg-gray-600 rounded-lg appearance-none cursor-pointer">
                                     </div>
                                 </div>
                                 <div>
                                     <h2 class="text-xl font-semibold mb-2 mt-4 text-gray-100">Algorithm Info</h2>
                                     <div id="info-display" class="info-text">
-                                        Draw a trajectory on the canvas and click "Run Segmentation".
+                                        Draw a trajectory and click "Align Trajectories".
                                     </div>
                                 </div>
                             </div>
@@ -90,25 +94,14 @@
                                 <div id="canvas-container" class="relative">
                                     <canvas id="segmentation-canvas"></canvas>
                                 </div>
-                                <p class="text-sm text-gray-500 mt-2">Click and drag to draw a trajectory. A new trajectory starts on each new mouse down event.</p>
+                                <p class="text-sm text-gray-500 mt-2">Click and drag to draw. Each new click starts a new trajectory.</p>
+                                
+                                <h2 class="text-xl font-semibold mb-3 mt-4 text-gray-100">DTW Cost Matrix</h2>
+                                <div id="dtw-canvas-container" class="relative">
+                                    <canvas id="dtw-canvas"></canvas>
+                                </div>
                             </div>
                         </div>
-
-                        <hr class="my-8 border-gray-700">
-                        <h2 class="text-2xl font-semibold mb-4 text-gray-100">How it Works</h2>
-                        <p>
-                            <strong>1. Drawing & Downsampling:</strong> The tool captures the path you draw as a series of (x, y) coordinates. To make the calculations faster, this raw data is first downsampled. A higher downsample factor means fewer points are used, leading to quicker but potentially less precise segmentation.
-                        </p>
-                        <p>
-                            <strong>2. Alignment (DTW):</strong> If you draw multiple trajectories, they won't have the same length or timing. Dynamic Time Warping (DTW) is used to stretch and compress the trajectories in time so they align. This allows us to create a "tube" that encloses all the demonstrations.
-                        </p>
-                        <p>
-                           <strong>3. Segmentation:</strong> The core of the demo. The goal is to find a set of "changepoints" that divide the trajectory (or tube) into segments. Each segment can then be accurately represented by a simple straight line (or a trapezoid for a tube).
-                           <ul>
-                                <li>The <strong>SEGDP</strong> algorithm uses dynamic programming to test every possible segmentation and is guaranteed to find the best one, but it is computationally expensive ($O(N^2 \cdot M)$ where N is length and M is segments).</li>
-                                <li>The <strong>FastSEGDP (PELT)</strong> algorithm (Pruned Exact Linear Time) intelligently prunes branches of the search that cannot possibly contain the optimal solution. This makes it significantly faster ($O(N)$) while still finding an exact, optimal result.</li>
-                           </ul>
-                        </p>
                     </section>
                 </article>
 
@@ -127,6 +120,5 @@
 
     <script src="../assets/js/main.js"></script>
     <script type="module" src="../assets/js/pages/interactive-segmentation.js"></script>
-
 </body>
 </html>
