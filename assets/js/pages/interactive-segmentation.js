@@ -27,24 +27,6 @@ document.addEventListener('DOMContentLoaded', () => {
     let alignedTrajectories = [];
     let tube = { tubeMin: null, tubeMax: null };
 
-    // --- Utility & Setup ---
-    const resizeAllCanvases = () => {
-        const dpr = window.devicePixelRatio || 1;
-        [canvas, dtwCanvas].forEach(c => {
-            const rect = c.getBoundingClientRect();
-            c.width = rect.width * dpr;
-            c.height = rect.height * dpr;
-            c.getContext('2d').scale(dpr, dpr);
-        });
-        // Redraw content after resize
-        drawState();
-    };
-
-    const getMousePos = (evt) => {
-        const rect = canvas.getBoundingClientRect();
-        return { x: evt.clientX - rect.left, y: evt.clientY - rect.top };
-    };
-
     // --- Core Action Handlers ---
     const handleClear = () => {
         rawTrajectories = [];
@@ -53,181 +35,9 @@ document.addEventListener('DOMContentLoaded', () => {
         clearCanvas(ctx);
         clearCanvas(dtwCtx);
         segmentBtn.disabled = true;
-        infoDisplay.textContent = 'Draw a trajectory and click "Align Trajectories".';
-    };
-    // In assets/js/pages/interactive-segmentation.js:
-
-    // ADD this new helper function somewhere with the other algorithm helpers.
-    const normalizeTube = (tube) => {
-        const allPoints = [...tube.tubeMin, ...tube.tubeMax];
-        const minX = Math.min(...allPoints.map(p => p.x));
-        const maxX = Math.max(...allPoints.map(p => p.x));
-        const minY = Math.min(...allPoints.map(p => p.y));
-        const maxY = Math.max(...allPoints.map(p => p.y));
-
-        const rangeX = maxX - minX;
-        const rangeY = maxY - minY;
-
-        if (rangeX === 0 || rangeY === 0) return tube; // Cannot normalize if there's no range
-
-        const normalize = (points) => points.map(p => ({
-            x: (p.x - minX) / rangeX,
-            y: (p.y - minY) / rangeY,
-        }));
-
-        return {
-            tubeMin: normalize(tube.tubeMin),
-            tubeMax: normalize(tube.tubeMax)
-        };
-    };
-    // ADD THIS NEW HELPER FUNCTION
-    const spatiallyNormalizeForViz = (trajectories) => {
-        if (trajectories.length < 2) return trajectories;
-        const refTraj = trajectories[0];
-        const refMinX = refTraj[0].x;
-        const refMaxX = refTraj[refTraj.length - 1].x;
-        const refRangeX = refMaxX - refMinX;
-
-        return trajectories.map((traj, index) => {
-            if (index === 0) return traj; // Don't transform the reference itself
-            const trajMinX = traj[0].x;
-            const trajMaxX = traj[traj.length - 1].x;
-            const trajRangeX = trajMaxX - trajMinX;
-            if (trajRangeX === 0) return traj; // Cannot scale a zero-width trajectory
-
-            return traj.map(p => ({
-                x: refMinX + ((p.x - trajMinX) * refRangeX / trajRangeX),
-                y: p.y // Preserve vertical value
-            }));
-        });
+        infoDisplay.textContent = 'Draw one or more trajectories and click "Align".';
     };
 
-    // In assets/js/pages/interactive-segmentation.js
-
-    // REPLACE the existing handleSegment function
-    const handleSegment = () => {
-        if (alignedTrajectories.length === 0) {
-            infoDisplay.textContent = "Please align trajectories first.";
-            return;
-        }
-        infoDisplay.textContent = "Segmenting...";
-        
-        setTimeout(() => {
-            const normalizedTube = normalizeTube(tube);
-
-            // Get the raw slider positions and convert them to log values
-            const lambdaSEGDP = getLogValue(parseFloat(lambdaSegdpSlider.value), 0.001, 100);
-            const lambdaPELT = getLogValue(parseFloat(lambdaPeltSlider.value), 0.001, 100);
-
-            const startTimeSEGDP = performance.now();
-            const segdp_cps = runSEGDP(normalizedTube.tubeMin, normalizedTube.tubeMax, lambdaSEGDP);
-            const segdpTime = performance.now() - startTimeSEGDP;
-
-            const startTimePELT = performance.now();
-            const fastsegdp_cps = runFastSEGDP(normalizedTube.tubeMin, normalizedTube.tubeMax, lambdaPELT);
-            const peltTime = performance.now() - startTimePELT;
-            
-            drawState({ segdp_cps, fastsegdp_cps });
-
-            infoDisplay.textContent = `SEGDP: ${segdp_cps.length - 1} segments (${segdpTime.toFixed(1)} ms)\nFastSEGDP: ${fastsegdp_cps.length - 1} segments (${peltTime.toFixed(1)} ms)`;
-        }, 50);
-    };
-    // In assets/js/pages/interactive-segmentation.js, REPLACE this function
-
-    const drawCostMatrices = (ctx, matrices) => {
-        clearCanvas(ctx);
-        if (!matrices || matrices.length === 0) return;
-        
-        const canvasWidth = ctx.canvas.getBoundingClientRect().width;
-        const canvasHeight = ctx.canvas.getBoundingClientRect().height;
-        const totalMatrices = matrices.length;
-        const matrixHeight = canvasHeight / totalMatrices;
-
-        matrices.forEach((matrix, index) => {
-            if (!matrix || matrix.length === 0) return;
-            
-            const n = matrix.length;
-            const m = matrix[0].length;
-            const w = canvasWidth / m;
-            const h = matrixHeight / n;
-            const yOffset = index * matrixHeight;
-            const maxCost = matrix[n-1][m-1];
-            if (maxCost === 0) return;
-
-            for (let i = 0; i < n; i++) {
-                for (let j = 0; j < m; j++) {
-                    const value = matrix[i][j] / maxCost;
-                    const colorVal = Math.floor((1 - value) * 200) + 55;
-                    ctx.fillStyle = `rgb(${colorVal}, ${colorVal}, ${colorVal})`;
-                    // This flips the y-axis to draw from bottom-left
-                    const yPos = yOffset + (matrixHeight - (i + 1) * h);
-                    ctx.fillRect(j * w, yPos, w, h);
-                }
-            }
-        });
-    };
-    // In assets/js/pages/interactive-segmentation.js:
-
-    // REPLACE this function
-    const getLogValue = (position, minVal, maxVal) => {
-        if (position == 0) return minVal;
-        if (position == 100) return maxVal;
-        const minLog = Math.log(minVal);
-        const maxLog = Math.log(maxVal);
-        const scale = (maxLog - minLog) / 100;
-        return Math.exp(minLog + scale * position);
-    };
-
-    // Inside setupEventListeners(), REPLACE the slider listener setup
-    downsampleSlider.addEventListener('input', () => {
-        downsampleValueSpan.textContent = downsampleSlider.value;
-    });
-    lambdaSegdpSlider.addEventListener('input', () => {
-        const logValue = getLogValue(parseFloat(lambdaSegdpSlider.value), 0.01, 100);
-        lambdaSegdpValueSpan.textContent = logValue.toFixed(4);
-    });
-    lambdaPeltSlider.addEventListener('input', () => {
-        const logValue = getLogValue(parseFloat(lambdaPeltSlider.value), 0.01, 100);
-        lambdaPeltValueSpan.textContent = logValue.toFixed(4);
-    });
-
-    // And REPLACE the initial text setting at the very end of the script
-    downsampleValueSpan.textContent = downsampleSlider.value;
-    lambdaSegdpValueSpan.textContent = getLogValue(parseFloat(lambdaSegdpSlider.value), 0.01, 100).toFixed(4);
-    lambdaPeltValueSpan.textContent = getLogValue(parseFloat(lambdaPeltSlider.value), 0.01, 100).toFixed(4);
-    // REPLACE the existing Slider Listeners inside the setupEventListeners function
-    // Old listeners:
-    // downsampleSlider.addEventListener('input', ...);
-    // lambdaSegdpSlider.addEventListener('input', ...);
-    // lambdaPeltSlider.addEventListener('input', ...);
-
-    // New Listeners:
-    downsampleSlider.addEventListener('input', () => {
-        downsampleValueSpan.textContent = downsampleSlider.value;
-    });
-
-    lambdaSegdpSlider.addEventListener('input', () => {
-        const logValue = getLogValue(parseFloat(lambdaSegdpSlider.value), 0.001, 100);
-        lambdaSegdpValueSpan.textContent = logValue.toFixed(4);
-    });
-
-    lambdaPeltSlider.addEventListener('input', () => {
-        const logValue = getLogValue(parseFloat(lambdaPeltSlider.value), 0.001, 100);
-        lambdaPeltValueSpan.textContent = logValue.toFixed(4);
-    });
-
-
-    // And also REPLACE the initial text setting at the end of the script with this:
-    // Old text setting:
-    // downsampleValueSpan.textContent = downsampleSlider.value;
-    // lambdaSegdpValueSpan.textContent = lambdaSegdpSlider.value;
-    // lambdaPeltValueSpan.textContent = ...
-
-    // New text setting:
-    downsampleValueSpan.textContent = downsampleSlider.value;
-    lambdaSegdpValueSpan.textContent = getLogValue(parseFloat(lambdaSegdpSlider.value), 0.001, 100).toFixed(4);
-    lambdaPeltValueSpan.textContent = getLogValue(parseFloat(lambdaPeltSlider.value), 0.001, 100).toFixed(4);
-    // REPLACE the existing handleAlign function
     const handleAlign = () => {
         if (rawTrajectories.length === 0 || rawTrajectories.flat().length < 2) {
             infoDisplay.textContent = "Please draw at least one trajectory.";
@@ -238,95 +48,51 @@ document.addEventListener('DOMContentLoaded', () => {
 
         setTimeout(() => {
             const factor = parseInt(downsampleSlider.value, 10);
-            const startTime = performance.now();
-
             const downsampled = rawTrajectories.map(t => downsample(t, factor));
             const { aligned, costMatrices } = align(downsampled);
-            const alignmentTime = performance.now() - startTime;
             
             alignedTrajectories = aligned;
-            if (aligned.length > 0 && aligned[0].length > 0) {
-                tube = calculateTube(alignedTrajectories);
-                segmentBtn.disabled = false;
-                infoDisplay.textContent = `Alignment Complete: ${alignmentTime.toFixed(1)} ms.\nFound ${costMatrices.length} DTW comparisons. Ready for segmentation.`;
+            if (aligned.length > 0 && aligned.flat().length > 0) {
+                 tube = calculateTube(alignedTrajectories);
+                 segmentBtn.disabled = false;
+                 infoDisplay.textContent = `Alignment complete. Found ${costMatrices.length} DTW comparisons. Ready for segmentation.`;
             } else {
-                infoDisplay.textContent = `Alignment failed. Please try again.`;
+                 infoDisplay.textContent = `Alignment failed. Please clear and try again.`;
             }
             
             drawState(); 
             drawCostMatrices(dtwCtx, costMatrices);
-        }, 50);
+        }, 10);
     };
-    // In assets/js/pages/interactive-segmentation.js, REPLACE this function
 
-    function runFastSEGDP(tubeMin, tubeMax, lambda) {
-        const N = tubeMin.length; if (N === 0) return [];
+    const handleSegment = () => {
+        if (alignedTrajectories.length === 0) {
+            infoDisplay.textContent = "Please align trajectories first.";
+            return;
+        }
+        infoDisplay.textContent = "Segmenting...";
         
-        const costCache = {};
-        const getCost = (start, end) => {
-            const key = `${start}-${end}`;
-            if (key in costCache) return costCache[key];
-            return costCache[key] = getSegmentCostPELT(start, end, tubeMin, tubeMax);
-        };
+        setTimeout(() => {
+            const normalizedTube = normalizeTube(tube);
+            const lambdaSEGDP = getLogValue(parseFloat(lambdaSegdpSlider.value), 0.01, 100);
+            const lambdaPELT = getLogValue(parseFloat(lambdaPeltSlider.value), 0.01, 100);
 
-        const F = Array(N + 1).fill(Infinity);
-        const P = Array(N + 1).fill(0);
-        F[0] = -lambda;
-        let R = [0];
+            const segdp_cps = runSEGDP(normalizedTube.tubeMin, normalizedTube.tubeMax, lambdaSEGDP);
+            const fastsegdp_cps = runFastSEGDP(normalizedTube.tubeMin, normalizedTube.tubeMax, lambdaPELT);
+            
+            drawState({ segdp_cps, fastsegdp_cps });
 
-        for (let t = 1; t <= N; t++) {
-            let minCostForT = Infinity;
-            let bestTauForT = 0;
-
-            // Find the best preceding changepoint for endpoint t
-            for (const tau of R) {
-                const cost = F[tau] + getCost(tau, t - 1) + lambda;
-                if (cost < minCostForT) {
-                    minCostForT = cost;
-                    bestTauForT = tau;
-                }
-            }
-            F[t] = minCostForT;
-            P[t] = bestTauForT;
-
-            // The crucial PELT pruning step
-            const R_new = [];
-            for (const tau of R) {
-                if (F[tau] + getCost(tau, t - 1) <= F[t]) {
-                    R_new.push(tau);
-                }
-            }
-            R_new.push(t);
-            R = R_new;
-        }
-
-        const changepoints = [];
-        let current_t = N;
-        while (current_t > 0) {
-            changepoints.push(current_t);
-            current_t = P[current_t];
-        }
-        changepoints.push(0);
-        return changepoints.sort((a,b) => a-b).filter((v,i,a) => a.indexOf(v)===i);
-    }
-    // REPLACE the existing drawState function
+            infoDisplay.textContent = `SEGDP: ${segdp_cps.length - 1} segments\nFastSEGDP: ${fastsegdp_cps.length - 1} segments`;
+        }, 10);
+    };
+    
+    // --- Drawing & Visualization ---
     const drawState = (segmentations = {}) => {
         clearCanvas(ctx);
-
-        // 1. If alignment has run, show the results
-        if (alignedTrajectories.length > 0) {
-            // Create a special, visually-scaled version for drawing
-            const vizTrajectories = spatiallyNormalizeForViz(alignedTrajectories);
-            drawTrajectories(ctx, vizTrajectories, '#FDBA74', 1); // Draw the visually aligned trajectories
-
-            if(tube.tubeMin) drawTube(ctx, tube.tubeMin, tube.tubeMax);
-        
-        // 2. Otherwise, just show the raw drawings
-        } else {
-            drawTrajectories(ctx, rawTrajectories, '#A0AEC0', 1.5);
+        drawTrajectories(ctx, rawTrajectories, '#475569', 1.5);
+        if (alignedTrajectories.length > 0 && tube.tubeMin) {
+            drawTube(ctx, tube.tubeMin, tube.tubeMax);
         }
-        
-        // 3. If segmentation has run, draw the results
         if (segmentations.segdp_cps) {
             drawSegmentation(ctx, segmentations.segdp_cps, tube.tubeMin, tube.tubeMax);
             drawVerticalChangepoints(ctx, segmentations.segdp_cps, alignedTrajectories, '#63B3ED', 'dotted');
@@ -338,51 +104,85 @@ document.addEventListener('DOMContentLoaded', () => {
             drawLegend(ctx);
         }
     };
+    
     // --- Event Listeners Setup ---
     const setupEventListeners = () => {
-        window.addEventListener('resize', resizeAllCanvases);
-
-        // Drawing listeners
-        const start = (e) => { isDrawing = true; rawTrajectories.push([getMousePos(e)]); };
-        const move = (e) => { if(isDrawing) { rawTrajectories[rawTrajectories.length - 1].push(getMousePos(e)); drawState(); } };
-        const end = () => { if(isDrawing) { isDrawing = false; alignedTrajectories = []; segmentBtn.disabled = true; } };
+        const startDrawing = (e) => {
+            isDrawing = true;
+            alignedTrajectories = [];
+            tube = { tubeMin: null, tubeMax: null };
+            segmentBtn.disabled = true;
+            clearCanvas(dtwCtx);
+            rawTrajectories.push([getMousePos(e)]);
+        };
+        const moveDrawing = (e) => { 
+            if(isDrawing) { 
+                rawTrajectories[rawTrajectories.length - 1].push(getMousePos(e)); 
+                drawState(); 
+            } 
+        };
+        const endDrawing = () => { isDrawing = false; };
         
-        canvas.addEventListener('mousedown', start);
-        canvas.addEventListener('mousemove', move);
-        canvas.addEventListener('mouseup', end);
-        canvas.addEventListener('mouseout', end);
+        canvas.addEventListener('mousedown', startDrawing);
+        canvas.addEventListener('mousemove', moveDrawing);
+        canvas.addEventListener('mouseup', endDrawing);
+        canvas.addEventListener('mouseout', endDrawing);
         
-        const touchStart = (e) => { e.preventDefault(); start(e.touches[0]); };
-        const touchMove = (e) => { e.preventDefault(); move(e.touches[0]); };
-        canvas.addEventListener('touchstart', touchStart);
-        canvas.addEventListener('touchmove', touchMove);
-        canvas.addEventListener('touchend', end);
+        canvas.addEventListener('touchstart', (e)=>{e.preventDefault();startDrawing(e.touches[0])});
+        canvas.addEventListener('touchmove', (e)=>{e.preventDefault();moveDrawing(e.touches[0])});
+        canvas.addEventListener('touchend', endDrawing);
         
-        // Button Listeners
         alignBtn.addEventListener('click', handleAlign);
         segmentBtn.addEventListener('click', handleSegment);
         clearBtn.addEventListener('click', handleClear);
         
-        // Slider Listeners
-        downsampleSlider.addEventListener('input', () => downsampleValueSpan.textContent = downsampleSlider.value);
-        lambdaSegdpSlider.addEventListener('input', () => lambdaSegdpValueSpan.textContent = lambdaSegdpSlider.value);
-        lambdaPeltSlider.addEventListener('input', () => lambdaPeltValueSpan.textContent = `${(parseFloat(lambdaPeltSlider.value)/1000000).toFixed(1)}M`);
+        downsampleSlider.addEventListener('input', () => { downsampleValueSpan.textContent = downsampleSlider.value; });
+        lambdaSegdpSlider.addEventListener('input', () => {
+            const logValue = getLogValue(parseFloat(lambdaSegdpSlider.value), 0.01, 100);
+            lambdaSegdpValueSpan.textContent = logValue.toFixed(4);
+        });
+        lambdaPeltSlider.addEventListener('input', () => {
+            const logValue = getLogValue(parseFloat(lambdaPeltSlider.value), 0.01, 100);
+            lambdaPeltValueSpan.textContent = logValue.toFixed(4);
+        });
     };
 
-    // --- Initial Call ---
-    handleClear(); // Set initial state
+    // --- Initial Call & Utility ---
+    const resizeAllCanvases = () => {
+        const dpr = window.devicePixelRatio || 1;
+        [canvas, dtwCanvas].forEach(c => {
+            if (!c) return;
+            const rect = c.getBoundingClientRect();
+            c.width = rect.width * dpr;
+            c.height = rect.height * dpr;
+            c.getContext('2d').scale(dpr, dpr);
+        });
+        drawState();
+    };
+    const getMousePos = (evt) => {
+        const rect = canvas.getBoundingClientRect();
+        return { x: evt.clientX - rect.left, y: evt.clientY - rect.top };
+    };
+
+    handleClear();
     resizeAllCanvases();
     setupEventListeners();
-    // Set initial slider text
+
     downsampleValueSpan.textContent = downsampleSlider.value;
-    lambdaSegdpValueSpan.textContent = lambdaSegdpSlider.value;
-    lambdaPeltValueSpan.textContent = `${(parseFloat(lambdaPeltSlider.value)/1000000).toFixed(1)}M`;
+    lambdaSegdpValueSpan.textContent = getLogValue(parseFloat(lambdaSegdpSlider.value), 0.01, 100).toFixed(4);
+    lambdaPeltValueSpan.textContent = getLogValue(parseFloat(lambdaPeltSlider.value), 0.01, 100).toFixed(4);
 });
 
 
-// --- ALGORITHMS & VISUALIZATION HELPERS (can be outside DOMContentLoaded) ---
+// --- ALGORITHMS & VISUALIZATION HELPERS ---
 
-const clearCanvas = (ctx) => ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+const clearCanvas = (ctx) => {
+    if (ctx && ctx.canvas) {
+        ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+    }
+};
+
+const getLogValue = (pos, min, max) => Math.exp(Math.log(min) + (Math.log(max) - Math.log(min)) / 100 * pos);
 
 const drawTrajectories = (ctx, trajs, color, lineWidth) => {
     ctx.strokeStyle = color;
@@ -391,12 +191,15 @@ const drawTrajectories = (ctx, trajs, color, lineWidth) => {
         if (traj.length < 2) return;
         ctx.beginPath();
         ctx.moveTo(traj[0].x, traj[0].y);
-        for (let i = 1; i < traj.length; i++) ctx.lineTo(traj[i].x, traj[i].y);
+        for (let i = 1; i < traj.length; i++) {
+            ctx.lineTo(traj[i].x, traj[i].y);
+        }
         ctx.stroke();
     });
 };
 
 const drawTube = (ctx, tMin, tMax) => {
+    if (!tMin || tMin.length === 0) return;
     ctx.fillStyle = 'rgba(100, 116, 139, 0.3)';
     ctx.beginPath();
     ctx.moveTo(tMax[0].x, tMax[0].y);
@@ -405,72 +208,39 @@ const drawTube = (ctx, tMin, tMax) => {
     ctx.closePath();
     ctx.fill();
 };
-// In assets/js/pages/interactive-segmentation.js, replace the old `drawCostMatrix` function:
 
-const drawCostMatrices = (ctx, matrices) => {
-    if (!matrices || matrices.length === 0) return;
-    
-    clearCanvas(ctx); // Clear previous drawings
-    
-    const canvasWidth = ctx.canvas.getBoundingClientRect().width;
-    const totalMatrices = matrices.length;
-    const matrixHeight = ctx.canvas.getBoundingClientRect().height / totalMatrices;
-
-    matrices.forEach((matrix, index) => {
-        if (!matrix || matrix.length === 0) return;
-        
-        const n = matrix.length;
-        const m = matrix[0].length;
-        const w = canvasWidth / m;
-        const h = matrixHeight / n;
-        const yOffset = index * matrixHeight;
-
-        const maxCost = matrix[n-1][m-1];
-        if(maxCost === 0) return;
-
-        for (let i = 0; i < n; i++) {
-            for (let j = 0; j < m; j++) {
-                const value = matrix[i][j] / maxCost;
-                const colorVal = Math.floor((1 - value) * 200) + 55;
-                ctx.fillStyle = `rgb(${colorVal}, ${colorVal}, ${colorVal})`;
-                ctx.fillRect(j * w, yOffset + (i * h), w, h);
-            }
-        }
-    });
-}; 
-
-const drawSegmentation = (ctx, changepoints, tMin, tMax) => {
-    if (!changepoints || changepoints.length < 2) return;
+const drawSegmentation = (ctx, cps, tMin, tMax) => {
+    if (!cps || cps.length < 2 || !tMin || tMin.length === 0) return;
     ctx.lineWidth = 3;
     // Min boundary (continuous piecewise line)
     ctx.strokeStyle = '#63B3ED';
     ctx.beginPath();
-    ctx.moveTo(tMin[changepoints[0]].x, tMin[changepoints[0]].y);
-    for(let i = 1; i < changepoints.length; i++) {
-        const endIdx = changepoints[i] === tMin.length ? changepoints[i] - 1 : changepoints[i];
+    ctx.moveTo(tMin[cps[0]].x, tMin[cps[0]].y);
+    for(let i = 1; i < cps.length; i++) {
+        const endIdx = cps[i] === tMin.length ? cps[i] - 1 : cps[i];
         if (tMin[endIdx]) ctx.lineTo(tMin[endIdx].x, tMin[endIdx].y);
     }
     ctx.stroke();
     // Max boundary
     ctx.strokeStyle = '#4299E1';
     ctx.beginPath();
-    ctx.moveTo(tMax[changepoints[0]].x, tMax[changepoints[0]].y);
-    for(let i = 1; i < changepoints.length; i++) {
-        const endIdx = changepoints[i] === tMax.length ? changepoints[i] - 1 : changepoints[i];
+    ctx.moveTo(tMax[cps[0]].x, tMax[cps[0]].y);
+    for(let i = 1; i < cps.length; i++) {
+        const endIdx = cps[i] === tMax.length ? cps[i] - 1 : cps[i];
         if (tMax[endIdx]) ctx.lineTo(tMax[endIdx].x, tMax[endIdx].y);
     }
     ctx.stroke();
 };
 
-const drawVerticalChangepoints = (ctx, changepoints, trajs, color, style) => {
-    if (!trajs || trajs.length === 0 || !changepoints) return;
+const drawVerticalChangepoints = (ctx, cps, trajs, color, style) => {
+    if (!trajs || trajs.length === 0 || !cps) return;
     const refTraj = trajs[0];
     ctx.strokeStyle = color;
     ctx.lineWidth = 1.5;
     if (style === 'dashed') ctx.setLineDash([5, 5]);
     else if (style === 'dotted') ctx.setLineDash([2, 3]);
     
-    changepoints.forEach(cp_idx => {
+    cps.forEach(cp_idx => {
         if (cp_idx > 0 && cp_idx < refTraj.length) {
             const point = refTraj[cp_idx];
             ctx.beginPath();
@@ -479,7 +249,7 @@ const drawVerticalChangepoints = (ctx, changepoints, trajs, color, style) => {
             ctx.stroke();
         }
     });
-    ctx.setLineDash([]); // Reset line dash
+    ctx.setLineDash([]);
 };
 
 const drawLegend = (ctx) => {
@@ -509,22 +279,43 @@ const drawLegend = (ctx) => {
     ctx.restore();
 };
 
-const downsample = (trajectory, factor) => {
-    if (factor <= 1 || trajectory.length < factor) return trajectory;
+const drawCostMatrices = (ctx, matrices) => {
+    clearCanvas(ctx);
+    if (!matrices || matrices.length === 0) return;
+    const canvasWidth = ctx.canvas.getBoundingClientRect().width;
+    const canvasHeight = ctx.canvas.getBoundingClientRect().height;
+    const totalMatrices = matrices.length;
+    const matrixHeight = canvasHeight / totalMatrices;
+    matrices.forEach((matrix, index) => {
+        if (!matrix || matrix.length === 0) return;
+        const n = matrix.length; const m = matrix[0].length;
+        const w = canvasWidth / m; const h = matrixHeight / n;
+        const yOffset = index * matrixHeight;
+        const maxCost = matrix[n-1][m-1];
+        if (maxCost === 0) return;
+        for (let i = 0; i < n; i++) for (let j = 0; j < m; j++) {
+            const value = matrix[i][j] / maxCost;
+            const colorVal = Math.floor((1 - value) * 200) + 55;
+            ctx.fillStyle = `rgb(${colorVal}, ${colorVal}, ${colorVal})`;
+            const yPos = yOffset + (matrixHeight - (i + 1) * h);
+            ctx.fillRect(j * w, yPos, w, h);
+        }
+    });
+};
+
+const downsample = (traj, factor) => {
+    if (factor <= 1 || traj.length < factor) return traj;
     const downsampled = [];
-    for (let i = 0; i < trajectory.length; i += factor) {
-        const chunk = trajectory.slice(i, Math.min(i + factor, trajectory.length));
+    for (let i = 0; i < traj.length; i += factor) {
+        const chunk = traj.slice(i, Math.min(i + factor, traj.length));
         const avg = chunk.reduce((acc, p) => ({ x: acc.x + p.x, y: acc.y + p.y }), { x: 0, y: 0 });
-        avg.x /= chunk.length;
-        avg.y /= chunk.length;
+        avg.x /= chunk.length; avg.y /= chunk.length;
         downsampled.push(avg);
     }
     return downsampled;
 };
 
-const euclideanDistance = (p1, p2) => Math.sqrt(Math.pow(p1.x - p2.x, 2) + Math.pow(p1.y - p2.y, 2));
-
-function dtw(refSeq, trajSeq) {
+const dtw = (refSeq, trajSeq) => {
     const n = refSeq.length; const m = trajSeq.length;
     if (n === 0 || m === 0) return [[]];
     const costMatrix = Array.from({length: n}, () => Array(m).fill(Infinity));
@@ -535,10 +326,10 @@ function dtw(refSeq, trajSeq) {
         costMatrix[i][j] = euclideanDistance(refSeq[i], trajSeq[j]) + Math.min(costMatrix[i-1][j], costMatrix[i][j-1], costMatrix[i-1][j-1]);
     }
     return costMatrix;
-}
+};
 
-function backtrackDtw(costMatrix) {
-    if (!costMatrix || costMatrix.length === 0) return [];
+const backtrackDtw = (costMatrix) => {
+    if (!costMatrix || costMatrix.length === 0 || costMatrix[0].length === 0) return [];
     let path = [];
     let i = costMatrix.length - 1; let j = costMatrix[0].length - 1;
     path.push([i, j]);
@@ -548,58 +339,56 @@ function backtrackDtw(costMatrix) {
             if (minPrev === costMatrix[i-1][j-1]) { i--; j--; }
             else if (minPrev === costMatrix[i-1][j]) { i--; }
             else { j--; }
-        } else if (i > 0) i--;
-        else j--;
+        } else if (i > 0) i--; else j--;
         path.push([i, j]);
     }
     return path.reverse();
-}
-// In assets/js/pages/interactive-segmentation.js, replace this function:
+};
 
 function align(trajectories) {
     if (trajectories.length <= 1) return { aligned: trajectories, costMatrices: [] };
-    const lengths = trajectories.map(t => t.length);
-    const refIndex = lengths.indexOf(Math.max(...lengths));
+    const refIndex = trajectories.map(t => t.length).indexOf(Math.max(...trajectories.map(t => t.length)));
     const refTraj = trajectories[refIndex];
-    
     const aligned = [refTraj];
-    const costMatrices = []; // Initialize array to hold all matrices
-
+    const costMatrices = [];
     for (let i = 0; i < trajectories.length; i++) {
         if (i === refIndex) continue;
-        const costMatrix = dtw(refTraj, trajectories[i]);
-        costMatrices.push(costMatrix); // Add each new matrix to the array
-        
+        const trajToAlign = trajectories[i];
+        if (trajToAlign.length === 0) continue;
+        const costMatrix = dtw(refTraj, trajToAlign);
+        costMatrices.push(costMatrix);
         const path = backtrackDtw(costMatrix);
-        if (path.length === 0) continue;
-
-        const warpedTraj = [];
-        let lastTrajIndex = 0;
-        const refToTrajMap = {};
-        path.forEach(([refI, trajI]) => { if (!(refI in refToTrajMap)) refToTrajMap[refI] = trajI; });
-        
-        for (let j = 0; j < refTraj.length; j++) {
-             if (j in refToTrajMap) lastTrajIndex = refToTrajMap[j];
-             if (trajectories[i][lastTrajIndex]) {
-                warpedTraj.push(trajectories[i][lastTrajIndex]);
-             }
-        }
+        if(path.length === 0) continue;
+        const warpedTraj = path.map(([refI, trajI]) => trajToAlign[trajI]);
         aligned.push(warpedTraj);
     }
-    return { aligned, costMatrices }; // Return the array of matrices
+    return { aligned, costMatrices };
 }
 
-function calculateTube(trajs) {
+const calculateTube = (trajs) => {
+    if (trajs.length === 0 || trajs[0].length === 0) return {tubeMin: [], tubeMax: []};
     const n = trajs[0].length;
     const tMin = Array.from({length:n},()=>({x:Infinity,y:Infinity}));
     const tMax = Array.from({length:n},()=>({x:-Infinity,y:-Infinity}));
     for(let i=0;i<n;i++) for(let j=0;j<trajs.length;j++) {
-        const p=trajs[j][i]; if(!p) continue;
+        if (!trajs[j] || !trajs[j][i]) continue;
+        const p=trajs[j][i];
         tMin[i].x=Math.min(tMin[i].x,p.x); tMin[i].y=Math.min(tMin[i].y,p.y);
         tMax[i].x=Math.max(tMax[i].x,p.x); tMax[i].y=Math.max(tMax[i].y,p.y);
     }
     return {tubeMin:tMin,tubeMax:tMax};
-}
+};
+
+const normalizeTube = (tube) => {
+    if (!tube || !tube.tubeMin || tube.tubeMin.length === 0) return tube;
+    const allPoints = [...tube.tubeMin, ...tube.tubeMax];
+    const minX = Math.min(...allPoints.map(p => p.x)); const maxX = Math.max(...allPoints.map(p => p.x));
+    const minY = Math.min(...allPoints.map(p => p.y)); const maxY = Math.max(...allPoints.map(p => p.y));
+    const rangeX = maxX - minX; const rangeY = maxY - minY;
+    if (rangeX === 0 || rangeY === 0) return tube;
+    const normalize = (points) => points.map(p => ({ x: (p.x - minX) / rangeX, y: (p.y - minY) / rangeY }));
+    return { tubeMin: normalize(tube.tubeMin), tubeMax: normalize(tube.tubeMax) };
+};
 
 const getSegmentCostSEGDP = (start,end,tMin,tMax) => {
     const len=end-start+1; if(len<=1)return 0; let cost=0;
@@ -631,25 +420,59 @@ function runSEGDP(tubeMin, tubeMax, lambda) {
     return cps.sort((a,b)=>a-b).filter((v,i,a)=>a.indexOf(v)===i);
 }
 
-const linearFit=(pts)=>{
-    const n=pts.length; if(n===0)return{error:0}; let sx=0,sy=0,sxy=0,sxx=0;
-    for(let i=0;i<n;i++){sx+=i;sy+=pts[i];sxy+=i*pts[i];sxx+=i*i;}
-    const slope=(n*sxy-sx*sy)/(n*sxx-sx*sx); const intercept=(sy-slope*sx)/n; let err=0;
-    for(let i=0;i<n;i++)err+=Math.pow(pts[i]-(slope*i+intercept),2); return {error:err};
+const getSegmentCostPELT = (start, end, tMin, tMax) => {
+    let cost = 0;
+    for(const dim of ['x', 'y']) {
+        const minPts = tMin.slice(start, end + 1).map(p => p[dim]);
+        const maxPts = tMax.slice(start, end + 1).map(p => p[dim]);
+        const n=minPts.length; if(n===0)continue;
+        let sxm=0,sym=0,sxym=0,sxxm=0; let sxa=0,sya=0,sxya=0,sxxa=0;
+        for(let i=0;i<n;i++){
+            sxm+=i;sym+=minPts[i];sxym+=i*minPts[i];sxxm+=i*i;
+            sxa+=i;sya+=maxPts[i];sxya+=i*maxPts[i];sxxa+=i*i;
+        }
+        const den_m=n*sxxm-sxm*sxm; const den_a=n*sxxa-sxa*sxa;
+        const slope_m=den_m===0?0:(n*sxym-sxm*sym)/den_m; const int_m=(sym-slope_m*sxm)/n;
+        const slope_a=den_a===0?0:(n*sxya-sxa*sya)/den_a; const int_a=(sya-slope_a*sxa)/n;
+        for(let i=0;i<n;i++){
+            cost+=Math.pow(minPts[i]-(slope_m*i+int_m),2);
+            cost+=Math.pow(maxPts[i]-(slope_a*i+int_a),2);
+        }
+    }
+    return cost;
 };
-const getSegmentCostPELT=(s,e,tMin,tMax)=>linearFit(tMin.slice(s,e+1).map(p=>p.x)).error+linearFit(tMin.slice(s,e+1).map(p=>p.y)).error+linearFit(tMax.slice(s,e+1).map(p=>p.x)).error+linearFit(tMax.slice(s,e+1).map(p=>p.y)).error;
 
 function runFastSEGDP(tubeMin, tubeMax, lambda) {
-    const N=tubeMin.length; if(N===0) return [];
-    const F=Array(N+1).fill(Infinity); const P=Array(N+1).fill(0);
-    F[0]=-lambda; let R=[0]; const costCache={}; const getCost=(s,e)=>{const k=`${s}-${e}`; if(k in costCache)return costCache[k]; return costCache[k]=getSegmentCostPELT(s,e,tubeMin,tubeMax);};
-    for(let t=1;t<=N;t++){
-        let best_tau=0,min_cost=Infinity;
-        for(const tau of R){const cost=F[tau]+getCost(tau,t-1)+lambda; if(cost<min_cost){min_cost=cost;best_tau=tau;}}
-        F[t]=min_cost;P[t]=best_tau;
-        R=R.filter(tau=>F[tau]+getCost(tau,t-1)<=F[t]); R.push(t);
+    const N = tubeMin.length; if (N === 0) return [];
+    const costCache = {};
+    const getCost = (start, end) => {
+        const key = `${start}-${end}`;
+        if (key in costCache) return costCache[key];
+        return costCache[key] = getSegmentCostPELT(start, end, tubeMin, tubeMax);
+    };
+    const F = Array(N + 1).fill(Infinity);
+    const P = Array(N + 1).fill(0);
+    F[0] = -lambda;
+    let R = [0];
+    for (let t = 1; t <= N; t++) {
+        let minCostForT = Infinity; let bestTauForT = 0;
+        for (const tau of R) {
+            const cost = F[tau] + getCost(tau, t - 1) + lambda;
+            if (cost < minCostForT) { minCostForT = cost; bestTauForT = tau; }
+        }
+        F[t] = minCostForT; P[t] = bestTauForT;
+        const R_new = [];
+        for (const tau of R) {
+            if (F[tau] + getCost(tau, t - 1) <= F[t]) { R_new.push(tau); }
+        }
+        R_new.push(t);
+        R = R_new;
     }
-    const cps=[N]; let t=N;
-    while(t>0){let cp=P[t]; cps.push(cp); t=cp;}
-    return cps.sort((a,b)=>a-b).filter((v,i,a)=>a.indexOf(v)===i);
+    const changepoints = []; let current_t = N;
+    while (current_t > 0) {
+        changepoints.push(current_t);
+        current_t = P[current_t];
+    }
+    changepoints.push(0);
+    return changepoints.sort((a,b) => a-b).filter((v,i,a) => a.indexOf(v)===i);
 }
