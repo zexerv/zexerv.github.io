@@ -55,7 +55,6 @@ document.addEventListener('DOMContentLoaded', () => {
         segmentBtn.disabled = true;
         infoDisplay.textContent = 'Draw a trajectory and click "Align Trajectories".';
     };
-
     const handleAlign = () => {
         if (rawTrajectories.length === 0 || rawTrajectories.flat().length < 2) {
             infoDisplay.textContent = "Please draw at least one trajectory.";
@@ -74,14 +73,15 @@ document.addEventListener('DOMContentLoaded', () => {
             
             alignedTrajectories = aligned;
             if (aligned.length > 0 && aligned[0].length > 0) {
-                 tube = calculateTube(alignedTrajectories);
-                 segmentBtn.disabled = false;
-                 infoDisplay.textContent = `Alignment Complete: ${alignmentTime.toFixed(1)} ms.\nReady for segmentation.`;
+                tube = calculateTube(alignedTrajectories);
+                segmentBtn.disabled = false;
+                infoDisplay.textContent = `Alignment Complete: ${alignmentTime.toFixed(1)} ms.\nReady for segmentation.`;
             } else {
-                 infoDisplay.textContent = `Alignment failed. Please try again.`;
+                infoDisplay.textContent = `Alignment failed. Please try again.`;
             }
             
-            drawState();
+            // Redraw state to show only the final tube
+            drawState(); 
             drawCostMatrix(dtwCtx, costMatrix);
         }, 50);
     };
