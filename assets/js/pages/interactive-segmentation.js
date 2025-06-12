@@ -55,7 +55,62 @@ document.addEventListener('DOMContentLoaded', () => {
         segmentBtn.disabled = true;
         infoDisplay.textContent = 'Draw a trajectory and click "Align Trajectories".';
     };
+    // In assets/js/pages/interactive-segmentation.js:
 
+    // ADD this new helper function somewhere with the other algorithm helpers.
+    const normalizeTube = (tube) => {
+        const allPoints = [...tube.tubeMin, ...tube.tubeMax];
+        const minX = Math.min(...allPoints.map(p => p.x));
+        const maxX = Math.max(...allPoints.map(p => p.x));
+        const minY = Math.min(...allPoints.map(p => p.y));
+        const maxY = Math.max(...allPoints.map(p => p.y));
+
+        const rangeX = maxX - minX;
+        const rangeY = maxY - minY;
+
+        if (rangeX === 0 || rangeY === 0) return tube; // Cannot normalize if there's no range
+
+        const normalize = (points) => points.map(p => ({
+            x: (p.x - minX) / rangeX,
+            y: (p.y - minY) / rangeY,
+        }));
+
+        return {
+            tubeMin: normalize(tube.tubeMin),
+            tubeMax: normalize(tube.tubeMax)
+        };
+    };
+
+    // REPLACE the existing handleSegment function with this one.
+    const handleSegment = () => {
+        if (alignedTrajectories.length === 0) {
+            infoDisplay.textContent = "Please align trajectories first.";
+            return;
+        }
+        infoDisplay.textContent = "Segmenting...";
+        
+        setTimeout(() => {
+            // Create a normalized version of the tube for cost calculation
+            const normalizedTube = normalizeTube(tube);
+
+            const lambdaSEGDP = parseFloat(lambdaSegdpSlider.value);
+            const lambdaPELT = parseFloat(lambdaPeltSlider.value);
+
+            const startTimeSEGDP = performance.now();
+            // Run algorithms on NORMALIZED data
+            const segdp_cps = runSEGDP(normalizedTube.tubeMin, normalizedTube.tubeMax, lambdaSEGDP);
+            const segdpTime = performance.now() - startTimeSEGDP;
+
+            const startTimePELT = performance.now();
+            const fastsegdp_cps = runFastSEGDP(normalizedTube.tubeMin, normalizedTube.tubeMax, lambdaPELT);
+            const peltTime = performance.now() - startTimePELT;
+            
+            // Pass ORIGINAL tube data for visualization
+            drawState({ segdp_cps, fastsegdp_cps });
+
+            infoDisplay.textContent = `SEGDP: ${segdp_cps.length - 1} segments (${segdpTime.toFixed(1)} ms)\nFastSEGDP: ${fastsegdp_cps.length - 1} segments (${peltTime.toFixed(1)} ms)`;
+        }, 50);
+    };
     // In assets/js/pages/interactive-segmentation.js, replace this function:
 
     const handleAlign = () => {
@@ -87,32 +142,6 @@ document.addEventListener('DOMContentLoaded', () => {
             drawCostMatrices(dtwCtx, costMatrices); // Calls the new drawing function
         }, 50);
     };
-
-    const handleSegment = () => {
-        if (alignedTrajectories.length === 0) {
-            infoDisplay.textContent = "Please align trajectories first.";
-            return;
-        }
-        infoDisplay.textContent = "Segmenting...";
-        
-        setTimeout(() => {
-            const lambdaSEGDP = parseFloat(lambdaSegdpSlider.value);
-            const lambdaPELT = parseFloat(lambdaPeltSlider.value);
-
-            const startTimeSEGDP = performance.now();
-            const segdp_cps = runSEGDP(tube.tubeMin, tube.tubeMax, lambdaSEGDP);
-            const segdpTime = performance.now() - startTimeSEGDP;
-
-            const startTimePELT = performance.now();
-            const fastsegdp_cps = runFastSEGDP(tube.tubeMin, tube.tubeMax, lambdaPELT);
-            const peltTime = performance.now() - startTimePELT;
-            
-            drawState({ segdp_cps, fastsegdp_cps });
-
-            infoDisplay.textContent = `SEGDP: ${segdp_cps.length - 1} segments (${segdpTime.toFixed(1)} ms)\nFastSEGDP: ${fastsegdp_cps.length - 1} segments (${peltTime.toFixed(1)} ms)`;
-        }, 50);
-    };
-    // In assets/js/pages/interactive-segmentation.js, find and replace this function:
 
     const drawState = (segmentations = {}) => {
         clearCanvas(ctx);
