@@ -24,7 +24,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // --- Global State ---
     let isDrawing = false;
     let rawTrajectories = [];
-    let resampledTrajectories = []; // To hold time-correct data
+    let resampledTrajectories = [];
     let alignedTrajectories = [];
     let tube = { tubeMin: null, tubeMax: null };
 
@@ -86,30 +86,38 @@ document.addEventListener('DOMContentLoaded', () => {
             const lambdaSEGDP = getLogValue(parseFloat(lambdaSegdpSlider.value), 0.01, 100);
             const lambdaPELT = getLogValue(parseFloat(lambdaPeltSlider.value), 0.01, 100);
 
+            const startTimeSEGDP = performance.now();
             const segdp_cps = runSEGDP(normalizedTube.tubeMin, normalizedTube.tubeMax, lambdaSEGDP);
+            const segdpTime = performance.now() - startTimeSEGDP;
+            
+            const startTimePELT = performance.now();
             const fastsegdp_cps = runFastSEGDP(normalizedTube.tubeMin, normalizedTube.tubeMax, lambdaPELT);
+            const peltTime = performance.now() - startTimePELT;
             
             drawState({ segdp_cps, fastsegdp_cps });
 
-            infoDisplay.textContent = `SEGDP: ${segdp_cps.length - 1} segments\nFastSEGDP: ${fastsegdp_cps.length - 1} segments`;
+            infoDisplay.textContent = `SEGDP: ${segdp_cps.length - 1} segments (${segdpTime.toFixed(1)} ms)\nFastSEGDP: ${fastsegdp_cps.length - 1} segments (${peltTime.toFixed(1)} ms)`;
         }, 10);
     };
     
     // --- Drawing & Visualization ---
     const drawState = (segmentations = {}) => {
         clearCanvas(ctx);
-        drawTrajectories(ctx, rawTrajectories, '#334155', 1.0);
-        if (resampledTrajectories.length > 0) {
-             drawTrajectories(ctx, resampledTrajectories, '#475569', 1.5);
+
+        if (alignedTrajectories.length > 0) {
+            const vizTrajectories = spatiallyNormalizeForViz(alignedTrajectories);
+            drawTrajectories(ctx, vizTrajectories, '#475569', 1.0);
+            if (tube.tubeMin) drawTube(ctx, tube.tubeMin, tube.tubeMax);
+        } else {
+            drawTrajectories(ctx, rawTrajectories, '#475569', 1.5);
         }
-        if (alignedTrajectories.length > 0 && tube.tubeMin) {
-            drawTube(ctx, tube.tubeMin, tube.tubeMax);
-        }
+        
         if (segmentations.segdp_cps) {
-            drawSegmentation(ctx, segmentations.segdp_cps, tube.tubeMin, tube.tubeMax);
+            drawSegmentation(ctx, segmentations.segdp_cps, tube.tubeMin, tube.tubeMax, false);
             drawVerticalChangepoints(ctx, segmentations.segdp_cps, alignedTrajectories, '#63B3ED', 'dotted');
         }
         if (segmentations.fastsegdp_cps) {
+            drawSegmentation(ctx, segmentations.fastsegdp_cps, tube.tubeMin, tube.tubeMax, true);
             drawVerticalChangepoints(ctx, segmentations.fastsegdp_cps, alignedTrajectories, '#68D391', 'dashed');
         }
         if (segmentations.segdp_cps || segmentations.fastsegdp_cps) {
@@ -223,27 +231,56 @@ const drawTube = (ctx, tMin, tMax) => {
     ctx.fill();
 };
 
-const drawSegmentation = (ctx, cps, tMin, tMax) => {
+const drawSegmentation = (ctx, cps, tMin, tMax, isFast) => {
     if (!cps || cps.length < 2 || !tMin || tMin.length === 0) return;
-    ctx.lineWidth = 3;
-    // Min boundary (continuous piecewise line)
-    ctx.strokeStyle = '#63B3ED';
-    ctx.beginPath();
-    if(tMin[cps[0]]) ctx.moveTo(tMin[cps[0]].x, tMin[cps[0]].y);
-    for(let i = 1; i < cps.length; i++) {
-        const endIdx = cps[i] >= tMin.length ? tMin.length - 1 : cps[i];
-        if (tMin[endIdx]) ctx.lineTo(tMin[endIdx].x, tMin[endIdx].y);
+    
+    for(let i = 0; i < cps.length - 1; i++) {
+        const start = cps[i];
+        let end = cps[i+1];
+        if (isFast) end--;
+        if (end < start) continue;
+        
+        if (isFast) {
+            // OLS fit for FastSEGDP visualization
+            const pointsMin = tMin.slice(start, end + 1);
+            const pointsMax = tMax.slice(start, end + 1);
+            if (pointsMin.length < 2 || pointsMax.length < 2) continue;
+
+            const fitMin = linearFitXY(pointsMin);
+            const fitMax = linearFitXY(pointsMax);
+            
+            const startX = pointsMin[0].x;
+            const endX = pointsMin[pointsMin.length - 1].x;
+            
+            ctx.strokeStyle = '#68D391'; // Light Green for FastSEGDP
+            ctx.lineWidth = 2.5;
+            ctx.beginPath();
+            ctx.moveTo(startX, fitMin.slope * startX + fitMin.intercept);
+            ctx.lineTo(endX, fitMin.slope * endX + fitMin.intercept);
+            ctx.stroke();
+
+            ctx.strokeStyle = '#48BB78'; // Dark Green for FastSEGDP
+            ctx.beginPath();
+            ctx.moveTo(startX, fitMax.slope * startX + fitMax.intercept);
+            ctx.lineTo(endX, fitMax.slope * endX + fitMax.intercept);
+            ctx.stroke();
+
+        } else {
+             // Trapezoid for SEGDP visualization
+            ctx.lineWidth = 3;
+            ctx.strokeStyle = '#63B3ED'; // Blue
+            ctx.beginPath();
+            if(tMin[start]) ctx.moveTo(tMin[start].x, tMin[start].y);
+            if(tMin[end]) ctx.lineTo(tMin[end].x, tMin[end].y);
+            ctx.stroke();
+
+            ctx.strokeStyle = '#4299E1'; // Darker Blue
+            ctx.beginPath();
+            if(tMax[start]) ctx.moveTo(tMax[start].x, tMax[start].y);
+            if(tMax[end]) ctx.lineTo(tMax[end].x, tMax[end].y);
+            ctx.stroke();
+        }
     }
-    ctx.stroke();
-    // Max boundary
-    ctx.strokeStyle = '#4299E1';
-    ctx.beginPath();
-    if(tMax[cps[0]]) ctx.moveTo(tMax[cps[0]].x, tMax[cps[0]].y);
-    for(let i = 1; i < cps.length; i++) {
-        const endIdx = cps[i] >= tMax.length ? tMax.length - 1 : cps[i];
-        if (tMax[endIdx]) ctx.lineTo(tMax[endIdx].x, tMax[endIdx].y);
-    }
-    ctx.stroke();
 };
 
 const drawVerticalChangepoints = (ctx, cps, trajs, color, style) => {
@@ -270,6 +307,7 @@ const drawVerticalChangepoints = (ctx, cps, trajs, color, style) => {
 const drawLegend = (ctx) => {
     const legend = [
         { text: 'SEGDP Approx.', color: '#63B3ED', style: 'solid' },
+        { text: 'FastSEGDP Approx.', color: '#68D391', style: 'solid'},
         { text: 'SEGDP CPs', color: '#63B3ED', style: 'dotted' },
         { text: 'FastSEGDP CPs', color: '#68D391', style: 'dashed' },
     ];
@@ -360,9 +398,7 @@ const resampleTrajectoryByX = (rawTraj) => {
         }
     }
     return resampled;
-}
-
-const euclideanDistance = (p1, p2) => Math.sqrt(Math.pow(p1.x - p2.x, 2) + Math.pow(p1.y - p2.y, 2));
+};
 
 const dtw = (refSeq, trajSeq) => {
     const n = refSeq.length; const m = trajSeq.length;
@@ -426,7 +462,6 @@ function align(trajectories) {
     return { aligned, costMatrices };
 }
 
-
 const calculateTube = (trajs) => {
     if (trajs.length === 0 || trajs.some(t => !t || t.length === 0) || trajs[0].length === 0) return {tubeMin: [], tubeMax: []};
     const n = trajs[0].length;
@@ -482,6 +517,17 @@ function runSEGDP(tubeMin, tubeMax, lambda) {
     return cps.sort((a,b)=>a-b).filter((v,i,a)=>a.indexOf(v)===i);
 }
 
+const linearFitXY = (points) => {
+    const n = points.length; if (n < 2) return { slope: 0, intercept: points[0]?.y || 0 };
+    let sum_x = 0, sum_y = 0, sum_xy = 0, sum_xx = 0;
+    for (const p of points) { sum_x += p.x; sum_y += p.y; sum_xy += p.x * p.y; sum_xx += p.x * p.x; }
+    const den = (n * sum_xx - sum_x * sum_x);
+    if(den === 0) return { slope: 0, intercept: points[0]?.y || 0 };
+    const slope = (n * sum_xy - sum_x * sum_y) / den;
+    const intercept = (sum_y - slope * sum_x) / n;
+    return { slope, intercept };
+};
+
 const getSegmentCostPELT = (start, end, tMin, tMax) => {
     let cost = 0;
     for(const dim of ['x', 'y']) {
@@ -502,6 +548,28 @@ const getSegmentCostPELT = (start, end, tMin, tMax) => {
         }
     }
     return cost;
+};
+
+const spatiallyNormalizeForViz = (trajectories) => {
+    if (trajectories.length < 2) return trajectories;
+    const refTraj = trajectories[0];
+    const refMinX = refTraj[0].x;
+    const refMaxX = refTraj[refTraj.length - 1].x;
+    const refRangeX = refMaxX - refMinX;
+    if(refRangeX === 0) return trajectories;
+
+    return trajectories.map((traj, index) => {
+        if (index === 0) return traj;
+        const trajMinX = traj[0].x;
+        const trajMaxX = traj[traj.length - 1].x;
+        const trajRangeX = trajMaxX - trajMinX;
+        if (trajRangeX === 0) return traj.map(p => ({...p, x: refMinX}));
+
+        return traj.map(p => ({
+            x: refMinX + ((p.x - trajMinX) * refRangeX / trajRangeX),
+            y: p.y
+        }));
+    });
 };
 
 function runFastSEGDP(tubeMin, tubeMax, lambda) {
@@ -537,5 +605,5 @@ function runFastSEGDP(tubeMin, tubeMax, lambda) {
         current_t = P[current_t];
     }
     changepoints.push(0);
-    return changepoints.sort((a,b)=>a-b).filter((v,i,a)=>a.indexOf(v)===i);
+    return changepoints.sort((a,b) => a-b).filter((v,i,a)=>a.indexOf(v)===i);
 }
