@@ -110,17 +110,22 @@ document.addEventListener('DOMContentLoaded', () => {
             infoDisplay.textContent = `SEGDP: ${segdp_cps.length - 1} segments (${segdpTime.toFixed(1)} ms)\nFastSEGDP: ${fastsegdp_cps.length - 1} segments (${peltTime.toFixed(1)} ms)`;
         }, 50);
     };
-    
-    // --- Drawing & Visualization ---
+    // In assets/js/pages/interactive-segmentation.js, find and replace this function:
+
     const drawState = (segmentations = {}) => {
         clearCanvas(ctx);
-        if (alignedTrajectories.length > 0) {
-            drawTrajectories(ctx, alignedTrajectories, '#FDBA74', 1); // Aligned are orange
-            if(tube.tubeMin) drawTube(ctx, tube.tubeMin, tube.tubeMax);
-        } else {
-            drawTrajectories(ctx, rawTrajectories, '#A0AEC0', 1.5); // Raw are grey
+
+        // 1. Always draw the original, raw trajectories in a muted grey.
+        if (rawTrajectories.length > 0) {
+            drawTrajectories(ctx, rawTrajectories, '#475569', 1.5); // A muted slate color
         }
         
+        // 2. If alignment has run, draw the resulting tube on top.
+        if (alignedTrajectories.length > 0 && tube.tubeMin) {
+            drawTube(ctx, tube.tubeMin, tube.tubeMax);
+        }
+        
+        // 3. If segmentation has run, draw the results.
         if (segmentations.segdp_cps) {
             drawSegmentation(ctx, segmentations.segdp_cps, tube.tubeMin, tube.tubeMax);
             drawVerticalChangepoints(ctx, segmentations.segdp_cps, alignedTrajectories, '#63B3ED', 'dotted');
