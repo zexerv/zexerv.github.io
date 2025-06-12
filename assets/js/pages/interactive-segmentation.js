@@ -24,7 +24,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // --- Global State ---
     let isDrawing = false;
     let rawTrajectories = [];
-    let resampledTrajectories = []; // NEW: To hold time-correct data
+    let resampledTrajectories = []; // To hold time-correct data
     let alignedTrajectories = [];
     let tube = { tubeMin: null, tubeMax: null };
 
@@ -49,7 +49,6 @@ document.addEventListener('DOMContentLoaded', () => {
         segmentBtn.disabled = true;
 
         setTimeout(() => {
-            // NEW: Resample trajectories by X-axis to make time consistent
             resampledTrajectories = rawTrajectories.map(t => resampleTrajectoryByX(t)).filter(t => t.length > 1);
             
             if (resampledTrajectories.length === 0) {
@@ -99,14 +98,10 @@ document.addEventListener('DOMContentLoaded', () => {
     // --- Drawing & Visualization ---
     const drawState = (segmentations = {}) => {
         clearCanvas(ctx);
-        // Always show the raw drawing underneath
-        drawTrajectories(ctx, rawTrajectories, '#334155', 1.0); // Darker, muted color
-        
-        // If resampled/aligned data exists, draw it more prominently
+        drawTrajectories(ctx, rawTrajectories, '#334155', 1.0);
         if (resampledTrajectories.length > 0) {
              drawTrajectories(ctx, resampledTrajectories, '#475569', 1.5);
         }
-        
         if (alignedTrajectories.length > 0 && tube.tubeMin) {
             drawTube(ctx, tube.tubeMin, tube.tubeMax);
         }
@@ -126,7 +121,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const setupEventListeners = () => {
         const startDrawing = (e) => {
             isDrawing = true;
-            // Clear previous results when new drawing starts
             resampledTrajectories = [];
             alignedTrajectories = [];
             tube = { tubeMin: null, tubeMax: null };
@@ -197,7 +191,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
 const clearCanvas = (ctx) => {
     if (ctx && ctx.canvas) {
-        ctx.clearRect(0, 0, ctx.canvas.width / (window.devicePixelRatio||1), ctx.canvas.height / (window.devicePixelRatio||1));
+        const dpr = window.devicePixelRatio || 1;
+        ctx.clearRect(0, 0, ctx.canvas.width / dpr, ctx.canvas.height / dpr);
     }
 };
 
@@ -234,18 +229,18 @@ const drawSegmentation = (ctx, cps, tMin, tMax) => {
     // Min boundary (continuous piecewise line)
     ctx.strokeStyle = '#63B3ED';
     ctx.beginPath();
-    ctx.moveTo(tMin[cps[0]].x, tMin[cps[0]].y);
+    if(tMin[cps[0]]) ctx.moveTo(tMin[cps[0]].x, tMin[cps[0]].y);
     for(let i = 1; i < cps.length; i++) {
-        const endIdx = cps[i] === tMin.length ? cps[i] - 1 : cps[i];
+        const endIdx = cps[i] >= tMin.length ? tMin.length - 1 : cps[i];
         if (tMin[endIdx]) ctx.lineTo(tMin[endIdx].x, tMin[endIdx].y);
     }
     ctx.stroke();
     // Max boundary
     ctx.strokeStyle = '#4299E1';
     ctx.beginPath();
-    ctx.moveTo(tMax[cps[0]].x, tMax[cps[0]].y);
+    if(tMax[cps[0]]) ctx.moveTo(tMax[cps[0]].x, tMax[cps[0]].y);
     for(let i = 1; i < cps.length; i++) {
-        const endIdx = cps[i] === tMax.length ? cps[i] - 1 : cps[i];
+        const endIdx = cps[i] >= tMax.length ? tMax.length - 1 : cps[i];
         if (tMax[endIdx]) ctx.lineTo(tMax[endIdx].x, tMax[endIdx].y);
     }
     ctx.stroke();
@@ -254,6 +249,7 @@ const drawSegmentation = (ctx, cps, tMin, tMax) => {
 const drawVerticalChangepoints = (ctx, cps, trajs, color, style) => {
     if (!trajs || trajs.length === 0 || !cps) return;
     const refTraj = trajs[0];
+    if(refTraj.length === 0) return;
     ctx.strokeStyle = color;
     ctx.lineWidth = 1.5;
     if (style === 'dashed') ctx.setLineDash([5, 5]);
@@ -334,14 +330,13 @@ const downsample = (traj, factor) => {
     return downsampled;
 };
 
-// NEW: Resamples a trajectory to have one Y for each integer X.
 const resampleTrajectoryByX = (rawTraj) => {
     if (rawTraj.length < 2) return [];
-    // Ensure trajectory is sorted by X
     const sortedTraj = [...rawTraj].sort((a,b) => a.x - b.x);
     const resampled = [];
     const startX = Math.ceil(sortedTraj[0].x);
     const endX = Math.floor(sortedTraj[sortedTraj.length - 1].x);
+    if (startX > endX) return [];
     
     let rawIndex = 0;
     for (let x = startX; x <= endX; x++) {
@@ -356,7 +351,7 @@ const resampleTrajectoryByX = (rawTraj) => {
         const x1 = p1.x, y1 = p1.y;
         const x2 = p2.x, y2 = p2.y;
 
-        if (x2 - x1 === 0) { // Vertical line segment
+        if (x2 - x1 === 0) {
             if(x === x1) resampled.push({ x, y: y1 });
         } else {
             const t = (x - x1) / (x2 - x1);
@@ -366,6 +361,8 @@ const resampleTrajectoryByX = (rawTraj) => {
     }
     return resampled;
 }
+
+const euclideanDistance = (p1, p2) => Math.sqrt(Math.pow(p1.x - p2.x, 2) + Math.pow(p1.y - p2.y, 2));
 
 const dtw = (refSeq, trajSeq) => {
     const n = refSeq.length; const m = trajSeq.length;
@@ -401,24 +398,38 @@ function align(trajectories) {
     if (trajectories.length <= 1) return { aligned: trajectories, costMatrices: [] };
     const refIndex = trajectories.map(t => t.length).indexOf(Math.max(...trajectories.map(t => t.length)));
     const refTraj = trajectories[refIndex];
+    if (!refTraj) return { aligned: [], costMatrices: [] };
+
     const aligned = [refTraj];
     const costMatrices = [];
     for (let i = 0; i < trajectories.length; i++) {
         if (i === refIndex) continue;
         const trajToAlign = trajectories[i];
         if (trajToAlign.length === 0) continue;
+
         const costMatrix = dtw(refTraj, trajToAlign);
         costMatrices.push(costMatrix);
         const path = backtrackDtw(costMatrix);
         if(path.length === 0) continue;
-        const warpedTraj = path.map(([refI, trajI]) => trajToAlign[trajI]);
+        
+        const refToTrajMap = new Map();
+        path.forEach(([ref_i, traj_i]) => { refToTrajMap.set(ref_i, traj_i); });
+        const warpedTraj = [];
+        let lastKnownTrajIndex = 0;
+        for (let ref_i = 0; ref_i < refTraj.length; ref_i++) {
+            if (refToTrajMap.has(ref_i)) {
+                lastKnownTrajIndex = refToTrajMap.get(ref_i);
+            }
+            warpedTraj.push(trajToAlign[lastKnownTrajIndex]);
+        }
         aligned.push(warpedTraj);
     }
     return { aligned, costMatrices };
 }
 
+
 const calculateTube = (trajs) => {
-    if (trajs.length === 0 || trajs[0].length === 0) return {tubeMin: [], tubeMax: []};
+    if (trajs.length === 0 || trajs.some(t => t.length ===0) || trajs[0].length === 0) return {tubeMin: [], tubeMax: []};
     const n = trajs[0].length;
     const tMin = Array.from({length:n},()=>({x:Infinity,y:Infinity}));
     const tMax = Array.from({length:n},()=>({x:-Infinity,y:-Infinity}));
@@ -498,6 +509,7 @@ function runFastSEGDP(tubeMin, tubeMax, lambda) {
     const N = tubeMin.length; if (N === 0) return [];
     const costCache = {};
     const getCost = (start, end) => {
+        if (start > end) return 0;
         const key = `${start}-${end}`;
         if (key in costCache) return costCache[key];
         return costCache[key] = getSegmentCostPELT(start, end, tubeMin, tubeMax);
