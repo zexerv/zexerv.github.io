@@ -113,6 +113,30 @@ document.addEventListener('DOMContentLoaded', () => {
     };
     // In assets/js/pages/interactive-segmentation.js, replace this function:
 
+    // ADD THIS NEW HELPER FUNCTION
+    const spatiallyNormalizeForViz = (trajectories) => {
+        if (trajectories.length < 2) return trajectories;
+        const refTraj = trajectories[0];
+        const refMinX = refTraj[0].x;
+        const refMaxX = refTraj[refTraj.length - 1].x;
+        const refRangeX = refMaxX - refMinX;
+
+        return trajectories.map((traj, index) => {
+            if (index === 0) return traj; // Don't transform the reference itself
+            const trajMinX = traj[0].x;
+            const trajMaxX = traj[traj.length - 1].x;
+            const trajRangeX = trajMaxX - trajMinX;
+            if (trajRangeX === 0) return traj; // Cannot scale a zero-width trajectory
+
+            return traj.map(p => ({
+                x: refMinX + ((p.x - trajMinX) * refRangeX / trajRangeX),
+                y: p.y // Preserve vertical value
+            }));
+        });
+    };
+
+
+    // REPLACE the existing handleAlign function
     const handleAlign = () => {
         if (rawTrajectories.length === 0 || rawTrajectories.flat().length < 2) {
             infoDisplay.textContent = "Please draw at least one trajectory.";
@@ -126,7 +150,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const startTime = performance.now();
 
             const downsampled = rawTrajectories.map(t => downsample(t, factor));
-            const { aligned, costMatrices } = align(downsampled); // Captures all matrices
+            const { aligned, costMatrices } = align(downsampled);
             const alignmentTime = performance.now() - startTime;
             
             alignedTrajectories = aligned;
@@ -139,24 +163,28 @@ document.addEventListener('DOMContentLoaded', () => {
             }
             
             drawState(); 
-            drawCostMatrices(dtwCtx, costMatrices); // Calls the new drawing function
+            drawCostMatrices(dtwCtx, costMatrices);
         }, 50);
     };
 
+    // REPLACE the existing drawState function
     const drawState = (segmentations = {}) => {
         clearCanvas(ctx);
 
-        // 1. Always draw the original, raw trajectories in a muted grey.
-        if (rawTrajectories.length > 0) {
-            drawTrajectories(ctx, rawTrajectories, '#475569', 1.5); // A muted slate color
+        // 1. If alignment has run, show the results
+        if (alignedTrajectories.length > 0) {
+            // Create a special, visually-scaled version for drawing
+            const vizTrajectories = spatiallyNormalizeForViz(alignedTrajectories);
+            drawTrajectories(ctx, vizTrajectories, '#FDBA74', 1); // Draw the visually aligned trajectories
+
+            if(tube.tubeMin) drawTube(ctx, tube.tubeMin, tube.tubeMax);
+        
+        // 2. Otherwise, just show the raw drawings
+        } else {
+            drawTrajectories(ctx, rawTrajectories, '#A0AEC0', 1.5);
         }
         
-        // 2. If alignment has run, draw the resulting tube on top.
-        if (alignedTrajectories.length > 0 && tube.tubeMin) {
-            drawTube(ctx, tube.tubeMin, tube.tubeMax);
-        }
-        
-        // 3. If segmentation has run, draw the results.
+        // 3. If segmentation has run, draw the results
         if (segmentations.segdp_cps) {
             drawSegmentation(ctx, segmentations.segdp_cps, tube.tubeMin, tube.tubeMax);
             drawVerticalChangepoints(ctx, segmentations.segdp_cps, alignedTrajectories, '#63B3ED', 'dotted');
@@ -168,7 +196,6 @@ document.addEventListener('DOMContentLoaded', () => {
             drawLegend(ctx);
         }
     };
-    
     // --- Event Listeners Setup ---
     const setupEventListeners = () => {
         window.addEventListener('resize', resizeAllCanvases);
