@@ -238,7 +238,7 @@ const drawSegmentation = (ctx, cps, tMin, tMax, isFast) => {
         const start = cps[i];
         let end = cps[i+1];
         if (isFast) end--;
-        if (end < start) continue;
+        if (end < start || end >= tMin.length) continue;
         
         if (isFast) {
             // OLS fit for FastSEGDP visualization
@@ -252,14 +252,14 @@ const drawSegmentation = (ctx, cps, tMin, tMax, isFast) => {
             const startX = pointsMin[0].x;
             const endX = pointsMin[pointsMin.length - 1].x;
             
-            ctx.strokeStyle = '#68D391'; // Light Green for FastSEGDP
+            ctx.strokeStyle = '#68D391';
             ctx.lineWidth = 2.5;
             ctx.beginPath();
             ctx.moveTo(startX, fitMin.slope * startX + fitMin.intercept);
             ctx.lineTo(endX, fitMin.slope * endX + fitMin.intercept);
             ctx.stroke();
 
-            ctx.strokeStyle = '#48BB78'; // Dark Green for FastSEGDP
+            ctx.strokeStyle = '#48BB78';
             ctx.beginPath();
             ctx.moveTo(startX, fitMax.slope * startX + fitMax.intercept);
             ctx.lineTo(endX, fitMax.slope * endX + fitMax.intercept);
@@ -268,13 +268,13 @@ const drawSegmentation = (ctx, cps, tMin, tMax, isFast) => {
         } else {
              // Trapezoid for SEGDP visualization
             ctx.lineWidth = 3;
-            ctx.strokeStyle = '#63B3ED'; // Blue
+            ctx.strokeStyle = '#63B3ED';
             ctx.beginPath();
             if(tMin[start]) ctx.moveTo(tMin[start].x, tMin[start].y);
             if(tMin[end]) ctx.lineTo(tMin[end].x, tMin[end].y);
             ctx.stroke();
 
-            ctx.strokeStyle = '#4299E1'; // Darker Blue
+            ctx.strokeStyle = '#4299E1';
             ctx.beginPath();
             if(tMax[start]) ctx.moveTo(tMax[start].x, tMax[start].y);
             if(tMax[end]) ctx.lineTo(tMax[end].x, tMax[end].y);
@@ -400,6 +400,8 @@ const resampleTrajectoryByX = (rawTraj) => {
     return resampled;
 };
 
+const euclideanDistance = (p1, p2) => Math.sqrt(Math.pow(p1.x - p2.x, 2) + Math.pow(p1.y - p2.y, 2));
+
 const dtw = (refSeq, trajSeq) => {
     const n = refSeq.length; const m = trajSeq.length;
     if (n === 0 || m === 0) return [[]];
@@ -447,20 +449,25 @@ function align(trajectories) {
         costMatrices.push(costMatrix);
         const path = backtrackDtw(costMatrix);
         if (path.length === 0) continue;
-
+        
         const warpedTraj = new Array(refTraj.length);
-        let pathIndex = 0;
-        for (let ref_i = 0; ref_i < refTraj.length; ref_i++) {
-            while (pathIndex + 1 < path.length && path[pathIndex + 1][0] <= ref_i) {
-                pathIndex++;
+        let pathIdx = 0;
+        for (let refIdx = 0; refIdx < refTraj.length; refIdx++) {
+            while (pathIdx + 1 < path.length && path[pathIdx + 1][0] <= refIdx) {
+                pathIdx++;
             }
-            const mappedTrajIndex = path[pathIndex][1];
-            warpedTraj[ref_i] = trajToAlign[mappedTrajIndex];
+            const mappedTrajIndex = path[pathIdx][1];
+            if (mappedTrajIndex < trajToAlign.length) {
+                 warpedTraj[refIdx] = trajToAlign[mappedTrajIndex];
+            } else {
+                warpedTraj[refIdx] = trajToAlign[trajToAlign.length - 1];
+            }
         }
         aligned.push(warpedTraj);
     }
     return { aligned, costMatrices };
 }
+
 
 const calculateTube = (trajs) => {
     if (trajs.length === 0 || trajs.some(t => !t || t.length === 0) || trajs[0].length === 0) return {tubeMin: [], tubeMax: []};
