@@ -60,11 +60,9 @@ document.addEventListener('DOMContentLoaded', () => {
             const downsampled = resampledTrajectories.map(t => downsample(t, factor));
             const { aligned, alignmentData } = align(downsampled);
             
-            // Fix #2: Use the newly warped trajectories for all subsequent steps
             alignedTrajectories = aligned;
             
             if (aligned.length > 0 && aligned.flat().length > 0) {
-                 // The tube is now correctly created from the warped data
                  tube = calculateTube(alignedTrajectories);
                  segmentBtn.disabled = false;
                  infoDisplay.textContent = `Alignment complete. Found ${alignmentData.length} DTW comparisons. Ready for segmentation.`;
@@ -73,7 +71,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
             
             drawState(); 
-            drawCostMatrices(dtwCtx, alignmentData); // Pass the full alignment data for drawing
+            drawCostMatrices(dtwCtx, alignmentData);
         }, 10);
     };
 
@@ -99,7 +97,6 @@ document.addEventListener('DOMContentLoaded', () => {
             
             drawState({ segdp_cps, fastsegdp_cps });
 
-            // Fix: Restore timing display
             infoDisplay.textContent = `SEGDP: ${segdp_cps.length - 1} segments (${segdpTime.toFixed(1)} ms)\nFastSEGDP: ${fastsegdp_cps.length - 1} segments (${peltTime.toFixed(1)} ms)`;
         }, 10);
     };
@@ -109,7 +106,6 @@ document.addEventListener('DOMContentLoaded', () => {
         clearCanvas(ctx);
 
         if (alignedTrajectories.length > 0) {
-            // Fix #2: Use the new, correctly warped trajectories for visualization
             const vizTrajectories = spatiallyNormalizeForViz(alignedTrajectories);
             drawTrajectories(ctx, vizTrajectories, '#475569', 1.0);
             if (tube.tubeMin) drawTube(ctx, tube.tubeMin, tube.tubeMax);
@@ -246,7 +242,6 @@ const drawSegmentation = (ctx, cps, tMin, tMax, isFast) => {
         if (end < start || end >= tMin.length) continue;
         
         if (isFast) {
-            // OLS fit for FastSEGDP visualization
             const pointsMin = tMin.slice(start, end + 1);
             const pointsMax = tMax.slice(start, end + 1);
             if (pointsMin.length < 2 || pointsMax.length < 2) continue;
@@ -257,29 +252,28 @@ const drawSegmentation = (ctx, cps, tMin, tMax, isFast) => {
             const startX = pointsMin[0].x;
             const endX = pointsMin[pointsMin.length - 1].x;
             
-            ctx.strokeStyle = '#68D391'; // Light Green
+            ctx.strokeStyle = '#68D391';
             ctx.lineWidth = 2.5;
             ctx.beginPath();
             ctx.moveTo(startX, fitMin.slope * startX + fitMin.intercept);
             ctx.lineTo(endX, fitMin.slope * endX + fitMin.intercept);
             ctx.stroke();
 
-            ctx.strokeStyle = '#48BB78'; // Dark Green
+            ctx.strokeStyle = '#48BB78';
             ctx.beginPath();
             ctx.moveTo(startX, fitMax.slope * startX + fitMax.intercept);
             ctx.lineTo(endX, fitMax.slope * endX + fitMax.intercept);
             ctx.stroke();
 
         } else {
-             // Trapezoid for SEGDP visualization
             ctx.lineWidth = 3;
-            ctx.strokeStyle = '#63B3ED'; // Blue
+            ctx.strokeStyle = '#63B3ED';
             ctx.beginPath();
             if(tMin[start]) ctx.moveTo(tMin[start].x, tMin[start].y);
             if(tMin[end]) ctx.lineTo(tMin[end].x, tMin[end].y);
             ctx.stroke();
 
-            ctx.strokeStyle = '#4299E1'; // Darker Blue
+            ctx.strokeStyle = '#4299E1';
             ctx.beginPath();
             if(tMax[start]) ctx.moveTo(tMax[start].x, tMax[start].y);
             if(tMax[end]) ctx.lineTo(tMax[end].x, tMax[end].y);
@@ -456,7 +450,7 @@ const backtrackDtw = (costMatrix) => {
 };
 
 function align(trajectories) {
-    // Fix #1: This function now correctly calculates and returns all N-1 alignment results
+    // Fix #1 & #2: This function now correctly calculates and returns all N-1 alignment results
     if (trajectories.length <= 1) return { aligned: trajectories, alignmentData: [] };
     const refIndex = trajectories.map(t => t.length).indexOf(Math.max(...trajectories.map(t => t.length)));
     const refTraj = trajectories[refIndex];
@@ -476,7 +470,6 @@ function align(trajectories) {
 
         if (path.length === 0) continue;
         
-        // Fix #2: This creates the new, correctly warped trajectory data
         const warpedTraj = new Array(refTraj.length);
         let pathIdx = 0;
         for (let refIdx = 0; refIdx < refTraj.length; refIdx++) {
@@ -549,7 +542,7 @@ function runSEGDP(tubeMin, tubeMax, lambda) {
         cps.push(N);
         let t = N - 1;
         let m = bestM;
-        while (m > 1) {
+        while (m > 1 && t > 0) {
             let prev_t = bp[t][m];
             if (prev_t === -1 || prev_t >= t) break;
             cps.unshift(prev_t);
