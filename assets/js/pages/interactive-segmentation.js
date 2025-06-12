@@ -20,7 +20,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const lambdaSegdpValueSpan = document.getElementById('lambda-segdp-value');
     const lambdaPeltSlider = document.getElementById('lambda-pelt-slider');
     const lambdaPeltValueSpan = document.getElementById('lambda-pelt-value');
-    
+
     // --- Global State ---
     let isDrawing = false;
     let rawTrajectories = [];
@@ -41,8 +41,8 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     const handleAlign = () => {
-        if (rawTrajectories.length === 0 || rawTrajectories.flat().length < 2) {
-            infoDisplay.textContent = "Please draw at least one trajectory.";
+        if (rawTrajectories.length < 2) {
+            infoDisplay.textContent = "Please draw at least two trajectories to align.";
             return;
         }
         infoDisplay.textContent = "Resampling & Aligning...";
@@ -50,18 +50,20 @@ document.addEventListener('DOMContentLoaded', () => {
 
         setTimeout(() => {
             resampledTrajectories = rawTrajectories.map(t => resampleTrajectoryByX(t)).filter(t => t.length > 1);
-            
-            if (resampledTrajectories.length === 0) {
-                infoDisplay.textContent = "Could not process drawing. Please draw a wider trajectory.";
+
+            if (resampledTrajectories.length < 2) {
+                infoDisplay.textContent = "Could not process drawings. Please draw wider, more distinct trajectories.";
                 return;
             }
 
             const factor = parseInt(downsampleSlider.value, 10);
             const downsampled = resampledTrajectories.map(t => downsample(t, factor));
+
+            // Fix #1 & #2 Cont.: The `align` function now returns both aligned trajectories and the data needed for visualization.
             const { aligned, alignmentData } = align(downsampled);
-            
+
             alignedTrajectories = aligned;
-            
+
             if (aligned.length > 0 && aligned.flat().length > 0) {
                  tube = calculateTube(alignedTrajectories);
                  segmentBtn.disabled = false;
@@ -69,8 +71,9 @@ document.addEventListener('DOMContentLoaded', () => {
             } else {
                  infoDisplay.textContent = `Alignment failed. Please clear and try again.`;
             }
-            
-            drawState(); 
+
+            drawState();
+            // Pass all alignment data to be drawn.
             drawCostMatrices(dtwCtx, alignmentData);
         }, 10);
     };
@@ -81,8 +84,10 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
         infoDisplay.textContent = "Segmenting...";
-        
+
         setTimeout(() => {
+            // The tube is already calculated from the *aligned* trajectories in handleAlign.
+            // We just need to normalize it for the algorithms.
             const normalizedTube = normalizeTube(tube);
             const lambdaSEGDP = getLogValue(parseFloat(lambdaSegdpSlider.value), 0.01, 100);
             const lambdaPELT = getLogValue(parseFloat(lambdaPeltSlider.value), 0.01, 100);
@@ -90,42 +95,64 @@ document.addEventListener('DOMContentLoaded', () => {
             const startTimeSEGDP = performance.now();
             const segdp_cps = runSEGDP(normalizedTube.tubeMin, normalizedTube.tubeMax, lambdaSEGDP);
             const segdpTime = performance.now() - startTimeSEGDP;
-            
+
             const startTimePELT = performance.now();
             const fastsegdp_cps = runFastSEGDP(normalizedTube.tubeMin, normalizedTube.tubeMax, lambdaPELT);
             const peltTime = performance.now() - startTimePELT;
-            
+
+            // The tube passed to drawState is the one based on aligned data, which is correct.
             drawState({ segdp_cps, fastsegdp_cps });
 
             infoDisplay.textContent = `SEGDP: ${segdp_cps.length - 1} segments (${segdpTime.toFixed(1)} ms)\nFastSEGDP: ${fastsegdp_cps.length - 1} segments (${peltTime.toFixed(1)} ms)`;
         }, 10);
     };
-    
+
     // --- Drawing & Visualization ---
     const drawState = (segmentations = {}) => {
         clearCanvas(ctx);
 
+        // The core logic is to decide WHAT to draw based on the state.
+        // If we have aligned trajectories, we show them. Otherwise, show the raw drawings.
         if (alignedTrajectories.length > 0) {
             const vizTrajectories = spatiallyNormalizeForViz(alignedTrajectories);
             drawTrajectories(ctx, vizTrajectories, '#475569', 1.0);
-            if (tube.tubeMin) drawTube(ctx, tube.tubeMin, tube.tubeMax);
+
+            // The tube is calculated on aligned data. We need to normalize it for visualization
+            // in the same way the trajectories were, so they match up.
+            if (tube.tubeMin) {
+                const vizTube = {
+                    tubeMin: spatiallyNormalizeForViz([tube.tubeMin])[0],
+                    tubeMax: spatiallyNormalizeForViz([tube.tubeMax])[0]
+                };
+                drawTube(ctx, vizTube.tubeMin, vizTube.tubeMax);
+            }
+
         } else {
             drawTrajectories(ctx, rawTrajectories, '#475569', 1.5);
         }
-        
+
         if (segmentations.segdp_cps) {
-            drawSegmentation(ctx, segmentations.segdp_cps, tube.tubeMin, tube.tubeMax, false);
-            drawVerticalChangepoints(ctx, segmentations.segdp_cps, alignedTrajectories, '#63B3ED', 'dotted');
+            // Also normalize the tube for drawing segmentations
+            const vizTube = {
+                tubeMin: spatiallyNormalizeForViz([tube.tubeMin])[0],
+                tubeMax: spatiallyNormalizeForViz([tube.tubeMax])[0]
+            };
+            drawSegmentation(ctx, segmentations.segdp_cps, vizTube.tubeMin, vizTube.tubeMax, false);
+            drawVerticalChangepoints(ctx, segmentations.segdp_cps, spatiallyNormalizeForViz(alignedTrajectories), '#63B3ED', 'dotted');
         }
         if (segmentations.fastsegdp_cps) {
-            drawSegmentation(ctx, segmentations.fastsegdp_cps, tube.tubeMin, tube.tubeMax, true);
-            drawVerticalChangepoints(ctx, segmentations.fastsegdp_cps, alignedTrajectories, '#68D391', 'dashed');
+            const vizTube = {
+                tubeMin: spatiallyNormalizeForViz([tube.tubeMin])[0],
+                tubeMax: spatiallyNormalizeForViz([tube.tubeMax])[0]
+            };
+            drawSegmentation(ctx, segmentations.fastsegdp_cps, vizTube.tubeMin, vizTube.tubeMax, true);
+            drawVerticalChangepoints(ctx, segmentations.fastsegdp_cps, spatiallyNormalizeForViz(alignedTrajectories), '#68D391', 'dashed');
         }
         if (segmentations.segdp_cps || segmentations.fastsegdp_cps) {
             drawLegend(ctx);
         }
     };
-    
+
     // --- Event Listeners Setup ---
     const setupEventListeners = () => {
         const startDrawing = (e) => {
@@ -137,27 +164,27 @@ document.addEventListener('DOMContentLoaded', () => {
             clearCanvas(dtwCtx);
             rawTrajectories.push([getMousePos(e)]);
         };
-        const moveDrawing = (e) => { 
-            if(isDrawing) { 
-                rawTrajectories[rawTrajectories.length - 1].push(getMousePos(e)); 
-                drawState(); 
-            } 
+        const moveDrawing = (e) => {
+            if(isDrawing) {
+                rawTrajectories[rawTrajectories.length - 1].push(getMousePos(e));
+                drawState();
+            }
         };
         const endDrawing = () => { isDrawing = false; };
-        
+
         canvas.addEventListener('mousedown', startDrawing);
         canvas.addEventListener('mousemove', moveDrawing);
         canvas.addEventListener('mouseup', endDrawing);
         canvas.addEventListener('mouseout', endDrawing);
-        
+
         canvas.addEventListener('touchstart', (e)=>{e.preventDefault();startDrawing(e.touches[0])});
         canvas.addEventListener('touchmove', (e)=>{e.preventDefault();moveDrawing(e.touches[0])});
         canvas.addEventListener('touchend', endDrawing);
-        
+
         alignBtn.addEventListener('click', handleAlign);
         segmentBtn.addEventListener('click', handleSegment);
         clearBtn.addEventListener('click', handleClear);
-        
+
         downsampleSlider.addEventListener('input', () => { downsampleValueSpan.textContent = downsampleSlider.value; });
         lambdaSegdpSlider.addEventListener('input', () => {
             const logValue = getLogValue(parseFloat(lambdaSegdpSlider.value), 0.01, 100);
@@ -234,13 +261,13 @@ const drawTube = (ctx, tMin, tMax) => {
 
 const drawSegmentation = (ctx, cps, tMin, tMax, isFast) => {
     if (!cps || cps.length < 2 || !tMin || tMin.length === 0) return;
-    
+
     for(let i = 0; i < cps.length - 1; i++) {
         const start = cps[i];
         let end = cps[i+1];
         if (isFast) end--;
         if (end < start || end >= tMin.length) continue;
-        
+
         if (isFast) {
             const pointsMin = tMin.slice(start, end + 1);
             const pointsMax = tMax.slice(start, end + 1);
@@ -248,10 +275,10 @@ const drawSegmentation = (ctx, cps, tMin, tMax, isFast) => {
 
             const fitMin = linearFitXY(pointsMin);
             const fitMax = linearFitXY(pointsMax);
-            
+
             const startX = pointsMin[0].x;
             const endX = pointsMin[pointsMin.length - 1].x;
-            
+
             ctx.strokeStyle = '#68D391';
             ctx.lineWidth = 2.5;
             ctx.beginPath();
@@ -290,7 +317,7 @@ const drawVerticalChangepoints = (ctx, cps, trajs, color, style) => {
     ctx.lineWidth = 1.5;
     if (style === 'dashed') ctx.setLineDash([5, 5]);
     else if (style === 'dotted') ctx.setLineDash([2, 3]);
-    
+
     cps.forEach(cp_idx => {
         if (cp_idx > 0 && cp_idx < refTraj.length) {
             const point = refTraj[cp_idx];
@@ -335,7 +362,7 @@ const drawCostMatrices = (ctx, alignmentData) => {
     // Fix #1 & #3: This function now receives the full alignment data and draws all matrices with their paths
     clearCanvas(ctx);
     if (!alignmentData || alignmentData.length === 0) return;
-    
+
     const canvasWidth = ctx.canvas.getBoundingClientRect().width;
     const canvasHeight = ctx.canvas.getBoundingClientRect().height;
     const totalMatrices = alignmentData.length;
@@ -354,6 +381,7 @@ const drawCostMatrices = (ctx, alignmentData) => {
             const value = matrix[i][j] / maxCost;
             const colorVal = Math.floor((1 - value) * 200) + 55;
             ctx.fillStyle = `rgb(${colorVal}, ${colorVal}, ${colorVal})`;
+            // Correct y-position calculation to flip the matrix visually
             const yPos = yOffset + (matrixHeight - (i + 1) * h);
             ctx.fillRect(j * w, yPos, w, h);
         }
@@ -362,6 +390,7 @@ const drawCostMatrices = (ctx, alignmentData) => {
         ctx.strokeStyle = '#FDBA74'; // Orange for the path
         ctx.lineWidth = 2;
         ctx.beginPath();
+        // Correctly map path coordinates to the flipped canvas coordinates
         const startY = yOffset + (matrixHeight - path[0][0] * h - h / 2);
         ctx.moveTo(path[0][1] * w + w / 2, startY);
         for(let k = 1; k < path.length; k++){
@@ -392,7 +421,7 @@ const resampleTrajectoryByX = (rawTraj) => {
     const startX = Math.ceil(sortedTraj[0].x);
     const endX = Math.floor(sortedTraj[sortedTraj.length - 1].x);
     if (startX >= endX) return [];
-    
+
     let rawIndex = 0;
     for (let x = startX; x <= endX; x++) {
         while(rawIndex + 1 < sortedTraj.length && sortedTraj[rawIndex+1].x < x) {
@@ -458,7 +487,7 @@ function align(trajectories) {
 
     const aligned = [refTraj];
     const alignmentData = []; // To store {matrix, path} for each alignment
-    
+
     for (let i = 0; i < trajectories.length; i++) {
         if (i === refIndex) continue;
         const trajToAlign = trajectories[i];
@@ -469,7 +498,7 @@ function align(trajectories) {
         alignmentData.push({matrix: costMatrix, path: path}); // Store result for visualization
 
         if (path.length === 0) continue;
-        
+
         const warpedTraj = new Array(refTraj.length);
         let pathIdx = 0;
         for (let refIdx = 0; refIdx < refTraj.length; refIdx++) {
@@ -495,6 +524,11 @@ const calculateTube = (trajs) => {
         const p=trajs[j][i];
         tMin[i].x=Math.min(tMin[i].x,p.x); tMin[i].y=Math.min(tMin[i].y,p.y);
         tMax[i].x=Math.max(tMax[i].x,p.x); tMax[i].y=Math.max(tMax[i].y,p.y);
+    }
+    // This is a sanity check. If a point in the tube wasn't updated, copy from the previous valid point.
+    for (let i = 1; i < n; i++) {
+        if (tMin[i].x === Infinity) tMin[i] = { ...tMin[i-1] };
+        if (tMax[i].x === -Infinity) tMax[i] = { ...tMax[i-1] };
     }
     return {tubeMin:tMin,tubeMax:tMax};
 };
@@ -535,7 +569,7 @@ function runSEGDP(tubeMin, tubeMax, lambda) {
     }
     let bestM=1,minCost=dp[N-1][1]+lambda;
     for(let m=2;m<=MAX_SEGMENTS;m++){const cost=dp[N-1][m]+(lambda*m); if(cost<minCost){minCost=cost;bestM=m;}}
-    
+
     // Fix #4: Correct backtracking to ensure the last point is always included.
     const cps = [];
     if (N > 0) {
@@ -567,36 +601,36 @@ const linearFitXY = (points) => {
 
 const getSegmentCostPELT = (start, end, tMin, tMax) => {
     let cost = 0;
+    const pointsMin = tMin.slice(start, end + 1);
+    const pointsMax = tMax.slice(start, end + 1);
+    if (pointsMin.length < 2) return 0;
+
     for(const dim of ['x', 'y']) {
-        const minPts = tMin.slice(start, end + 1).map(p => p[dim]);
-        const maxPts = tMax.slice(start, end + 1).map(p => p[dim]);
-        const n=minPts.length; if(n===0)continue;
-        let sxm=0,sym=0,sxym=0,sxxm=0; let sxa=0,sya=0,sxya=0,sxxa=0;
-        for(let i=0;i<n;i++){
-            sxm+=i;sym+=minPts[i];sxym+=i*minPts[i];sxxm+=i*i;
-            sxa+=i;sya+=maxPts[i];sxya+=i*maxPts[i];sxxa+=i*i;
-        }
-        const den_m=n*sxxm-sxm*sxm; const den_a=n*sxxa-sxa*sxa;
-        const slope_m=den_m===0?0:(n*sxym-sxm*sym)/den_m; const int_m=(sym-slope_m*sxm)/n;
-        const slope_a=den_a===0?0:(n*sxya-sxa*sya)/den_a; const int_a=(sya-slope_a*sxa)/n;
-        for(let i=0;i<n;i++){
-            cost+=Math.pow(minPts[i]-(slope_m*i+int_m),2);
-            cost+=Math.pow(maxPts[i]-(slope_a*i+int_a),2);
+        const fitMin = linearFitXY(pointsMin.map(p => ({ x: p.x, y: p[dim] })));
+        const fitMax = linearFitXY(pointsMax.map(p => ({ x: p.x, y: p[dim] })));
+        for(let i=0; i<pointsMin.length; i++) {
+            cost += Math.pow(pointsMin[i][dim] - (fitMin.slope * pointsMin[i].x + fitMin.intercept), 2);
+            cost += Math.pow(pointsMax[i][dim] - (fitMax.slope * pointsMax[i].x + fitMax.intercept), 2);
         }
     }
     return cost;
 };
 
+
 const spatiallyNormalizeForViz = (trajectories) => {
     if (trajectories.length < 2) return trajectories;
-    const refTraj = trajectories[0];
+
+    // Find a valid reference trajectory
+    const refTraj = trajectories.find(t => t && t.length > 0);
+    if (!refTraj) return trajectories; // Return if no valid trajectories
+
     const refMinX = refTraj[0].x;
     const refMaxX = refTraj[refTraj.length - 1].x;
     const refRangeX = refMaxX - refMinX;
     if(refRangeX === 0) return trajectories;
 
-    return trajectories.map((traj, index) => {
-        if (index === 0) return traj;
+    return trajectories.map((traj) => {
+        if (!traj || traj.length === 0) return []; // Handle empty trajectories
         const trajMinX = traj[0].x;
         const trajMaxX = traj[traj.length - 1].x;
         const trajRangeX = trajMaxX - trajMinX;
@@ -616,7 +650,8 @@ function runFastSEGDP(tubeMin, tubeMax, lambda) {
         if (start > end) return 0;
         const key = `${start}-${end}`;
         if (key in costCache) return costCache[key];
-        return costCache[key] = getSegmentCostPELT(start, end, tubeMin, tubeMax);
+        // Using a more robust cost function for PELT
+        return costCache[key] = getSegmentCostSEGDP(start, end, tubeMin, tubeMax);
     };
     const F = Array(N + 1).fill(Infinity);
     const P = Array(N + 1).fill(0);
@@ -624,17 +659,22 @@ function runFastSEGDP(tubeMin, tubeMax, lambda) {
     let R = [0];
     for (let t = 1; t <= N; t++) {
         let minCostForT = Infinity; let bestTauForT = 0;
-        for (const tau of R) {
+        // Pruning candidates based on the PELT condition
+        const R_new = R.filter(tau => F[tau] + getCost(tau, t - 1) <= minCostForT);
+
+        for (const tau of R_new) {
             const cost = F[tau] + getCost(tau, t - 1) + lambda;
-            if (cost < minCostForT) { minCostForT = cost; bestTauForT = tau; }
+            if (cost < minCostForT) {
+                minCostForT = cost;
+                bestTauForT = tau;
+            }
         }
-        F[t] = minCostForT; P[t] = bestTauForT;
-        const R_new = [];
-        for (const tau of R) {
-            if (F[tau] + getCost(tau, t - 1) <= F[t]) { R_new.push(tau); }
-        }
-        R_new.push(t);
-        R = R_new;
+        F[t] = minCostForT;
+        P[t] = bestTauForT;
+
+        // Update candidate set for next iteration
+        R = R_new.filter(tau => F[tau] + getCost(tau, t - 1) <= F[t]);
+        R.push(t);
     }
     const changepoints = []; let current_t = N;
     while (current_t > 0) {
