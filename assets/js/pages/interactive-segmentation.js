@@ -55,6 +55,9 @@ document.addEventListener('DOMContentLoaded', () => {
         segmentBtn.disabled = true;
         infoDisplay.textContent = 'Draw a trajectory and click "Align Trajectories".';
     };
+
+    // In assets/js/pages/interactive-segmentation.js, replace this function:
+
     const handleAlign = () => {
         if (rawTrajectories.length === 0 || rawTrajectories.flat().length < 2) {
             infoDisplay.textContent = "Please draw at least one trajectory.";
@@ -68,21 +71,20 @@ document.addEventListener('DOMContentLoaded', () => {
             const startTime = performance.now();
 
             const downsampled = rawTrajectories.map(t => downsample(t, factor));
-            const { aligned, costMatrix } = align(downsampled);
+            const { aligned, costMatrices } = align(downsampled); // Captures all matrices
             const alignmentTime = performance.now() - startTime;
             
             alignedTrajectories = aligned;
             if (aligned.length > 0 && aligned[0].length > 0) {
                 tube = calculateTube(alignedTrajectories);
                 segmentBtn.disabled = false;
-                infoDisplay.textContent = `Alignment Complete: ${alignmentTime.toFixed(1)} ms.\nReady for segmentation.`;
+                infoDisplay.textContent = `Alignment Complete: ${alignmentTime.toFixed(1)} ms.\nFound ${costMatrices.length} DTW comparisons. Ready for segmentation.`;
             } else {
                 infoDisplay.textContent = `Alignment failed. Please try again.`;
             }
             
-            // Redraw state to show only the final tube
             drawState(); 
-            drawCostMatrix(dtwCtx, costMatrix);
+            drawCostMatrices(dtwCtx, costMatrices); // Calls the new drawing function
         }, 50);
     };
 
@@ -205,24 +207,39 @@ const drawTube = (ctx, tMin, tMax) => {
     ctx.closePath();
     ctx.fill();
 };
+// In assets/js/pages/interactive-segmentation.js, replace the old `drawCostMatrix` function:
 
-const drawCostMatrix = (ctx, matrix) => {
-    if (!matrix || matrix.length === 0) return;
-    const n = matrix.length;
-    const m = matrix[0].length;
-    const w = ctx.canvas.getBoundingClientRect().width / m;
-    const h = ctx.canvas.getBoundingClientRect().height / n;
-    const maxCost = matrix[n-1][m-1];
-    if(maxCost === 0) return;
-    for (let i = 0; i < n; i++) {
-        for (let j = 0; j < m; j++) {
-            const value = matrix[i][j] / maxCost;
-            const colorVal = Math.floor((1 - value) * 200) + 55; // Darker theme heatmap
-            ctx.fillStyle = `rgb(${colorVal}, ${colorVal}, ${colorVal})`;
-            ctx.fillRect(j * w, i * h, w, h);
+const drawCostMatrices = (ctx, matrices) => {
+    if (!matrices || matrices.length === 0) return;
+    
+    clearCanvas(ctx); // Clear previous drawings
+    
+    const canvasWidth = ctx.canvas.getBoundingClientRect().width;
+    const totalMatrices = matrices.length;
+    const matrixHeight = ctx.canvas.getBoundingClientRect().height / totalMatrices;
+
+    matrices.forEach((matrix, index) => {
+        if (!matrix || matrix.length === 0) return;
+        
+        const n = matrix.length;
+        const m = matrix[0].length;
+        const w = canvasWidth / m;
+        const h = matrixHeight / n;
+        const yOffset = index * matrixHeight;
+
+        const maxCost = matrix[n-1][m-1];
+        if(maxCost === 0) return;
+
+        for (let i = 0; i < n; i++) {
+            for (let j = 0; j < m; j++) {
+                const value = matrix[i][j] / maxCost;
+                const colorVal = Math.floor((1 - value) * 200) + 55;
+                ctx.fillStyle = `rgb(${colorVal}, ${colorVal}, ${colorVal})`;
+                ctx.fillRect(j * w, yOffset + (i * h), w, h);
+            }
         }
-    }
-};
+    });
+}; 
 
 const drawSegmentation = (ctx, changepoints, tMin, tMax) => {
     if (!changepoints || changepoints.length < 2) return;
@@ -339,30 +356,39 @@ function backtrackDtw(costMatrix) {
     }
     return path.reverse();
 }
+// In assets/js/pages/interactive-segmentation.js, replace this function:
 
 function align(trajectories) {
-    if (trajectories.length <= 1) return { aligned: trajectories, costMatrix: null };
+    if (trajectories.length <= 1) return { aligned: trajectories, costMatrices: [] };
     const lengths = trajectories.map(t => t.length);
     const refIndex = lengths.indexOf(Math.max(...lengths));
     const refTraj = trajectories[refIndex];
+    
     const aligned = [refTraj];
-    let primaryCostMatrix = null;
+    const costMatrices = []; // Initialize array to hold all matrices
+
     for (let i = 0; i < trajectories.length; i++) {
         if (i === refIndex) continue;
         const costMatrix = dtw(refTraj, trajectories[i]);
-        if (i === (refIndex > 0 ? 0 : 1)) primaryCostMatrix = costMatrix;
+        costMatrices.push(costMatrix); // Add each new matrix to the array
+        
         const path = backtrackDtw(costMatrix);
+        if (path.length === 0) continue;
+
         const warpedTraj = [];
         let lastTrajIndex = 0;
         const refToTrajMap = {};
         path.forEach(([refI, trajI]) => { if (!(refI in refToTrajMap)) refToTrajMap[refI] = trajI; });
+        
         for (let j = 0; j < refTraj.length; j++) {
              if (j in refToTrajMap) lastTrajIndex = refToTrajMap[j];
-             warpedTraj.push(trajectories[i][lastTrajIndex]);
+             if (trajectories[i][lastTrajIndex]) {
+                warpedTraj.push(trajectories[i][lastTrajIndex]);
+             }
         }
         aligned.push(warpedTraj);
     }
-    return { aligned, costMatrix: primaryCostMatrix };
+    return { aligned, costMatrices }; // Return the array of matrices
 }
 
 function calculateTube(trajs) {
