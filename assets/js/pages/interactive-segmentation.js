@@ -80,39 +80,6 @@ document.addEventListener('DOMContentLoaded', () => {
             tubeMax: normalize(tube.tubeMax)
         };
     };
-
-    // REPLACE the existing handleSegment function with this one.
-    const handleSegment = () => {
-        if (alignedTrajectories.length === 0) {
-            infoDisplay.textContent = "Please align trajectories first.";
-            return;
-        }
-        infoDisplay.textContent = "Segmenting...";
-        
-        setTimeout(() => {
-            // Create a normalized version of the tube for cost calculation
-            const normalizedTube = normalizeTube(tube);
-
-            const lambdaSEGDP = parseFloat(lambdaSegdpSlider.value);
-            const lambdaPELT = parseFloat(lambdaPeltSlider.value);
-
-            const startTimeSEGDP = performance.now();
-            // Run algorithms on NORMALIZED data
-            const segdp_cps = runSEGDP(normalizedTube.tubeMin, normalizedTube.tubeMax, lambdaSEGDP);
-            const segdpTime = performance.now() - startTimeSEGDP;
-
-            const startTimePELT = performance.now();
-            const fastsegdp_cps = runFastSEGDP(normalizedTube.tubeMin, normalizedTube.tubeMax, lambdaPELT);
-            const peltTime = performance.now() - startTimePELT;
-            
-            // Pass ORIGINAL tube data for visualization
-            drawState({ segdp_cps, fastsegdp_cps });
-
-            infoDisplay.textContent = `SEGDP: ${segdp_cps.length - 1} segments (${segdpTime.toFixed(1)} ms)\nFastSEGDP: ${fastsegdp_cps.length - 1} segments (${peltTime.toFixed(1)} ms)`;
-        }, 50);
-    };
-    // In assets/js/pages/interactive-segmentation.js, replace this function:
-
     // ADD THIS NEW HELPER FUNCTION
     const spatiallyNormalizeForViz = (trajectories) => {
         if (trajectories.length < 2) return trajectories;
@@ -135,7 +102,82 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     };
 
+    // In assets/js/pages/interactive-segmentation.js
 
+    // ADD THIS NEW HELPER FUNCTION
+    // It converts a linear slider position (0-100) to a logarithmic scale
+    const getLogValue = (position, minVal, maxVal) => {
+        // position is 0-100, minVal/maxVal are the desired output range (e.g., 0.01 to 100)
+        if (position == 0) return minVal;
+        const minLog = Math.log(minVal);
+        const maxLog = Math.log(maxVal);
+        const scale = (maxLog - minLog) / 100;
+        return Math.exp(minLog + scale * position);
+    };
+
+
+    // REPLACE the existing handleSegment function
+    const handleSegment = () => {
+        if (alignedTrajectories.length === 0) {
+            infoDisplay.textContent = "Please align trajectories first.";
+            return;
+        }
+        infoDisplay.textContent = "Segmenting...";
+        
+        setTimeout(() => {
+            const normalizedTube = normalizeTube(tube);
+
+            // Get the raw slider positions and convert them to log values
+            const lambdaSEGDP = getLogValue(parseFloat(lambdaSegdpSlider.value), 0.001, 100);
+            const lambdaPELT = getLogValue(parseFloat(lambdaPeltSlider.value), 0.001, 100);
+
+            const startTimeSEGDP = performance.now();
+            const segdp_cps = runSEGDP(normalizedTube.tubeMin, normalizedTube.tubeMax, lambdaSEGDP);
+            const segdpTime = performance.now() - startTimeSEGDP;
+
+            const startTimePELT = performance.now();
+            const fastsegdp_cps = runFastSEGDP(normalizedTube.tubeMin, normalizedTube.tubeMax, lambdaPELT);
+            const peltTime = performance.now() - startTimePELT;
+            
+            drawState({ segdp_cps, fastsegdp_cps });
+
+            infoDisplay.textContent = `SEGDP: ${segdp_cps.length - 1} segments (${segdpTime.toFixed(1)} ms)\nFastSEGDP: ${fastsegdp_cps.length - 1} segments (${peltTime.toFixed(1)} ms)`;
+        }, 50);
+    };
+
+
+    // REPLACE the existing Slider Listeners inside the setupEventListeners function
+    // Old listeners:
+    // downsampleSlider.addEventListener('input', ...);
+    // lambdaSegdpSlider.addEventListener('input', ...);
+    // lambdaPeltSlider.addEventListener('input', ...);
+
+    // New Listeners:
+    downsampleSlider.addEventListener('input', () => {
+        downsampleValueSpan.textContent = downsampleSlider.value;
+    });
+
+    lambdaSegdpSlider.addEventListener('input', () => {
+        const logValue = getLogValue(parseFloat(lambdaSegdpSlider.value), 0.001, 100);
+        lambdaSegdpValueSpan.textContent = logValue.toFixed(4);
+    });
+
+    lambdaPeltSlider.addEventListener('input', () => {
+        const logValue = getLogValue(parseFloat(lambdaPeltSlider.value), 0.001, 100);
+        lambdaPeltValueSpan.textContent = logValue.toFixed(4);
+    });
+
+
+    // And also REPLACE the initial text setting at the end of the script with this:
+    // Old text setting:
+    // downsampleValueSpan.textContent = downsampleSlider.value;
+    // lambdaSegdpValueSpan.textContent = lambdaSegdpSlider.value;
+    // lambdaPeltValueSpan.textContent = ...
+
+    // New text setting:
+    downsampleValueSpan.textContent = downsampleSlider.value;
+    lambdaSegdpValueSpan.textContent = getLogValue(parseFloat(lambdaSegdpSlider.value), 0.001, 100).toFixed(4);
+    lambdaPeltValueSpan.textContent = getLogValue(parseFloat(lambdaPeltSlider.value), 0.001, 100).toFixed(4);
     // REPLACE the existing handleAlign function
     const handleAlign = () => {
         if (rawTrajectories.length === 0 || rawTrajectories.flat().length < 2) {
