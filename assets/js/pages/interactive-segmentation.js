@@ -58,19 +58,22 @@ document.addEventListener('DOMContentLoaded', () => {
 
             const factor = parseInt(downsampleSlider.value, 10);
             const downsampled = resampledTrajectories.map(t => downsample(t, factor));
-            const { aligned, costMatrices } = align(downsampled);
+            const { aligned, alignmentData } = align(downsampled);
             
+            // Fix #2: Use the newly warped trajectories for all subsequent steps
             alignedTrajectories = aligned;
+            
             if (aligned.length > 0 && aligned.flat().length > 0) {
+                 // The tube is now correctly created from the warped data
                  tube = calculateTube(alignedTrajectories);
                  segmentBtn.disabled = false;
-                 infoDisplay.textContent = `Alignment complete. Found ${costMatrices.length} DTW comparisons. Ready for segmentation.`;
+                 infoDisplay.textContent = `Alignment complete. Found ${alignmentData.length} DTW comparisons. Ready for segmentation.`;
             } else {
                  infoDisplay.textContent = `Alignment failed. Please clear and try again.`;
             }
             
             drawState(); 
-            drawCostMatrices(dtwCtx, costMatrices);
+            drawCostMatrices(dtwCtx, alignmentData); // Pass the full alignment data for drawing
         }, 10);
     };
 
@@ -96,6 +99,7 @@ document.addEventListener('DOMContentLoaded', () => {
             
             drawState({ segdp_cps, fastsegdp_cps });
 
+            // Fix: Restore timing display
             infoDisplay.textContent = `SEGDP: ${segdp_cps.length - 1} segments (${segdpTime.toFixed(1)} ms)\nFastSEGDP: ${fastsegdp_cps.length - 1} segments (${peltTime.toFixed(1)} ms)`;
         }, 10);
     };
@@ -105,6 +109,7 @@ document.addEventListener('DOMContentLoaded', () => {
         clearCanvas(ctx);
 
         if (alignedTrajectories.length > 0) {
+            // Fix #2: Use the new, correctly warped trajectories for visualization
             const vizTrajectories = spatiallyNormalizeForViz(alignedTrajectories);
             drawTrajectories(ctx, vizTrajectories, '#475569', 1.0);
             if (tube.tubeMin) drawTube(ctx, tube.tubeMin, tube.tubeMax);
@@ -252,14 +257,14 @@ const drawSegmentation = (ctx, cps, tMin, tMax, isFast) => {
             const startX = pointsMin[0].x;
             const endX = pointsMin[pointsMin.length - 1].x;
             
-            ctx.strokeStyle = '#68D391';
+            ctx.strokeStyle = '#68D391'; // Light Green
             ctx.lineWidth = 2.5;
             ctx.beginPath();
             ctx.moveTo(startX, fitMin.slope * startX + fitMin.intercept);
             ctx.lineTo(endX, fitMin.slope * endX + fitMin.intercept);
             ctx.stroke();
 
-            ctx.strokeStyle = '#48BB78';
+            ctx.strokeStyle = '#48BB78'; // Dark Green
             ctx.beginPath();
             ctx.moveTo(startX, fitMax.slope * startX + fitMax.intercept);
             ctx.lineTo(endX, fitMax.slope * endX + fitMax.intercept);
@@ -268,13 +273,13 @@ const drawSegmentation = (ctx, cps, tMin, tMax, isFast) => {
         } else {
              // Trapezoid for SEGDP visualization
             ctx.lineWidth = 3;
-            ctx.strokeStyle = '#63B3ED';
+            ctx.strokeStyle = '#63B3ED'; // Blue
             ctx.beginPath();
             if(tMin[start]) ctx.moveTo(tMin[start].x, tMin[start].y);
             if(tMin[end]) ctx.lineTo(tMin[end].x, tMin[end].y);
             ctx.stroke();
 
-            ctx.strokeStyle = '#4299E1';
+            ctx.strokeStyle = '#4299E1'; // Darker Blue
             ctx.beginPath();
             if(tMax[start]) ctx.moveTo(tMax[start].x, tMax[start].y);
             if(tMax[end]) ctx.lineTo(tMax[end].x, tMax[end].y);
@@ -332,20 +337,25 @@ const drawLegend = (ctx) => {
     ctx.restore();
 };
 
-const drawCostMatrices = (ctx, matrices) => {
+const drawCostMatrices = (ctx, alignmentData) => {
+    // Fix #1 & #3: This function now receives the full alignment data and draws all matrices with their paths
     clearCanvas(ctx);
-    if (!matrices || matrices.length === 0) return;
+    if (!alignmentData || alignmentData.length === 0) return;
+    
     const canvasWidth = ctx.canvas.getBoundingClientRect().width;
     const canvasHeight = ctx.canvas.getBoundingClientRect().height;
-    const totalMatrices = matrices.length;
+    const totalMatrices = alignmentData.length;
     const matrixHeight = canvasHeight / totalMatrices;
-    matrices.forEach((matrix, index) => {
+
+    alignmentData.forEach(({ matrix, path }, index) => {
         if (!matrix || matrix.length === 0) return;
         const n = matrix.length; const m = matrix[0].length;
         const w = canvasWidth / m; const h = matrixHeight / n;
         const yOffset = index * matrixHeight;
         const maxCost = matrix[n-1][m-1];
         if (maxCost === 0) return;
+
+        // Draw Heatmap
         for (let i = 0; i < n; i++) for (let j = 0; j < m; j++) {
             const value = matrix[i][j] / maxCost;
             const colorVal = Math.floor((1 - value) * 200) + 55;
@@ -353,8 +363,21 @@ const drawCostMatrices = (ctx, matrices) => {
             const yPos = yOffset + (matrixHeight - (i + 1) * h);
             ctx.fillRect(j * w, yPos, w, h);
         }
+
+        // Draw Warping Path
+        ctx.strokeStyle = '#FDBA74'; // Orange for the path
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        const startY = yOffset + (matrixHeight - path[0][0] * h - h / 2);
+        ctx.moveTo(path[0][1] * w + w / 2, startY);
+        for(let k = 1; k < path.length; k++){
+            const yPos = yOffset + (matrixHeight - path[k][0] * h - h / 2);
+            ctx.lineTo(path[k][1] * w + w / 2, yPos);
+        }
+        ctx.stroke();
     });
 };
+
 
 const downsample = (traj, factor) => {
     if (factor <= 1 || traj.length < factor) return traj;
@@ -433,23 +456,27 @@ const backtrackDtw = (costMatrix) => {
 };
 
 function align(trajectories) {
-    if (trajectories.length <= 1) return { aligned: trajectories, costMatrices: [] };
+    // Fix #1: This function now correctly calculates and returns all N-1 alignment results
+    if (trajectories.length <= 1) return { aligned: trajectories, alignmentData: [] };
     const refIndex = trajectories.map(t => t.length).indexOf(Math.max(...trajectories.map(t => t.length)));
     const refTraj = trajectories[refIndex];
-    if (!refTraj || refTraj.length === 0) return { aligned: [], costMatrices: [] };
+    if (!refTraj || refTraj.length === 0) return { aligned: [], alignmentData: [] };
 
     const aligned = [refTraj];
-    const costMatrices = [];
+    const alignmentData = []; // To store {matrix, path} for each alignment
+    
     for (let i = 0; i < trajectories.length; i++) {
         if (i === refIndex) continue;
         const trajToAlign = trajectories[i];
         if (trajToAlign.length === 0) continue;
 
         const costMatrix = dtw(refTraj, trajToAlign);
-        costMatrices.push(costMatrix);
         const path = backtrackDtw(costMatrix);
+        alignmentData.push({matrix: costMatrix, path: path}); // Store result for visualization
+
         if (path.length === 0) continue;
         
+        // Fix #2: This creates the new, correctly warped trajectory data
         const warpedTraj = new Array(refTraj.length);
         let pathIdx = 0;
         for (let refIdx = 0; refIdx < refTraj.length; refIdx++) {
@@ -457,15 +484,11 @@ function align(trajectories) {
                 pathIdx++;
             }
             const mappedTrajIndex = path[pathIdx][1];
-            if (mappedTrajIndex < trajToAlign.length) {
-                 warpedTraj[refIdx] = trajToAlign[mappedTrajIndex];
-            } else {
-                warpedTraj[refIdx] = trajToAlign[trajToAlign.length - 1];
-            }
+            warpedTraj[refIdx] = trajToAlign[mappedTrajIndex] || trajToAlign[trajToAlign.length - 1];
         }
         aligned.push(warpedTraj);
     }
-    return { aligned, costMatrices };
+    return { aligned, alignmentData };
 }
 
 
@@ -519,9 +542,23 @@ function runSEGDP(tubeMin, tubeMax, lambda) {
     }
     let bestM=1,minCost=dp[N-1][1]+lambda;
     for(let m=2;m<=MAX_SEGMENTS;m++){const cost=dp[N-1][m]+(lambda*m); if(cost<minCost){minCost=cost;bestM=m;}}
-    const cps=[N]; let t=N-1,m=bestM;
-    while(m>0&&t>=0){let s=bp[t][m]; if(s===-1)break; cps.push(s); t=s-1; m--;}
-    return cps.sort((a,b)=>a-b).filter((v,i,a)=>a.indexOf(v)===i);
+    
+    // Fix #4: Correct backtracking to ensure the last point is always included.
+    const cps = [];
+    if (N > 0) {
+        cps.push(N);
+        let t = N - 1;
+        let m = bestM;
+        while (m > 1) {
+            let prev_t = bp[t][m];
+            if (prev_t === -1 || prev_t >= t) break;
+            cps.unshift(prev_t);
+            t = prev_t - 1;
+            m--;
+        }
+        cps.unshift(0);
+    }
+    return [...new Set(cps)].sort((a,b)=>a-b);
 }
 
 const linearFitXY = (points) => {
@@ -612,5 +649,5 @@ function runFastSEGDP(tubeMin, tubeMax, lambda) {
         current_t = P[current_t];
     }
     changepoints.push(0);
-    return changepoints.sort((a,b) => a-b).filter((v,i,a)=>a.indexOf(v)===i);
+    return changepoints.sort((a,b)=>a-b).filter((v,i,a)=>a.indexOf(v)===i);
 }
