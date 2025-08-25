@@ -4,29 +4,35 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mo Saeidi - Robotics & Control Engineer</title>
-    <link rel="stylesheet" href="assets/style.css">
+    
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Roboto:wght@400;500&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="assets/style.css">
+    
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
 </head>
 <body>
 
-    <header class="intro-section">
-        <div class="intro-content">
-            <h1>Mo Saeidi</h1>
-            <p class="subtitle">Robotics & Control Engineer</p>
-            <p class="bio">
-                M.Sc. candidate in Automation and Control Engineering at Politecnico di Milano, specializing in the intersection of control theory, reinforcement learning, and intelligent systems. Passionate about developing intuitive frameworks for human-robot interaction and creating robust, autonomous systems.
+    <header class="hero-section">
+        <div class="hero-content">
+            <h1 class="hero-title">Mo Saeidi</h1>
+            <p class="hero-subtitle">Robotics & Control Engineer</p>
+            <p class="hero-bio">
+                M.Sc. candidate at Politecnico di Milano, specializing in the intersection of control theory, reinforcement learning, and intelligent systems. Passionate about developing intuitive frameworks for human-robot interaction and creating robust, autonomous systems.
             </p>
             <div class="social-links">
-                <a href="https://github.com/zexerv" target="_blank" rel="noopener noreferrer">GitHub</a>
-                <a href="https://scholar.google.com/citations?user=your_google_scholar_id" target="_blank" rel="noopener noreferrer">Scholar</a>
-                <a href="https://linkedin.com/in/your_linkedin_profile" target="_blank" rel="noopener noreferrer">LinkedIn</a>
-                <a href="mailto:msaeidi1999@gmail.com">Email</a>
+                <a href="https://github.com/zexerv" title="GitHub" target="_blank" rel="noopener noreferrer">GitHub</a>
+                <a href="https://scholar.google.com/citations?user=your_google_scholar_id" title="Google Scholar" target="_blank" rel="noopener noreferrer">Scholar</a>
+                <a href="https://linkedin.com/in/your_linkedin_profile" title="LinkedIn" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+                <a href="mailto:msaeidi1999@gmail.com" title="Email">Email</a>
             </div>
             <div class="cv-buttons">
-                <a href="assets/cv/Mo_Saeidi_CV_EN.pdf" download class="btn-cv">Download CV (English)</a>
-                <a href="assets/cv/Mo_Saeidi_CV_IT.pdf" download class="btn-cv">Download CV (Italian)</a>
+                <a href="assets/cv/Mo_Saeidi_CV_EN.pdf" download class="btn">Download CV (English)</a>
+                <a href="assets/cv/Mo_Saeidi_CV_IT.pdf" download class="btn btn-secondary">Download CV (Italian)</a>
             </div>
         </div>
     </header>
@@ -34,153 +40,123 @@
     <main>
         
         <section id="experience" class="section">
-            <h2>Experience</h2>
-            
-            <div class="job-item">
-                <h3>Researcher, MERLIN Laboratory POLIMI</h3>
-                <p class="job-info">Milan, Italy | October 2024 - Present</p>
-                <ul>
-                    [cite_start]<li>Conducted Master's thesis on "Robotic Programming by Demonstration: Segmentation and Via-Set Optimization"[cite: 42].</li>
-                    [cite_start]<li>Developed three novel algorithms: event-based DTW for interpreting multiple demonstrations; a segmentation algorithm (SEGDP) and its faster extension with proved $\mathcal{O}(N)$ complexity; and a Via-Set Optimization module for run-time skill refinement[cite: 43, 44, 45].</li>
-                    [cite_start]<li>Tested the efficacy of the pipeline through ablation studies and non-expert user inquiries[cite: 46].</li>
-                </ul>
+            <h2 class="section-title">Experience</h2>
+            <div class="card-container">
+                <div class="card">
+                    <h3>Researcher, MERLIN Laboratory POLIMI</h3>
+                    <p class="card-info">Milan, Italy | October 2024 - Present</p>
+                    <ul>
+                        <li>Conducted Master's thesis on "Robotic Programming by Demonstration: Segmentation and Via-Set Optimization".</li>
+                        <li>Developed three novel algorithms: event-based DTW for interpreting multiple demonstrations; a segmentation algorithm (SEGDP) and its faster extension with proved $\mathcal{O}(N)$ complexity; and a Via-Set Optimization module for run-time skill refinement.</li>
+                        <li>Tested the efficacy of the pipeline through ablation studies and non-expert user inquiries.</li>
+                    </ul>
+                </div>
+                
+                <div class="card">
+                    <h3>Researcher, AIRLAB Drone Team POLIMI</h3>
+                    <p class="card-info">Milan, Italy | April 2023 - November 2023</p>
+                    <ul>
+                        <li>Translated navigation and filtering nodes from ROS1 to ROS2.</li>
+                        <li>Developed a high-level navigation and obstacle avoidance system from scratch using $A^{*}$ and point clouds from a ZED camera.</li>
+                        <li>Participated in the Leonardo Drone Contest of 2023 in Torino.</li>
+                    </ul>
+                </div>
+                
+                <div class="card">
+                    <h3>Research Assistant, Mechatronics Laboratory - KNTU</h3>
+                    <p class="card-info">Tehran, Iran | 2021 - 2022</p>
+                    <ul>
+                        <li>Participated in the AEB computer vision project, benchmarking monocular depth estimation algorithms, object detection, and sensor fusion.</li>
+                        <li>Contributed to the Chess Track project by gathering and labeling over 10,000 images of chess pieces and training a YOLO model for chess tournament use.</li>
+                    </ul>
+                </div>
+                
+                <div class="card">
+                    <h3>Research Assistant, Vibration and Control Laboratory - KNTU</h3>
+                    <p class="card-info">Tehran, Iran | 2019 - 2022</p>
+                    <ul>
+                        <li>Conducted my BSc thesis on simulating a rigid rotor with imbalance distribution of mass.</li>
+                        <li>Developed a fault diagnosis Neural Network (NN) to detect where to place balancing masses, reducing the required number of sensors to two.</li>
+                    </ul>
+                </div>
             </div>
-            
-            <div class="job-item">
-                <h3>Researcher, AIRLAB Drone Team POLIMI</h3>
-                <p class="job-info">Milan, Italy | April 2023 - November 2023</p>
-                <ul>
-                    [cite_start]<li>Translated navigation and filtering nodes from ROS1 to ROS2[cite: 50].</li>
-                    [cite_start]<li>Developed a high-level navigation and obstacle avoidance system from scratch using $A^{*}$ and point clouds from a ZED camera[cite: 51].</li>
-                    [cite_start]<li>Participated in the Leonardo Drone Contest of 2023 in Torino[cite: 52].</li>
-                </ul>
-            </div>
-            
-            <div class="job-item">
-                <h3>Research Assistant, Mechatronics Laboratory - KNTU</h3>
-                <p class="job-info">Tehran, Iran | 2021 - 2022</p>
-                <ul>
-                    [cite_start]<li>Participated in the AEB computer vision project, benchmarking monocular depth estimation algorithms, object detection, and sensor fusion[cite: 55].</li>
-                    [cite_start]<li>Contributed to the Chess Track project by gathering and labeling over 10,000 images of chess pieces and training a YOLO model for chess tournament use[cite: 56, 57].</li>
-                </ul>
-            </div>
-            
-            <div class="job-item">
-                <h3>Research Assistant, Vibration and Control Laboratory - KNTU</h3>
-                <p class="job-info">Tehran, Iran | 2019 - 2022</p>
-                <ul>
-                    [cite_start]<li>Conducted my BSc thesis on simulating a rigid rotor with imbalance distribution of mass[cite: 60].</li>
-                    [cite_start]<li>Developed a fault diagnosis Neural Network (NN) to detect where to place balancing masses, reducing the required number of sensors to two[cite: 60].</li>
-                </ul>
-            </div>
-
         </section>
 
         <section id="education" class="section">
-            <h2>Education</h2>
-            <div class="edu-item">
-                <h3>M.Sc. in Automation and Control Engineering</h3>
-                <p class="edu-info">Polytechnic University of Milan (POLIMI), Italy | 2023 - Present</p>
-                [cite_start]<p>GPA: 27.11/30 [cite: 12]</p>
-                [cite_start]<p>Thesis: Learning Policies from Human Demonstrations for Testing Optimization [cite: 13]</p>
-            </div>
-            <div class="edu-item">
-                <h3>B.Sc. in Mechanical Engineering</h3>
-                <p class="edu-info">KNTU University, Tehran, Iran | 2017 - 2022</p>
-                [cite_start]<p>GPA: 3.88/4.0 [cite: 17]</p>
-                [cite_start]<p>Thesis: Pattern Recognition of Unbalanced Rigid Rotor Bearing Forces [cite: 18]</p>
+            <h2 class="section-title">Education</h2>
+            <div class="card-container">
+                <div class="card card-with-image">
+                    <div class="card-image">
+                        <img src="assets/images/msc_thesis.jpg" alt="MSc Thesis Project Image">
+                    </div>
+                    <div class="card-content">
+                        <h3>M.Sc. in Automation and Control Engineering</h3>
+                        <p class="card-info">Polytechnic University of Milan (POLIMI), Italy | 2023 - Present</p>
+                        <p><strong>GPA:</strong> 27.11/30</p>
+                        <p><strong>Thesis:</strong> Learning Policies from Human Demonstrations for Testing Optimization</p>
+                    </div>
+                </div>
+                <div class="card card-with-image">
+                    <div class="card-image">
+                        <img src="assets/images/bsc_thesis.jpg" alt="BSc Thesis Project Image">
+                    </div>
+                    <div class="card-content">
+                        <h3>B.Sc. in Mechanical Engineering</h3>
+                        <p class="card-info">KNTU University, Tehran, Iran | 2017 - 2022</p>
+                        <p><strong>GPA:</strong> 3.88/4.0</p>
+                        <p><strong>Thesis:</strong> Pattern Recognition of Unbalanced Rigid Rotor Bearing Forces</p>
+                    </div>
+                </div>
             </div>
         </section>
 
         <section id="publications" class="section">
-            <h2>Publications</h2>
-            <div class="pub-list">
-                <div class="pub-item">
-                    <p class="pub-title">
-                        Homaeinezhad, M. R. & Saeidi Mostaghim, M. H. "Nonlinear Tracking Control Algorithm for Dynamical Output Systems Manipulated by the Hardly Constrained Oscillatory Actuator," Structural Control and Health Monitoring. [cite_start]2023[cite: 20, 21, 23].
-                    </p>
-                    <a href="https://scholar.google.com/citations?user=your_google_scholar_id" target="_blank" rel="noopener noreferrer" class="pub-link">View Paper</a>
+            <h2 class="section-title">Publications</h2>
+            <div class="card-container">
+                <div class="card">
+                    <h3>Nonlinear Tracking Control Algorithm...</h3>
+                    <p class="card-info">Structural Control and Health Monitoring, 2023</p>
+                    <p>Homaeinezhad, M. R. & Saeidi Mostaghim, M. H. "Nonlinear Tracking Control Algorithm for Dynamical Output Systems Manipulated by the Hardly Constrained Oscillatory Actuator."</p>
+                    <a href="link-to-your-paper.html" target="_blank" rel="noopener noreferrer" class="read-more">View Paper &rarr;</a>
                 </div>
-                <div class="pub-item">
-                    <p class="pub-title">
-                        Homaeinezhad, M. R. & Saeidi Mostaghim, M. H. "Synthetic Lyapunov Stabilization Technique for Designing Actuation-Constrained Multi-Input Multi-Output Control Systems," Journal of the Franklin Institute. [cite_start]2022[cite: 24, 25, 26].
-                    </p>
-                    <a href="https://scholar.google.com/citations?user=your_google_scholar_id" target="_blank" rel="noopener noreferrer" class="pub-link">View Paper</a>
+                <div class="card">
+                    <h3>Synthetic Lyapunov Stabilization Technique...</h3>
+                    <p class="card-info">Journal of the Franklin Institute, 2022</p>
+                    <p>Homaeinezhad, M. R. & Saeidi Mostaghim, M. H. "Synthetic Lyapunov Stabilization Technique for Designing Actuation-Constrained Multi-Input Multi-Output Control Systems."</p>
+                    <a href="link-to-your-paper.html" target="_blank" rel="noopener noreferrer" class="read-more">View Paper &rarr;</a>
                 </div>
-                <div class="pub-item">
-                    <p class="pub-title">
-                        Homaeinezhad, M. R. & Saeidi Mostaghim, M. H. "Pattern Recognition of Unbalanced Rigid Rotor Bearing Forces," Amirkabir Journal of Mechanical Engineering, 54(12), pp. 3591-3606. [cite_start]2022[cite: 27, 28, 29, 30].
-                    </p>
-                    <a href="https://scholar.google.com/citations?user=your_google_scholar_id" target="_blank" rel="noopener noreferrer" class="pub-link">View Paper</a>
-                </div>
-            </div>
-        </section>
-
-        <section id="conferences" class="section">
-            <h2>Conferences</h2>
-            <div class="pub-list">
-                <div class="pub-item">
-                    <p class="pub-title">
-                        Homaeinezhad, M. R. & Saeidi Mostaghim, M. H. "Pattern Recognition of Unbalanced Rigid Rotor Bearing Forces," 18th National Conference and 7th International Conference on Manufacturing Engineering in Iran (ICME 2022). [cite_start]2022[cite: 32, 33, 34].
-                    </p>
-                </div>
-                <div class="pub-item">
-                    <p class="pub-title">
-                        Homaeinezhad, M. R. & Saeidi Mostaghim, M. H. "Constrained Control of Moving Base Robotic System with Cooperative Arms," 30th Annual International Conference of the Iranian Association of Mechanical Engineers, Tehran, Iran. [cite_start]2022[cite: 35, 36, 37].
-                    </p>
+                <div class="card">
+                    <h3>Pattern Recognition of Unbalanced Rigid Rotor...</h3>
+                    <p class="card-info">Amirkabir Journal of Mechanical Engineering, 2022</p>
+                    <p>Homaeinezhad, M. R. & Saeidi Mostaghim, M. H. "Pattern Recognition of Unbalanced Rigid Rotor Bearing Forces," 54(12), pp. 3591-3606.</p>
+                    <a href="link-to-your-paper.html" target="_blank" rel="noopener noreferrer" class="read-more">View Paper &rarr;</a>
                 </div>
             </div>
         </section>
 
         <section id="skills" class="section">
-            <h2>Software & Technical Skills</h2>
-            <div class="skills-grid">
-                <div class="skills-category">
-                    <h3>Programming & Control</h3>
-                    <ul>
-                        [cite_start]<li>C++ [cite: 62]</li>
-                        [cite_start]<li>MATLAB [cite: 62]</li>
-                        [cite_start]<li>Python [cite: 62]</li>
-                        [cite_start]<li>Model Predictive Control [cite: 62]</li>
-                        [cite_start]<li>Control Theory [cite: 62]</li>
-                        [cite_start]<li>Optimization [cite: 62]</li>
-                    </ul>
-                </div>
-                <div class="skills-category">
-                    <h3>Robotics & Machine Learning</h3>
-                    <ul>
-                        [cite_start]<li>ROS/ROS2 [cite: 62]</li>
-                        [cite_start]<li>Human-Robot Interaction [cite: 62]</li>
-                        [cite_start]<li>TensorFlow/PyTorch [cite: 62]</li>
-                        [cite_start]<li>Mujoco [cite: 62]</li>
-                        [cite_start]<li>Filtering [cite: 62]</li>
-                    </ul>
-                </div>
-                <div class="skills-category">
-                    <h3>Tools & Software</h3>
-                    <ul>
-                        [cite_start]<li>SolidWorks [cite: 62]</li>
-                        [cite_start]<li>CATIA [cite: 62]</li>
-                        [cite_start]<li>Fusion 360 [cite: 62]</li>
-                        [cite_start]<li>ANSYS APDL & Mechanical [cite: 62]</li>
-                        [cite_start]<li>Raspberry Pi/Jetson/Arduino [cite: 62]</li>
-                        [cite_start]<li>Linux [cite: 62]</li>
-                        [cite_start]<li>Git [cite: 62]</li>
-                    </ul>
-                </div>
+            <h2 class="section-title">Technical Skills</h2>
+            <div class="skills-container">
+                <span class="skill-tag">C++</span>
+                <span class="skill-tag">Python</span>
+                <span class="skill-tag">MATLAB</span>
+                <span class="skill-tag">ROS/ROS2</span>
+                <span class="skill-tag">Control Theory</span>
+                <span class="skill-tag">MPC</span>
+                <span class="skill-tag">Optimization</span>
+                <span class="skill-tag">TensorFlow/PyTorch</span>
+                <span class="skill-tag">Human-Robot Interaction</span>
+                <span class="skill-tag">Mujoco</span>
+                <span class="skill-tag">SolidWorks</span>
+                <span class="skill-tag">Linux</span>
+                <span class="skill-tag">Git</span>
+                <span class="skill-tag">Raspberry Pi/Jetson</span>
             </div>
         </section>
-
     </main>
 
     <footer>
-        <p>&copy; 2025 Mo Saeidi. All rights reserved.</p>
-        <div class="social-links">
-            <a href="https://github.com/zexerv" target="_blank" rel="noopener noreferrer">GitHub</a>
-            <a href="https://scholar.google.com/citations?user=your_google_scholar_id" target="_blank" rel="noopener noreferrer">Scholar</a>
-            <a href="https://linkedin.com/in/your_linkedin_profile" target="_blank" rel="noopener noreferrer">LinkedIn</a>
-            <a href="mailto:msaeidi1999@gmail.com">Email</a>
-        </div>
+        <p>&copy; 2025 Mo Saeidi. Built with passion and code.</p>
     </footer>
 
 </body>
