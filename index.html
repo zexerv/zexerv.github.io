@@ -1,169 +1,94 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mo Saeidi - Robotics & Control Engineer</title>
-    
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>MoSa - Robotics & Control Engineer</title>
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;700&family=Lato:wght@400;700&display=swap" rel="stylesheet">
-    
-    <link rel="stylesheet" href="assets/style.css">
-    
-    <script>
-    MathJax = {
-      tex: {
-        inlineMath: [['$', '$'], ['\\(', '\\)']]
-      }
-    };
-    </script>
-    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+    <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" integrity="sha512-Fo3rlrZj/k7ujTnH/PR5njL16VsdhE5W8aXjz/r+5M6l5NjF/YSO0UOeAcH6rOr1v6Z1bOiHx6sF8Jb4iMJ5gw==" crossorigin="anonymous" referrerpolicy="no-referrer" /> -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css"/>
+
+    <link rel="stylesheet" href="assets/css/base.css" />
+    <link rel="stylesheet" href="assets/css/layout.css" />
+    <link rel="stylesheet" href="assets/css/components/navbar.css" />
+    <link rel="stylesheet" href="assets/css/components/buttons.css" />
+    <link rel="stylesheet" href="assets/css/components/footer.css" />
+    <link rel="stylesheet" href="assets/css/pages/index.css" />
 
 </head>
 <body>
-
-    <header class="hero-section">
-        <div class="hero-content">
-            <h1 class="hero-title">Mo Saeidi</h1>
-            <p class="hero-subtitle">Robotics & Control Engineer</p>
-            <p class="hero-bio">
-                M.Sc. candidate at Politecnico di Milano, specializing in the intersection of control theory, reinforcement learning, and intelligent systems. Passionate about developing intuitive frameworks for human-robot interaction and creating robust, autonomous systems.
-            </p>
-            <div class="social-links">
-                <a href="https://github.com/zexerv" title="GitHub" target="_blank" rel="noopener noreferrer">GitHub</a>
-                <a href="https://scholar.google.com/citations?user=your_google_scholar_id" title="Google Scholar" target="_blank" rel="noopener noreferrer">Scholar</a>
-                <a href="https://linkedin.com/in/your_linkedin_profile" title="LinkedIn" target="_blank" rel="noopener noreferrer">LinkedIn</a>
-                <a href="mailto:msaeidi1999@gmail.com" title="Email">Email</a>
-            </div>
-            <div class="cv-buttons">
-                <a href="assets/cv/Mo_Saeidi_CV_EN.pdf" download class="btn">Download CV (English)</a>
-                <a href="assets/cv/Mo_Saeidi_CV_IT.pdf" download class="btn btn-secondary">Download CV (Italian)</a>
-            </div>
-        </div>
-    </header>
-
-    <main>
-        
-        <section id="experience" class="section">
-            <h2 class="section-title">Experience</h2>
-            <div class="card-container">
-                <div class="card">
-                    <h3>Researcher, MERLIN Laboratory POLIMI</h3>
-                    <p class="card-info">Milan, Italy | October 2024 - Present</p>
-                    <ul>
-                        <li>Conducted Master's thesis on "Robotic Programming by Demonstration: Segmentation and Via-Set Optimization".</li>
-                        <li>Developed three novel algorithms: event-based DTW for interpreting multiple demonstrations; a segmentation algorithm (SEGDP) and its faster extension with proved $\mathcal{O}(N)$ complexity; and a Via-Set Optimization module for run-time skill refinement.</li>
-                        <li>Tested the efficacy of the pipeline through ablation studies and non-expert user inquiries.</li>
+    <div class="page-wrapper">
+        <header class="header">
+            <nav class="navbar">
+                <div class="container">
+                    <!-- <a href="index.html" class="logo">MoSa</a> -->
+                    <button id="mobile-menu-btn" class="mobile-menu-btn" aria-label="Toggle Menu" aria-expanded="false">
+                        <span class="bar"></span>
+                        <span class="bar"></span>
+                        <span class="bar"></span>
+                    </button>
+                    <ul class="nav-links">
+                        <li><a href="index.html" class="active">MoSa</a></li>
+                        <li><a href="projects.html">Projects</a></li>
+                        <li><a href="blog.html">Blog</a></li>
+                        <li><a href="academia.html">Academia</a></li>
                     </ul>
                 </div>
-                
-                <div class="card">
-                    <h3>Researcher, AIRLAB Drone Team POLIMI</h3>
-                    <p class="card-info">Milan, Italy | April 2023 - November 2023</p>
-                    <ul>
-                        <li>Translated navigation and filtering nodes from ROS1 to ROS2.</li>
-                        <li>Developed a high-level navigation and obstacle avoidance system from scratch using <i>A*</i> and point clouds from a ZED camera.</li>
-                        <li>Participated in the Leonardo Drone Contest of 2023 in Torino.</li>
-                    </ul>
-                </div>
-                
-                <div class="card">
-                    <h3>Research Assistant, Mechatronics Laboratory - KNTU</h3>
-                    <p class="card-info">Tehran, Iran | 2021 - 2022</p>
-                    <ul>
-                        <li>Participated in the AEB computer vision project, benchmarking monocular depth estimation algorithms, object detection, and sensor fusion.</li>
-                        <li>Contributed to the Chess Track project by gathering and labeling over 10,000 images of chess pieces and training a YOLO model for chess tournament use.</li>
-                    </ul>
-                </div>
-                
-                <div class="card">
-                    <h3>Research Assistant, Vibration and Control Laboratory - KNTU</h3>
-                    <p class="card-info">Tehran, Iran | 2019 - 2022</p>
-                    <ul>
-                        <li>Conducted my BSc thesis on simulating a rigid rotor with imbalance distribution of mass.</li>
-                        <li>Developed a fault diagnosis Neural Network (NN) to detect where to place balancing masses, reducing the required number of sensors to two.</li>
-                    </ul>
-                </div>
-            </div>
-        </section>
+            </nav>
+        </header>
 
-        <section id="education" class="section">
-            <h2 class="section-title">Education</h2>
-            <div class="card-container">
-                <div class="card card-with-image">
-                    <div class="card-image">
-                        <img src="assets/images/msc_thesis.jpg" alt="MSc Thesis Project Image">
-                    </div>
-                    <div class="card-content">
-                        <h3>M.Sc. in Automation and Control Engineering</h3>
-                        <p class="card-info">Polytechnic University of Milan (POLIMI), Italy | 2023 - Present</p>
-                        <p><strong>GPA:</strong> 27.11/30</p>
-                        <p><strong>Thesis:</strong> Learning Policies from Human Demonstrations for Testing Optimization</p>
+        <main class="main-content">
+            <section class="mosa-hero">
+                <div class="container">
+                    <div class="mosa-hero-content">
+                        <img src="assets/images/profile-photo.jpg" alt="Mo Saeidi" class="mosa-profile-pic">
+                        <h1 class="mosa-name">Mo Saeidi</h1>
+                        <p class="mosa-title">
+                            Robotics engineer exploring the intersection of control theory, reinforcement learning, and intelligent systems.
+                        </p>
+                        <div class="mosa-links">
+                            <a href="https://github.com/zexerv" target="_blank" rel="noopener noreferrer" class="mosa-link-item icon-link" aria-label="GitHub Profile">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" role="img" aria-hidden="true">
+                                    <path fill-rule="evenodd" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"></path>
+                                </svg>
+                                <span>GitHub</span>
+                            </a>
+                            <a href="https://www.linkedin.com/in/mo-saeidi-21a00015a/" target="_blank" rel="noopener noreferrer" class="mosa-link-item icon-link" aria-label="LinkedIn Profile">
+                               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" role="img" aria-hidden="true">
+                                   <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"></path>
+                                </svg>
+                                <span>LinkedIn</span>
+                            </a>
+                            <a href="https://scholar.google.com/citations?user=6AucdhQAAAAJ&hl=en" target="_blank" rel="noopener noreferrer" class="mosa-link-item icon-link" aria-label="Google Scholar Profile">
+                                <i class="ai ai-google-scholar"></i> <span>Scholar</span>
+                            </a>
+                            <a href="mailto:mohammadhosein.saeidi@mail.polimi.it" class="mosa-link-item icon-link" aria-label="Send Email">
+                               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" role="img" aria-hidden="true">
+                                   <path d="M0 3v18h24v-18h-24zm21.518 2l-9.518 7.713-9.518-7.713h19.036zm-19.518 14v-11.817l10 8.104 10-8.104v11.817h-20z"></path>
+                                </svg>
+                                <span>Email</span>
+                            </a>
+                        </div>
+
+                        <div class="mosa-divider"></div>
+
+                        <blockquote class="mosa-quote">
+                            <p>"Exploration is not just a core challenge in reinforcement learning algorithms; it's a guiding philosophy for life."</p>
+                            </blockquote>
                     </div>
                 </div>
-                <div class="card card-with-image">
-                    <div class="card-image">
-                        <img src="assets/images/bsc_thesis.jpg" alt="BSc Thesis Project Image">
-                    </div>
-                    <div class="card-content">
-                        <h3>B.Sc. in Mechanical Engineering</h3>
-                        <p class="card-info">KNTU University, Tehran, Iran | 2017 - 2022</p>
-                        <p><strong>GPA:</strong> 3.88/4.0</p>
-                        <p><strong>Thesis:</strong> Pattern Recognition of Unbalanced Rigid Rotor Bearing Forces</p>
-                    </div>
-                </div>
+            </section>
+            </main>
+
+        <footer class="footer">
+            <div class="container">
+                <p>&copy; <span id="current-year"></span> Mo Saeidi. All rights reserved.</p>
             </div>
-        </section>
-
-        <section id="publications" class="section">
-            <h2 class="section-title">Publications</h2>
-            <div class="card-container">
-                <div class="card">
-                    <h3>Nonlinear Tracking Control Algorithm...</h3>
-                    <p class="card-info">Structural Control and Health Monitoring, 2023</p>
-                    <p>Homaeinezhad, M. R. & Saeidi Mostaghim, M. H. "Nonlinear Tracking Control Algorithm for Dynamical Output Systems Manipulated by the Hardly Constrained Oscillatory Actuator."</p>
-                    <a href="link-to-your-paper.html" target="_blank" rel="noopener noreferrer" class="read-more">View Paper &rarr;</a>
-                </div>
-                <div class="card">
-                    <h3>Synthetic Lyapunov Stabilization Technique...</h3>
-                    <p class="card-info">Journal of the Franklin Institute, 2022</p>
-                    <p>Homaeinezhad, M. R. & Saeidi Mostaghim, M. H. "Synthetic Lyapunov Stabilization Technique for Designing Actuation-Constrained Multi-Input Multi-Output Control Systems."</p>
-                    <a href="link-to-your-paper.html" target="_blank" rel="noopener noreferrer" class="read-more">View Paper &rarr;</a>
-                </div>
-                <div class="card">
-                    <h3>Pattern Recognition of Unbalanced Rigid Rotor...</h3>
-                    <p class="card-info">Amirkabir Journal of Mechanical Engineering, 2022</p>
-                    <p>Homaeinezhad, M. R. & Saeidi Mostaghim, M. H. "Pattern Recognition of Unbalanced Rigid Rotor Bearing Forces," 54(12), pp. 3591-3606.</p>
-                    <a href="link-to-your-paper.html" target="_blank" rel="noopener noreferrer" class="read-more">View Paper &rarr;</a>
-                </div>
-            </div>
-        </section>
-
-        <section id="skills" class="section">
-            <h2 class="section-title">Technical Skills</h2>
-            <div class="skills-container">
-                <span class="skill-tag">C++</span>
-                <span class="skill-tag">Python</span>
-                <span class="skill-tag">MATLAB</span>
-                <span class="skill-tag">ROS/ROS2</span>
-                <span class="skill-tag">Control Theory</span>
-                <span class="skill-tag">MPC</span>
-                <span class="skill-tag">Optimization</span>
-                <span class="skill-tag">TensorFlow/PyTorch</span>
-                <span class="skill-tag">Human-Robot Interaction</span>
-                <span class="skill-tag">Mujoco</span>
-                <span class="skill-tag">SolidWorks</span>
-                <span class="skill-tag">Linux</span>
-                <span class="skill-tag">Git</span>
-                <span class="skill-tag">Raspberry Pi/Jetson</span>
-            </div>
-        </section>
-    </main>
-
-    <footer>
-        <p>&copy; 2025 Mo Saeidi. Built with passion and code.</p>
-    </footer>
-
-</body>
+        </footer>
+    </div> <script src="assets/js/main.js"></script>
+    </body>
 </html>

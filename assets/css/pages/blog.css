@@ -1,0 +1,88 @@
+/* assets/css/pages/blog.css */
+
+.blog-header {
+    text-align: center;
+    margin-bottom: var(--spacing-xl);
+    padding-bottom: var(--spacing-md);
+    border-bottom: 1px solid var(--color-border);
+}
+
+.blog-header h1 {
+    font-size: 2.5rem;
+    margin-bottom: var(--spacing-sm);
+}
+
+.blog-header p {
+    font-size: 1.1rem;
+    color: var(--color-text-secondary);
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.blog-post-list {
+    list-style: none;
+    padding-left: 0;
+    max-width: 800px; /* Constrain width for readability */
+    margin: 0 auto; /* Center the list */
+}
+
+.blog-post-item {
+    padding: var(--spacing-lg) 0;
+    border-bottom: 1px solid var(--color-border);
+}
+.blog-post-item:first-child {
+     padding-top: 0; /* Remove top padding for the first item if header has border */
+}
+.blog-post-item:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+}
+
+.post-meta {
+    display: block;
+    font-size: 0.85rem;
+    color: var(--color-text-tertiary);
+    margin-bottom: var(--spacing-xs);
+}
+
+.post-title {
+    font-size: 1.5rem; /* Or 1.75rem */
+    margin-bottom: var(--spacing-sm);
+    color: var(--color-text-primary);
+}
+
+.post-title a {
+    color: inherit; /* Inherit color from h2 */
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+.post-title a:hover {
+    color: var(--color-link);
+    text-decoration: underline;
+}
+
+.post-excerpt {
+    color: var(--color-text-secondary);
+    font-size: 1rem;
+    line-height: 1.7;
+    margin-bottom: var(--spacing-md);
+}
+
+.read-more-link {
+    display: inline-block;
+    color: var(--color-link);
+    font-weight: 500;
+    text-decoration: none;
+    font-size: 0.95rem;
+}
+.read-more-link:hover {
+    color: var(--color-link-hover);
+    text-decoration: underline;
+}
+.read-more-link i {
+    margin-left: var(--spacing-xs);
+    transition: transform 0.2s ease-out;
+}
+.read-more-link:hover i {
+    transform: translateX(4px);
+}

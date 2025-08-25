@@ -1,0 +1,11 @@
+/* assets/css/components/footer.css */
+
+/* Add more specific footer component styles here if needed later */
+/* For now, layout.css covers basic footer styling */
+
+.footer .container {
+    /* Example: Add specific alignment if content structure changes */
+    /* display: flex; */
+    /* justify-content: center; */
+    /* align-items: center; */
+}

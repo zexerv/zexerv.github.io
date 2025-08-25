@@ -1,0 +1,186 @@
+/* assets/css/base.css */
+
+/* CSS Variables - GitHub Dark Theme Inspired */
+:root {
+    --font-primary: 'Roboto', sans-serif;
+    --font-mono: 'Roboto Mono', monospace;
+
+    /* Dark Theme Colors */
+    --color-background: #0d1117; /* Very dark grey/blue */
+    --color-foreground: #161b22; /* Dark grey */
+    --color-border: #30363d;     /* Grey border */
+    --color-text-primary: #c9d1d9; /* Light grey text */
+    --color-text-secondary: #8b949e; /* Medium grey text */
+    --color-text-tertiary: #586069;  /* Darker grey text (e.g., muted) */
+    --color-link: #58a6ff;        /* Blue links */
+    --color-link-hover: #79c0ff;   /* Lighter blue on hover */
+    --color-accent: #2ea043;      /* Green accent (buttons, highlights) */
+    --color-accent-hover: #3fb950; /* Lighter green on hover */
+    --color-danger: #f85149;       /* Red for warnings/errors */
+
+    /* Sizes & Spacing */
+    --spacing-xs: 0.25rem; /* 4px */
+    --spacing-sm: 0.5rem;  /* 8px */
+    --spacing-md: 1rem;    /* 16px */
+    --spacing-lg: 1.5rem;  /* 24px */
+    --spacing-xl: 2rem;    /* 32px */
+    --spacing-xxl: 3rem;   /* 48px */
+
+    --border-radius-sm: 3px;
+    --border-radius-md: 6px;
+    --border-radius-lg: 8px;
+
+    --header-height: 60px; /* Example header height */
+}
+
+/* Basic Reset & Box Sizing */
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+/* HTML & Body Setup */
+html {
+    font-size: 16px; /* Base font size */
+    scroll-behavior: smooth;
+    height: 100%;
+}
+
+body {
+    font-family: var(--font-primary);
+    line-height: 1.6;
+    color: var(--color-text-primary);
+    background-color: var(--color-background);
+    display: flex;
+    flex-direction: column;
+    min-height: 100%;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+/* Basic Typography */
+h1, h2, h3, h4, h5, h6 {
+    margin-bottom: var(--spacing-md);
+    line-height: 1.3;
+    font-weight: 600; /* Adjust as needed */
+    color: var(--color-text-primary);
+}
+
+h1 { font-size: 2.25rem; } /* 36px */
+h2 { font-size: 1.75rem; } /* 28px */
+h3 { font-size: 1.375rem; } /* 22px */
+h4 { font-size: 1.125rem; } /* 18px */
+
+p {
+    margin-bottom: var(--spacing-md);
+    color: var(--color-text-secondary);
+}
+
+a {
+    color: var(--color-link);
+    text-decoration: none;
+    transition: color 0.2s ease-in-out;
+}
+
+a:hover {
+    color: var(--color-link-hover);
+    text-decoration: underline;
+}
+
+ul, ol {
+    margin-bottom: var(--spacing-md);
+    padding-left: var(--spacing-lg);
+}
+
+li {
+    margin-bottom: var(--spacing-sm);
+}
+
+/* Code Styling */
+code, pre {
+    font-family: var(--font-mono);
+    font-size: 0.9em;
+    background-color: var(--color-foreground);
+    border: 1px solid var(--color-border);
+    border-radius: var(--border-radius-sm);
+}
+
+code { /* Inline code */
+    padding: 0.2em 0.4em;
+    color: var(--color-text-primary);
+    background-color: rgba(110, 118, 129, 0.2); /* Subtle inline code bg */
+    border: none; /* Remove border for inline */
+}
+
+pre { /* Code blocks */
+    padding: var(--spacing-md);
+    overflow-x: auto; /* Enable horizontal scrolling for long lines */
+    color: var(--color-text-primary);
+    margin-bottom: var(--spacing-md);
+    border-radius: var(--border-radius-md); /* Match other components */
+}
+pre code { /* Reset inline styles for code within pre */
+    background-color: transparent;
+    padding: 0;
+    border: none;
+    border-radius: 0;
+    font-size: 1em; /* Inherit from pre */
+    color: inherit;
+}
+
+
+/* SVG Icon Styling (Added in Step 9) */
+.icon-link svg {
+    width: 1.3em; /* Control size relative to text */
+    height: 1.3em;
+    fill: currentColor; /* Make SVG color match surrounding text color */
+    vertical-align: middle; /* Align icon nicely with text */
+    margin-right: var(--spacing-sm); /* Space between icon and text */
+    transition: fill 0.2s ease;
+}
+
+/* Specific adjustments for SVG links in MoSa page */
+.mosa-link-item svg {
+     width: 20px; /* Fixed width like before */
+     height: 20px;
+     fill: var(--color-text-secondary); /* Match icon color */
+     margin-right: var(--spacing-sm);
+}
+.mosa-link-item:hover svg {
+    fill: var(--color-link); /* Change color on hover */
+}
+
+/* Specific adjustments for SVG links in Academia sidebar */
+.profile-links a svg {
+    width: 18px; /* Match sidebar icon width */
+    height: 18px;
+    fill: var(--color-text-tertiary);
+    margin-right: var(--spacing-sm);
+}
+.profile-links a:hover svg {
+     fill: var(--color-link);
+}
+
+
+/* Helper Classes (Optional) */
+.text-muted {
+    color: var(--color-text-tertiary) !important;
+}
+
+.text-center {
+    text-align: center;
+}
+
+/* Basic focus visible styles for accessibility */
+:focus-visible {
+  outline: 2px solid var(--color-link);
+  outline-offset: 2px;
+  border-radius: var(--border-radius-sm); /* Optional: match element's rounding */
+}
+/* Remove outline for non-keyboard focus if desired (use cautiously) */
+:focus:not(:focus-visible) {
+  outline: none;
+}
